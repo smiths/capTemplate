@@ -2,6 +2,8 @@
 
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{float}
+
 
 \title{Problem Statement and Goals\\\progname}
 
@@ -9,8 +11,6 @@
 
 \date{}
 
-\input{../Comments}
-\input{../Common}
 
 \begin{document}
 
@@ -22,35 +22,143 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+September 25, 2023 & Q.H, R.V, D.A, D.C, U.R & Competed Problem Statement and Goals Document\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.}
-\wss{You can change the section headings, as long as you include the required information.}
+\subsection{Background}
+McMaster Interdisciplinary Satellite Team (MIST) launched its first-ever satellite, the NEUDOSE
+CubeSat, in March 2023. To communicate and command the satellite, a permanent ground station has been set up on the campus of McMaster University. For radio frequency signals to reach each other, the satellite must be orbiting above the ground station horizon, or 0° elevation. 
+\\ \\
+Although NEUDOSE will orbit the earth up to 16 times per day, it will only pass over the Hamilton sky 3-5 times during that day. Often, these overpasses are not ideal because their maximum elevations are far from the center of the sky, where the signals are the strongest.
+\\ \\ 
+For each suitable pass, an operator will wait until just before the Acquisition of Signal (i.e. going above 0° elevation), log into the mission control computer, launch software for radio frequency communications, send the satellite commands, wait for responses, and finally closeout operation by the Loss of Signal (i.e. going under 0° elevation).
+
 
 \subsection{Problem}
+The current approach to communicating with NEUDOSE proved to be problematic for various reasons, including:
+\begin{itemize}
+    \item Operators not being available for suitable passes, which can happen at midnight, early morning, or mid-day.
+    \item Launching software and entering commands are mundane and error-prone for a human operator.
+    \item Command history not stored under Configuration Management, making it hard to trace the system state.
+    \item Flight Model and Engineering Model satellites have separate software interfaces, resulting in inconsistent system verification and operator training.
+    \item Access control is difficult to manage through a single password-protected computer.
+\end{itemize}
+
+
 
 \subsection{Inputs and Outputs}
+\begin{enumerate} 
+    \item Inputs
+    \begin{enumerate}
+        \item User log in input 
+        \item Control commands from the user that are directed to the satellite 
+    \end{enumerate}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+    \item Outputs
+    \begin{enumerate}
+        \item Logs of commands that are sent and received by satellite 
+        \item Operator training and hardware modules for user
+        \item Display user account data
+        \item UI for the user that displays all the different features and processes we are creating. 
+    \end{enumerate}
+\end{enumerate}
+
 
 \subsection{Stakeholders}
+There are 8 stakeholders who are involved with the project. These are individuals or groups who have an interest in the project and can be affected by its outcome.
+\begin{enumerate}
+    \item Dr. Soohyun Byun
+    \begin{enumerate}
+        \item Role: Supervisor and Principal Investigators at MIST
+        \item Interest: Dr. Byun, as the supervisor of this project, wants to ensure that the application facilitates efficient communication and success of the NEUDOSE and PRESET CubeSats.
+    \end{enumerate}
+    \item Austin Liu
+    \begin{enumerate}
+        \item Role: PRESET Systems Team Lead 
+        \item Interest: Austin is responsible for the overall system integration and performance of the PRESET CubeSat.
+    \end{enumerate}
+    \item Muhammad Danyal
+    \begin{enumerate}
+        \item Role: Software Specialist on Mission Operations and Control Team
+        \item Interest: As a software specialist, Muhammad's primary focus is in the functionality and usability of the Mission Control Terminal application. 
+    \end{enumerate}
+    \item Jay Patel
+    \begin{enumerate}
+        \item Role: Command and Data Handling Team Leader
+        \item Interest: Jay is interested in this project's success as it directly relates to the handling of commands and data for the CubeSat. 
+    \end{enumerate}
+    \item McMaster Interdisciplinary Satellite Team (MIST)
+    \begin{enumerate}
+        \item Role: Organization
+        \item Interest: As the organization, their primary focus is in the success of the Mission Control Terminal application as it affects the entire satellite team's operations. Their main concern is with the satellite operations and communication being reliable.
+    \end{enumerate}
+    \item Software Developers
+    \begin{enumerate}
+        \item Role: Responsible for developing, deploying and maintaining the web application
+        \item Interest: Their key concerns include fulfilling technical specifications, making sure the application is scalable, secure, and well-maintained, and creating an effective and intuitive solution. 
+    \end{enumerate}
+    \item Satellite Engineers
+    \begin{enumerate}
+        \item Role: Engineers responsible for the operation of PRESET CubeSat
+        \item Interest: Satellite engineers may be involved in the testing and integration of the application with the satellite systems.
+    \end{enumerate}
+    \item Command Operators
+    \begin{enumerate}
+        \item Role: Users who utilize the application for mission control activities
+        \item Interest: These are the end users of the Mission Control Terminal application. Their main focus is in the functionality, intuitiveness and responsiveness of the application.
+    \end{enumerate}
+\end{enumerate}
+
 
 \subsection{Environment}
 
-\wss{Hardware and software}
+\wss{The application will be hosted on a Linux based server and will include of a web based graphical user interface. It will also consist of a TCP port which will act as a command port to communicate with the satellite systems.}
 
 \section{Goals}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ | m{4cm} | m{8cm} | } 
+\hline
+  \textbf{Goals} & \textbf{Rationale} \\ 
+  \hline
+  The system enables communication with a satellite based on satellite orbit prediction between Acquisition of Signal (AOS) and Loss of Signal (LOS). & A basic goal that the software must achieve for the product to useful. This involves accurately tracking and predicting orbit paths, positioning signal receivers and senders, and enabling communication between satellite and ground station. \\ 
+  \hline
+  The system ensures storage and logs of commands sent to a satellite. & Another necessary goal of the project is to maintain all the logs and command history transmitted to the satellite. This provides the opportunity for data collection/analysis and maintains records of information regarding commands, responses and users involved. \\ 
+  \hline
+  The system manages user and operator accounts. & To allow secure access the command scheduling application, the system provides accounts and access level capabilities.  \\ 
+  \hline
+  The system improves ease of use and accessibility of mission control software. & A requirement of the application is an accessible user interface that allows non technical users to easily interact with the application and provide an enhanced command scheduling experience. \\
+  \hline
+  The application unifies control of the engineering and flight satellite models. &  The application should provide an option to unify the command scheduling process for the satellite and its replica engineering models.\\
+  \hline
+  The system provides support for multi-satellite command scheduling. & The application should be able to maintain multiple satellite scheduling processes and be able to prioritize between those satellites. \\
+  \hline
+  
+
+\end{tabular}
 
 \section{Stretch Goals}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ | m{4cm} | m{8cm} | } 
+\hline
+  \textbf{Goals} & \textbf{Rationale} \\ 
+  \hline
+  The system lets users search and filter for scheduled commands and satellites. & Improves the efficiency of sending commands for the user. By narrowing down the accessible commands, satellites and timelines, the user can focus on their primary task which is to interface with the ground station. \\ 
+  \hline
+  The system lets external services subscribe to receive notifications of results from scheduled commands. & Incorporating a subscriber and notification model into the system increases the usefulness of the product, where users and external applications can be kept updated on recent satellite activity. \\ 
+  \hline
+  The system provides an API suite to allow for testing of the satellite software. & Having a set of exposed API endpoints expands the utility of the application for end users. This will make the satellite software more testable for both external services and application users.  \\ 
+  \hline
+ The system facilitates operator training. & This improves the learnability of the system where it would help onboarding new operators and get them familiarized with the application. In turn, improving the usability of finding and sending commands to satellites. \\ 
+    \hline
+
+\end{tabular}
 
 \end{document}
