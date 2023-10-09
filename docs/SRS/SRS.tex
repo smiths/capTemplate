@@ -48,6 +48,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 October 6, 2023 & Q.H, R.V, D.A, D.C, U.R & Completed SRS documentation\\
+October 9, 2023 & U.R & Added missing relevant facts and assumptions\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -222,32 +223,29 @@ involved in the Project}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
-\lips
+\begin{itemize}
+    \item UTF-8 does not produce conversion or loss of information when text is encoded in ASCII.
+    \item OpenID Connect’s authentication protocol uses JSON Object Signing and Encryption (JOSE), including JSON Web Token (JWT) to encrypt information, which can be securely used for authorization and authentication flows.
+    \item Github provides built-in support for Semantic Versioning.
+    \item MongoDB offers auto-scaling capabilities, allowing for reactive vertical scaling.
+    
+\end{itemize}
 \subsection{Business Rules}
-\lips
+\begin{itemize}
+    \item Only users with the application administrator role can access and modify user data, such as permissions and roles
+    \item Only authenticated and authorized users can send commands through the MCT.
+    \item Logs of command sent to the satellite are stored in a database.
+    The web application must be accessible through a web browser.
+\end{itemize}
+
 \subsection{Assumptions}
-\lips
-
-\section{The Scope of the Work}
-\subsection{The Current Situation}
-\lips
-\subsection{The Context of the Work}
-\lips
-\subsection{Work Partitioning}
-\lips
-\subsection{Specifying a Business Use Case (BUC)}
-\lips
-
-\section{Business Data Model and Data Dictionary}
-\subsection{Business Data Model}
-\begin{figure}[H] % Figure environment for caption and placement
-    \centering % Center the image
-    \includegraphics[width=0.8\linewidth]{systemcontext.png} % Include the image with desired width
-    \caption{Business Data Model} % Add a caption
-    \label{fig:systemcontext} % Add a label for referencing in the text
-\end{figure}
-\subsection{Data Dictionary}
-\lips
+\begin{itemize}
+    \item The application will be hosted on Linux-based servers.
+    \item The application will not be hosted beyond a single server.
+    \item The application does not store any science data collected by the satellite.
+    \item Commands to operate the satellite will be provided to the application, where it does not need to design specific commands.
+    \item The application will be compatible with commonly used web browsers, including Chrome, Firefox, and Edge.
+\end{itemize}
 
 \section{The Scope of the Product}
 \subsection{Product Boundary}
