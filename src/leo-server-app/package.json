@@ -1,0 +1,20 @@
+{
+  "name": "leo-server-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tsc",
+    "start:dev": "nodemon src/server.ts"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.19",
+    "@types/node": "^20.8.6",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
