@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "all": "concurrently \"cd ../leo-server-app && npm run start:dev\" \"npm run dev\""
   },
   "dependencies": {
+    "concurrently": "^8.2.1",
     "next": "^13.5.4",
     "react": "^18",
     "react-dom": "^18"
