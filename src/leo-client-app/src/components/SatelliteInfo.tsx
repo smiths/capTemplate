@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
+const fetchDelay = 1000;
+
 interface SatelliteInfoState {
   positionEci: {
     x: number;
@@ -13,6 +15,9 @@ interface SatelliteInfoState {
     y: number;
     z: number;
   };
+  longitude: number;
+  latitude: number;
+  height: number;
 }
 
 const SatelliteInfo: React.FC = () => {
@@ -27,6 +32,9 @@ const SatelliteInfo: React.FC = () => {
       y: 0,
       z: 0,
     },
+    longitude: 0,
+    latitude: 0,
+    height: 0,
   });
 
   const fetchData = () => {
@@ -44,7 +52,7 @@ const SatelliteInfo: React.FC = () => {
     fetchData(); // Fetch data initially
 
     // Update data every 1000ms (1s)
-    const dataFetchInterval = setInterval(fetchData, 1000);
+    const dataFetchInterval = setInterval(fetchData, fetchDelay);
 
     return () => {
       // Clear the interval when the component is unmounted to prevent memory leaks
@@ -52,7 +60,7 @@ const SatelliteInfo: React.FC = () => {
     };
   }, []);
 
-  const { positionEci, velocityEci } = state;
+  const { positionEci, velocityEci, longitude, latitude, height } = state;
 
   return (
     <div>
@@ -65,12 +73,22 @@ const SatelliteInfo: React.FC = () => {
           <li>Z: {positionEci.z}</li>
         </ul>
       </div>
+      <br/>
       <div>
         <strong>Velocity ECI:</strong>
         <ul>
           <li>X: {velocityEci.x}</li>
           <li>Y: {velocityEci.y}</li>
           <li>Z: {velocityEci.z}</li>
+        </ul>
+      </div>
+      <br/>
+      <div>
+        <strong>Other Info:</strong>
+        <ul>
+          <li>Longitude: {longitude}</li>
+          <li>Latitude: {latitude}</li>
+          <li>Height: {height}</li>
         </ul>
       </div>
     </div>
