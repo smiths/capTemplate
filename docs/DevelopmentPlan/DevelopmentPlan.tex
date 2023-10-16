@@ -122,6 +122,8 @@ In addition to using the orbital prediction software such as Gpredict, N2YO, GMA
     \item \textbf{Real-time testing}: This can be achieved by predicting passes for the upcoming weeks or month. System's predictions should be adjusted based on the data gathered from real-time predictions and actual passes. 
 \end{enumerate}
 The steps mentioned above can be used to demonstrate the risk being mitigated. However in the web-application, a built-in orbit prediction software will be used which is based on SatNOGS. This mean integrating the methods could be a challenging task. Additionally, due to PRESET CubeSat's change in orbit, the number of passes where the signals are the strongest, is reduced.
+\\ \\
+The resulting POC will be a bare-bones web app for while a user can track a satellite given their TLE (Two Line Element Set), track future overpasses, and schedule/send commands to the ground station server. As the ground station server may not been fully configured by MIST by the POC deadline, a mock server will be created to mimic connection to the ground station. 
 
 \section{Technology}
 
