@@ -18,6 +18,9 @@ interface SatelliteInfoState {
   longitude: number;
   latitude: number;
   height: number;
+  azimuth: number;
+  elevation: number;
+  rangeSat: number;
 }
 
 const SatelliteInfo: React.FC = () => {
@@ -35,6 +38,9 @@ const SatelliteInfo: React.FC = () => {
     longitude: 0,
     latitude: 0,
     height: 0,
+    azimuth: 0,
+    elevation: -10,
+    rangeSat: 0,
   });
 
   const fetchData = () => {
@@ -60,7 +66,7 @@ const SatelliteInfo: React.FC = () => {
     };
   }, []);
 
-  const { positionEci, velocityEci, longitude, latitude, height } = state;
+  const { positionEci, velocityEci, longitude, latitude, height, azimuth, elevation, rangeSat } = state;
 
   return (
     <div>
@@ -89,6 +95,10 @@ const SatelliteInfo: React.FC = () => {
           <li>Longitude: {longitude}</li>
           <li>Latitude: {latitude}</li>
           <li>Height: {height}</li>
+          <br/>
+          <li>Azimuth: {azimuth}</li>
+          <li>Elevation: {elevation}</li>
+          <li>rangeSat: {rangeSat}</li>
         </ul>
       </div>
     </div>
