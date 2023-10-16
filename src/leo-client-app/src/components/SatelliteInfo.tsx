@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const fetchDelay = 1000;
+const fetchDelay = 2000;
 
 interface SatelliteInfoState {
   positionEci: {
