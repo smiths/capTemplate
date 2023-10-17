@@ -12,28 +12,23 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// NEUDOSE TLE
-var tleLine1 = '1 99172U          23114.51041667 -.00000031  00000-0 -52816-6 0 00003',
-    tleLine2 = '2 99172 051.6609 234.5214 0004321 232.3001 269.5133 15.50456434000013';  
+// NEUDOSE TLE from satnogs
+var tleLine1 = '1 56315U 98067VG  23289.56381294  .00217706  00000+0  12767-2 0  9999',
+    tleLine2 = '2 56315  51.6294  74.1402 0004981 252.1253 107.9204 15.77094333 27340';  
 
 // GS info
 var observerGd = {
-    longitude: satellite.degreesToRadians(79.9201),
+    longitude: satellite.degreesToRadians(-79.9201),
     latitude: satellite.degreesToRadians(43.2585),
     height: 0.370
 };
-      
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, this is Express + TypeScript");
-});
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
-// All values in radians
-app.get('/getSatelliteInfo', (req, res) => {
-  var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
+function getSatelliteInfo(date: Date){
+   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
   
-  var positionAndVelocity = satellite.propagate(satrec, new Date());
-  var gmst = satellite.gstime(new Date());
+  var positionAndVelocity = satellite.propagate(satrec, date);
+  var gmst = satellite.gstime(date);
   
   var positionEci = positionAndVelocity.position,
       velocityEci = positionAndVelocity.velocity;
@@ -42,46 +37,54 @@ app.get('/getSatelliteInfo', (req, res) => {
       positionGd    = satellite.eciToGeodetic(positionEci, gmst),
       lookAngles    = satellite.ecfToLookAngles(observerGd, positionEcf)
 
-  var longitude = positionGd.longitude,
-      latitude  = positionGd.latitude,
+  var longitude = satellite.degreesLong(positionGd.longitude),
+      latitude  = satellite.degreesLat(positionGd.latitude),
       height    = positionGd.height;
 
   var azimuth   = satellite.radiansToDegrees(lookAngles.azimuth),
       elevation = satellite.radiansToDegrees(lookAngles.elevation),
       rangeSat  = lookAngles.rangeSat;
-
-
-  res.json({positionEci, velocityEci, longitude, latitude, height, azimuth, elevation, rangeSat});
   
+  return {positionEci, velocityEci, longitude, latitude, height, azimuth, elevation, rangeSat}
+}
+      
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello, this is Express + TypeScript");
+});
+
+
+app.get('/getSatelliteInfo', (req, res) => {
+  res.json(getSatelliteInfo(new Date()));  
 });
 
 // Gets passes for next week
 app.get('/getNextPasses', (req, res) => {
-  var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
   // Time window in milliseconds (1 minute)
-  const windowMillis = 60000;
-  
-  // Getting readings every hour every day
+  const WINDOWMILLIS = 60 * 1000;
+
+  // Elevation Entry
+  const MINELEVATION = 10;
+
   var today = new Date()
   today.setHours(0,0,0,0);
   
   var nextPasses = [];
+  var enterElevation = null;
+  var enterInfo;
+  var exitInfo;
 
-  for (let i = 0; i < 7 * 24 * 60; i++){
+  // Gets overpasses for the next week
+  for (let i = 0; i < 7 * 24 * 60 ; i++){
 
     // Calculate the next pass
-    var nextPassTime = new Date(today.getTime() + i * windowMillis);
-    var positionAndVelocity = satellite.propagate(satrec, nextPassTime);
-    
-    var positionEci = positionAndVelocity.position;
+    var nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
 
-    var positionEcf   = satellite.eciToEcf(positionEci, nextPassTime),
-        lookAngles    = satellite.ecfToLookAngles(observerGd, positionEcf)
+    // Get satellite information for the next pass
+    var satelliteInfo = getSatelliteInfo(nextPassTime)
 
-    if (satellite.radiansToDegrees(lookAngles.elevation) > 5) {
-
-      const formattedTime = nextPassTime.toLocaleString('en-US', {
+    // Format Time
+    const formattedTime = nextPassTime.toLocaleString('en-US', {
         year: 'numeric',
         month: 'short',
         day: '2-digit',
@@ -90,11 +93,32 @@ app.get('/getNextPasses', (req, res) => {
         second: '2-digit'
       }).replace(/\u202f/g, ' ');
 
-        nextPasses.push({
-            time: formattedTime,
-            azimuth:lookAngles.azimuth,
-            elevation: lookAngles.elevation
-        });
+    if (satelliteInfo.elevation > MINELEVATION) {
+
+      if (!enterElevation){
+
+         enterInfo = {
+          type: "Enter",
+          time: formattedTime,
+          azimuth:satelliteInfo.azimuth,
+          elevation: satelliteInfo.elevation,
+          };  
+        enterElevation = satelliteInfo.elevation;
+      } 
+
+    } else {
+
+      if (enterElevation){
+        
+        exitInfo = {
+          type: "Exit",
+          time: formattedTime,
+          azimuth:satelliteInfo.azimuth,
+          elevation: satelliteInfo.elevation,
+        };
+        nextPasses.push([enterInfo,exitInfo])
+        enterElevation = null;
+      }
     }
 
   }
