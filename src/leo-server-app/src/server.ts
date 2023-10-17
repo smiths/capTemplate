@@ -82,8 +82,8 @@ app.get('/getNextPasses', (req, res) => {
     if (satellite.radiansToDegrees(lookAngles.elevation) > 10) {
             nextPasses.push({
                 time: nextPassTime,
-                azimuth: satellite.radiansToDegrees(lookAngles.azimuth),
-                elevation: satellite.radiansToDegrees(lookAngles.elevation)
+                azimuth:lookAngles.azimuth,
+                elevation: lookAngles.elevation
             });
         }
 
