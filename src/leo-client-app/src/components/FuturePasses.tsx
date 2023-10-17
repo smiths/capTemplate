@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
 interface Pass {
+  type: string;
   time: string;
   azimuth: number;
   elevation: number;
 }
 
 const FuturePasses: React.FC = () => {
-  const [passes, setPasses] = useState<Pass[]>([]);
+  const [passes, setPasses] = useState<Pass[][]>([]);
 
   const fetchPasses = () => {
     fetch('http://localhost:3001/getNextPasses')
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw Error('Network response was not ok');
         }
         return response.json();
       })
@@ -40,13 +41,34 @@ const FuturePasses: React.FC = () => {
   return (
     <div>
       <h1>Next Week's Passes</h1>
-      <ul>
-        {passes.map((pass, index) => (
-          <li key={index}>
-            <strong>Time:</strong> {pass.time} - <strong>Azimuth:</strong> {pass.azimuth} - <strong>Elevation:</strong> {pass.elevation}
-          </li>
-        ))}
-      </ul>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th style={{ width: '50%', border: '1px solid #000', padding: '8px' }}>Entry</th>
+            <th style={{ width: '50%', border: '1px solid #000', padding: '8px' }}>Exit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {passes.map((passPair, index) => (
+            <tr key={index}>
+              <td style={{ border: '1px solid #000', padding: '8px' }}>
+                {passPair[0].type === 'Enter' && (
+                  <>
+                    {passPair[0].time}
+                  </>
+                )}
+              </td>
+              <td style={{ border: '1px solid #000', padding: '8px' }}>
+                {passPair[1].type === 'Exit' && (
+                  <>
+                    {passPair[1].time}
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
