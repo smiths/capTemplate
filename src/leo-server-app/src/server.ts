@@ -31,6 +31,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
+// All values in radians
 app.get('/getSatelliteInfo', (req, res) => {
   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
   
@@ -48,8 +49,8 @@ app.get('/getSatelliteInfo', (req, res) => {
       latitude  = positionGd.latitude,
       height    = positionGd.height;
 
-  var azimuth   = lookAngles.azimuth,
-      elevation = lookAngles.elevation,
+  var azimuth   = satellite.radiansToDegrees(lookAngles.azimuth),
+      elevation = satellite.radiansToDegrees(lookAngles.elevation),
       rangeSat  = lookAngles.rangeSat;
 
 
