@@ -22,6 +22,9 @@ var observerGd = {
     latitude: satellite.degreesToRadians(43.2585),
     height: 0.370
 };
+
+// Time window
+const windowMillis = 3600000;
       
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, this is Express + TypeScript");
@@ -51,6 +54,41 @@ app.get('/getSatelliteInfo', (req, res) => {
 
 
   res.json({positionEci, velocityEci, longitude, latitude, height, azimuth, elevation, rangeSat});
+  
+});
+
+// Gets passes for next week
+app.get('/getNextPasses', (req, res) => {
+  var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
+  
+  // Getting readings every hour every day
+  var today = new Date()
+  today.setHours(0,0,0,0);
+  
+  var nextPasses = [];
+
+  for (let i = 0; i < 7 * 24; i++){
+
+    // Calculate the next pass
+    var nextPassTime = new Date(today.getTime() + i * windowMillis);
+    var positionAndVelocity = satellite.propagate(satrec, nextPassTime);
+    
+    var positionEci = positionAndVelocity.position;
+
+    var positionEcf   = satellite.eciToEcf(positionEci, nextPassTime),
+        lookAngles    = satellite.ecfToLookAngles(observerGd, positionEcf)
+
+    if (satellite.radiansToDegrees(lookAngles.elevation) > 10) {
+            nextPasses.push({
+                time: nextPassTime,
+                azimuth: satellite.radiansToDegrees(lookAngles.azimuth),
+                elevation: satellite.radiansToDegrees(lookAngles.elevation)
+            });
+        }
+
+  }
+
+  res.json({nextPasses});
   
 });
 
