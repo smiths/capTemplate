@@ -49,6 +49,7 @@
 \midrule
 October 6, 2023 & Q.H, R.V, D.A, D.C, U.R & Completed SRS documentation\\
 October 9, 2023 & U.R & Added missing relevant facts and assumptions\\
+October 20, 2023 & U.R & Added safety and security requirements from Hazard Analysis\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -560,7 +561,9 @@ User Authentication and Authorization: Users must be able to log in, with a spec
         \item \textbf{Phase in Plan}: This requirement will start phasing in at during the Verification and Validation Plan, on November 3rd, 2023.
     \end{itemize}
     \item \textbf{Backups: }The MCT should allow an administrator to back up its data to protect it from loss or corruption.
-    \item \textbf{Phase in Plan}: This requirement will start phasing in at during the Verification and Validation Plan, on November 3rd, 2023.
+    \begin{itemize}
+        \item \textbf{Phase in Plan}: This requirement will start phasing in at during the Verification and Validation Plan, on November 3rd, 2023.
+    \end{itemize}
     \item \textbf{Application Logs:} The MCT application should store logs to facilitate debugging.
     \begin{itemize}
         \item \textbf{Rationale: }It is important to keep track of the logs in order to debug the application. This will also help in finding the methods/functions where an error occurs.
@@ -577,18 +580,53 @@ User Authentication and Authorization: Users must be able to log in, with a spec
 \section{Security Requirements}
 \subsection{Access Requirements}
 
-\begin{itemize}
-    \item \textbf{User security} The MCT should implement a multi-layered security protocol as it is necessary to protect the security of its user accounts.
-    \begin{itemize}
-        \item \textbf{Phase in Plan}: This requirement will start phasing in after the system has completed every other core functionality, which will be a few days before February 5th, 2024.
+\subsubsection*{AR-1:}
+The application shall support multi-factor authentication such that a user must verify their identity through their registered email account. \\
+\textbf{Rationale} Having multi-factor authentication provides an additional layer of security to the application, ensuring that unauthorized users are prohibited from accessing sensitive user and system data.
+ \begin{itemize}
+         \item \textbf{Phase in Plan}: This requirement will start phasing in after the system has completed every other core functionality, which will be a few days before February 5th, 2024.
     \end{itemize}
-\end{itemize}
+
+
+\subsubsection*{AR-2:}
+The application shall not authenticate a user who has attempted to login with the same credentials ten times, consecutively. The application shall have a timeout period of five minutes before the user can authenticate themselves. \\
+\textbf{Rationale} By having a timeout period for a set number of unsuccessful authentication attempts, it protects user accounts from unauthorized access and improves security.
 
 
 \subsection{Integrity Requirements}
-\begin{itemize}
-    \item N/A
-\end{itemize}
+\subsubsection*{IR-1:}
+The application shall periodically fetch TLE and calculate satellite overpasses to ensure the most recent data is being used to predict satellite overpasses. \\ 
+\textbf{Rationale:} An issue with calculating satellite overpasses is the variation in TLE and other conditions. Periodically retrieving and recalculating this piece of information will ensure a more accurate prediction of overpasses.
+
+\subsubsection*{IR-2:}
+The application shall use a minimum elevation as a point of reference to evaluate whether a connection to the satellite can be made. \\
+\textbf{Rationale:} In the case that a satellite is below the minimum elevation required to make a connection, the scheduled commands may not work and as a result, produce incomplete data. By having a minimum point of reference, the system can assess if a satellite is out of range.
+
+\subsubsection*{IR-3:}
+Operators shall be informed of errors that occur during the scheduling of commands, however, it is the operator’s responsibility to ensure the validity of the commands. \\
+\textbf{Rationale:} Since the application allows operators to send and schedule commands to the satellite, it is possible that an incorrect command is sent.  In this case, it would be helpful to highlight the errors found in the operator’s input data.
+
+\subsubsection*{IR-4:}
+The system shall have a backup and recovery mechanism which is capable of restoring the database to its most recent correct state in the event of unexpected data failures. \\
+\textbf{Rationale:} A situation may occur where the database enters into an unknown or corrupt state. The presence of a backup and recovery mechanism ensures that the information in the database is still accessible by rolling back to the most recent correct state.
+
+\subsubsection*{IR-5}
+In the event of a system, network, or satellite failure, all missing data fields shall be labelled with an appropriate error message as part of the data validation process. These error messages shall adhere to a standardized format. \\
+\textbf{Rationale} There may be cases where a scheduled command produces responses with missing data attributes. By identifying the incomplete data using standardized error messages, it provides a consistent data state across all validation processes.
+
+\subsubsection*{IR-6}
+Cross-browser testing across a range of browsers shall be performed to ensure the application functions consistently. \\
+\textbf{Rationale} Due to slight variations in browsers such as Safari, Chrome, and Firefox, it is important to assess the performance of the application across all user-intended environments.
+
+\subsubsection*{IR-7}
+The code base shall have HTML and CSS checks to ensure compatibility across different devices and browsers. \\
+\textbf{Rationale} Incorporating the above checks can identify errors in the code base as well as possibly improve the application’s user interface.
+
+\subsubsection*{IR-8}
+All components which are required for scheduling operations shall be evaluated on their efficiency, where each component must complete within a minimum time frame. \\
+\textbf{Rationale} By having a pipeline to test parts of the duration of a code, it can prevent situations where there may exist an inefficiency in scheduling operations.
+
+
 \subsection{Privacy Requirements}
 
 \begin{itemize}
