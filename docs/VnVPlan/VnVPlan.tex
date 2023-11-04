@@ -32,6 +32,9 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 November 3, 2023 & 1.0 & Completed VnV Plan - Q.H, R.V, D.A, D.C, U.R\\
+
+November 3, 2023 & 1.0 & Updated NFRs - Q.H, R.V, D.A, D.C, U.R\\
+
 \bottomrule
 \end{tabularx}
 
@@ -1309,27 +1312,83 @@ This module is designed to ensure our software not only meets current performanc
 \textbf{NFR}: 14.2.7
 
 \textbf{Type}: HTML and CSS Compatibility Checks, Automated
-\textbf{Initial State}: The application is developed, and the cross-browser testing framework is set up to evaluate the application's performance across a range of browsers, including Safari, Chrome, and Firefox.
+\textbf{Initial State}: The code base is set up with automated HTML and CSS checks to ensure compatibility across different devices and browsers. The necessary testing tools and frameworks are in place.
 
-\textbf{Input/Condition}: Execute the application on different browsers, including Safari, Chrome, and Firefox, to assess its functionality and consistency.
-\textbf{Output/Result}: Verification that the application functions consistently across all tested browsers, ensuring a uniform user experience regardless of the browser being used.
+
+\textbf{Input/Condition}:  Run automated HTML and CSS checks on the code base to identify any compatibility issues across various devices and browsers.
+\textbf{Output/Result}: Verification that the code base passes the HTML and CSS compatibility checks, ensuring that the application is compatible and displays correctly across different devices and browsers.
 \textbf{How test will be performed}: 
 \begin{enumerate}
-    \item Execute the application on Safari, Chrome, and Firefox, covering the range of browsers specified in the requirement.
-    \item Verify that all essential functionalities of the application perform as expected on each browser.
-    \item Confirm that the layout, design, and user interface elements remain consistent across all tested browsers.
-    \item Identify and document any discrepancies or inconsistencies in the application's behavior across different browsers.
+    \item Execute the automated HTML and CSS checks on the code base using appropriate testing tools and frameworks.
+    \item Verify that the code base adheres to the HTML and CSS standards for compatibility across different devices and browsers.
+    \item Identify and address any compatibility issues or errors reported by the automated checks.
+
+    \item Validate that the application's user interface remains consistent and functional across different devices and browsers.
+
+\end{enumerate}
+
+
+\item {Integrity-8\\}
+
+\textbf{NFR}: 14.2.8
+
+\textbf{Type}: Efficiency Evaluation of Scheduling Components, Automated
+
+\textbf{Initial State}: The application's scheduling components are in place, and the efficiency evaluation pipeline is set up to assess each component's performance, ensuring that each component completes within the specified minimum time frame.
+
+
+
+\textbf{Input/Condition}: Execute the efficiency evaluation pipeline to test the duration of each scheduling component and verify that they complete within the designated minimum time frame.
+
+\textbf{Output/Result}: Verification that all scheduling components complete their tasks within the minimum time frame, ensuring efficient scheduling operations within the application.
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Execute the efficiency evaluation pipeline to assess the duration of each scheduling component's operation.
+
+    \item Verify that each scheduling component completes its tasks within the specified minimum time frame.
+
+    \item Identify and address any components that do not meet the specified efficiency requirements.
+
+    \item Ensure that the scheduling operations remain efficient and that any inefficiencies are rectified promptly.
+
 
 \end{enumerate}
 
 
 
 
+\item {Privacy-1\\}
+
+\textbf{NFR}: 14.3.1
+
+\textbf{Type}: Network Port Security with Cryptographic Protocol, Automated
+
+
+\textbf{Initial State}: The MCT's network ports are configured and exposed, and a reputed cryptographic protocol is implemented to secure the network communication.
 
 
 
 
+\textbf{Input/Condition}: Initiate an automated security test to verify that the network ports exposed by the MCT are secured using the specified reputable cryptographic protocol.
 
+\textbf{Output/Result}: Verification that the network ports exposed by the MCT are effectively secured using the reputable cryptographic protocol, ensuring the confidentiality and integrity of the network communication.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Conduct an automated security test to assess the cryptographic protocol implementation on the network ports exposed by the MCT.
+
+
+    \item Confirm that the cryptographic protocol in use is recognized as reputable and meets security requirements.
+
+
+    \item Validate that the network communication remains confidential and secure during the automated security test.
+
+
+    \item Address any identified security vulnerabilities or weaknesses to ensure the robustness of the cryptographic protocol.
+
+
+
+\end{enumerate}
 
 
 
