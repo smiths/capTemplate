@@ -11,9 +11,10 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{longtable}
 
-\input{../Comments}
-\input{../Common}
+% \input{../Comments}
+% \input{../Common}
 
 \begin{document}
 
@@ -30,184 +31,183 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+November 3, 2023 & 1.0 & Completed VnV Plan - Q.H, R.V, D.A, D.C, U.R\\
 \bottomrule
 \end{tabularx}
 
 ~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
-
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
 
 \newpage
 
 \tableofcontents
 
-\listoftables
-\wss{Remove this section if it isn't needed}
-
-\listoffigures
-\wss{Remove this section if it isn't needed}
-
 \newpage
 
 \section{Symbols, Abbreviations, and Acronyms}
 
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
-  \bottomrule
-\end{tabular}\\
-
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+Please refer to the SRS document, section \textbf{5 Naming Conventions and Terminologies} for symbols, abbreviation, and acronyms used throughout the document.
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+
+This document outlines the verification and validation objectives needed to ensure that the MCT application aligns with its software requirements specifications. The plan detailed in this document acts as a guide to ensure the team produces a verified and validated software solution that meets its requirements. 
+\\\\
+\textbf{Roadmap}
+
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Testing Strategy} & \textbf{Date} \\
+\hline
+Configure ESLint for code base & November 12, 2023 \\
+\hline
+Configure Istanbul code coveraging tool & November 12, 2023 \\
+\hline
+Code walkthrough 1 & November 19, 2023 \\
+\hline
+Formal Code review 1 & November 30, 2023 \\
+\hline
+Configure automated jest testing & January 10, 2024 \\
+\hline
+Code walkthrough 2 & January 12, 2024 \\
+\hline
+Formal Code review 2 & January 21, 2024 \\
+\hline
+
+\end{longtable}
+
 
 \section{General Information}
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+The software that is being tested is the MCT web application which is a platform to automatically schedule and send commands to satellites as they
+pass overhead. The application will be used by authorized operators and administrators. Operators will be registered and given access privileges by an administrator through the GUI of the MCT application. Furthermore, the system will allow operators to schedule both manual and automated command sequences, as well as retain logs of all commands sent and their responses. The GUI of the application provides a means to create, edit, delete, and view scheduled commands and their responses.
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+\wss{In the scope of this project, several critical components demand meticulous attention to ensure the system's effectiveness and reliability. Foremost among these is the graphical user interface (GUI), serving as the central point of interaction between users and the satellite system. The design and functionality of this GUI play a pivotal role, as they directly influence the user experience and the efficiency of data exchange. Ensuring an intuitive and user-friendly interface is paramount, enabling users to seamlessly send and receive essential data from the satellite. A well-designed GUI not only enhances user satisfaction but also contributes significantly to the system's overall usability and accessibility.
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+Equally vital are the mechanisms of user validation and command verification. Robust protocols for user authentication are imperative to confirm the identity and authorization of individuals accessing the system. Additionally, thorough validation procedures for commands are crucial to prevent any erroneous or malicious instructions from reaching the satellite. These validation processes serve as the first line of defense, ensuring that only legitimate and accurate commands are executed. By implementing stringent validation measures, the project can safeguard the satellite's operations, data integrity, and overall security, thereby instilling confidence in the system's users.
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+Furthermore, the seamless integration and usability of databases for storing and managing logs represent another cornerstone of the project. Efficient database management is essential for quick and accurate retrieval of data, enabling real-time monitoring and analysis. Properly organized databases facilitate the tracking of system performance, identification of patterns, and swift resolution of potential issues. A well-structured data management system not only enhances the project's overall functionality but also streamlines troubleshooting processes, contributing to the project's long-term sustainability and success.
+
+While validating all aspects of the project is ideal, the reality of limited time and resources poses a challenge. Consequently, strategic prioritization becomes essential. However, it is imperative to acknowledge that certain aspects, such as the libraries used for satellite orbit tracking, are assumed to provide accurate results without exhaustive validation.}
+
 
 \subsection{Relevant Documentation}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.}
+Listed below are some pieces of documentation which may be useful for the reader to gain more context about the system.
 
-\citet{SRS}
+\begin{enumerate}
+    \item \href{https://github.com/RishiVaya/Lower_Earth_Orbiters/blob/main/Project%20Proposal.pdf}{Project Proposal}: This document gives context on the purpose of the application, as well as various stakeholder requirements and constraints. 
+    \item \href{https://github.com/RishiVaya/Lower_Earth_Orbiters/blob/main/docs/DevelopmentPlan/Development_Plan.pdf}{Development Plan}: This document provides information on testing and validation tools and technologies that will be implemented through this VnV plan.
+    \item \href{https://github.com/RishiVaya/Lower_Earth_Orbiters/blob/main/docs/SRS/SRS.pdf}{Software Requirements Specification}: This document gives context on the functional and non-functional requirements for which this document will outline tests for.
+    \item Design Document: This document gives dives deeper on the design and implementation of functional and non-functional requirements, this document will outline tests for the design.
+\end{enumerate}
 
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
 
 \section{Plan}
-
-\wss{Introduce this section.   You can provide a roadmap of the sections to
-  come.}
-
 \subsection{Verification and Validation Team}
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ | m{5cm} | m{8cm} | } 
+\hline
+  \textbf{Name and Role} & \textbf{Responsibilites} \\ 
+  \hline
+    \textbf{Buu Ha (Quinn)} - Code verification & \begin{itemize}
+	\item Responsible for ensuring that the code adheres to standards and guidelines set for the project.
+	
+\end{itemize}\\ 
+  \hline
+   \textbf{Rishi Vaya} - SRS verification & \begin{itemize}
+	\item Ensures that the MCT application has addressed the functional and non-functional requirements listed in the SRS document.
+       
+\end{itemize}\\ 
+  \hline
+    \textbf{Diamond Ahuja} - Security Verification & \begin{itemize}
+	\item Responsible for ensuring that security measures, including authentication, role-based authorization, and data encryption are implemented correctly.
+\end{itemize}\\ 
+  \hline
+   \textbf{Dhruv Cheemakurti} - Performance Verification & \begin{itemize}
+	\item Ensures the application’s load times, response times, and resource utilization meet performance standards.
+\end{itemize}\\ 
+  \hline
+    \textbf{Umang Rajkarnikar} - Data Verification & \begin{itemize}
+	\item Responsible for ensuring the validation and verification of application data. This includes both user and satellite data.
+\end{itemize}\\ 
+  \hline
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+\end{tabular}
 
 \subsection{SRS Verification Plan}
 
-\wss{List any approaches you intend to use for SRS verification.  This may include
-  ad hoc feedback from reviewers, like your classmates, or you may plan for 
-  something more rigorous/systematic.}
+In order to perform verification on the SRS, a formal inspection will be used to evaluate the MCT application’s implementation of the SRS. These reviews will be conducted by both team members and the Neudose team where both parties can provide valuable feedback based on their knowledge of the system. In these reviews, members will be provided a checklist to ensure that specific aspects of the SRS document are met. This includes that functional requirements, non-functional requirements, assumptions, and use cases are covered.
 
-\wss{Maybe create an SRS checklist?}
+
 
 \subsection{Design Verification Plan}
 
-\wss{Plans for design verification}
+The goal of this plan is to verify that the design of the MCT application meets the intended specifications.
+\\\\
+Firstly, our classmates will act as reviewers and they will be instructed to evaluate the design of the system. Each reviewer will be provided with a checklist which they can use to assess the system on the specified aspects of the design.
+\\\\
+Next, our stakeholders, in particular the Neudose team will also participate as reviewers when verifying the application’s design. This verification will be in the form of design review meetings. These meetings will be scheduled every two weeks where our team and the Neudose team can discuss and validate the design.
 
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+The verification and validation plan is also a document that needs to be verified for correctness and completeness. In order to verify this Verification and Validation Plan document, peer review will be used to ensure that the system and unit tests for the functional and nonfunctional requirements are complete. To accomplish this, a checklist that outlines the key aspects to evaluate will be used as a means of assessing the plan. Team members will meet on scheduled dates to discuss any issues or improvement opportunities found in the current VnV plan.
 
 \subsection{Implementation Verification Plan}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
+The following points will outline the plan for verifying the implementation:
+\begin{itemize}
+    \item The tests are categorized based on their ability to verify the functional correctness and performance characteristics of the software.
+    \item This includes functional test cases to evaluate FR-SLN1, ensuring that the MCT application loads successfully in the web browser when accessed via a URL path.
+    \item The plan encompasses functional test cases for FR-SLN2 to confirm the accessibility of the implemented communication protocol, wherein a success response from the TCP port indicates the success of the interaction with valid Linux commands. 
+    \item Detailed information on more functional requirements can be found in Section \ref{Section 4.1} of this document.
+    \item For non-functional requirements like Usability-1 (NFR: 10.1), outlines a manual usability test in which users engage with the fully functional application or system to provide feedback and complete surveys, leading to the compilation of usability scores on a scale from 1 to 10.
+    \item Detailed information on more non-functional requirements can be found in Section \ref{Section 4.2} of this document.
+    \item In addition to testing, the plan included static verification techniques to catch potential issues in the code without executing it. 
+    \begin{itemize}
+        \item We will conduct code walkthroughs, where team members review the source code line by line to identify potential issues, such as logic errors and improper coding practices.
+        \item We will employ static code analysis tools and linters (ESLint) to automatically scan the source code for common programming errors 
+    \end{itemize}
+\end{itemize}
 
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+\begin{itemize}
+\item Unit Testing Framework: Jest
+\item Code Coverage Measuring Tool: Istanbul(nyc)
+\end{itemize}
+Jest and Istanbul (with nyc library) were chosen for the unit test framework and code coverage tool for their simplicity, ease of use, and support for various features such as mocking, assertions, and running tests in parallel. In addition, Jest is maintained by Meta, with ample documentation and support available.
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+\begin{itemize}
+\item ESLint (extension available on VS Code)
+\end{itemize}
+ESLint was chosen as a linter for it’s reputation amongst developers as an industry standard. In addition, a VS Code (code editor of choice) extension is available for ease of use and integration.
+\\ \\
+Detailed information about the technology used and coding standards can be found in Section 6 and 7 of the \href{https://github.com/RishiVaya/Lower_Earth_Orbiters/blob/main/docs/DevelopmentPlan/Development_Plan.pdf}{Development Plan}.
 
 \subsection{Software Validation Plan}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+A Software Validation Plan is crucial for ensuring that the developed software meets its intended requirements and functions as expected. 
+\begin{itemize}
+    \item The MCT interface will be validated using real satellite telemetry data obtained from previous satellites. This data will simulate actual command and response scenarios, allowing us to verify the software's ability to handle and process real satellite communication data.
+    \item We have scheduled bi-weekly review sessions with project stakeholders, including NEUDOSE team members. These sessions will involve walking through the interface and its features, taking feedback on the user interface design, and ensuring that the software aligns with their operational requirements.
+    \item After the Rev 0 demo, we will demonstrate the software's core functionalities to the stakeholders such as Dr. Byun and gather feedback regarding its alignment with the project's goals.
+\end{itemize}
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
-
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
-
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
 
 \section{System Test Description}
 	
 \subsection{Tests for Functional Requirements}
+\label{Section 4.1}
 
 \wss{Subsets of the tests may be in related, so this section is divided into
   different areas.  If there are no identifiable subsets for the tests, this
@@ -216,230 +216,1248 @@ as a Rev 0 demo for the supervisor.}
 \wss{Include a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.}
 
-\subsubsection{Area of Testing1}
+\subsubsection{MCT Application Accessibility}
 
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-1
+\end{itemize}
 		
-\paragraph{Title for Test}
-
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{FR-SLN1\\}
 
-Control: Manual versus Automatic
+Control: Manual
 					
-Initial State: 
+Initial State: The MCT system is hosted on a linux server.
 					
-Input: 
+Input: URL path of the MCT user interface to be accessed via a web browser.
 					
-Output: \wss{The expected result for the given inputs}
+Output: MCT application loads successfully in the web browser
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: Upon entering the URL of the MCT application on a web browser, the browser should load the user interface of the application.
 					
 How test will be performed: 
-					
-\item{test-id2\\}
+The test can be performed on a common web browser such as Chrome or Firefox. A user will enter the URL of the hosted MCT application on the web browser.
 
-Control: Manual versus Automatic
 					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+\item{FR-SLN2\\}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Control: Manual
+					
+Initial State: The MCT system is hosted on a linux server and has an active TCP port to communicate with.
+					
+Input: A valid linux command or a series of commands.
+					
+Output: A success response from the TCP port, indicating that the ping was successful.
 
-How test will be performed: 
+Test Case Derivation: The active TCP port needs to accept linux-based commands from the command line and a success response from the TCP port can be used to evaluate the accessibility of the implemented communication protocol.
+
+How test will be performed: A user can send linux-commands through the GUI of the application after being authenticated and authorized.
+
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Managing User Roles}
 
-...
-
-\subsection{Tests for Nonfunctional Requirements}
-
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy}
-
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
-
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-2
+    \item FR-7
+\end{itemize}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{FR-SLN3\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
+Control: Manual
 					
-Initial State: 
+Initial State: The MongoDB database connected to the MCT application consists of one user with an admin role.
 					
-Input/Condition: 
+Input: An email adhering to standard email formats, user role, and a password for a user.
 					
-Output/Result: 
+Output: An updated list of users who are authorized to use the MCT application. This list shall include the user added above.
+
+Test Case Derivation: Upon adding a new user to the system, the changes should be reflected when retrieving the list of users allowed to access the application.
 					
 How test will be performed: 
-					
-\item{test-id2\\}
+Through the MCT application, a user who has an admin role will be able to add another user to the system. The admin can specify the role of this user. Then, the MongoDB database of users will be updated with the information provided by the admin.
 
-Type: Functional, Dynamic, Manual, Static etc.
+\item{FR-SLN4\\}
+
+Control: Manual
 					
-Initial State: 
+Initial State: The MongoDB database connected to the MCT application consists of one user with an admin role and five users with operator privileges.
 					
 Input: 
+\begin{enumerate}
+    \item Deleting a user: Email of the user to delete.
+    \item Editing a user: Email of the user to edit and role of the user.
+\end{enumerate}
 					
 Output: 
+\begin{enumerate}
+    \item Deleting a user: An updated list of users who are authorized to use the MCT application. This list shall not include the user added above.
+    \item Editing a user: An updated list of users who are authorized to use the MCT application. This list shall include the user added above, with their updated information.
+\end{enumerate}
+Test Case Derivation: Upon adding a new user to the system, the changes should be reflected when retrieving the list of users allowed to access the application.
 					
 How test will be performed: 
+Through the MCT application, a user who has an admin role will be able to add another user to the system. The admin can specify the role of this user. Then, the MongoDB database of users will be updated with the information provided by the admin.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Scheduling and Executing Commands}
 
-...
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-3
+    \item FR-4
+    \item FR-5
+\end{itemize}
+		
+
+\begin{enumerate}
+
+\item{FR-SLN5\\}
+
+Control: Automated
+					
+Initial State: The MCT application’s graphical user interface which currently consists of zero automated command sequences.
+					
+Input: An automated sequence of linux-based commands which is sent through the MCT’s graphical command line.
+					
+Output: A table which displays the automated command sequences in a queue.
+
+Test Case Derivation: Upon entering a set of command sequences to be sent to the satellite, the commands which are now in the queue should be displayed to the operator.
+					
+How test will be performed: 
+An operator will enter a set of linux-based commands to be automated through the MCT’s GUI.
+
+\item{FR-SLN6\\}
+
+Control: Manual
+					
+Initial State: The MCT application’s graphical user interface which currently consists of five command sequences in queue.
+					
+Input: Selected command sequences to be executed. Once executed, the command is sent to the satellite.
+
+Output: 
+A table which shows the updated statuses of all executed commands. This includes commands which were sent to and received by the satellite with their timestamps.
+
+Test Case Derivation: Upon executing a set of command sequences, the commands should be logged and displayed to the operator. The logs should also have the timestamp and statuses of the executed commands.
+					
+How test will be performed: 
+An operator will select a previously entered sequence of linux-based commands. Then, an operator can execute all of the selected commands which will forward the request to the satellite.
+
+\end{enumerate}
+
+\subsubsection{Cancelling Scheduled Commands}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-6
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN7\\}
+
+Control: Manual
+					
+Initial State: The MCT application’s graphical user interface which currently consists of five command sequences in queue.
+					
+Input: Select scheduled commands to delete. Send the request to delete a command from the queue.
+					
+Output: A table which shows the updated statuses of all executed commands. This includes commands which were sent to and received by the satellite with their timestamps.
+
+Test Case Derivation: Upon deleting a scheduled command, the updated list of commands should be logged and displayed to the operator. The logs should also have the timestamp and statuses of the executed commands.
+					
+How test will be performed: 
+An operator will select a scheduled command from the list of scheduled commands. Then, an operator can choose to delete the selected command and the changes should be displayed in the MCT application’s GUI.
+
+\end{enumerate}
+
+
+\subsubsection{Validating Scheduled Commands}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-7
+    \item FR-8
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN8\\}
+
+Control: Manual
+					
+Initial State: The MCT application has been configured with a list of allowed commands and automated sequences. These command sequences represent the available list of registered commands which operators can use to communicate with the satellite.
+					
+Input: A user attempts to enter an unregistered and unknown command through the GUI.
+					
+Output: An error message should be displayed, detailing the invalid command sequence.
+
+Test Case Derivation: Only allowed command sequences can be scheduled and sent for communication. Otherwise, the user should be informed of the invalid request.
+					
+How test will be performed: 
+An operator will enter a command sequence which is not in the list of available commands. The user interface shall display an error message and show the status of the invalid request.
+
+\end{enumerate}
+
+\subsubsection{Permission List Criteria for User}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-10
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN9\\}
+
+Control: Manual
+					
+Initial State: Ensure the user is logged into the MCT and the command to be executed does not match the user's permission list criteria.
+	
+Input: User attempts to execute a command that does not match their permission list criteria.
+					
+Output: The MCT should reject the command execution attempt and display an appropriate error message indicating the mismatch with the permission list criteria.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Permission List Criteria for Command Target}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-11
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN10\\}
+
+Control: Manual
+					
+Initial State: Ensure the user is logged into the MCT and the command to be executed does not match the permission list criteria for the specified command target.
+	
+Input: User attempts to execute a command that does not match the permission list criteria for the command target.
+					
+Output: The MCT should reject the command execution attempt and display an appropriate error message indicating the mismatch with the permission list criteria for the specified command target.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Permission List Criteria for Command Target}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-12
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN11\\}
+
+Control: Manual
+					
+Initial State: Ensure the user is logged into the MCT and has appropriate permissions to schedule commands.
+	
+Input: User schedules a command or automated command sequence for future execution.
+					
+Output: The MCT should successfully schedule the command or automated command sequence for future execution. The scheduled command or sequence should execute at the specified time without manual intervention.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Managing Scheduled Command Sequences}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-13
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN12\\}
+
+Control: Manual
+					
+Initial State: Ensure the user is logged into the MCT and has appropriate permissions to manage scheduled commands and sequences.
+	
+Input: User creates, edits, or deletes a scheduled command or sequence using the graphical user interface.
+					
+Output: The MCT's graphical user interface should respond accordingly to the user's action. Created commands or sequences should be displayed, edited changes should be saved, and deleted commands or sequences should be removed from the interface.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Selecting and Editing Satellites}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-14
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN13\\}
+
+Control: Manual
+					
+Initial State: Ensure the user is logged into the MCT and has appropriate permissions to select and edit satellites.
+	
+Input: User selects a satellite and edits its settings using the graphical user interface.
+					
+Output: The MCT's graphical user interface should allow the user to select and edit satellites of interest. Changes made to satellite settings should be saved and reflected in the interface.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Viewing Configured Satellites}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-15
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN14\\}
+
+Control: Manual
+					
+Initial State: Satellites of interest are configured in the MCT.
+	
+Input: User accesses the MCT interface.
+					
+Output: The MCT interface should display the current orbital state for each satellite of interest. Information displayed should include elevation, orbital state, and solar illumination for each satellite.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+
+\subsubsection{Configuring Elevation Threshold}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-16
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN15\\}
+
+Control: Manual
+					
+Initial State: User is logged into the MCT and the satellite's current elevation is below the specified threshold.
+	
+Input: User sets a specific elevation threshold for a satellite.
+					
+Output: The MCT should automatically schedule a command when the satellite's elevation reaches the user-specified threshold. The scheduled command should execute as per the defined parameters.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsubsection{Detecting Satellite and Scheduling Command}
+
+The tests below provide a means to evaluate the following functional requirements referred to in the SRS document:
+\begin{itemize}
+    \item FR-17
+\end{itemize}
+
+\begin{enumerate}
+
+\item{FR-SLN16\\}
+
+Control: Manual
+					
+Initial State: User is logged into the MCT and the satellite is within the covered area.
+	
+Input: Satellite enters or exits the covered area.
+					
+Output: The MCT should automatically schedule a command when the satellite enters or exits the covered area. The scheduled command should execute as per the defined parameters.
+
+Test Case Derivation:
+					
+How test will be performed:
+
+\end{enumerate}
+
+\subsection{Tests for Nonfunctional Requirements}
+\label{Section 4.2}
+
+
+\subsubsection{Usability and Humanity Requirements}
+
+Our usability testing module employs a comprehensive approach to evaluate user experience, learnability, and accessibility. We deploy a targeted suite of manual tests to capture direct user interaction feedback, assessing the software's intuitiveness and inclusiveness.
+
+\begin{description}
+    \item[Usability Testing:] We engage users in hands-on sessions, collecting their feedback to derive a quantitative usability score. This score reflects the software’s ease of use from the perspective of new users.
+    \item[Learnability Assessment:] Observing new users as they navigate the software without prior training allows us to gauge the software's learning curve and identify potential user experience roadblocks.
+    \item[Accessibility Review:] A diverse range of users, including those with different accessibility needs, are invited to test the software. Their experiences are crucial in informing necessary improvements to achieve an accessible and barrier-free user experience.
+\end{description}
+
+Each test within this module is carefully crafted to target essential usability facets, ensuring that the software lives up to the highest user-friendliness and accessibility standards.
+
+
+\begin{enumerate}
+
+\item{Usability-1\\}
+
+\textbf{NFR}: 10.1
+
+\textbf{Type}: Usability, Manual
+
+\textbf{Initial State}: Application or system is fully functional and ready for user interaction without prior exposure.
+
+\textbf{Input/Condition}: User engagement with the application or system.
+
+\textbf{Output/Result}: Compilation of usability scores derived from user feedback and completed surveys.
+
+\textbf{How test will be performed}:
+
+\begin{itemize}
+    \item Users will be granted access to the system or application for task execution or navigation.
+    \item Upon using the application or system, participants will be requested to fill out a survey evaluating the usability aspects.
+    \item The accumulated surveys will be examined to extract an aggregate usability score on a scale from 1 to 10.
+\end{itemize}
+
+\item{Usability-2\\}
+
+\textbf{NFR}: 10.3
+
+\textbf{Type}: Usability, Manual
+
+\textbf{Initial State}: Application or system is ready for testing with users who are inexperienced and have not been instructed on its use.
+
+\textbf{Input/Condition}: Users attempt self-guided learning and navigation of the application or system.
+
+\textbf{Output/Result}: Documentation of the learning curve, user errors, inquiries, and the time required for users to reach proficiency.
+
+\textbf{How test will be performed}:
+
+\begin{itemize}
+    \item Users will be allowed access to the software for exploratory learning through any available guides or tooltips.
+    \item Observers will document any user encounters with difficulties, posed questions, committed mistakes, and the duration to complete specified tasks efficiently.
+    \item Post-testing feedback sessions may be organized to gather additional insights on user learning experience.
+    \item The results from the surveys and observations will be synthesized to formulate an overall learnability score from 1 to 10.
+\end{itemize}
+
+\item{Usability-3\\}
+
+\textbf{NFR}: 10.5
+
+\textbf{Type}: Accessibility, Manual
+
+\textbf{Initial State}: Application or system is operational and ready for assessment by users with various accessibility needs.
+
+\textbf{Input/Condition}: Users with differing accessibility needs engage with the application or system.
+
+\textbf{Output/Result}: Analysis of accessibility, encountered barriers, user testimonials, and identification of improvement points.
+
+\textbf{How test will be performed}:
+
+\begin{itemize}
+    \item Participants with diverse accessibility needs, such as visual, auditory, or motor impairments, will be given access to the application or system.
+    \item They will be tasked to navigate and complete certain operations within the system.
+    \item Challenges faced by users, the software's accessibility strengths and shortcomings will be observed and noted.
+    \item Assistive technologies may be employed by participants, and their effectiveness will be evaluated during the testing.
+    \item Post-test discussions will be convened to accumulate detailed feedback on the accessibility of the software.
+    \item Analyzed data will aid in determining the software's alignment with accessibility standards and required enhancements.
+\end{itemize}
+
+\end{enumerate}
+
+\subsubsection{Performance Requirements}
+
+The Performance Testing Module is structured to rigorously assess the application's responsiveness, stability, and efficiency through a series of automated and manual tests:
+
+\begin{description}
+    \item[Response Time and Latency:] Measures the application's speed and latency under varying loads, ensuring performance stays within specified benchmarks.
+    \item[System Availability:] Monitors uptime to ensure the application's continuous operation, capturing any periods of unavailability.
+    \item[Calculation Precision:] Validates the accuracy of calculations to the second decimal point, critical for applications relying on spg4's positioning and elevation computations.
+    \item[Exception Handling:] Evaluates the system's capability to effectively manage internal exceptions, maintaining functionality without data loss.
+    \item[Resource Optimization:] Tracks CPU, RAM, and disk space usage to guarantee optimal resource utilization under different workload scenarios.
+    \item[Longevity Assessment:] Conducts comprehensive reviews to project the system's operational viability up to the year 2026, ensuring robustness and maintainability.
+\end{description}
+
+This module is designed to ensure our software not only meets current performance standards but is also poised for future demands and growth.
+
+
+\begin{enumerate}
+
+\item{performance-1\\}
+
+\textbf{NFR}: 11.1
+
+\textbf{Type}: Performance, Automated
+
+\textbf{Initial State}: Application or system fully functional and ready for testing, ideally in a controlled environment similar to production.
+
+\textbf{Input/Condition}: Specific tasks or actions are performed on the application or system to measure response times and latency.
+
+\textbf{Output/Result}: Measurements of speed (how fast a task is completed) and latency (time delay between the input and the expected output).
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item A performance testing tool or framework will be set up to simulate user actions or tasks.
+    \item The tool will execute these actions, mimicking real-world usage scenarios.
+    \item The software's response times for each task will be measured to assess speed.
+    \item Latency, or the delay between a user's action and the system's response, will be measured.
+    \item The test will be run multiple times, with increasing user load, to see how the system behaves under stress and if there are any degradation in speed or increases in latency.
+    \item Collected data will be analyzed to determine if the software meets predefined speed and latency benchmarks or thresholds.
+\end{itemize}\\
+
+\item{performance-2 \\}
+\textbf{NFR}: 11.2
+
+\textbf{Type}: Availability, Automated
+
+\textbf{Initial State}: Application or system deployed in a production-like environment.
+
+\textbf{Input/Condition}: Continuous monitoring tools check the application or system's availability at regular intervals.
+
+\textbf{Output/Result}: Measurements of the system's uptime and any periods of unavailability or downtime outside of scheduled maintenance windows.
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item An availability monitoring tool will be set up to check the application or system's status at regular intervals, e.g., every minute.
+    \item The tool will send requests to the system to ensure it is responsive and available.
+    \item Any periods of unavailability or downtime will be logged.
+    \item Scheduled maintenance windows will be noted, and any downtime during these periods will be excluded from the final availability calculations.
+    \item The system's overall uptime will be calculated as a percentage of the total time minus any downtime outside of scheduled maintenance.
+    \item The collected data will be analyzed to determine if the software meets the required 24/7 availability criteria, excluding scheduled maintenance periods.
+\end{itemize}\\
+
+\item{performance-3 \\}
+\textbf{NFR}: 11.3
+
+\textbf{Type}: Precision, Manual/Automated
+
+\textbf{Initial State}: Application or system fully functional and ready for testing in a controlled environment.
+
+\textbf{Input/Condition}: Specific tasks or calculations are executed in the application or system that involve spg4's calculation for position and elevation.
+
+\textbf{Output/Result}: Measurements of the system's calculation precision, ensuring results are accurate to the nearest 2nd decimal point.
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item A set of known input data will be fed into the system which uses spg4's calculation.
+    \item The system's calculated results will be captured and compared against expected values with known precision.
+    \item Any variation from the expected values beyond the 2nd decimal point will be logged as a precision error.
+    \item Automated testing tools or scripts will be used to run multiple iterations with varying input data to ensure consistent precision across different scenarios.
+    \item The collected data will be analyzed to determine if the software meets the required precision criteria, ensuring accuracy to the nearest 2nd decimal point for spg4's calculation.
+\end{itemize}\\
+
+\item{performance-4 \\}
+\textbf{NFR}: 11.4
+
+\textbf{Type}: Exception Handling, Automated/Manual
+
+\textbf{Initial State}: Application or system fully functional and ready for testing in a controlled environment.
+
+\textbf{Input/Condition}: Specific actions or tasks are performed on the application or system that are known to trigger internal exceptions or are likely to do so.
+
+\textbf{Output/Result}: Logs or notifications of the system's ability to catch and handle internal exceptions.
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item Scenarios known to cause internal exceptions will be identified. These scenarios will be executed on the system, through automated testing tools.
+    \item The system's behavior will be observed to check if it appropriately catches and handles the exceptions without crashing or causing data loss.
+    \item Logs, error messages, or any other relevant system output will be captured and analyzed to ensure the internal exceptions are caught and documented.
+    \item Any failure to catch or handle exceptions will be logged as an error.
+    \item The collected data will be analyzed to determine if the software effectively catches and manages internal exceptions as per the required criteria.
+\end{itemize}\\
+
+\item{performance-5 \\}
+\textbf{NFR}: 11.5
+
+\textbf{Type}: Resource Optimization, Automated
+
+\textbf{Initial State}: Application or system fully functional and ready for testing in a controlled environment with monitoring tools in place.
+
+\textbf{Input/Condition}: The application or system is subjected to typical workloads or specific tasks that challenge its resource utilization.
+
+\textbf{Output/Result}: Measurements of the system's CPU, RAM, and disk space utilization during the test.
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item Baseline measurements of CPU, RAM, and disk space utilization will be captured when the system is idle.
+    \item Automated testing tools or scripts will be used to simulate typical user actions, workloads, or specific stress scenarios on the system.
+    \item Monitoring tools will continuously track and log the system's CPU, RAM, and disk space utilization throughout the test.
+    \item Once testing is complete, the peak and average resource utilizations will be identified.
+    \item These values will be compared to predefined benchmarks or acceptable limits to ensure the software operates within the desired resource constraints.
+    \item If resource utilization exceeds acceptable limits, the specific scenarios causing excessive usage will be identified for optimization.
+\end{itemize}\\
+
+\item{performance-6 \\}
+\textbf{NFR}: 11.7
+
+\textbf{Type}: Longevity Assessment, Manual
+
+\textbf{Initial State}: Application or system fully functional, with complete documentation about its architecture, components, dependencies, and operational environment.
+
+\textbf{Input/Condition}: Review of the system's architecture, codebase, dependencies, licensing, infrastructure, and any third-party services it relies on.
+
+\textbf{Output/Result}: Recommendations and actions to ensure the system remains operational up to 2026.
+
+\textbf{How test will be performed}: 
+\begin{itemize}[noitemsep]
+    \item Infrastructure Review: Check the lifespan of the infrastructure components. Ensure that servers, databases, and other key components are robust and maintained to last through 2026.
+    \item Dependency Audit: Analyze the system's dependencies, including libraries, frameworks, and third-party services. Ensure that they are actively maintained and are expected to be supported through 2026.
+    \item Code Quality Assessment: High-quality, maintainable code is more likely to last longer without major issues. Perform a code review to identify any potential problem areas or technical debt that might cause problems in the future.
+    \item Redundancy and Failover: Ensure that the system has adequate redundancy and failover mechanisms in place to handle failures and maintain uptime.
+    \item Backup and Recovery Plan: Ensure that there's a robust backup and recovery plan in place and that it's tested regularly.
+    \item Documentation Review: Well-documented systems are easier to maintain and update. Ensure that system documentation is up-to-date and comprehensive, covering both the technical aspects and operational procedures.
+\end{itemize}\\
+
+\end{enumerate}
+
+
+\subsubsection{Operational and Environmental Requirements}
+
+\begin{enumerate}
+
+\item{Environmental-1\\}
+
+\textbf{NFR}: 12.2.1
+
+\textbf{Type}: Staging Environment, Manual/Automated
+
+\textbf{Initial State}: Development and testing of the application or system have been completed, and the production environment is ready for deployment.
+
+\textbf{Input/Condition}: The application or system is prepared for deployment to the production environment, and the staging environment is configured to mirror the production environment.
+
+\textbf{Output/Result}: Verification that the staging environment is available and functional for testing before production deployment.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Perform automated load and performance testing in the staging environment to ensure it can handle expected traffic and workloads.
+    \item Ensure that the staging environment is set up with configurations that match the production environment, including hardware, software, and network settings.
+    \item Confirm that monitoring and logging tools are in place to track the environment's status and performance.
+    \item Conduct manual testing to verify that the application or system's core functionalities work as expected in the staging environment.
+\end{enumerate}
+\\
+ 
+					
+\item{Environmental-2 \\}
+\textbf{NFR}: 12.2.2
+
+\textbf{Type}: Development environment, Manual
+
+\textbf{Initial State}: Development environment infrastructure is set up, and developers are ready to begin working on the MCT.
+
+\textbf{Input/Condition}: Developers need to set up their local development environment without installing additional software or tools on their local machines.
+
+\textbf{Output/Result}: Verification that the local development environment is self-contained and functional without the need for additional software installations.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Developers will attempt to set up their local development environment following the provided instructions. Developers will launch the local development environment to ensure it initializes and runs without errors.
+    \item Developers will work on the MCT application, making changes, writing code, and performing tests within the self-contained environment.
+    \item Verify that the MCT's required dependencies are included and functioning properly within the self-contained development environment.
+\end{enumerate}
+\\
+
+\item Environmental-3 \\
+
+\textbf{NFR}: 12.5
+
+\textbf{Type}: Release Requirement, Manual
+
+\textbf{Initial State}: The project for developing the MCT is in its planning and development phase.
+
+\textbf{Input/Condition}: The project plan includes the requirement to have the MCT ready for use by September 2024.
+
+\textbf{Output/Result}: Project is on track to meet the commission date and validation that the MCT is indeed ready for use by September 2024.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Implement a project management and monitoring system to track the progress of the MCT development against the project plan. Continuously monitor project tasks and milestones to identify any potential delays.
+    \item Schedule regular project status meetings to review progress, discuss challenges, and address any deviations from the project plan. Monitor and report on progress to stakeholders.
+    \item As the September 2024 deadline approaches, assess the readiness of the MCT. Verify that all features, functions, and necessary preparations are in place for use.
+
+\end{enumerate}
+
+
+
+\\
+
+
+\end{enumerate}
+
+\subsubsection{Maintainability and Support Requirements}
+
+\begin{enumerate}
+    \item {Maintenance-1\\}
+\textbf{NFR}: 13.1.1
+
+\textbf{Type}: Database Management, Manual and Automated
+
+\textbf{Initial State}: The MCT development project is in progress, and MongoDB has been chosen as the database technology for storing application data.
+
+\textbf{Input/Condition}: The development team is tasked with implementing MongoDB and ensuring it aligns with the project's requirements.
+
+\textbf{Output/Result}: Verification that MongoDB is successfully implemented, and the use of text or plain files for data storage is avoided.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Verify that MongoDB is configured and optimized for the project's specific requirements.
+    \item Ensure that MongoDB is compatible with the MCT's software stack, programming languages, and frameworks.
+    \item Test data retrieval and query performance to ensure that MongoDB can deliver data to the application in a timely manner.
+    \item Ensure that MongoDB backup and recovery mechanisms are in place and tested to safeguard against data loss.
+    \item Simulate expected workloads and assess MongoDB's performance, including read and write operations, query execution times, and throughput.
+\end{enumerate}
+
+
+\\
+ 
+    \item {Maintenance-2\\}
+\textbf{NFR}: 13.1.2
+
+\textbf{Type}: CI/CD Process, Automated and Manual
+
+\textbf{Initial State}: The MCT development project is underway, and the development team has decided to use GitHub Actions for CI/CD.
+
+\textbf{Input/Condition}: The development team is responsible for implementing CI/CD with GitHub Actions, incorporating automated testing and static analysis.
+
+\textbf{Output/Result}: GitHub Actions is successfully set up for CI/CD, including automated testing and static analysis, and that it aligns with the requirement.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Confirm that GitHub Actions is correctly configured for the project, including the definition of workflows, jobs, and triggers.
+
+    \item Ensure that the CI/CD pipeline in GitHub Actions automates the build and deployment process of the MCT.
+
+    \item Introduce a code change and push it to the version control system. Confirm that the CI/CD pipeline automatically triggers unit tests and reports the test results.
+
+    \item Validate that CI/CD pipelines integrate seamlessly with issue tracking systems and version control repositories. Confirm that commits trigger automatic builds.
+\end{enumerate}
+
+\\
+ 
+    \item {Maintenance-3\\}
+\textbf{NFR}: 13.1.3
+
+\textbf{Type}: System updates, Manual/Automated
+
+\textbf{Initial State}: The MCT development is in progress, and the system is expected to have the ability to update libraries and dependencies.
+
+\textbf{Input/Condition}: The system must be designed to detect, download, and apply updates for libraries and dependencies from trusted sources.
+
+\textbf{Output/Result}: Verification that the MCT can effectively update its libraries and dependencies to enhance security, performance, or functionality.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Use a test environment to initiate an update for a specific library. Confirm that the system processes the update request and begins the update process.
+
+    \item Manually downgrade a library version to simulate an outdated component. Verify that the system identifies the outdated version and triggers an update.
+
+    \item Apply an update to a library in the test environment. Verify that automated tests are executed, and manual validation is performed to ensure that the update doesn't introduce new issues.
+
+    \item Introduce deliberate code formatting issues and verify that they are promptly addressed and corrected in the codebase.
+\end{enumerate}
+\\
+ 
+    \item {Maintenance-4\\}
+\textbf{NFR}: 13.1.4
+
+\textbf{Type}: Code Quality Assessment, Manual
+
+\textbf{Initial State}: The MCT development project is ongoing, and the code is being actively developed.
+
+\textbf{Input/Condition}: The development team is responsible for writing and maintaining the MCT's source code.
+
+\textbf{Output/Result}: Source code is well-organized, modular, and adheres to fundamental software engineering principles.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Review the project's directory structure to ensure that source code files are organized into logical folders, like “front-end” and “back-end”.
+    \item Verify that variable and function names follow a consistent naming convention (e.g., camelCase), ensuring that code is self-consistent.
+    \item Conduct a code review session with team members, identifying and discussing any code quality issues or deviations from best practices.
+    \item Review code from multiple team members to ensure that it adheres to the project's coding standards and guidelines.
+\end{enumerate}\\
+
+    \item {Maintenance-5\\}
+\textbf{NFR}: 13.1.5
+
+\textbf{Type}: Code Formatting, Automated
+
+\textbf{Initial State}: The MCT development project is in progress, and source code is actively being written and maintained.
+
+\textbf{Input/Condition}: The development team is responsible for writing and formatting the source code, and ESLint is integrated into the development workflow.
+
+\textbf{Output/Result}:  Verification that the source code adheres to consistent formatting standards and is easy to read.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Confirm that a code formatting tool (ESLint) is integrated into the development environment and configured to enforce code formatting standards.
+    \item Run the code formatting tool on a code file known to have inconsistent formatting. Verify that the tool automatically formats the code.
+    \item Select code files at random and confirm that they follow defined code style guidelines, including aspects like indentation, variable naming, and code structure.
+\end{enumerate}\\
+ 
+    \item {Support-1\\}
+\textbf{NFR}: 13.2.1
+
+\textbf{Type}: Containerization, Manual and Automated
+
+\textbf{Initial State}: The source code of the MCT application is actively being developed and is in a state where it needs to be containerized for deployment.
+
+\textbf{Input/Condition}: The team has access to containerization tools and technologies, such as Docker, and is responsible for integrating these tools into the development workflow.
+
+\textbf{Output/Result}: Verification that the MCT is successfully containerized, allowing for portability, scalability, and efficiency.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Confirm that Docker is installed and configured on the development environment. Execute the containerization process for the MCT application. Verify that the container is successfully created and can be run as intended.
+    \item Deploy the MCT container to a local development environment and a testing environment. Confirm that the same container runs consistently in both environments.
+    \item Store data in the containerized application and restart it. Confirm that data is not lost when containers are restarted.
+\end{enumerate}
+
+\\
+ 
+    \item {Support-2\\}
+\textbf{NFR}: 13.2.2
+
+\textbf{Type}: Backup Testing, Manual
+
+\textbf{Initial State}: The MCT system is operational, and data is being actively processed and stored.
+
+\textbf{Input/Condition}: The development team has implemented data backup capabilities within the MCT system, and administrators are responsible for initiating and managing data backup operations.
+
+\textbf{Output/Result}: Verification that backups are created and can be accessed in case of data loss.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item After creating a backup, compare the backed-up data with the original data to ensure that no data corruption occurred during the backup process.
+    \item  Perform a backup of a large data set and measure the time it takes to complete. Verify that the system can handle large backups efficiently.
+    \item Initiate a data restoration process from a backup to confirm that administrators can successfully restore data in case of loss or corruption.
+\end{enumerate}
+
+\\
+
+ 
+    \item {Support-3\\}
+\textbf{NFR}: 13.2.3
+
+\textbf{Type}: Application Log Implementation, Automated and Manual
+
+\textbf{Initial State}: The MCT application is operational and actively processing requests and data. Logging mechanisms are implemented within the application.
+
+\textbf{Input/Condition}: The MCT application is configured to generate logs, and the log storage and retrieval mechanisms are in place. The development team and administrators have access to log data for debugging purposes.
+
+\textbf{Output/Result}: Verification that the MCT application effectively generates and stores logs to assist in debugging, and that the logs can be retrieved and analyzed.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Trigger specific events or actions in the MCT application that should result in log entries being created. Confirm that log entries are generated as expected. 
+    \item Inspect log entries to ensure they contain relevant information, such as timestamps, error messages.
+    \item Use logs to investigate and resolve specific issues or errors that occur within the MCT application. Confirm that logs facilitate the debugging process by identifying the causes of errors.
+\end{enumerate}
+
+\\
+
+\subsubsection{Security and Access Requirements}
+\item {Access-1\\}
+\textbf{NFR}: 14.1.1
+
+\textbf{Type}: Multi-Factor Authentication Implementation, Manual
+
+\textbf{Initial State}: The application's multi-factor authentication feature is enabled and configured. Users have registered email accounts linked to their respective profiles.
+
+\textbf{Input/Condition}:  User attempts to log in to the application and provides the required login credentials. The user is prompted to verify their identity through their registered email account by entering a verification code sent to the email.
+
+\textbf{Output/Result}: Verification that the application successfully prompts users for multi-factor authentication via their registered email accounts, preventing unauthorized access to sensitive user and system data.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Attempt to log in to the application using valid credentials.
+    \item Verify that the application prompts the user to verify their identity through their registered email account.
+    \item Access the registered email account and retrieve the verification code.
+    \item Enter the verification code into the application to complete the login process.
+    \item Attempt to log in with invalid credentials and verify that the multi-factor authentication process prevents unauthorized access.
+
+\end{enumerate}
+
+
+\item {Access-2\\}
+\textbf{NFR}: 14.1.2
+
+\textbf{Type}: Account Lockout and Timeout Implementation, Manual
+
+\textbf{Initial State}: The application's account lockout and timeout settings are configured to restrict access after ten consecutive failed login attempts. The timeout period is set to five minutes.
+
+
+\textbf{Input/Condition}:   A user attempts to log in to the application using the same credentials consecutively for ten times.
+
+\textbf{Output/Result}: Verification that the application denies access to the user account after ten consecutive failed login attempts and enforces a five-minute timeout period before the user can attempt to authenticate again.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Attempt to log in to the application with the same credentials ten times, ensuring each attempt is unsuccessful.
+
+    \item Verify that the application denies access to the user account after the tenth failed attempt.
+    \item Wait for the designated timeout period to pass (five minutes).
+
+    \item Attempt to log in to the application again with the correct credentials and verify that the user can authenticate successfully.
+
+\end{enumerate}
+
+\item {Integrity-1\\}
+\textbf{NFR}: 14.2.1
+
+\textbf{Type}: TLE Update and Overpass Calculation, Automated
+
+\textbf{Initial State}: The application has a scheduled process to periodically fetch TLE data and recalculate satellite overpasses based on the most recent information.
+
+
+\textbf{Input/Condition}: The scheduled time for the TLE update and overpass calculation process is reached.
+
+
+\textbf{Output/Result}: Verification that the application successfully fetches the most recent TLE data and recalculates satellite overpasses using the updated information, ensuring accurate predictions of satellite overpasses.
+
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Wait for the scheduled time for the TLE update and overpass calculation process to be initiated.
+
+    \item Verify that the application fetches the most recent TLE data from the appropriate source.
+    \item Confirm that the application utilizes the updated TLE data to recalculate satellite overpasses.
+
+    \item Compare the recalculated overpasses with the previously calculated overpasses to ensure the predictions are more accurate.
+
+\end{enumerate}
+
+\item {Integrity-2\\}
+\textbf{NFR}: 14.2.2
+
+\textbf{Type}: Minimum Elevation Connection Evaluation, Automated
+
+
+\textbf{Initial State}: The application is configured with a minimum elevation threshold to evaluate satellite connections, and the necessary satellite data and connectivity settings are in place.
+
+
+
+\textbf{Input/Condition}: The application attempts to establish a connection with a satellite positioned below the set minimum elevation threshold.
+
+
+
+\textbf{Output/Result}: Verification that the application correctly assesses whether a satellite is within the acceptable range for connection based on the minimum elevation threshold, ensuring that scheduled commands are not executed if the satellite is out of range.
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Simulate a scenario where the application attempts to establish a connection with a satellite positioned below the minimum elevation threshold.
+
+    \item Verify that the application evaluates the satellite's elevation and determines whether it is within the acceptable range for a connection.
+
+    \item Confirm that the application does not execute scheduled commands if the satellite is deemed out of range based on the minimum elevation threshold.
+\end{enumerate}
+
+\item {Integrity-3\\}
+
+\textbf{NFR}: 14.2.3
+
+\textbf{Type}: Error Notification and Operator Responsibility, Manual
+
+
+\textbf{Initial State}: The application is operational, and the operators have the necessary access and privileges to send and schedule commands to the satellite.
+
+
+
+
+\textbf{Input/Condition}: An operator attempts to schedule a command that contains errors or invalid data.
+
+
+
+
+\textbf{Output/Result}: Verification that the application promptly notifies the operator of any errors found within the scheduled command, while emphasizing the operator's responsibility to ensure the validity of the commands.
+
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Intentionally create a command with errors or invalid data and attempt to schedule it.
+
+
+    \item Confirm that the application promptly notifies the operator of the errors found within the command.
+
+
+    \item Ensure that the error notification provides sufficient information to help the operator identify and rectify the errors within the command.
+
+    \item Verify that the application does not execute the command until the errors have been addressed by the operator.
+
+\end{enumerate}
+
+\item {Integrity-4\\}
+
+\textbf{NFR}: 14.2.4
+
+\textbf{Type}: Backup and Recovery Mechanism, Automated and Manual
+
+
+
+\textbf{Initial State}: The system has a backup and recovery mechanism in place to restore the database to its most recent correct state in the event of unexpected data failures. The backup schedule is established and functioning properly.
+
+
+
+
+
+\textbf{Input/Condition}: Introduce simulated data corruption or loss within the database to trigger the need for the backup and recovery mechanism.
+
+
+
+
+
+\textbf{Output/Result}: Verification that the system successfully restores the database to its most recent correct state using the backup and recovery mechanism, ensuring that the information in the database remains accessible despite the data failures.
+
+
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Introduce simulated data corruption or loss within the database.
+
+
+    \item Trigger the backup and recovery mechanism to restore the database to its most recent correct state.
+
+
+    \item Verify that the system retrieves and reinstates the most recent backup data without any loss or corruption.
+
+
+    \item Confirm that the restored database contains all the necessary information and is fully operational.
+
+
+\end{enumerate}
+
+\item {Integrity-5\\}
+
+\textbf{NFR}: 14.2.5
+
+\textbf{Type}: Error Message Standardization and Data Validation, Automated
+\textbf{Initial State}: The application's data validation is set up to identify the missing data fields and return appropriate error messages adhering to a standardized format.
+
+
+\textbf{Input/Condition}: Simulate a scenario where the system or satellite failure leads to responses with missing data attributes.
+
+
+\textbf{Output/Result}: Ensure that the application correctly labels all missing data fields with appropriate error messages, ensuring that it sticks to the standardized format and maintaining consistent data across all validation processes.
+
+
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Simulate a system, or satellite failure to generate responses with missing data attributes.
+
+
+
+    \item Verify that the application identifies the missing data fields during the data validation process.
+
+
+
+    \item Confirm that the application labels the missing data fields with appropriate error messages following the standardized format.
+
+
+
+    \item Cross-verify that the standardized error messages effectively communicate the nature of the missing data attributes and their respective fields.
+
+\end{enumerate}
+
+
+
+\item {Integrity-6\\}
+
+\textbf{NFR}: 14.2.6
+
+\textbf{Type}: Cross-Browser Testing, Manual and Automated
+\textbf{Initial State}: The application is developed, and the cross-browser testing framework is set up to evaluate the application's performance across a range of browsers, including Safari, Chrome, and Firefox.
+
+\textbf{Input/Condition}: Execute the application on different browsers, including Safari, Chrome, and Firefox, to assess its functionality and consistency.
+\textbf{Output/Result}: Verification that the application functions consistently across all tested browsers, ensuring a uniform user experience regardless of the browser being used.
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Execute the application on Safari, Chrome, and Firefox, covering the range of browsers specified in the requirement.
+    \item Verify that all essential functionalities of the application perform as expected on each browser.
+    \item Confirm that the layout, design, and user interface elements remain consistent across all tested browsers.
+    \item Identify and document any discrepancies or inconsistencies in the application's behavior across different browsers.
+
+\end{enumerate}
+
+
+\item {Integrity-7\\}
+
+\textbf{NFR}: 14.2.7
+
+\textbf{Type}: HTML and CSS Compatibility Checks, Automated
+\textbf{Initial State}: The application is developed, and the cross-browser testing framework is set up to evaluate the application's performance across a range of browsers, including Safari, Chrome, and Firefox.
+
+\textbf{Input/Condition}: Execute the application on different browsers, including Safari, Chrome, and Firefox, to assess its functionality and consistency.
+\textbf{Output/Result}: Verification that the application functions consistently across all tested browsers, ensuring a uniform user experience regardless of the browser being used.
+\textbf{How test will be performed}: 
+\begin{enumerate}
+    \item Execute the application on Safari, Chrome, and Firefox, covering the range of browsers specified in the requirement.
+    \item Verify that all essential functionalities of the application perform as expected on each browser.
+    \item Confirm that the layout, design, and user interface elements remain consistent across all tested browsers.
+    \item Identify and document any discrepancies or inconsistencies in the application's behavior across different browsers.
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+\end{enumerate}
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+FR-1 & FR-SLN1, FR-SLN2 \\
+\hline
+FR-2 & FR-SLN3, FR-SLN4 \\
+\hline
+FR-3 & FR-SLN5, FR-SLN6 \\
+\hline
+FR-4 & FR-SLN5, FR-SLN6 \\
+\hline
+FR-5 & FR-SLN5, FR-SLN6 \\
+\hline
+FR-6 & FR-SLN7 \\
+\hline
+FR-7 & FR-SLN3, FR-SLN8 \\
+\hline
+FR-8 & FR-SLN8 \\
+\hline
+FR-10 & FR-SLN9 \\
+\hline
+FR-11 & FR-SLN10 \\
+\hline
+FR-12 & FR-SLN11 \\
+\hline
+FR-13 & FR-SLN12 \\
+\hline
+FR-14 & FR-SLN13 \\
+\hline
+FR-15 & FR-SLN16 \\
+\hline
+FR-17 & FR-SLN16 \\
+\hline
+NFR-10.1 & Usability-1  \\
+\hline
+NFR-10.3 & Usability-2 \\
+\hline
+NFR-10.5 & Usability-3 \\
+\hline
+NFR-11.1 & Performance-1 \\
+\hline
+NFR-11.2 & Performance-2 \\
+\hline
+NFR-11.3 & Performance-3 \\
+\hline
+NFR-11.4 & Performance-4 \\
+\hline
+NFR-11.5 & Performance-5 \\
+\hline
+NFR-11.6 & Performance-6 \\
+\hline
+NFR-12.2.1 & Environmental-1 \\
+\hline
+NFR-12.2.2 & Environmental-2 \\
+\hline
+NFR-12.2.5 & Environmental-3 \\
+\hline
+NFR-13.1.1 & Maintenance-1 \\
+\hline
+NFR-13.1.2 & Maintenance-2 \\
+\hline
+NFR-13.1.3 & Maintenance-3 \\
+\hline
+NFR-13.1.4 & Maintenance-4 \\
+\hline
+NFR-13.1.5 & Maintenance-5 \\
+\hline
+NFR-13.2.1 & Support-1 \\
+\hline
+NFR-13.2.2 & Support-2 \\
+\hline
+NFR-13.2.3 & Support-3 \\
+\hline
+NFR-14.1.1 & Access-1 \\
+\hline
+NFR-14.1.2 & Access-2 \\
+\hline
+NFR-14.2.1 & Integrity-1 \\
+\hline
+NFR-14.2.2 & Integrity-2 \\
+\hline
+NFR-14.2.3 & Integrity-3 \\
+\hline
+NFR-14.2.4 & Integrity-4 \\
+\hline
+NFR-14.2.5 & Integrity-5 \\
+\hline
+NFR-14.2.6 & Integrity-6 \\
+\hline
+NFR-14.2.7 & Integrity-7 \\
+\hline
+NFR-14.2.8 & Integrity-8 \\
+\hline
+NFR-14.3.1 & Privacy-3 \\
+\hline
+\end{longtable}
+
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
-
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
-
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
-
 \subsection{Unit Testing Scope}
-
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
-
-\subsubsection{Module 1}
-
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
-
-\begin{enumerate}
-
-\item{test-id1\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
-\item{...\\}
-    
-\end{enumerate}
-
-\subsubsection{Module 2}
-
-...
-
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
-
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
-
-\subsubsection{Module ?}
-		
-\begin{enumerate}
-
-\item{test-id1\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
-
-\end{enumerate}
-
-\subsubsection{Module ?}
-
-...
-
-\subsection{Traceability Between Test Cases and Modules}
-
-\wss{Provide evidence that all of the modules have been considered.}
-				
 \bibliographystyle{plainnat}
 
 \bibliography{../../refs/References}
@@ -448,16 +1466,17 @@ How test will be performed:
 
 \section{Appendix}
 
-This is where you can place additional information.
-
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+N/A
 
 \subsection{Usability Survey Questions?}
 
-\wss{This is a section that would be appropriate for some projects.}
+\begin{itemize}
+    \item On a scale of 1-10, how easy was it to utilize and navigate the application?
+    \item On a scale of 1-10, how easy was the action of scheduling a command to the satellite?
+    \item On a scale of 1-10, how easy was the action of editing and removing a scheduled command sequence?
+\end{itemize}
 
 \newpage{}
 \section*{Appendix --- Reflection}
@@ -484,5 +1503,50 @@ graduate attribute of Lifelong Learning.  Please answer the following questions:
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?
 \end{enumerate}
+
+Umang's Reflection
+\begin{enumerate}
+    \item 
+        In order to make sure this project achieves all of its targeted goals, the team will have to acquire knowledge and skills to become more familiar with the verification and validation steps of a software project. The team will need to acquire knowledge in dynamic testing techniques such as integration testing when verifying how well the application adheres to the SRS. Also, unit testing can be used to streamline the testing process when evaluating different components of the MCT application. Software tools such as Selenium and jest are available to automate the testing of client and server-side applications. In addition, the performance of the application needs to be verified and validated, which can be done through acquiring testing skills related to regression testing.
+
+    \item There are several resources, whether it is in the form of books or videos, to learn more about the technologies and processes mentioned above. I will learn by reading documentation and articles to learn about best practices of testing depending on the use case. Then, I will research into testing tools and frameworks to help implement these best practices.
+\end{enumerate}
+
+Quinn's Reflection
+\begin{enumerate}
+    \item 
+        For the team to complete the verification and validation of the project, thorough testing knowledge will have to be learned and applied, specifically reflecting on past coursework in SFWRENG 3SO3, Software Testing. This knowledge can be applied while using various testing tools to statically and dynamically test FRs and NRFs. In addition, we can draw our knowledge from SFWRENG 4HC3, Human Computer Interfaces, for usability testing of NFR's, and conducting usability testing based off designs.
+
+    \item To approach static, dynamic, and usability testing, it would be good to reflect and utilize past coursework, as well as use online resources/tutorial to aid in learning. As my interests lie primarily in the UI/UX component of the application, I will look into usability testing, and drawing my experiences from past coursework.
+\end{enumerate}
+
+Diamond's Reflection
+\begin{enumerate}
+    \item To successfully complete the verification and validation of our project, the team will need a range of knowledge and skills. This includes understanding testing methodologies, the ability to create effective tests, proficiency in relevant tools and languages, database management, and effective communication with stakeholders. Acquiring these competencies is essential for the project's success.
+    \item In addition to taking webinars for practical testing, team members have the option of enrolling in online tutorials and courses to gain information about dynamic testing. They can use linters and static analysis tools to find problems in the code, and they can research and implement industry best practises for efficient code reviews while the product is being developed.
+\end{enumerate}
+
+Dhruv's Reflection
+\begin{enumerate}
+    \item To ensure the successful verification and validation of our project, the team will require a diverse set of knowledge and skills. This encompasses familiarity with various testing methodologies for which I will refer to a previous course we took on testing in a previous year, 3S03: Software Testing. Acquiring and honing these competencies are imperative for achieving the project's objectives. To do this, we will continue to keep touching base to ensure team communication is maintained and I will find resources so I can learn how to dynamic test more effectively. Utilizing some softwares such as Jira can help in this aspect. 
+    \item To enhance their understanding of practical testing, team members can participate in webinars and consider enrolling in online Udemy courses to become better dynamic testers. Additionally, looking at online videos on how people approach it is a good way to understand the different techniques involved. This is something I look forward to doing because it can allow me to think from many perspectives while ensuring our application is robust and reliable. 
+
+\end{enumerate}
+
+Rishi's Reflection
+\begin{enumerate}
+    \item To ensure the successful verification and validation of our project, the team must possess a diverse set of knowledge and skills. This encompasses familiarity with various testing methods, the capability to design meaningful tests, proficiency in relevant programming languages and tools, adeptness in database management, and the ability to communicate effectively with stakeholders. Acquiring these competencies is vital for the project's overall success, as they enable the team to thoroughly assess the project's functionality, identify potential issues, and maintain clear communication channels with all involved parties. With these essential skills in place, the project can achieve its objectives efficiently and meet the requirements of stakeholders and users alike.
+
+    \item Numerous resources, including books and videos, are available to delve deeper into the technologies and processes discussed. My approach involves studying documentation and articles to grasp testing best practices tailored to specific use cases. Subsequently, I plan to explore various testing tools and frameworks, utilizing this research to effectively implement the identified best practices. This methodical approach ensures a comprehensive understanding of the subject matter and facilitates the practical application of learned concepts in the project.
+\end{enumerate}
+
+
+
+Next steps:
+\begin{itemize}
+    \item Dynamic Testing (integration testing): Quinn and Rishi will take the initiative to gain a deeper understanding of dynamic testing techniques such as integration testing. This will be used to verify the completeness and correctness of the code and SRS.
+    \item Regression Testing: Dhruv will take the initiative to gain a deeper understanding of regression testing. The goal is to research into the available regression testing tools and frameworks which will subsequently be utilized to verify the application's performance.
+    \item Unit Testing: Diamond and Umang will take the initiative to gain a deeper understanding of testing tools such as Selenium and jest. This will be used to automate testing of the application's client and server-side functions.
+\end{itemize}
 
 \end{document}
