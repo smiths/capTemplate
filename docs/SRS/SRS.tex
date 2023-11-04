@@ -50,6 +50,7 @@
 October 6, 2023 & Q.H, R.V, D.A, D.C, U.R & Completed SRS documentation\\
 October 9, 2023 & U.R & Added missing relevant facts and assumptions\\
 October 20, 2023 & U.R & Added safety and security requirements from Hazard Analysis\\
+November 3, 2023 & U.R & Added labels to FRs\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -289,39 +290,90 @@ User Authentication and Authorization: Users must be able to log in, with a spec
 \section{Functional Requirements}
 \subsection{Functional Requirements}
 \begin{enumerate}
-    \item The MCT must run as a web application consisting of a graphical UI accessible through a web browser and TCP port to communicate commands. \\
-    \textbf{Rationale:} We believe a web application is the most appropriate way to achieve communication between users and the satellite. We chose Linux because of its flexibility, reliability and overall security. 
-    \item The MCT must manage a list of users and its data, specifying the roles and all its associated actions. \\
+    \item{FR-1\\}
+    
+    The MCT must run as a web application consisting of a graphical UI accessible through a web browser and TCP port to communicate commands. \\
+    \textbf{Rationale:} We believe a web application is the most appropriate way to achieve communication between users and the satellite. We chose Linux because of its flexibility, reliability and overall security.
+    
+    \item{FR-2\\}
+    
+    The MCT must manage a list of users and its data, specifying the roles and all its associated actions. \\
     \textbf{Rationale:} This is to ensure that the system has a list of users to verify who’s allowed to enter and who isn’t. 
-    \item The MCT will present a graphical interface allowing users to enter, select, and execute satellite commands while receiving text output from each command. \\
+
+    \item{FR-3\\}
+    
+
+    The MCT will present a graphical interface allowing users to enter, select, and execute satellite commands while receiving text output from each command. \\
     \textbf{Rationale:} This is important because this is one of the most basic functions of our application, which includes three fundamental functions. The text output allows the user to understand the process as it’s happening so they are in the know. 
-    \item  The MCT will log all commands sent to and received from each target with timestamps. \\
+
+    \item{FR-4\\}
+    
+    The MCT will log all commands sent to and received from each target with timestamps. \\
     \textbf{Rationale:} This is helpful when the system runs into errors, because it’s easy to trace and determine what command caused it. 
-    \item The MCT must present a graphical user interface to create, edit, and delete automated command sequences. \\
+
+    \item{FR-5\\}
+    
+    The MCT must present a graphical user interface to create, edit, and delete automated command sequences. \\
     \textbf{Rationale:} A graphical user interface enables intuitive interaction between the user and the system and improves the overall user experience. 
-    \item The MCT must have an option to cancel an automated command sequence during execution. \\
+
+    \item{FR-6\\}
+        
+    The MCT must have an option to cancel an automated command sequence during execution. \\
     \textbf{Rationale:} This is to allow the user to undo if a command was sent as a mistake or incorrect on their part. This will save plenty of time for the user rather than having to wait till the original command has been processed. 
-    \item The MCT shall store a list of allowed commands and automated sequences for each target, specified using regular expressions. \\
-    \textbf{Rationale:} This will ensure the system can verify a command when inputted by a user so that it matches to an allowed list. Otherwise, any command might influence a target which can cause damage. 
-    \item The MCT shall store a list of allowed commands and automated sequences for each user, specified using regular expressions. \\
+
+    \item{FR-7\\}
+    
+    The MCT shall store a list of allowed commands and automated sequences for each target, specified using regular expressions. \\
+    \textbf{Rationale:} This will ensure the system can verify a command when inputted by a user so that it matches to an allowed list. Otherwise, any command might influence a target which can cause damage.
+
+    \item{FR-8\\}
+        
+    The MCT shall store a list of allowed commands and automated sequences for each user, specified using regular expressions. \\
     \textbf{Rationale:} This will ensure the system can verify the user so that it matches to an allowed list of users. Otherwise, any command by any user can negatively influence the satellite. 
-    \item The application administrator shall be able to edit the permission list for each target and user. \\
+
+    \item{FR-9\\}
+    
+    The application administrator shall be able to edit the permission list for each target and user. \\
     \textbf{Rationale:} An admin user who is responsible enough has been given permission to edit the list of targets and users. Without this functionality, if a user or command is attempting to cause damage it cannot be reprimanded. The admin user can remove or delete them to avoid said damage. 
-    \item The MCT will be able to reject a user from executing a command unless that command matches the permission list criteria for the originating user. \\
+
+    \item{FR-10\\}
+    
+    The MCT will be able to reject a user from executing a command unless that command matches the permission list criteria for the originating user. \\
     \textbf{Rationale:} This is vital because a command has to fit the permission list criteria in order for it to be allowed to run. Without this constraint, any command would be eligible to run which would be out of scope for this project. Specifically, it has to fit the criteria for that user group as different groups have different permissions for commands. 
-    \item The MCT will be able to reject a user from executing a command unless that command matches the permission list criteria for the command target. \\
+
+    \item{FR-11\\}
+    
+    The MCT will be able to reject a user from executing a command unless that command matches the permission list criteria for the command target. \\
     \textbf{Rationale:} This is important because a command has to fit the permission list criteria for it to run. Specifically, it has to fit the criteria of commands for that command target, because each target has commands specifically associated to it. 
-    \item The MCT must be able to schedule commands and automated command sequences for future execution. \\
+
+    \item{FR-12\\}
+    
+    The MCT must be able to schedule commands and automated command sequences for future execution. \\
     \textbf{Rationale:} This is important because a user may not have the time to wait or schedule a command for later. Through this, a user can save time to run commands without having to wait. 
-    \item The MCT shall present a graphical user interface to create, edit, and delete scheduled commands and sequences. \\
+
+    \item{FR-13\\}
+        
+    The MCT shall present a graphical user interface to create, edit, and delete scheduled commands and sequences. \\
     \textbf{Rationale:} A graphical user interface presents an intuitive interface for the user to interact with the satellite through create, edit and delete functions. A visual UI is most intuitive for every human to interpret and work with. 
-    \item The MCT shall present a graphical user interface to select and edit the satellites of interest. \\
+
+    \item{FR-14\\}
+
+    The MCT shall present a graphical user interface to select and edit the satellites of interest. \\
     \textbf{Rationale:} A graphical user interface presents an intuitive interface for the user to interact with the select and edit the satellites of interest. A graphical UI is most appropriate solution for this function.
-    \item The MCT shall display the current orbital state for satellites of interest, elevation, and solar illumination. \\
+
+    \item{FR-15\\}    
+
+    The MCT shall display the current orbital state for satellites of interest, elevation, and solar illumination. \\
     \textbf{Rationale:} This is very important because it displays what the user is working with. For each satellite of interest, its elevation, orbital state and its illumination are vital pieces of information for the user to know. Presenting these on the screen is appropriate. 
-    \item The MCT shall be able to schedule commands when a satellite enters a user-specified elevation threshold over the ground station coordinates. \\
+    
+    \item{FR-16\\}
+
+    The MCT shall be able to schedule commands when a satellite enters a user-specified elevation threshold over the ground station coordinates. \\
     \textbf{Rationale:} This allows the user to manipulate any satellite within the threshold. This enables the user to play around with more satellites as their threshold is subject to preference. 
-    \item  The MCT shall be able to schedule commands when a satellite enters or exits in the covered area. \\
+
+    \item{FR-17\\}
+    
+    The MCT shall be able to schedule commands when a satellite enters or exits in the covered area. \\
     \textbf{Rationale:} This is a core function of the application. The application can only manipulate and schedule commands for satellites within this area. Beyond this area would be too difficult for the application to manage. 
 
 \end{enumerate}
