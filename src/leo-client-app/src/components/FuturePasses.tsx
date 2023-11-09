@@ -1,4 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useUser } from "@auth0/nextjs-auth0/client";
+import {
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 
 interface Pass {
   type: string;
@@ -9,12 +20,13 @@ interface Pass {
 
 const FuturePasses: React.FC = () => {
   const [passes, setPasses] = useState<Pass[][]>([]);
+  const { user } = useUser();
 
   const fetchPasses = () => {
-    fetch('http://localhost:3001/getNextPasses')
+    fetch("http://localhost:3001/getNextPasses")
       .then((response) => {
         if (!response.ok) {
-          throw Error('Network response was not ok');
+          throw Error("Network response was not ok");
         }
         return response.json();
       })
@@ -22,7 +34,7 @@ const FuturePasses: React.FC = () => {
         setPasses(data.nextPasses);
       })
       .catch((error) => {
-        console.error('Error fetching passes:', error);
+        console.error("Error fetching passes:", error);
       });
   };
 
@@ -39,37 +51,33 @@ const FuturePasses: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <Stack alignItems="center" spacing={2}>
       <h1>Next Week's Passes</h1>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th style={{ width: '50%', border: '1px solid #000', padding: '8px' }}>Entry</th>
-            <th style={{ width: '50%', border: '1px solid #000', padding: '8px' }}>Exit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {passes.map((passPair, index) => (
-            <tr key={index}>
-              <td style={{ border: '1px solid #000', padding: '8px' }}>
-                {passPair[0].type === 'Enter' && (
-                  <>
-                    {passPair[0].time}
-                  </>
-                )}
-              </td>
-              <td style={{ border: '1px solid #000', padding: '8px' }}>
-                {passPair[1].type === 'Exit' && (
-                  <>
-                    {passPair[1].time}
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <TableContainer component={Paper} sx={{ maxWidth: 650 }}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Entry</TableCell>
+              <TableCell align="center">Exit</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {passes.map((passPair, index) => (
+              <TableRow
+                key={passPair[0].time + index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell align="center" component="th" scope="row">
+                  {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
+                </TableCell>
+                <TableCell align="center">
+                  {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Stack>
   );
 };
 
