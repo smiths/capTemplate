@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import { Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
 const fetchDelay = 1000;
 
@@ -44,13 +45,13 @@ const SatelliteInfo: React.FC = () => {
   });
 
   const fetchData = () => {
-    fetch('http://localhost:3001/getSatelliteInfo') // TODO: Fix endpoint for when server is hosted
+    fetch("http://localhost:3001/getSatelliteInfo") // TODO: Fix endpoint for when server is hosted
       .then((response) => response.json())
       .then((data: SatelliteInfoState) => {
         setState(data);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
   };
 
@@ -66,42 +67,53 @@ const SatelliteInfo: React.FC = () => {
     };
   }, []);
 
-  const { positionEci, velocityEci, longitude, latitude, height, azimuth, elevation, rangeSat } = state;
+  const {
+    positionEci,
+    velocityEci,
+    longitude,
+    latitude,
+    height,
+    azimuth,
+    elevation,
+    rangeSat,
+  } = state;
 
   return (
-    <div>
+    <Stack alignItems="center" spacing={2}>
       <h2>Satellite Information</h2>
-      <div>
-        <strong>Position ECI:</strong>
-        <ul>
-          <li>X: {positionEci.x}</li>
-          <li>Y: {positionEci.y}</li>
-          <li>Z: {positionEci.z}</li>
-        </ul>
-      </div>
-      <br/>
-      <div>
-        <strong>Velocity ECI:</strong>
-        <ul>
-          <li>X: {velocityEci.x}</li>
-          <li>Y: {velocityEci.y}</li>
-          <li>Z: {velocityEci.z}</li>
-        </ul>
-      </div>
-      <br/>
-      <div>
-        <strong>Other Info:</strong>
-        <ul>
-          <li>Longitude: {longitude}</li>
-          <li>Latitude: {latitude}</li>
-          <li>Height: {height}</li>
-          <br/>
-          <li>Azimuth: {azimuth}</li>
-          <li>Elevation: {elevation}</li>
-          <li>rangeSat: {rangeSat}</li>
-        </ul>
-      </div>
-    </div>
+      <Stack spacing={1}>
+        <div>
+          <strong>Position ECI:</strong>
+          <ul>
+            <li>X: {positionEci.x}</li>
+            <li>Y: {positionEci.y}</li>
+            <li>Z: {positionEci.z}</li>
+          </ul>
+        </div>
+        <br />
+        <div>
+          <strong>Velocity ECI:</strong>
+          <ul>
+            <li>X: {velocityEci.x}</li>
+            <li>Y: {velocityEci.y}</li>
+            <li>Z: {velocityEci.z}</li>
+          </ul>
+        </div>
+        <br />
+        <div>
+          <strong>Other Info:</strong>
+          <ul>
+            <li>Longitude: {longitude}</li>
+            <li>Latitude: {latitude}</li>
+            <li>Height: {height}</li>
+            <br />
+            <li>Azimuth: {azimuth}</li>
+            <li>Elevation: {elevation}</li>
+            <li>rangeSat: {rangeSat}</li>
+          </ul>
+        </div>
+      </Stack>
+    </Stack>
   );
 };
 
