@@ -14,14 +14,13 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true,
   },
-  role: UserRole,
+  role: Object.values(UserRole),
   satellites: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Satellite",
     },
   ],
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);

@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import * as dotenv from "dotenv";
+import bodyParser from "body-parser";
 
 dotenv.config({ path: `.env.local`, override: true });
 
@@ -8,16 +9,24 @@ const cors = require("cors");
 const port = 3001;
 const satellite = require("satellite.js");
 const mongoose = require("mongoose");
+const User = require("./models/user");
+const Satellite = require("./models/satellite");
+const Log = require("./models/log");
 
-const username = "admin";
-
-const password = "3JasPQ8z197ZYkpL";
-
-const dbUri = `mongodb+srv://${username}:${password}@lower-earth-orbit.svc6u3u.mongodb.net/lower-earth-orbit?retryWrites=true&w=majority`;
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 mongoose
-  .connect(dbUri)
-  .then((res: any) => console.log("Connected to db."))
+  // .connect(process.env.DB_URI)
+  .connect(
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@lower-earth-orbit.svc6u3u.mongodb.net/lower-earth-orbit?retryWrites=true&w=majority`
+  )
+  .then((res: any) => {
+    app.listen(port, () => {
+      console.log(`[Server]: I am running at https://localhost:${port}`);
+    });
+    console.log("Connected to db.");
+  })
   .catch((err: any) => console.log(err));
 
 // Allow requests from your React app's origin (http://localhost:3000)
@@ -145,6 +154,47 @@ app.get("/getNextPasses", (req, res) => {
   res.json({ nextPasses });
 });
 
-app.listen(port, () => {
-  console.log(`[Server]: I am running at https://localhost:${port}`);
+app.post("/createUser", async (req, res) => {
+  const { body } = req;
+
+  console.log(req.body);
+
+  const newUser = new User({
+    email: body.email,
+    role: body.role,
+    satellites: body.satellites,
+  });
+  console.log(newUser);
+  const user = await User.create(newUser);
+  res.status(201).json({ message: "User Created", user });
 });
+
+app.post("/createSatellite", async (req, res) => {
+  const { body } = req;
+
+  const newSatellite = new Satellite({
+    name: body.name,
+    operators: body.operators,
+  });
+
+  console.log(newSatellite);
+
+  const user = await Satellite.create(newSatellite);
+  res.status(201).json({ message: "User Created", user });
+});
+
+// TODO: GET endpoint to get all users
+
+// TODO: PATCH endpoint to update user role
+
+// app.post("/createLog", async (req, res) => {
+//   const { body } = req;
+
+//   const newLog = new Log({
+//     name: data,
+//     operators: body.operators,
+//   });
+
+//   const user = await Satellite.create(newSatellite);
+//   res.status(201).json({ message: "User Created", user });
+// });
