@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 mongoose
   // .connect(process.env.DB_URI)
   .connect(
-    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@lower-earth-orbit.svc6u3u.mongodb.net/lower-earth-orbit?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.km5f8kd.mongodb.net/?retryWrites=true&w=majority`
   )
   .then((res: any) => {
     app.listen(port, () => {
