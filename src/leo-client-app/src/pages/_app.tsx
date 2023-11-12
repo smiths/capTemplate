@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +18,14 @@ export const metadata: Metadata = {
  * UserProvider is a wrapper that allows us to access auth0 features globally throughout the app
  */
 export default function MyApp({ Component, pageProps }: AppProps) {
+  // React-query
+  const queryClient = new QueryClient();
+
   return (
     <UserProvider>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </UserProvider>
   );
 }
