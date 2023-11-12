@@ -184,8 +184,28 @@ app.post("/createSatellite", async (req, res) => {
 });
 
 // TODO: GET endpoint to get all users
+app.get("/getAllOperators", async (req, res) => {
+  const { body } = req;
+
+  const operators = await User.find({});
+  res.status(201).json({ message: "Fetched operators", operators });
+});
 
 // TODO: PATCH endpoint to update user role
+app.patch("/updateOperatorRole/:userId", async (req, res) => {
+  const { body, params } = req;
+
+  const id = new mongoose.Types.ObjectId(params.userId);
+
+  const filter = { _id: id };
+
+  const update = { role: body.role };
+
+  await User.findOneAndUpdate(filter, update);
+
+  const operator = await User.findOne(filter);
+  res.status(201).json({ message: "Fetched operators", operator });
+});
 
 // app.post("/createLog", async (req, res) => {
 //   const { body } = req;
