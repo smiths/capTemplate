@@ -194,12 +194,11 @@ app.get("/getAllOperators", async (req, res) => {
 // TODO: PATCH endpoint to update user role
 app.patch("/updateOperatorRole/:userId", async (req, res) => {
   const { body, params } = req;
-
   const id = new mongoose.Types.ObjectId(params.userId);
 
   const filter = { _id: id };
 
-  const update = { role: body.role };
+  const update = { role: body.body.role };
 
   await User.findOneAndUpdate(filter, update);
 
