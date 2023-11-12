@@ -11,7 +11,6 @@ function SatelliteInfoPage() {
     <main>
       <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
-        <a href="/api/auth/logout">Logout</a>
         <SatelliteInfo />
         <FuturePasses />
       </Stack>

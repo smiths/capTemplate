@@ -10,6 +10,10 @@ const navbarItems = [
     heading: "Manage Operators",
     path: "/manage-operators",
   },
+  {
+    heading: "Log Out",
+    path: "/api/auth/logout",
+  },
 ];
 
 const Navbar: React.FC = () => {
