@@ -183,7 +183,6 @@ app.post("/createSatellite", async (req, res) => {
   res.status(201).json({ message: "User Created", user });
 });
 
-// TODO: GET endpoint to get all users
 app.get("/getAllOperators", async (req, res) => {
   const { body } = req;
 
@@ -191,7 +190,6 @@ app.get("/getAllOperators", async (req, res) => {
   res.status(201).json({ message: "Fetched operators", operators });
 });
 
-// TODO: PATCH endpoint to update user role
 app.patch("/updateOperatorRole/:userId", async (req, res) => {
   const { body, params } = req;
   const id = new mongoose.Types.ObjectId(params.userId);
