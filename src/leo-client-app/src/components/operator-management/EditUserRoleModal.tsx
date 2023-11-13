@@ -27,9 +27,7 @@ enum UserRole {
 const EditUserRoleModal = ({ open, userData, handleClose }: Props) => {
   const queryClient = useQueryClient();
 
-  const [userRole, setUserRole] = useState<UserRole>(
-    userData?.role ?? UserRole.OPERATOR
-  );
+  const [userRole, setUserRole] = useState<UserRole>(UserRole.OPERATOR);
 
   useEffect(() => {
     if (userData) setUserRole(userData?.role);

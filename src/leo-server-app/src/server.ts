@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 mongoose
-  // .connect(process.env.DB_URI)
   .connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.km5f8kd.mongodb.net/?retryWrites=true&w=majority`
   )
@@ -157,14 +156,11 @@ app.get("/getNextPasses", (req, res) => {
 app.post("/createUser", async (req, res) => {
   const { body } = req;
 
-  console.log(req.body);
-
   const newUser = new User({
     email: body.email,
     role: body.role,
     satellites: body.satellites,
   });
-  console.log(newUser);
   const user = await User.create(newUser);
   res.status(201).json({ message: "User Created", user });
 });
@@ -176,8 +172,6 @@ app.post("/createSatellite", async (req, res) => {
     name: body.name,
     operators: body.operators,
   });
-
-  console.log(newSatellite);
 
   const user = await Satellite.create(newSatellite);
   res.status(201).json({ message: "User Created", user });
@@ -203,15 +197,3 @@ app.patch("/updateOperatorRole/:userId", async (req, res) => {
   const operator = await User.findOne(filter);
   res.status(201).json({ message: "Fetched operators", operator });
 });
-
-// app.post("/createLog", async (req, res) => {
-//   const { body } = req;
-
-//   const newLog = new Log({
-//     name: data,
-//     operators: body.operators,
-//   });
-
-//   const user = await Satellite.create(newSatellite);
-//   res.status(201).json({ message: "User Created", user });
-// });
