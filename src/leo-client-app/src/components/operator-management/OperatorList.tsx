@@ -76,6 +76,7 @@ const OperatorList: React.FC = () => {
                   <TableCell sx={{ color: "white !important" }} align="left">
                     <Button
                       variant="text"
+                      sx={{ color: "#6cb6ff" }}
                       onClick={() => handleModalOpen(user)}>
                       Edit Role
                     </Button>
