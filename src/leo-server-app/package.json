@@ -7,12 +7,14 @@
     "build": "npx tsc",
     "start:dev": "nodemon src/server.ts",
     "all": "concurrently \"cd ../leo-client-app && npm run dev\" \"npm run start:dev\""
-    
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "concurrently": "^8.2.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongoose": "^8.0.0",
     "satellite.js": "^5.0.0"
   },
   "devDependencies": {
