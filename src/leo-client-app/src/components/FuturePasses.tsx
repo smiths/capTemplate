@@ -53,12 +53,18 @@ const FuturePasses: React.FC = () => {
   return (
     <Stack alignItems="center" spacing={2}>
       <h1>Next Week's Passes</h1>
-      <TableContainer component={Paper} sx={{ maxWidth: 650 }}>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: 650, background: "#40403fb0" }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Entry</TableCell>
-              <TableCell align="center">Exit</TableCell>
+              <TableCell sx={{ color: "white !important" }} align="center">
+                Entry
+              </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="center">
+                Exit
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -66,10 +72,14 @@ const FuturePasses: React.FC = () => {
               <TableRow
                 key={passPair[0].time + index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell align="center" component="th" scope="row">
+                <TableCell
+                  sx={{ color: "white !important" }}
+                  align="center"
+                  component="th"
+                  scope="row">
                   {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell sx={{ color: "white !important" }} align="center">
                   {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
                 </TableCell>
               </TableRow>
