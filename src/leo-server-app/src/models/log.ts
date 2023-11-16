@@ -8,10 +8,14 @@ const logSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  message: String,
+  logs: String,
   satellite: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Satellite",
+  },
+  schedule: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Schedule",
   },
 });
 
