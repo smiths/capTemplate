@@ -12,6 +12,7 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const Satellite = require("./models/satellite");
 const Log = require("./models/log");
+const Schedule = require("./models/schedule");
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
@@ -156,25 +157,29 @@ app.get("/getNextPasses", (req, res) => {
 app.post("/createUser", async (req, res) => {
   const { body } = req;
 
+  console.log(body);
+
   const newUser = new User({
     email: body.email,
     role: body.role,
     satellites: body.satellites,
   });
-  const user = await User.create(newUser);
+  // const user = await User.create(newUser);
+  const user = null;
   res.status(201).json({ message: "User Created", user });
 });
 
-app.post("/createSatellite", async (req, res) => {
+app.post("/addSatelliteTarget", async (req, res) => {
   const { body } = req;
 
   const newSatellite = new Satellite({
     name: body.name,
+    validCommands: body.validCommands,
     operators: body.operators,
   });
 
   const user = await Satellite.create(newSatellite);
-  res.status(201).json({ message: "User Created", user });
+  res.status(201).json({ message: "Satellite system added", user });
 });
 
 app.get("/getAllOperators", async (req, res) => {
@@ -197,3 +202,43 @@ app.patch("/updateOperatorRole/:userId", async (req, res) => {
   const operator = await User.findOne(filter);
   res.status(201).json({ message: "Fetched operators", operator });
 });
+
+// Scheduling endpoints
+
+// Create schedule
+type ScheduleType = {
+  body: {
+    commands: any[];
+    satelliteId: string;
+    userId: string;
+    executionTimestamp: Date;
+  };
+};
+
+app.post("/createSchedule", async (req: ScheduleType, res) => {
+  const { body } = req;
+
+  // validate commands
+
+  const newSchedule = {
+    userId: body.userId,
+    satelliteId: body.satelliteId,
+    commands: JSON.stringify(body.commands),
+    executionTimestamp: body.executionTimestamp,
+    status: false,
+  };
+
+  const schedule = await Schedule.create(newSchedule);
+  res.status(201).json({ message: "Created schdule", schedule });
+});
+
+app.post("/getSchedulesBySatellite", async (req, res) => {
+  const { body } = req;
+
+  const filter = { satellite: body.satelliteId };
+
+  const schedules = await Schedule.find(filter).exec();
+  res.status(201).json({ message: "Fetched operators", schedules });
+});
+
+// Executing Requests
