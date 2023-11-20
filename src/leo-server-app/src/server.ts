@@ -223,9 +223,10 @@ app.post("/createSchedule", async (req: ScheduleType, res) => {
   const newSchedule = {
     userId: body.userId,
     satelliteId: body.satelliteId,
-    commands: JSON.stringify(body.commands),
+    commands: body.commands,
     executionTimestamp: body.executionTimestamp,
     status: false,
+    type: "FUTURE",
   };
 
   const schedule = await Schedule.create(newSchedule);
@@ -241,4 +242,42 @@ app.post("/getSchedulesBySatellite", async (req, res) => {
   res.status(201).json({ message: "Fetched operators", schedules });
 });
 
+async function sendRequest(
+  satelliteId: string,
+  scheduleId: string,
+  commands: string[]
+) {
+  // send command to ground station and capture response
+  let res = {};
+
+  // create log
+  const newLog = {
+    data: res,
+    satellite: satelliteId,
+    schdule: scheduleId,
+  };
+  const log = await Log.create(newLog);
+  return log;
+}
+
 // Executing Requests
+app.post("/sendLiveRequest", async (req, res) => {
+  const { body } = req;
+
+  // validate commands
+
+  // create schedule
+  const newSchedule = {
+    userId: body.userId,
+    satelliteId: body.satelliteId,
+    commands: body.commands,
+    executionTimestamp: body.executionTimestamp,
+    status: false,
+  };
+
+  const schedule = await Schedule.create(newSchedule);
+
+  // api request
+  const log = await sendRequest(body.satelliteId, schedule._id, body.commands);
+  res.status(201).json({ message: "Sent command sequence", log });
+});
