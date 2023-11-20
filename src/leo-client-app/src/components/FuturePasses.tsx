@@ -23,7 +23,7 @@ const FuturePasses: React.FC = () => {
   const { user } = useUser();
 
   const fetchPasses = () => {
-    fetch("http://localhost:3001/getNextPasses")
+    fetch("http://localhost:3001/satellite/getNextPasses")
       .then((response) => {
         if (!response.ok) {
           throw Error("Network response was not ok");
