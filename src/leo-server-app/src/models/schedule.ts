@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+enum ScheduleType {
+  "LIVE" = "LIVE",
+  "FUTURE" = "FUTURE",
+}
+
 const scheduleSchema = new Schema(
   {
     commands: Schema.Types.Mixed,
@@ -13,6 +18,7 @@ const scheduleSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Satellite",
     },
+    requestType: Object.values(ScheduleType),
     status: Boolean,
     user: {
       type: mongoose.Schema.Types.ObjectId,

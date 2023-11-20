@@ -5,11 +5,6 @@ const Schema = mongoose.Schema;
 const logSchema = new Schema(
   {
     data: Schema.Types.Mixed,
-    timestamp: {
-      type: Date,
-      default: Date.now,
-    },
-    logs: String,
     satellite: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Satellite",
