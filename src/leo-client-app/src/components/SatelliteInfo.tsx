@@ -45,7 +45,7 @@ const SatelliteInfo: React.FC = () => {
   });
 
   const fetchData = () => {
-    fetch("http://localhost:3001/getSatelliteInfo") // TODO: Fix endpoint for when server is hosted
+    fetch("http://localhost:3001/satellite/getSatelliteInfo") // TODO: Fix endpoint for when server is hosted
       .then((response) => response.json())
       .then((data: SatelliteInfoState) => {
         setState(data);

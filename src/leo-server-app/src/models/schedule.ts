@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
+import { ScheduleType } from "../types/schedule";
 
 const Schema = mongoose.Schema;
-
-enum ScheduleType {
-  "LIVE" = "LIVE",
-  "FUTURE" = "FUTURE",
-}
 
 const scheduleSchema = new Schema(
   {
@@ -29,4 +25,5 @@ const scheduleSchema = new Schema(
 );
 
 const Schedule = mongoose.model("Schedule", scheduleSchema);
-module.exports = Schedule;
+
+export default Schedule;

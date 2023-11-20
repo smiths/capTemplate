@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
+import { UserRole } from "../types/user";
 
 const Schema = mongoose.Schema;
-
-enum UserRole {
-  "OPERATOR" = "OPERATOR",
-  "ADMIN" = "ADMIN",
-}
 
 const userSchema = new Schema(
   {
