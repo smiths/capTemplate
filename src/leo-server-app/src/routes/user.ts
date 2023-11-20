@@ -13,8 +13,7 @@ router.post("/createUser", async (req: any, res: any) => {
     role: body.role,
     satellites: body.satellites,
   });
-  // const user = await User.create(newUser);
-  const user = null;
+  const user = await User.create(newUser);
   res.status(201).json({ message: "User Created", user });
 });
 

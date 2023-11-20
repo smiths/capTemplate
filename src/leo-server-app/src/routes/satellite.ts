@@ -1,5 +1,6 @@
 const express = require("express");
 const Satellite = require("../models/satellite");
+const User = require("../models/user");
 const satellite = require("satellite.js");
 
 const router = express.Router();
@@ -133,14 +134,48 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
 router.post("/addOperatorToSatellite", async (req: any, res: any) => {
   const { body } = req;
 
-  const newSatellite = new Satellite({
-    name: body.name,
-    validCommands: body.validCommands,
-    operators: body.operators,
-  });
+  let isUserInSatellite = false;
+  let resMsg = {};
 
-  const user = await Satellite.create(newSatellite);
-  res.status(201).json({ message: "Satellite system added", user });
+  //   Check if user exists, if not create record
+  let user = await User.exists({ email: body.email });
+  if (!user) {
+    const newUser = new User({
+      email: body.email,
+      role: body.role,
+      satellites: [],
+    });
+    user = await User.create(newUser);
+  } else {
+    // Check if user is already in satellite
+    isUserInSatellite = await User.exists({
+      _id: user._id,
+      satellites: body.satelliteId,
+    });
+  }
+
+  if (isUserInSatellite) {
+    resMsg = {
+      message: "Operator is already in satellite",
+      updateSatellite: undefined,
+    };
+  } else {
+    // Update satellite and users to include references
+    const updateSatellite = await Satellite.findByIdAndUpdate(
+      body.satelliteId,
+      {
+        $push: { operators: user._id },
+      }
+    );
+
+    await User.findByIdAndUpdate(user._id, {
+      $push: { satellites: body.satelliteId },
+    });
+    resMsg = { message: "Operator added", updateSatellite };
+  }
+
+  //   const user = await Satellite.create(updateSatellite);
+  res.status(201).json(resMsg);
 });
 
 module.exports = router;
