@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const scheduleSchema = new Schema(
   {
-    commands: Schema.Types.Mixed,
+    commands: { type: [String] },
     executionTimestamp: {
       type: Date,
       default: Date.now,
