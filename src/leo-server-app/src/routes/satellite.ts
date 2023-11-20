@@ -131,6 +131,20 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   res.status(201).json({ message: "Satellite system added", user });
 });
 
+router.get("/getSatellite", async (req: any, res: any) => {
+  const { body } = req;
+
+  const satellite = await Satellite.findById(body.satelliteId);
+  res.status(201).json({ message: "Fetched satellite", satellite });
+});
+
+router.get("/getAllSatellitesOfUser", async (req: any, res: any) => {
+  const { body } = req;
+  const filter = { operators: { $in: [body.userId] } };
+  const satellites = await Satellite.find(filter).exec();
+  res.status(201).json({ message: "Fetched all satellites", satellites });
+});
+
 router.post("/addOperatorToSatellite", async (req: any, res: any) => {
   const { body } = req;
 
