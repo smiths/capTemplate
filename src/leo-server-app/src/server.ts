@@ -12,6 +12,8 @@ const mongoose = require("mongoose");
 const usersRoute = require("./routes/user");
 const satelliteRoute = require("./routes/satellite");
 const scheduleRoute = require("./routes/schedule");
+const logRoute = require("./routes/log");
+
 // Allow requests from your React app's origin (http://localhost:3000)
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -25,6 +27,7 @@ app.use(bodyParser.json());
 app.use("/users", usersRoute);
 app.use("/satellite", satelliteRoute);
 app.use("/schedule", scheduleRoute);
+app.use("/log", logRoute);
 
 mongoose
   .connect(
