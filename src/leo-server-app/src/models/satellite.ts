@@ -8,6 +8,7 @@ const satelliteSchema = new Schema(
       type: String,
       required: true,
     },
+    intlCode: { type: String, required: true, unique: true },
     operators: [
       {
         type: mongoose.Schema.Types.ObjectId,
