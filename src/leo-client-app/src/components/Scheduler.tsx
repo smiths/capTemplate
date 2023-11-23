@@ -31,6 +31,7 @@ const Scheduler: React.FC = () => {
   // Function will load schedule somewhere, currently console log for POC demo
   const sendSchedule = () => {
     console.log(currentSchedule)
+    setCurrentSchedule([])
   }
 
   useEffect(() => {
