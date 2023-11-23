@@ -1,21 +1,19 @@
 "use client";
 
-import SatelliteInfo from "@/components/SatelliteInfo";
-import FuturePasses from "@/components/FuturePasses";
+import Scheduler from "@/components/Scheduler";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
 
-function SatelliteInfoPage() {
+function SchedulerPage() {
   return (
     <main>
       <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
-        <SatelliteInfo />
-        <FuturePasses />
+        <Scheduler />
       </Stack>
     </main>
   );
 }
 
-export default withPageAuthRequired(SatelliteInfoPage);
+export default withPageAuthRequired(SchedulerPage);

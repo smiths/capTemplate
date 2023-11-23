@@ -7,6 +7,10 @@ const navbarItems = [
     path: "/satellite-passes",
   },
   {
+    heading: "Scheduler",
+    path: "/schedule-commands",
+  },
+  {
     heading: "Manage Operators",
     path: "/manage-operators",
   },
