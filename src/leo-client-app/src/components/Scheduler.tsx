@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import styles from '../pages/globals.css';
 
 const Scheduler: React.FC = () => {
+
+  // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
   const [validCommands, setValidCommands] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
@@ -26,6 +29,7 @@ const Scheduler: React.FC = () => {
     setCurrentSchedule(currentSchedule => currentSchedule.filter((_, i) => i !== index));
   };
 
+  // Function will load schedule somewhere, currently console log for POC demo
   const sendSchedule = () => {
     console.log(currentSchedule)
   }
@@ -36,7 +40,6 @@ const Scheduler: React.FC = () => {
 
     return (
     <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start' }}>
-      {/* Valid Commands Column */}
       <div style={{
         minWidth: '200px',
         border: '2px solid white',
@@ -46,32 +49,19 @@ const Scheduler: React.FC = () => {
         <h2>Valid Commands</h2>
         <div>
           {validCommands && validCommands.length > 0 && validCommands.map((command, index) => (
-            <div key={index} style={{
-              border: '1px solid lightgray',
-              borderRadius: '8px',
-              padding: '5px',
-              marginBottom: '5px'
-            }}>
-              <button 
-                onClick={() => addCommand(command)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '100%',
-                  textAlign: 'left'
-                }}
-              >
-                {command}
-              </button>
-            </div>  
+            <button 
+              key={index} 
+              className="scheduleButton" 
+              onClick={() => addCommand(command)}
+            >
+              {command}
+            </button>
           ))}
         </div>
       </div>
 
       <div style={{ width: '50px' }}></div>
 
-      {/* Current Schedule Column */}
       <div style={{
         border: '2px solid white',
         borderRadius: '16px',
@@ -80,20 +70,14 @@ const Scheduler: React.FC = () => {
       }}>
         <h2>Current Schedule</h2>
         {currentSchedule && currentSchedule.length > 0 && currentSchedule.map((command, index) => (
-          <div key={index} style={{
-            border: '1px solid lightgray',
-            borderRadius: '8px',
-            padding: '5px',
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: '5px'
-          }}>
-            <span style={{ marginRight: '10px', flexGrow: 1 }}>{command}</span>
-            <button onClick={() => removeCommand(index)}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-              X
-            </button>
-          </div>
+           <button 
+            key={index} 
+            className="removeButton scheduleButton" 
+            onClick={() => removeCommand(index)}
+          >
+            <span className="buttonText">{command}</span>
+            <span className="closeButton">X</span>
+          </button>
         ))}
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
           <button onClick={() => setCurrentSchedule([])}

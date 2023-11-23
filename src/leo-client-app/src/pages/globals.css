@@ -109,3 +109,28 @@ a {
     color-scheme: dark;
   }
 }
+
+.scheduleButton {
+  border: 2px solid white;
+  padding: 5px;
+  margin-bottom: 5px;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.removeButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.removeButton .buttonText {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.removeButton .closeButton {
+  margin-left: 10px;
+}
