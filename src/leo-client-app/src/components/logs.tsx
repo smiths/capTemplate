@@ -1,5 +1,4 @@
 "use client";
-import { useGetAllOperators } from "@/constants/hooks";
 import {
   Button,
   Paper,
@@ -13,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import LogDialog from "./logModal";
 
 const Logs: React.FC = () => {
 
@@ -20,15 +20,12 @@ const Logs: React.FC = () => {
   const satelliteId = "655acd63d122507055d3d2ea";
   const [logs, setLogs] = useState([]);
   const [openLog, setOpenLog] = useState<boolean>(false);
-//   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
 
 const handleLogOpen = () => {
-    // setUserToEdit(null);
     setOpenLog(true);
   };
 
   const handleLogClose = () => {
-    // setUserToEdit(null);
     setOpenLog(false);
   };
 
@@ -37,25 +34,13 @@ const handleLogOpen = () => {
       .then((response) => response.json())
       .then(data => {
         setLogs(data);
+        console.log(logs);
       })
       .catch((error) => {
         console.error("Error fetching satellite logs:", error);
       }); 
   };
 
-//   const addCommand = (command : string) => {
-//     setCurrentSchedule(prevCommands => [...prevCommands, command]);
-//   };
-
-//   const removeCommand = (index: number) => {
-//     setCurrentSchedule(currentSchedule => currentSchedule.filter((_, i) => i !== index));
-//   };
-
-  // Function will load schedule somewhere, currently console log for POC demo
-//   const sendSchedule = () => {
-//     console.log(currentSchedule)
-//     setCurrentSchedule([])
-//   }
 
   useEffect(() => {
     fetchLogs(satelliteId);
@@ -115,11 +100,11 @@ const handleLogOpen = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <EditUserRoleModal
+        <LogDialog
           open={openLog}
-        //   userData={userToEdit}
+          logData={logs}
           handleClose={handleLogClose}
-        /> */}
+        />
       </Stack>
     );
   };
