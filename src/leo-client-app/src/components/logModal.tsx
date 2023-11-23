@@ -13,7 +13,7 @@ type Props = {
     handleClose: () => void;
   };
 
-export default function logDialog({ open, logData, handleClose }: Props) {
+export default function LogDialog({ open, logData, handleClose }: Props) {
 //   const [open, setOpen] = React.useState(false);
 
 //   const handleClickOpen = () => {
@@ -36,7 +36,7 @@ export default function logDialog({ open, logData, handleClose }: Props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+          {"Satellite Logs dialog"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
