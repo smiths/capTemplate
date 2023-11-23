@@ -145,8 +145,8 @@ router.get("/getSatellite", async (req: any, res: any) => {
 });
 
 router.get("/getAllSatellitesOfUser", async (req: any, res: any) => {
-  const { body } = req;
-  const filter = { operators: { $in: [body.userId] } };
+  const { userId } = req.query;
+  const filter = { operators: { $in: [userId] } };
   const satellites = await Satellite.find(filter).exec();
   res.status(201).json({ message: "Fetched all satellites", satellites });
 });

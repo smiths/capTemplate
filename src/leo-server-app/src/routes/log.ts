@@ -5,10 +5,10 @@ const router = express.Router();
 router.use(express.json());
 
 router.get("/getLogs", async (req: any, res: any) => {
-  const { body } = req;
+  const { satelliteId } = req.query;
 
   const filter = {
-    satellite: body.satelliteId,
+    satellite: satelliteId,
   };
 
   const logs = await Log.find(filter).exec();
