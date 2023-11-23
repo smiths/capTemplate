@@ -1,5 +1,17 @@
 "use client";
-
+import { useGetAllOperators } from "@/constants/hooks";
+import {
+  Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 const Logs: React.FC = () => {
@@ -7,16 +19,27 @@ const Logs: React.FC = () => {
   // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
   const [logs, setLogs] = useState([]);
+  const [openLog, setOpenLog] = useState<boolean>(false);
 //   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
+
+const handleLogOpen = () => {
+    // setUserToEdit(null);
+    setOpenLog(true);
+  };
+
+  const handleLogClose = () => {
+    // setUserToEdit(null);
+    setOpenLog(false);
+  };
 
   const fetchLogs = (satelliteId: string) => {
     fetch(`http://localhost:3001/satellite/getLogs?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then(data => {
-        setLogs(data.satellite.validCommands);
+        setLogs(data);
       })
       .catch((error) => {
-        console.error("Error fetching valid commands:", error);
+        console.error("Error fetching satellite logs:", error);
       }); 
   };
 
@@ -29,69 +52,76 @@ const Logs: React.FC = () => {
 //   };
 
   // Function will load schedule somewhere, currently console log for POC demo
-  const sendSchedule = () => {
-    console.log(currentSchedule)
-    setCurrentSchedule([])
-  }
+//   const sendSchedule = () => {
+//     console.log(currentSchedule)
+//     setCurrentSchedule([])
+//   }
 
   useEffect(() => {
-    fetchValidCommands(satelliteId);
+    fetchLogs(satelliteId);
   }, [satelliteId]);
 
     return (
-    <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start' }}>
-      <div style={{
-        minWidth: '200px',
-        border: '2px solid white',
-        borderRadius: '16px',
-        padding: '10px'
-      }}>
-        <h2>Valid Commands</h2>
-        <div>
-          {validCommands && validCommands.length > 0 && validCommands.map((command, index) => (
-            <button 
-              key={index} 
-              className="scheduleButton" 
-              onClick={() => addCommand(command)}
-            >
-              {command}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ width: '50px' }}></div>
-
-      <div style={{
-        border: '2px solid white',
-        borderRadius: '16px',
-        padding: '10px',
-        overflow: 'auto' 
-      }}>
-        <h2>Current Schedule</h2>
-        {currentSchedule && currentSchedule.length > 0 && currentSchedule.map((command, index) => (
-           <button 
-            key={index} 
-            className="removeButton scheduleButton" 
-            onClick={() => removeCommand(index)}
-          >
-            <span className="buttonText">{command}</span>
-            <span className="closeButton">X</span>
-          </button>
-        ))}
-        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <button onClick={() => setCurrentSchedule([])}
-            style={{ display: 'block', margin: '5px 0' }}>
-            Clear Schedule
-          </button>
-          <button onClick={() => sendSchedule()}
-            style={{ display: 'block', margin: '5px 0' }}>
-            Send Schedule
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
+        <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
+        <Typography variant="h5">Logs</Typography>
+        <TableContainer
+          component={Paper}
+          sx={{
+            maxWidth: 800,
+            background: "#40403fb0",
+          }}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ color: "white !important" }} align="left">
+                  Created At
+                </TableCell>
+                <TableCell sx={{ color: "white !important" }} align="left">
+                  Last Updated
+                </TableCell>
+                <TableCell sx={{ color: "white !important" }} align="left">
+                  Logs
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {logs &&
+                logs.map((data: any, index: number) => (
+                  <TableRow
+                    key={data._id + index}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}>
+                    <TableCell
+                      sx={{ color: "white !important" }}
+                      align="left"
+                      component="th"
+                      scope="row">
+                      {data.createdAt}
+                    </TableCell>
+                    <TableCell sx={{ color: "white !important" }} align="left">
+                      {data.updatedAt}
+                    </TableCell>
+                    <TableCell sx={{ color: "white !important" }} align="left">
+                      <Button
+                        variant="text"
+                        sx={{ color: "#6cb6ff" }}
+                        onClick={() => handleLogOpen()}>
+                        Show Logs
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* <EditUserRoleModal
+          open={openLog}
+        //   userData={userToEdit}
+          handleClose={handleLogClose}
+        /> */}
+      </Stack>
+    );
+  };
+  
 export default Logs;
