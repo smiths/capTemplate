@@ -2,12 +2,10 @@
 
 import Navbar from "@/components/navbar/Navbar";
 import OperatorList from "@/components/operator-management/OperatorList";
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack } from "@mui/material";
 
 function MangeOperatorsPage() {
-  const { user } = useUser();
-
   return (
     <main>
       <Navbar />

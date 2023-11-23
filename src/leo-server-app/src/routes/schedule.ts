@@ -81,7 +81,7 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   }
 
   res.status(201).json(resObj);
-});
+}); 
 
 router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
   const { body } = req;

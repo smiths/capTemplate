@@ -131,10 +131,16 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   res.status(201).json({ message: "Satellite system added", user });
 });
 
-router.get("/getSatellite", async (req: any, res: any) => {
-  const { body } = req;
+// Helper Function
+router.get("/getAllSatellites", async (req: any, res: any) => {
+  const satellites = await Satellite.find({});
+  res.status(201).json({ message: "All satellite info", satellites });
+});
 
-  const satellite = await Satellite.findById(body.satelliteId);
+router.get("/getSatellite", async (req: any, res: any) => {
+  const satelliteId = req.query.satelliteId;
+
+  const satellite = await Satellite.findById(satelliteId);
   res.status(201).json({ message: "Fetched satellite", satellite });
 });
 
