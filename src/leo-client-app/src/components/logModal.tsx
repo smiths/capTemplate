@@ -14,7 +14,6 @@ type Props = {
   };
 
 export default function LogDialog({ open, logData, handleClose }: Props) {
-//   const [open, setOpen] = React.useState(false);
 
 const downloadLogs = () => {
   const file = new Blob([JSON.stringify(logData?.data?.message)], {type: 'text/plain'});
@@ -26,19 +25,9 @@ const downloadLogs = () => {
   handleClose();
 }
 
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-
   return (
     <React.Fragment>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
+
       <Dialog
         open={open}
         onClose={handleClose}

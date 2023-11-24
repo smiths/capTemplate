@@ -27,20 +27,15 @@ const handleLogOpen = (logData: any) => {
     setOpenLog(true);
   };
 
-// const setData = {}
-
   const handleLogClose = () => {
     setOpenLog(false);
   };
 
   const fetchLogs = (satelliteId: string) => {
-    // `http://localhost:3001/log/getLogs?satellite=${satelliteId}`
     fetch(`http://localhost:3001/log/getLogs?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then(data => {
         setLogs(data?.logs??[]);
-        console.log(data);
-        // console.log(logs?.data?.logs)
       })
       .catch((error) => {
         console.error("Error fetching satellite logs:", error);
@@ -51,8 +46,6 @@ const handleLogOpen = (logData: any) => {
   useEffect(() => {
     fetchLogs(satelliteId);
   }, [satelliteId]);
-
-    // console.log(logs);
 
     return (
         <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
