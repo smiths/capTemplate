@@ -18,23 +18,29 @@ const Logs: React.FC = () => {
 
   // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<any>([]);
+  const [logData, setLogData] = useState<any>(null);
   const [openLog, setOpenLog] = useState<boolean>(false);
 
-const handleLogOpen = () => {
+const handleLogOpen = (logData: any) => {
+    setLogData(logData);
     setOpenLog(true);
   };
+
+// const setData = {}
 
   const handleLogClose = () => {
     setOpenLog(false);
   };
 
   const fetchLogs = (satelliteId: string) => {
-    fetch(`http://localhost:3001/satellite/getLogs?satelliteId=${satelliteId}`)
+    // `http://localhost:3001/log/getLogs?satellite=${satelliteId}`
+    fetch(`http://localhost:3001/log/getLogs?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then(data => {
-        setLogs(data);
-        console.log(logs);
+        setLogs(data?.logs??[]);
+        console.log(data);
+        // console.log(logs?.data?.logs)
       })
       .catch((error) => {
         console.error("Error fetching satellite logs:", error);
@@ -45,6 +51,8 @@ const handleLogOpen = () => {
   useEffect(() => {
     fetchLogs(satelliteId);
   }, [satelliteId]);
+
+    console.log(logs);
 
     return (
         <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
@@ -71,7 +79,7 @@ const handleLogOpen = () => {
             </TableHead>
             <TableBody>
               {logs &&
-                logs.map((data: any, index: number) => (
+                logs?.map((data: any, index: number) => (
                   <TableRow
                     key={data._id + index}
                     sx={{
@@ -91,7 +99,7 @@ const handleLogOpen = () => {
                       <Button
                         variant="text"
                         sx={{ color: "#6cb6ff" }}
-                        onClick={() => handleLogOpen()}>
+                        onClick={() => handleLogOpen(data)}>
                         Show Logs
                       </Button>
                     </TableCell>
@@ -102,7 +110,7 @@ const handleLogOpen = () => {
         </TableContainer>
         <LogDialog
           open={openLog}
-          logData={logs}
+          logData={logData}
           handleClose={handleLogClose}
         />
       </Stack>

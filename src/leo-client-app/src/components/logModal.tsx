@@ -40,7 +40,7 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {logData}
+            {JSON.stringify(logData?.data?.message)}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
