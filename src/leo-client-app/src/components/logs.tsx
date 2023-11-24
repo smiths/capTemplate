@@ -52,7 +52,7 @@ const handleLogOpen = (logData: any) => {
     fetchLogs(satelliteId);
   }, [satelliteId]);
 
-    console.log(logs);
+    // console.log(logs);
 
     return (
         <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
