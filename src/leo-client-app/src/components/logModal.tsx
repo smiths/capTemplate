@@ -16,6 +16,16 @@ type Props = {
 export default function LogDialog({ open, logData, handleClose }: Props) {
 //   const [open, setOpen] = React.useState(false);
 
+const downloadLogs = () => {
+  const file = new Blob([JSON.stringify(logData?.data?.message)], {type: 'text/plain'});
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+  link.download = "logFile.txt";
+  link.href = url;
+  link.click();
+  handleClose();
+}
+
 //   const handleClickOpen = () => {
 //     setOpen(true);
 //   };
@@ -44,7 +54,7 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Download Logs</Button>
+          <Button onClick={downloadLogs}>Download Logs</Button>
           <Button onClick={handleClose} autoFocus>
             Close
           </Button>
