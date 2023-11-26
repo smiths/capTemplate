@@ -39,7 +39,7 @@ const downloadLogs = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {JSON.stringify(logData?.data?.message)}
+            {logData?.data?.message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
