@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
+import moment from 'moment';
 
 const Logs: React.FC = () => {
 
@@ -83,10 +84,10 @@ const handleLogOpen = (logData: any) => {
                       align="left"
                       component="th"
                       scope="row">
-                      {data.createdAt}
+                      {moment.utc(data.createdAt).local().format('DD/MM/YYYY HH:mm:ss')}
                     </TableCell>
                     <TableCell sx={{ color: "white !important" }} align="left">
-                      {data.updatedAt}
+                      {moment.utc(data.updatedAt).local().format('DD/MM/YYYY HH:mm:ss')}
                     </TableCell>
                     <TableCell sx={{ color: "white !important" }} align="left">
                       <Button
