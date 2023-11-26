@@ -15,9 +15,14 @@ const navbarItems = [
     path: "/manage-operators",
   },
   {
+    heading: "Logs",
+    path: "/satellite-logs",
+  },
+  {
     heading: "Log Out",
     path: "/api/auth/logout",
   },
+  
 ];
 
 const Navbar: React.FC = () => {
