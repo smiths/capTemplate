@@ -2,6 +2,8 @@
 
 Location: `leo-server-app/src/routes/satellite.ts`
 
+Base URL: `/satellite/{endpoint}`
+
 The purpose of these endpoint groupings is to access data regarding the satellite, including orbital data, next overpasses, as well as database mangement regarding satellites.
 
 ---
