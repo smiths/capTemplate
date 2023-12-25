@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18.x
           cache: npm
-          working-directory: ./src/leo-server-app/package-lock.json
+          cache-dependency-path: ./src/leo-server-app/package-lock.json
 
       - name: Clean Install Server App
         run: npm ci
