@@ -6,6 +6,6 @@ export default function Index() {
 
   useEffect(() => {
     replace("/satellite-passes");
-  }, [pathname]);
+  }, [pathname, replace]);
   return null;
 }
