@@ -15,12 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: "npm"
-          working-directory: ./src/leo-server-app
+          cache: npm
+          working-directory: ./src/leo-server-app/package-lock.json
 
       - name: Clean Install Server App
         run: npm ci
