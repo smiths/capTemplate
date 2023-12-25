@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: 18.x
           cache: "npm"
+          working-directory: ./src/leo-server-app
 
       - name: Clean Install Server App
         run: npm ci
