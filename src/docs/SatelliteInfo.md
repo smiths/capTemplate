@@ -8,7 +8,7 @@ To read more about how to read TLEs, check it out [here](https://celestrak.org/N
 
 ## How does this project track satellites?
 
-TLE data is collected from [n2yo](https://www.n2yo.com/?s=56315), which uses Celestrak data to get TLE information. TLE data will have to be updated regularly as drift (**not currently implemented**), and other spacial conditions may affect the TLE of a satellite.
+TLE data is collected from [space-track.org](https://www.space-track.org), which uses Celestrak data to get TLE information. TLE data will have to be updated regularly as drift (**not currently implemented**), and other spacial conditions may affect the TLE of a satellite.
 
 ## How is satellite data obtained?
 
