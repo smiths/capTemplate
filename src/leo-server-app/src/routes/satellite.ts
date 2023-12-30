@@ -4,7 +4,7 @@ import { TLEResponse } from "../types/satellites";
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
-var spacetrack = require("spacetrack");
+let spacetrack = require("spacetrack");
 
 const Satellite = require("../models/satellite");
 const User = require("../models/user");
