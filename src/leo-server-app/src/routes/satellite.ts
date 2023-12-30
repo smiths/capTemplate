@@ -54,7 +54,7 @@ var observerGd = {
 };
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
-function getSatelliteInfo(date: Date) {
+function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
   var positionAndVelocity = satellite.propagate(satrec, date);
@@ -88,7 +88,7 @@ function getSatelliteInfo(date: Date) {
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
-  res.json(getSatelliteInfo(new Date()));
+  res.json(getSatelliteInfo(new Date(), tleLine1, tleLine2));
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {
@@ -112,7 +112,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
     var nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
 
     // Get satellite information for the next pass
-    var satelliteInfo = getSatelliteInfo(nextPassTime);
+    var satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
 
     // Format Time
     const formattedTime = nextPassTime
