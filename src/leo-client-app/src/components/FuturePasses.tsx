@@ -52,10 +52,11 @@ const FuturePasses: React.FC = () => {
 
   return (
     <Stack alignItems="center" spacing={2}>
-      <h1>Next Week's Passes</h1>
+      <h1>Next Week&apos;s Passes</h1>
       <TableContainer
         component={Paper}
-        sx={{ maxWidth: 650, background: "#40403fb0" }}>
+        sx={{ maxWidth: 650, background: "#40403fb0" }}
+      >
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -71,12 +72,14 @@ const FuturePasses: React.FC = () => {
             {passes.map((passPair, index) => (
               <TableRow
                 key={passPair[0].time + index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
                 <TableCell
                   sx={{ color: "white !important" }}
                   align="center"
                   component="th"
-                  scope="row">
+                  scope="row"
+                >
                   {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
                 </TableCell>
                 <TableCell sx={{ color: "white !important" }} align="center">
