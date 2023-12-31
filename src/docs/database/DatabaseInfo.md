@@ -4,7 +4,7 @@ This documentation guide details out the database technology used for this MCT a
 
 ## Technology
 
-**MongoDB** is a non-relational database program which is document-oriented, scalable, flexible, and widely used in development.
+**MongoDB** is a non-relational database program which is document-oriented, scalable, flexible, and widely used in development. For the purposes of this project, MongoDB allows the application to deal with unstructured data and supports horizontal scalability as the app grows in size.
 
 Goals:
 
@@ -17,6 +17,8 @@ See [MongoDB's Documentation](https://www.mongodb.com/docs/) for more informatio
 ## Schemas
 
 ### User Model
+
+The User model records information about application administrators and satellite operators.
 
 UserRole: ‘OPERATOR’ | ‘ADMIN’
 
@@ -31,6 +33,8 @@ UserRole: ‘OPERATOR’ | ‘ADMIN’
 
 ### Satellite Model
 
+The Satellite model is used to store satellites that application administrators and operators will interface with.
+
 | Field         | Type                |
 | ------------- | ------------------- |
 | id            | string              |
@@ -41,7 +45,9 @@ UserRole: ‘OPERATOR’ | ‘ADMIN’
 | createdAt     | Date                |
 | updatedAt     | Date                |
 
-### User Model
+### Schedule Model
+
+The Schedule model is used to keep track of commands operators send to a satellite. Each schedule record will be associated with a satellite and the user who initiated the request.
 
 ScheduleType: ‘LIVE’ | ‘FUTURE’
 
@@ -58,6 +64,8 @@ ScheduleType: ‘LIVE’ | ‘FUTURE’
 | updatedAt          | Date         |
 
 ### Log Model
+
+The Log model is used to record response data from a scheduled request. Each log record will be associated with a satellite and a schedule.
 
 | Field     | Type         |
 | --------- | ------------ |
