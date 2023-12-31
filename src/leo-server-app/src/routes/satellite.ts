@@ -232,4 +232,4 @@ router.post("/addOperatorToSatellite", async (req: any, res: any) => {
   res.status(201).json(resMsg);
 });
 
-module.exports = router;
+module.exports = { router, getSatelliteInfo };
