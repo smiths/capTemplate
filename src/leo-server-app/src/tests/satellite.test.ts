@@ -1,8 +1,16 @@
-import { isNull } from "util";
-
+import * as dotenv from "dotenv";
 const request = require("supertest");
 const app = require("../server");
 const { getSatelliteInfo, setTleLines } = require("../routes/satellite");
+
+dotenv.config({ path: `.env.local`, override: true });
+
+beforeEach(() => {
+  process.env = Object.assign(process.env, {
+    SPACE_TRACK_USERNAME: process.env.SPACE_TRACK_USERNAME,
+    SPACE_TRACK_PASSWORD: process.env.SPACE_TRACK_PASSWORD,
+  });
+});
 
 let defaultTleLine1 =
     "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
