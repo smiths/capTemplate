@@ -10,7 +10,7 @@ const port = 3001;
 const mongoose = require("mongoose");
 
 const usersRoute = require("./routes/user");
-const satelliteRoute = require("./routes/satellite");
+const { router: satelliteRoute } = require("./routes/satellite");
 const scheduleRoute = require("./routes/schedule");
 const logRoute = require("./routes/log");
 
@@ -44,6 +44,8 @@ mongoose
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, this is Express + TypeScript");
 });
+
+module.exports = app;
 
 // Gets passes for next week
 
