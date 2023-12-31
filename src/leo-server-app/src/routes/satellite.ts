@@ -1,4 +1,11 @@
+import * as dotenv from "dotenv";
+import { TLEResponse } from "../types/satellites";
+
+dotenv.config({ path: `.env.local`, override: true });
+
 const express = require("express");
+let spacetrack = require("spacetrack");
+
 const Satellite = require("../models/satellite");
 const User = require("../models/user");
 const satellite = require("satellite.js");
@@ -6,11 +13,38 @@ const satellite = require("satellite.js");
 const router = express.Router();
 router.use(express.json());
 
-// NEUDOSE TLE from satnogs
-var tleLine1 =
-    "1 56315U 98067VG  23289.56381294  .00217706  00000+0  12767-2 0  9999",
-  tleLine2 =
-    "2 56315  51.6294  74.1402 0004981 252.1253 107.9204 15.77094333 27340";
+spacetrack.login({
+  username: process.env.SPACE_TRACK_USERNAME,
+  password: process.env.SPACE_TRACK_PASSWORD,
+});
+
+let tleLine1: string;
+let tleLine2: string;
+
+// BDSAT-2 TLE from Space-Track accessed 12/25/2023
+var defaultTleLine1 =
+    "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
+  defaultTleLine2 =
+    "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
+
+spacetrack
+  .get({
+    type: "tle_latest",
+    query: [
+      { field: "NORAD_CAT_ID", condition: "55098" },
+      { field: "ORDINAL", condition: "1" },
+    ],
+    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
+  })
+  .then(
+    function (result: TLEResponse[]) {
+      tleLine1 = result[0]?.TLE_LINE1 || defaultTleLine1;
+      tleLine2 = result[0]?.TLE_LINE2 || defaultTleLine2;
+    },
+    function (err: Error) {
+      console.error("error", err.stack);
+    }
+  );
 
 // GS info
 var observerGd = {
