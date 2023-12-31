@@ -98,68 +98,79 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
-  res.json(getSatelliteInfo(new Date(), tleLine1, tleLine2));
+  try {
+    const satelliteInfo = getSatelliteInfo(new Date(), tleLine1, tleLine2);
+    res.json(satelliteInfo);
+  } catch (error) {
+    console.error("Error in getSatelliteInfo():", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {
-  // Time window in milliseconds (1 minute)
-  const WINDOWMILLIS = 60 * 1000;
+  try {
+    // Time window in milliseconds (1 minute)
+    const WINDOWMILLIS = 60 * 1000;
 
-  // Elevation Entry
-  const MINELEVATION = 10;
+    // Elevation Entry
+    const MINELEVATION = 10;
 
-  var today = new Date();
-  today.setHours(0, 0, 0, 0);
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  var nextPasses = [];
-  var enterElevation = null;
-  var enterInfo;
-  var exitInfo;
+    var nextPasses = [];
+    var enterElevation = null;
+    var enterInfo;
+    var exitInfo;
 
-  // Gets overpasses for the next week
-  for (let i = 0; i < 7 * 24 * 60; i++) {
-    // Calculate the next pass
-    var nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
+    // Gets overpasses for the next week
+    for (let i = 0; i < 7 * 24 * 60; i++) {
+      // Calculate the next pass
+      var nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
 
-    // Get satellite information for the next pass
-    var satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
+      // Get satellite information for the next pass
+      var satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
 
-    // Format Time
-    const formattedTime = nextPassTime
-      .toLocaleString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      })
-      .replace(/\u202f/g, " ");
+      // Format Time
+      const formattedTime = nextPassTime
+        .toLocaleString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+        .replace(/\u202f/g, " ");
 
-    if (satelliteInfo.elevation > MINELEVATION) {
-      if (!enterElevation) {
-        enterInfo = {
-          type: "Enter",
-          time: formattedTime,
-          azimuth: satelliteInfo.azimuth,
-          elevation: satelliteInfo.elevation,
-        };
-        enterElevation = satelliteInfo.elevation;
-      }
-    } else {
-      if (enterElevation) {
-        exitInfo = {
-          type: "Exit",
-          time: formattedTime,
-          azimuth: satelliteInfo.azimuth,
-          elevation: satelliteInfo.elevation,
-        };
-        nextPasses.push([enterInfo, exitInfo]);
-        enterElevation = null;
+      if (satelliteInfo.elevation > MINELEVATION) {
+        if (!enterElevation) {
+          enterInfo = {
+            type: "Enter",
+            time: formattedTime,
+            azimuth: satelliteInfo.azimuth,
+            elevation: satelliteInfo.elevation,
+          };
+          enterElevation = satelliteInfo.elevation;
+        }
+      } else {
+        if (enterElevation) {
+          exitInfo = {
+            type: "Exit",
+            time: formattedTime,
+            azimuth: satelliteInfo.azimuth,
+            elevation: satelliteInfo.elevation,
+          };
+          nextPasses.push([enterInfo, exitInfo]);
+          enterElevation = null;
+        }
       }
     }
+    res.json({ nextPasses });
+  } catch (error) {
+    console.error("Error in getNextPasses:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-  res.json({ nextPasses });
 });
 
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
