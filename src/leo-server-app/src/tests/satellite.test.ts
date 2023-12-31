@@ -8,12 +8,12 @@ let date = new Date();
 
 describe("Satellite Information Tests", () => {
   test("Valid TLE", () => {
-    expect(
+    expect(() =>
       getSatelliteInfo(new Date(), defaultTleLine1, defaultTleLine2)
     ).toBeDefined();
   });
 
   test("Invalid TLE", () => {
-    expect(getSatelliteInfo(new Date(), "", "")).toBeDefined();
+    expect(() => getSatelliteInfo(new Date(), "", "")).toThrow();
   });
 });

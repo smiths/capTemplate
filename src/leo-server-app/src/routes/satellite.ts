@@ -57,6 +57,10 @@ var observerGd = {
 function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
+  if (satrec.satnum === "") {
+    throw new Error("Incorrect TLE definition");
+  }
+
   var positionAndVelocity = satellite.propagate(satrec, date);
   var gmst = satellite.gstime(date);
 
