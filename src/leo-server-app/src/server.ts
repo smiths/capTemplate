@@ -45,6 +45,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, this is Express + TypeScript");
 });
 
+module.exports = app;
+
 // Gets passes for next week
 
 // Scheduling endpoints
