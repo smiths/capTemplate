@@ -20,8 +20,8 @@ describe("getSatelliteInfo()", () => {
 });
 
 describe("GET /getSatelliteInfo", () => {
-  setTleLines(defaultTleLine1, defaultTleLine2);
   it("responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getSatelliteInfo")
       .expect("Content-Type", /json/)
