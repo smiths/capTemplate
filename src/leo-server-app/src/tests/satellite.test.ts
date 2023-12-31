@@ -28,3 +28,13 @@ describe("GET /getSatelliteInfo", () => {
       .expect(200);
   });
 });
+
+describe("GET /getNextPasses", () => {
+  it("responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .get("/satellite/getNextPasses")
+      .expect("Content-Type", /json/)
+      .expect(200);
+  });
+});
