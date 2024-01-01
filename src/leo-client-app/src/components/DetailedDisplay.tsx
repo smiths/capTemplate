@@ -2,8 +2,13 @@
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
 
+interface DataPoint {
+  elevation: number;
+  azimuth: number;
+}
+
 const DetailedDisplay: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<DataPoint[]>([]);
 
   useEffect(() => {
     d3.select("#plot").select("svg").remove();
@@ -54,7 +59,7 @@ const DetailedDisplay: React.FC = () => {
           .data(d3.range(1, numCircles + 1))
           .enter()
           .append("circle")
-          .attr("r", (d) => (radius / numCircles) * d)
+          .attr("r", (d: number) => (radius / numCircles) * d)
           .style("fill", "none")
           .style("stroke", "white");
 
@@ -66,11 +71,11 @@ const DetailedDisplay: React.FC = () => {
           .append("line")
           .attr("class", "angular-axis")
           .attr("y2", -rScale.range()[1])
-          .attr("transform", (d) => `rotate(${(d * 360) / numLines})`)
+          .attr("transform", (d: number) => `rotate(${(d * 360) / numLines})`)
           .style("stroke", "white");
 
         // Add radial axis labels
-        d3.range(1, numCircles + 1).forEach((d) => {
+        d3.range(1, numCircles + 1).forEach((d: number) => {
           svg
             .append("text")
             .attr("x", 0)
@@ -91,7 +96,7 @@ const DetailedDisplay: React.FC = () => {
           .attr("dy", ".35em"); // Vertically center text
 
         // Add azimuth axis labels every 30 degrees
-        d3.range(0, 360, 30).forEach((angle) => {
+        d3.range(0, 360, 30).forEach((angle: number) => {
           svg
             .append("text")
             .attr("x", (radius + 30) * Math.cos(toRadians(angle)))
@@ -109,14 +114,14 @@ const DetailedDisplay: React.FC = () => {
           .enter()
           .append("circle")
           .attr("class", "data-point")
-          .attr(
-            "cx",
-            (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth))
-          )
-          .attr(
-            "cy",
-            (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth))
-          )
+          .attr("cx", (d: any) => {
+            const point = d as DataPoint; // Type assertion
+            return rScale(point.elevation) * Math.cos(toRadians(point.azimuth));
+          })
+          .attr("cy", (d: any) => {
+            const point = d as DataPoint; // Type assertion
+            return rScale(point.elevation) * Math.sin(toRadians(point.azimuth));
+          })
           .attr("r", 5)
           .style("fill", "red");
       })
