@@ -107,6 +107,29 @@ router.get("/getSatelliteInfo", (req: any, res: any) => {
   }
 });
 
+router.get("/getPolarPlotData", (req: any, res: any) => {
+  let startDate = new Date(req.query.START_DATE);
+  let endDate = new Date(req.query.END_DATE);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return res.status(400).send("Invalid start or end date");
+  }
+
+  let current = startDate;
+  const oneSecond = 10000; // Incrementing by 10 seconds
+  let data = [];
+
+  while (current <= endDate) {
+    const info = getSatelliteInfo(current);
+    data.push({ azimuth: info.azimuth, elevation: info.elevation });
+
+    // Increment current date by one second (10 seconds in this case)
+    current = new Date(current.getTime() + oneSecond);
+  }
+
+  res.json(data);
+});
+
 router.get("/getNextPasses", (req: any, res: any) => {
   try {
     // Time window in milliseconds (1 minute)
