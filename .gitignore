@@ -277,3 +277,6 @@ TSWLatexianTemp*
 
 # DS_Store file from Mac computers
 .DS_Store
+
+# Code coverage in server
+src/leo-server-app/coverage

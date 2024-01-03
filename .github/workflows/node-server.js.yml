@@ -27,3 +27,9 @@ jobs:
       - name: Build Server App
         run: npm run build --if-present
         working-directory: ./src/leo-server-app
+      - name: Test Server App
+        env:
+          SPACE_TRACK_USERNAME: ${{ secrets.SPACE_TRACK_USERNAME }}
+          SPACE_TRACK_PASSWORD: ${{ secrets.SPACE_TRACK_PASSWORD }}
+        run: npm run test
+        working-directory: ./src/leo-server-app
