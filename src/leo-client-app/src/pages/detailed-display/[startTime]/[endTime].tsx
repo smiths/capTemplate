@@ -1,6 +1,5 @@
 "use client";
 
-import SatelliteInfo from "@/components/SatelliteInfo";
 import DetailedDisplay from "@/components/DetailedDisplay";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/router";
@@ -15,7 +14,6 @@ function DetailedSatelliteInfoPage() {
     <main>
       <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
-        <SatelliteInfo />
         <DetailedDisplay
           startTime={startTime as string}
           endTime={endTime as string}
