@@ -13,6 +13,20 @@ interface DetailedDisplayProps {
   endTime?: string | string[];
 }
 
+function formatTime(time: string): string {
+  const dateObj = new Date(time);
+  return dateObj
+    .toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replace(/\u202f/g, " ");
+}
+
 const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   startTime,
   endTime,
@@ -141,7 +155,14 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
       });
   }, [startTime, endTime]);
 
-  return <div id="plot"></div>;
+  return (
+    <div>
+      <div id="plot"></div>
+      {typeof startTime === "string" && <p>AOS: {formatTime(startTime)}</p>}
+      {typeof endTime === "string" && <p>LOS: {formatTime(endTime)}</p>}
+      <p>Measurements closest to the nearest minute.</p>
+    </div>
+  );
 };
 
 export default DetailedDisplay;
