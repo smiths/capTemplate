@@ -28,7 +28,7 @@ jobs:
         run: npm run build --if-present
         working-directory: ./src/leo-server-app
       - name: Read Secrets
-        run: echo "username is " ${{ secrets.SPACE_TRACK_USERNAME }}
+        run: echo "username is  ${{ secrets.SPACE_TRACK_USERNAME }}"
       - name: Test Server App
         env:
           SPACE_TRACK_USERNAME: ${{ secrets.SPACE_TRACK_USERNAME }}
