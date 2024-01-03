@@ -1,23 +1,34 @@
 "use client";
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface DataPoint {
   elevation: number;
   azimuth: number;
 }
 
-const DetailedDisplay: React.FC = () => {
+interface DetailedDisplayProps {
+  startTime?: string | string[];
+  endTime?: string | string[];
+}
+
+const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
+  startTime,
+  endTime,
+}) => {
   const [data, setData] = useState<DataPoint[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     d3.select("#plot").select("svg").remove();
+    console.log(startTime, endTime);
 
-    const formattedStartDate = "2024-01-06T10:15:00"; // Replace with actual start date
-    const formattedEndDate = "2024-01-06T10:22:00"; // Replace with actual end date
+    // const formattedStartDate = startTime + "Z"; // Replace with actual start date
+    // const formattedEndDate = startTime + "Z"; // Replace with actual end date
 
     fetch(
-      `http://localhost:3001/satellite/getPolarPlotData?START_DATE=${formattedStartDate}&END_DATE=${formattedEndDate}`
+      `http://localhost:3001/satellite/getPolarPlotData?START_DATE=${startTime}&END_DATE=${endTime}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -128,7 +139,7 @@ const DetailedDisplay: React.FC = () => {
       .catch((error) => {
         console.error("Error fetching polar plot data:", error);
       });
-  }, []);
+  }, [startTime, endTime]);
 
   return <div id="plot"></div>;
 };

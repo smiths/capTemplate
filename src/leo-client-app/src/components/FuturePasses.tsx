@@ -1,5 +1,6 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
+  Link,
   Paper,
   Stack,
   Table,
@@ -10,6 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import NextLink from "next/link";
 
 interface Pass {
   type: string;
@@ -21,6 +23,11 @@ interface Pass {
 const FuturePasses: React.FC = () => {
   const [passes, setPasses] = useState<Pass[][]>([]);
   const { user } = useUser();
+
+  function formatDateToISO(dateString: string) {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 19) + "Z";
+  }
 
   const fetchPasses = () => {
     fetch("http://localhost:3001/satellite/getNextPasses")
@@ -84,6 +91,19 @@ const FuturePasses: React.FC = () => {
                 </TableCell>
                 <TableCell sx={{ color: "white !important" }} align="center">
                   {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
+                </TableCell>
+                <TableCell>
+                  <NextLink
+                    href={`/detailed-display/${encodeURIComponent(
+                      formatDateToISO(passPair[0].time)
+                    )}/${encodeURIComponent(
+                      formatDateToISO(passPair[1].time)
+                    )}`}
+                  >
+                    <Link component="a" sx={{ color: "#6cb6ff" }}>
+                      View Details
+                    </Link>
+                  </NextLink>
                 </TableCell>
               </TableRow>
             ))}
