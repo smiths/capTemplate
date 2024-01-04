@@ -65,6 +65,9 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
   if (!tleLine1 || !tleLine2) {
     throw new Error("Incorrect TLE definition");
   }
+  if (isNaN(date.getTime())) {
+    throw new Error("Incorrect Date definition");
+  }
   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
   var positionAndVelocity = satellite.propagate(satrec, date);

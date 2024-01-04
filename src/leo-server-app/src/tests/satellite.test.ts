@@ -17,6 +17,22 @@ describe("getSatelliteInfo()", () => {
   test("Invalid TLE", async () => {
     await expect(() => getSatelliteInfo(new Date(), null, null)).toThrow();
   });
+
+  test("Valid TLE with Valid Date", async () => {
+    await expect(() =>
+      getSatelliteInfo(
+        new Date("2024-01-06T10:15:00Z"),
+        defaultTleLine1,
+        defaultTleLine2
+      )
+    ).toBeDefined();
+  });
+
+  test("Valid TLE with Invalid Date", async () => {
+    await expect(() =>
+      getSatelliteInfo(new Date("bad date"), defaultTleLine1, defaultTleLine2)
+    ).toThrow();
+  });
 });
 
 describe("GET /getSatelliteInfo", () => {
