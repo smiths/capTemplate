@@ -34,6 +34,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   const [data, setData] = useState<DataPoint[]>([]);
   const [startAzimuth, setStartAzimuth] = useState<number>();
   const [endAzimuth, setEndAzimuth] = useState<number>();
+  const [maxElevation, setmaxElevation] = useState<number>();
   const router = useRouter();
 
   useEffect(() => {
@@ -68,6 +69,23 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
       })
       .then((data) => {
         setEndAzimuth(data.azimuth);
+      })
+      .catch((error) => {
+        console.error("Error fetching end azimuth:", error);
+      });
+
+    // Get max elevation
+    fetch(
+      `http://localhost:3001/satellite/getMaxElevation?START_DATE=${startTime}&END_DATE=${endTime}`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setmaxElevation(data.maxElevation);
       })
       .catch((error) => {
         console.error("Error fetching end azimuth:", error);
@@ -191,11 +209,19 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   return (
     <div>
       <div id="plot"></div>
-      {typeof startAzimuth === "number" && <p>Start Azimuth: {startAzimuth}</p>}
-      {typeof endAzimuth === "number" && <p>End Azimuth: {endAzimuth}</p>}
+      {typeof startAzimuth === "number" && (
+        <p>Start Azimuth: {startAzimuth}°</p>
+      )}
+      {typeof endAzimuth === "number" && <p>End Azimuth: {endAzimuth}°</p>}
+      {typeof maxElevation === "number" && (
+        <p>Max Elevation: {maxElevation}°</p>
+      )}
       {typeof startTime === "string" && <p>AOS: {formatTime(startTime)}</p>}
       {typeof endTime === "string" && <p>LOS: {formatTime(endTime)}</p>}
-      <p>Measurements closest to the nearest minute.</p>
+      <p>
+        Max elevation closest to the nearest second. AOS and LOS closest to the
+        nearest minute.
+      </p>
     </div>
   );
 };
