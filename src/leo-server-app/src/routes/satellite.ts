@@ -65,6 +65,9 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
   if (!tleLine1 || !tleLine2) {
     throw new Error("Incorrect TLE definition");
   }
+  if (isNaN(date.getTime())) {
+    throw new Error("Incorrect Date definition");
+  }
   var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
   var positionAndVelocity = satellite.propagate(satrec, date);
@@ -105,6 +108,57 @@ router.get("/getSatelliteInfo", (req: any, res: any) => {
     console.error("Error in getSatelliteInfo():", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+router.get("/getPolarPlotData", (req: any, res: any) => {
+  let startDate = new Date(req.query.START_DATE);
+  let endDate = new Date(req.query.END_DATE);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return res.status(500).send("Invalid start or end date");
+  }
+
+  let current = startDate;
+  const tenSecond = 10000; // Incrementing by 10 seconds
+  let data = [];
+
+  while (current <= endDate) {
+    const info = getSatelliteInfo(current, tleLine1, tleLine2);
+    data.push({ azimuth: info.azimuth, elevation: info.elevation });
+
+    // Increment current date by ten seconds
+    current = new Date(current.getTime() + tenSecond);
+  }
+
+  res.json(data);
+});
+
+router.get("/getMaxElevation", (req: any, res: any) => {
+  let startDate = new Date(req.query.START_DATE);
+  let endDate = new Date(req.query.END_DATE);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return res.status(500).send("Invalid start or end date");
+  }
+
+  let current = startDate;
+  const oneSecond = 1000; // Incrementing by 1 second
+  let maxElevation = 0; // Initialize max elevation
+
+  while (current <= endDate) {
+    const info = getSatelliteInfo(current, tleLine1, tleLine2);
+
+    // Update max elevation if current elevation is higher
+    if (info.elevation > maxElevation) {
+      maxElevation = info.elevation;
+    }
+
+    // Increment current date by one second
+    current = new Date(current.getTime() + oneSecond);
+  }
+
+  // Return the maximum elevation
+  res.json({ maxElevation: maxElevation });
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {

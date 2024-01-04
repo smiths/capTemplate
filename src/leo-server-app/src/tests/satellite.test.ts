@@ -17,6 +17,22 @@ describe("getSatelliteInfo()", () => {
   test("Invalid TLE", async () => {
     await expect(() => getSatelliteInfo(new Date(), null, null)).toThrow();
   });
+
+  test("Valid TLE with Valid Date", async () => {
+    await expect(() =>
+      getSatelliteInfo(
+        new Date("2024-01-06T10:15:00Z"),
+        defaultTleLine1,
+        defaultTleLine2
+      )
+    ).toBeDefined();
+  });
+
+  test("Valid TLE with Invalid Date", async () => {
+    await expect(() =>
+      getSatelliteInfo(new Date("bad date"), defaultTleLine1, defaultTleLine2)
+    ).toThrow();
+  });
 });
 
 describe("GET /getSatelliteInfo", () => {
@@ -30,6 +46,56 @@ describe("GET /getSatelliteInfo", () => {
   it("Throws error if invalid TLE", async () => {
     setTleLines(null, null);
     await request(app).get("/satellite/getSatelliteInfo").expect(500);
+  });
+});
+
+describe("GET /getPolarPlotData", () => {
+  it("Responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    let startTime = "2024-01-06T10:15:00Z";
+    let endTime = "2024-01-06T10:22:00Z";
+    await request(app)
+      .get(
+        "/satellite/getPolarPlotData?START_DATE=" +
+          startTime +
+          "&END_DATE=" +
+          endTime
+      )
+      .expect("Content-Type", /json/)
+      .expect(200);
+  });
+  it("Throws error if invalid Date", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .get(
+        "/satellite/getPolarPlotData?START_DATE=bad_string&END_DATE=bad_string"
+      )
+      .expect(500);
+  });
+});
+
+describe("GET /getMaxElevation", () => {
+  it("Responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    let startTime = "2024-01-06T10:15:00Z";
+    let endTime = "2024-01-06T10:22:00Z";
+    await request(app)
+      .get(
+        "/satellite/getMaxElevation?START_DATE=" +
+          startTime +
+          "&END_DATE=" +
+          endTime
+      )
+      .expect("Content-Type", /json/)
+      .expect(200);
+  });
+  it("Throws error if invalid Date", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .get(
+        "/satellite/getMaxElevation?START_DATE=bad_string&END_DATE=bad_string"
+      )
+      .expect(500);
   });
 });
 
