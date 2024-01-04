@@ -33,7 +33,7 @@ Type: `GET`
 Request: `{START_DATE: String, END_DATE: String}`
 Response: `{ [{ azimuth: number, elevation: number }] }`
 
-Returns an array of `[azimut, elevation]`, points for a polar plot, in degrees, with points every 10 seconds. START_DATE and END_DATE should be strings which can be put into the `Date()` constructor, i.e "2024-01-06T10:15:00Z". Note the Z is very important for calculations.
+Returns an array of `[azimuth, elevation]`, points for a polar plot, in degrees, with points every 10 seconds. START_DATE and END_DATE should be strings which can be put into the `Date()` constructor, i.e "2024-01-06T10:15:00Z". Note the Z is very important for calculations. Uses getSatelliteInfo() function.
 
 This endpoint is used for retrieving the polar plot points for a given date range.
 
