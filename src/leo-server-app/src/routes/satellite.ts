@@ -120,7 +120,7 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
   let data = [];
 
   while (current <= endDate) {
-    const info = getSatelliteInfo(current);
+    const info = getSatelliteInfo(current, tleLine1, tleLine2);
     data.push({ azimuth: info.azimuth, elevation: info.elevation });
 
     // Increment current date by ten seconds
@@ -143,7 +143,7 @@ router.get("/getMaxElevation", (req: any, res: any) => {
   let maxElevation = 0; // Initialize max elevation
 
   while (current <= endDate) {
-    const info = getSatelliteInfo(current);
+    const info = getSatelliteInfo(current, tleLine1, tleLine2);
 
     // Update max elevation if current elevation is higher
     if (info.elevation > maxElevation) {
