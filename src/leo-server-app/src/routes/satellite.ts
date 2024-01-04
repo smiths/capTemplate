@@ -115,7 +115,7 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
   let endDate = new Date(req.query.END_DATE);
 
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(400).send("Invalid start or end date");
+    return res.status(500).send("Invalid start or end date");
   }
 
   let current = startDate;
