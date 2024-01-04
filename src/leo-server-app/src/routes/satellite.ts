@@ -116,18 +116,46 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
   }
 
   let current = startDate;
-  const oneSecond = 10000; // Incrementing by 10 seconds
+  const tenSecond = 10000; // Incrementing by 10 seconds
   let data = [];
 
   while (current <= endDate) {
     const info = getSatelliteInfo(current);
     data.push({ azimuth: info.azimuth, elevation: info.elevation });
 
-    // Increment current date by one second (10 seconds in this case)
-    current = new Date(current.getTime() + oneSecond);
+    // Increment current date by ten seconds
+    current = new Date(current.getTime() + tenSecond);
   }
 
   res.json(data);
+});
+
+router.get("/getMaxElevation", (req: any, res: any) => {
+  let startDate = new Date(req.query.START_DATE);
+  let endDate = new Date(req.query.END_DATE);
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return res.status(400).send("Invalid start or end date");
+  }
+
+  let current = startDate;
+  const oneSecond = 1000; // Incrementing by 1 second
+  let maxElevation = 0; // Initialize max elevation
+
+  while (current <= endDate) {
+    const info = getSatelliteInfo(current);
+
+    // Update max elevation if current elevation is higher
+    if (info.elevation > maxElevation) {
+      maxElevation = info.elevation;
+    }
+
+    // Increment current date by one second
+    current = new Date(current.getTime() + oneSecond);
+  }
+
+  // Return the maximum elevation
+  res.json({ maxElevation: maxElevation });
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {
