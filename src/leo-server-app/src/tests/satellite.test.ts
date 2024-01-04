@@ -52,9 +52,14 @@ describe("GET /getSatelliteInfo", () => {
 describe("GET /getPolarPlotData", () => {
   it("Responds with json", async () => {
     setTleLines(defaultTleLine1, defaultTleLine2);
+    let startTime = "2024-01-06T10:15:00Z";
+    let endTime = "2024-01-06T10:22:00Z";
     await request(app)
       .get(
-        "/satellite/getMaxElevation?START_DATE=2024-01-06T10:15:00Z&END_DATE=2024-01-06T10:22:00Z"
+        "/satellite/getPolarPlotData?START_DATE=" +
+          startTime +
+          "&END_DATE=" +
+          endTime
       )
       .expect("Content-Type", /json/)
       .expect(200);
@@ -64,6 +69,31 @@ describe("GET /getPolarPlotData", () => {
     await request(app)
       .get(
         "/satellite/getPolarPlotData?START_DATE=bad_string&END_DATE=bad_string"
+      )
+      .expect(500);
+  });
+});
+
+describe("GET /getMaxElevation", () => {
+  it("Responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    let startTime = "2024-01-06T10:15:00Z";
+    let endTime = "2024-01-06T10:22:00Z";
+    await request(app)
+      .get(
+        "/satellite/getMaxElevation?START_DATE=" +
+          startTime +
+          "&END_DATE=" +
+          endTime
+      )
+      .expect("Content-Type", /json/)
+      .expect(200);
+  });
+  it("Throws error if invalid Date", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .get(
+        "/satellite/getMaxElevation?START_DATE=bad_string&END_DATE=bad_string"
       )
       .expect(500);
   });
