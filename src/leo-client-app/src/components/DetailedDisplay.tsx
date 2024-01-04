@@ -32,15 +32,48 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   endTime,
 }) => {
   const [data, setData] = useState<DataPoint[]>([]);
+  const [startAzimuth, setStartAzimuth] = useState<number>();
+  const [endAzimuth, setEndAzimuth] = useState<number>();
   const router = useRouter();
 
   useEffect(() => {
     d3.select("#plot").select("svg").remove();
-    console.log(startTime, endTime);
 
-    // const formattedStartDate = startTime + "Z"; // Replace with actual start date
-    // const formattedEndDate = startTime + "Z"; // Replace with actual end date
+    // Get start Azimuth
+    fetch(
+      "http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(startTime)}"
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setStartAzimuth(data.azimuth);
+      })
+      .catch((error) => {
+        console.error("Error fetching start azimuth:", error);
+      });
 
+    // Get end Azimuth
+    fetch(
+      "http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(endTime)}"
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setEndAzimuth(data.azimuth);
+      })
+      .catch((error) => {
+        console.error("Error fetching end azimuth:", error);
+      });
+
+    //Plot the polar plot
     fetch(
       `http://localhost:3001/satellite/getPolarPlotData?START_DATE=${startTime}&END_DATE=${endTime}`
     )
@@ -158,6 +191,8 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   return (
     <div>
       <div id="plot"></div>
+      {typeof startAzimuth === "number" && <p>Start Azimuth: {startAzimuth}</p>}
+      {typeof endAzimuth === "number" && <p>End Azimuth: {endAzimuth}</p>}
       {typeof startTime === "string" && <p>AOS: {formatTime(startTime)}</p>}
       {typeof endTime === "string" && <p>LOS: {formatTime(endTime)}</p>}
       <p>Measurements closest to the nearest minute.</p>
