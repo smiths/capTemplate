@@ -73,6 +73,9 @@ const FuturePasses: React.FC = () => {
               <TableCell sx={{ color: "white !important" }} align="center">
                 Exit
               </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="center">
+                More Info
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -92,7 +95,7 @@ const FuturePasses: React.FC = () => {
                 <TableCell sx={{ color: "white !important" }} align="center">
                   {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ color: "white !important" }}>
                   <NextLink
                     href={`/detailed-display/${encodeURIComponent(
                       formatDateToISO(passPair[0].time)
@@ -100,9 +103,7 @@ const FuturePasses: React.FC = () => {
                       formatDateToISO(passPair[1].time)
                     )}`}
                   >
-                    <Link component="a" sx={{ color: "#6cb6ff" }}>
-                      View Details
-                    </Link>
+                    <u>View Details</u>
                   </NextLink>
                 </TableCell>
               </TableRow>
