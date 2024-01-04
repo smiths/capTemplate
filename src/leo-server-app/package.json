@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start:dev": "nodemon src/server.ts",
     "all": "concurrently \"cd ../leo-client-app && npm run dev\" \"npm run start:dev\"",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
