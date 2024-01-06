@@ -21,6 +21,8 @@ To start the client and server app concurrently, use:
 npm run all
 ```
 
+By default, the server will run on 3001 port.
+
 To run tests:
 
 ```bash
