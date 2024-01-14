@@ -1,5 +1,3 @@
-import { ScheduleType } from "../types/schedule";
-
 const express = require("express");
 const Satellite = require("../models/satellite");
 const Schedule = require("../models/schedule");
@@ -70,7 +68,6 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
       commands: body.commands,
       executionTimestamp: new Date(body.executionTimestamp),
       status: false,
-      requestType: ScheduleType.FUTURE,
     };
 
     const schedule = await Schedule.create(newSchedule);
@@ -88,7 +85,6 @@ router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
 
   const filter = {
     satellite: satelliteId,
-    requestType: ScheduleType.FUTURE,
     status: false,
   };
 

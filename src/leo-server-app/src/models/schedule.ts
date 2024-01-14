@@ -1,22 +1,28 @@
 import mongoose from "mongoose";
-import { ScheduleType } from "../types/schedule";
+import { ScheduleStatus } from "../types/schedule";
 
 const Schema = mongoose.Schema;
 
 const scheduleSchema = new Schema(
   {
-    commands: { type: [String] },
-    executionTimestamp: {
+    startDate: {
       type: Date,
       default: Date.now,
     },
-    satellite: {
+    endDate: {
+      type: Date,
+      default: Date.now,
+    },
+    satelliteId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Satellite",
     },
-    requestType: Object.values(ScheduleType),
-    status: Boolean,
-    user: {
+    status: {
+      type: String,
+      enums: Object.values(ScheduleStatus),
+      default: ScheduleStatus.FUTURE,
+    },
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },

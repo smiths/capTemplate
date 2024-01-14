@@ -1,4 +1,4 @@
-export enum ScheduleType {
-  "LIVE" = "LIVE",
+export enum ScheduleStatus {
   "FUTURE" = "FUTURE",
+  "PASSED" = "PASSED",
 }
