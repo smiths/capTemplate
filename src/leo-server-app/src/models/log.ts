@@ -7,7 +7,8 @@ const logSchema = new Schema(
   {
     response: Schema.Types.Mixed,
     command: {
-      type: commandSchema,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Command",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
