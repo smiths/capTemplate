@@ -9,12 +9,6 @@ const satelliteSchema = new Schema(
       required: true,
     },
     intlCode: { type: String, required: true, unique: true },
-    operators: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
     validCommands: {
       type: [String],
     },

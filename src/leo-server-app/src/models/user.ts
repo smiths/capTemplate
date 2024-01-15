@@ -11,7 +11,7 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
     },
-    role: Object.values(UserRole),
+    role: { type: String, enum: Object.values(UserRole) },
     satellites: [
       {
         type: mongoose.Schema.Types.ObjectId,
