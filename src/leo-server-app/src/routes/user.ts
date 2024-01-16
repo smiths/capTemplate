@@ -1,17 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const User = require("../models/user");
+import User from "../models/user";
 
 const router = express.Router();
 router.use(express.json());
 
 router.post("/createUser", async (req: any, res: any) => {
-  const { body } = req;
+  const { email, role } = req.query;
 
   const newUser = new User({
-    email: body.email,
-    role: body.role,
-    satellites: body.satellites,
+    email: email,
+    role: role,
   });
   const user = await User.create(newUser);
   res.status(201).json({ message: "User Created", user });
