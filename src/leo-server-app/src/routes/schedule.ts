@@ -1,7 +1,14 @@
+// TODO: FIX IMPORTS
+
 const express = require("express");
 const Satellite = require("../models/satellite");
 const Schedule = require("../models/schedule");
 const Log = require("../models/log");
+
+import Command from "../models/command";
+import User from "../models/user";
+import { UserRole } from "../types/user";
+import mongoose from "mongoose";
 
 const router = express.Router();
 router.use(express.json());
@@ -12,6 +19,14 @@ type CreateScheduleProp = {
     satelliteId: string;
     userId: string;
     executionTimestamp: Date;
+  };
+};
+
+type UpdateScheduleProp = {
+  query: {
+    command: string;
+    commandId: string;
+    userId: string;
   };
 };
 
@@ -79,6 +94,57 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
 
   res.status(201).json(resObj);
 });
+
+const isAdminCheck = async (userId: string) => {
+  const userRecord = await User.findById(userId);
+  console.log(userRecord?.role);
+  return userRecord?.role === UserRole.ADMIN;
+};
+
+router.patch(
+  "/updateScheduledCommand",
+  async (req: UpdateScheduleProp, res: any) => {
+    const { userId, commandId, command } = req.query;
+    let isValid = true;
+    let updatedCommand = null;
+    let message = "Updated Command";
+
+    if (
+      !mongoose.isValidObjectId(userId) ||
+      !mongoose.isValidObjectId(commandId)
+    ) {
+      isValid = false;
+      message = "Invalid IDs supplied";
+    }
+
+    const isAdmin = await isAdminCheck(userId);
+    if (!isAdmin) {
+      // Validation step
+      const commandRecord = await Command.findById(commandId);
+      if (commandRecord?.userId?.toString() !== userId) {
+        message = "Invalid credentials";
+        isValid = false;
+      }
+    }
+
+    // Update command record
+    if (isValid) {
+      updatedCommand = await Command.findByIdAndUpdate(
+        commandId,
+        {
+          command,
+        },
+        { new: true }
+      ).exec();
+    }
+
+    const resObj = {
+      message,
+      updatedCommand,
+    };
+    return res.status(201).json(resObj);
+  }
+);
 
 router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
   const { satelliteId } = req.query;
