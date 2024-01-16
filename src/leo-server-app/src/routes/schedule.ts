@@ -105,44 +105,40 @@ router.patch(
   "/updateScheduledCommand",
   async (req: UpdateScheduleProp, res: any) => {
     const { userId, commandId, command } = req.query;
-    let isValid = true;
-    let updatedCommand = null;
-    let message = "Updated Command";
 
+    // Validation
     if (
       !mongoose.isValidObjectId(userId) ||
       !mongoose.isValidObjectId(commandId)
     ) {
-      isValid = false;
-      message = "Invalid IDs supplied";
+      return res.status(500).json({ error: "Invalid IDs" });
     }
 
-    const isAdmin = await isAdminCheck(userId);
-    if (!isAdmin) {
-      // Validation step
+    const userRecord = await User.findById(userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission
+
+    if (userRecord.role !== UserRole.ADMIN) {
       const commandRecord = await Command.findById(commandId);
       if (commandRecord?.userId?.toString() !== userId) {
-        message = "Invalid credentials";
-        isValid = false;
+        return res.status(500).json({ error: "Invalid Credentials" });
       }
     }
 
     // Update command record
-    if (isValid) {
-      updatedCommand = await Command.findByIdAndUpdate(
-        commandId,
-        {
-          command,
-        },
-        { new: true }
-      ).exec();
-    }
+    const updatedCommand = await Command.findByIdAndUpdate(
+      commandId,
+      {
+        command,
+      },
+      { new: true }
+    ).exec();
 
-    const resObj = {
-      message,
-      updatedCommand,
-    };
-    return res.status(201).json(resObj);
+    return res.json({ message: "Updated command", updatedCommand });
   }
 );
 
