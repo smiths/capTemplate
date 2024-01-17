@@ -12,7 +12,7 @@ router.post("/createUser", async (req: any, res: any) => {
     email: email,
     role: role,
   });
-  const user = await User.create(newUser);
+const user = await User.create(newUser);
   res.status(201).json({ message: "User Created", user });
 });
 
