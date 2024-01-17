@@ -17,4 +17,4 @@ const satelliteSchema = new Schema(
 );
 
 const Satellite = mongoose.model("Satellite", satelliteSchema);
-module.exports = Satellite;
+export default Satellite;
