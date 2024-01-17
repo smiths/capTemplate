@@ -12,7 +12,6 @@ const { router: satelliteRoute } = require("./routes/satellite");
 const scheduleRoute = require("./routes/schedule");
 const logRoute = require("./routes/log");
 
-// Allow requests from your React app's origin (http://localhost:3000)
 const corsOptions = {
   origin: "http://localhost:3000",
 };

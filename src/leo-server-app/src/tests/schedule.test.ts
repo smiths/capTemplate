@@ -27,8 +27,6 @@ describe("PATCH /updateScheduledCommand", () => {
     console.log(process.env.NODE_ENV);
     connectDB("test");
 
-    // Create command record
-
     // First create users
     const user_1 = new User({
       email: "test4@gmail.com",
@@ -97,7 +95,7 @@ describe("PATCH /updateScheduledCommand", () => {
     disconnectDB();
   });
 
-  it("Correctly update existing command record", async () => {
+  it("Correctly updates existing command record", async () => {
     const newCommand = "start";
     const res = await request.patch(path).query({
       userId: users[0].id,

@@ -141,7 +141,7 @@ router.patch(
     }
 
     // Add validation for invalid command sequence based on satellite and user permissions
-    // Test 1 - Check if command exists in the satellite's list of command sequences
+    // Check if command exists in the satellite's list of command sequences
     const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
       satelliteId,
       command
@@ -151,7 +151,7 @@ router.patch(
       return res.status(500).json({ error: "Invalid command sequence" });
     }
 
-    // Test 2 - Check if command exists in the user's permission list for satellite unless they are admin
+    // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
 
     // Update command record
     const updatedCommand = await Command.findByIdAndUpdate(
