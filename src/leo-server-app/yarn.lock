@@ -1252,14 +1252,6 @@
   dependencies:
     sparse-bitfield "^3.0.3"
 
-"@shelf/jest-mongodb@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@shelf/jest-mongodb/-/jest-mongodb-4.2.0.tgz#377f2202d04a51187853abdfa041acf13217e005"
-  integrity sha512-AtrG0EGtoDX4/jiTHlVCtAT0QAW1RjKQDYVXK89fog07RcKr42r6hYOL+7XT/8Wj9pEmnOc1GoYQUWiOk0y8Nw==
-  dependencies:
-    debug "4.3.4"
-    mongodb-memory-server "9.1.1"
-
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
@@ -2075,7 +2067,7 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@4.3.4, debug@4.x, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4:
+debug@4, debug@4.x, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -3382,24 +3374,6 @@ mongodb-connection-string-url@^2.6.0:
     "@types/whatwg-url" "^8.2.1"
     whatwg-url "^11.0.0"
 
-mongodb-memory-server-core@9.1.1:
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-9.1.1.tgz#9b1b2c0f881424d53d1a4704023f1d03cf70eb14"
-  integrity sha512-5toYR4A7DfV5k+Qf6L9FG86baID2rPP/JYwp8TPrdm8ZzfTfyHTwQwa2BzVpSwmLoVW5gXN0znYmXiE68mImMg==
-  dependencies:
-    async-mutex "^0.4.0"
-    camelcase "^6.3.0"
-    debug "^4.3.4"
-    find-cache-dir "^3.3.2"
-    follow-redirects "^1.15.3"
-    https-proxy-agent "^7.0.2"
-    mongodb "^5.9.1"
-    new-find-package-json "^2.0.0"
-    semver "^7.5.4"
-    tar-stream "^3.0.0"
-    tslib "^2.6.2"
-    yauzl "^2.10.0"
-
 mongodb-memory-server-core@9.1.5:
   version "9.1.5"
   resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-9.1.5.tgz#c5a06955f9ae2349edcbaf4f78c78ef98f470308"
@@ -3417,14 +3391,6 @@ mongodb-memory-server-core@9.1.5:
     tar-stream "^3.0.0"
     tslib "^2.6.2"
     yauzl "^2.10.0"
-
-mongodb-memory-server@9.1.1:
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-9.1.1.tgz#ebe5f55e79984ca9fcfa58789c3b484127d23353"
-  integrity sha512-ZOHOdb7//sBR2ea1lPHDPRaw8oO2MIfMdF+z82/KnzfNZ6yY6igR48cfG8u+QArKJQFsA392GMMHSevfPWsrRA==
-  dependencies:
-    mongodb-memory-server-core "9.1.1"
-    tslib "^2.6.2"
 
 mongodb-memory-server@^9.1.5:
   version "9.1.5"
