@@ -20,6 +20,8 @@ const config: Config = {
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "babel",
+
+  preset: "@shelf/jest-mongodb",
 };
 
 export default config;
