@@ -1,10 +1,10 @@
 // TODO: FIX IMPORTS
 
 const express = require("express");
-const Satellite = require("../models/satellite");
 const Schedule = require("../models/schedule");
 const Log = require("../models/log");
 
+import Satellite from "../models/satellite";
 import Command from "../models/command";
 import User from "../models/user";
 import { UserRole } from "../types/user";
@@ -26,6 +26,7 @@ type UpdateScheduleProp = {
   query: {
     command: string;
     commandId: string;
+    satelliteId: string;
     userId: string;
   };
 };
@@ -56,7 +57,7 @@ async function validateCommands(satelliteId: string, commands: string[]) {
   const satellite = await Satellite.findById(satelliteId).exec();
 
   // Check if commands are valid
-  return commands.every((cmd) => satellite.validCommands.includes(cmd));
+  return commands.every((cmd) => satellite?.validCommands.includes(cmd));
 }
 
 // ---- API Routes ----
@@ -101,10 +102,21 @@ const isAdminCheck = async (userId: string) => {
   return userRecord?.role === UserRole.ADMIN;
 };
 
+const checkSatellitePermissionList = async (
+  satelliteId: string,
+  command: string
+) => {
+  // Fetch satellite
+  const satellite = await Satellite.findById(satelliteId);
+
+  const isValid = satellite?.validCommands.includes(command);
+  return isValid;
+};
+
 router.patch(
   "/updateScheduledCommand",
   async (req: UpdateScheduleProp, res: any) => {
-    const { userId, commandId, command } = req.query;
+    const { userId, commandId, satelliteId, command } = req.query;
 
     // Validation
     if (
@@ -121,13 +133,25 @@ router.patch(
     }
 
     // Check if user has permission
-
     if (userRecord.role !== UserRole.ADMIN) {
       const commandRecord = await Command.findById(commandId);
       if (commandRecord?.userId?.toString() !== userId) {
         return res.status(500).json({ error: "Invalid Credentials" });
       }
     }
+
+    // Add validation for invalid command sequence based on satellite and user permissions
+    // Test 1 - Check if command exists in the satellite's list of command sequences
+    const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
+      satelliteId,
+      command
+    );
+
+    if (!isCommandInSatelliteCriteria) {
+      return res.status(500).json({ error: "Invalid command sequence" });
+    }
+
+    // Test 2 - Check if command exists in the user's permission list for satellite unless they are admin
 
     // Update command record
     const updatedCommand = await Command.findByIdAndUpdate(
