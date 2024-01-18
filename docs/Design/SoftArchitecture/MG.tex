@@ -33,7 +33,7 @@
 
 \begin{document}
 
-\title{Module Guide for \progname{}} 
+\title{Module Guide for MCT }
 \author{\authname}
 \date{\today}
 
@@ -46,8 +46,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Jan. 17, 2024 & 1.0 & Completed MG for MCT application\\
 \bottomrule
 \end{tabularx}
 
@@ -72,9 +71,9 @@ This section records information for easy reference.
   R & Requirement\\
   SC & Scientific Computing \\
   SRS & Software Requirements Specification\\
-  \progname & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
+  FIFO & First In First Out \\
+  MCT & Mission Control Terminal\\
   \bottomrule
 \end{tabular}\\
 
@@ -93,7 +92,7 @@ This section records information for easy reference.
 \section{Introduction}
 
 Decomposing a system into modules is a commonly accepted approach to developing
-software.  A module is a work assignment for a programmer or programming
+software.  A module is a work assignment for a programming
 team~\citep{ParnasEtAl1984}.  We advocate a decomposition
 based on the principle of information hiding~\citep{Parnas1972a}.  This
 principle supports design for change, because the ``secrets'' that each module
@@ -101,7 +100,7 @@ hides represent likely future changes.  Design for change is valuable in SC,
 where modifications are frequent, especially during initial development as the
 solution space is explored.  
 
-Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
+Our design for the MCT application follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
 \begin{itemize}
 \item System details that are likely to change independently should be the
   secrets of separate modules.
@@ -157,11 +156,12 @@ adapted here is called design for
 change.
 
 \begin{description}
-\item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
-  hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+\item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific TLE for satellites to track, per user.
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The number of satellites to track, per user
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The type of information requested by stakeholders 
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The precision of measurement specification requested by stakeholders 
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The ground station coordinate information 
+\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The specific commands to be sent to satellites by operators and application administrators 
 \end{description}
 
 \subsection{Unlikely Changes} \label{SecUchange}
@@ -174,9 +174,11 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Server on which the application in hosted
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Format of satellite data input 
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Format of TLE data for tracking 
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Encoding scheme of command sequences to be sent to a satellite 
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Database technology being used to persist command sequences and log outputs 
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -199,23 +201,20 @@ actually be implemented.
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding Module} & ~ \\
+{Hardware-Hiding Module} & N/A ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & Satellite Module\\
+& Schedule Module\\
+& User Module\\
+& Log Module\\
+& Database Module\\
+& Authentication Module\\
+& BackendService Module \\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
-\bottomrule
+\multirow{1}{0.3\textwidth}{Software Decision Module} & SatelliteQueue Module \\
+\midrule
 
 \end{tabular}
 \caption{Module Hierarchy}
@@ -228,6 +227,40 @@ The design of the system is intended to satisfy the requirements developed in
 the SRS. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
 
+\subsection{Modules}
+
+\subsubsection{Satellite Module}
+
+The Satellite module is responsible for all information related to a satellite, including calculating positional data, future overpasses, and generating polar plot data.
+
+\subsubsection{Schedule Module}
+
+The Schedule module is responsible for all logic pertaining to storing, updating, and executing command sequence(s) for a satellite target.
+
+\subsubsection{User Module}
+
+The User module is responsible for storing information about users in the MCT application. This includes creating new users and updating information for existing users.
+
+\subsubsection{SatelliteQueue Module}
+
+The SatelliteQueue module implements the queue data structure to store commands scheduled for execution in the upcoming overpass.
+
+\subsubsection{Log Module}
+
+The Log module implements logging functionality from the ground server.
+
+\subsubsection{Authentication Module}
+
+This module will employ the user's email and password for authentication purposes and to fetch their complete information, a prerequisite for accessing the satellite and scheduling data.
+
+\subsubsection{Database Module}
+
+This module will utilize multiple data structures to store, collect and return data. It will also enable users to view and edit stored data.
+
+\subsubsection{BackendService Module}
+
+It's responsible for initializing the backend processes of the application.  
+ 
 \section{Module Decomposition} \label{SecMD}
 
 Modules are decomposed according to the principle of ``information hiding''
@@ -247,16 +280,13 @@ to be implemented.
 \subsection{Hardware Hiding Modules (\mref{mHH})}
 
 \begin{description}
-\item[Secrets:]The data structure and algorithm used to implement the virtual
-  hardware.
-\item[Services:]Serves as a virtual hardware used by the rest of the
-  system. This module provides the interface between the hardware and the
-  software. So, the system can use it to display outputs or to accept inputs.
-\item[Implemented By:] OS
+\item N/A
 \end{description}
 
 \subsection{Behaviour-Hiding Module}
 
+
+ 
 \begin{description}
 \item[Secrets:]The contents of the required behaviours.
 \item[Services:]Includes programs that provide externally visible behaviour of
@@ -267,34 +297,71 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
+\subsubsection{Satellite Module}
 
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+\item[Secrets:]Overpass dates, satellite name and intl code.
+\item[Services:]Fetch future overpasses, satellite telemetry information and manage (add, update, delete) records of satellite systems.
+\item[Implemented By:] MCT
+\item[Type of Module:] Abstract Object
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{Schedule Module }
 
+\begin{description}
+\item[Secrets:] Command sequences to execute for a satellite's scheduled overpass.
+\item[Services:]Manage (add, update, delete) records of scheduled command sequences for a satellite system.
+\item[Implemented By:] MCT
+\item[Type of Module:] Abstract Object
+\end{description}
+
+\subsubsection{User Module }
+
+\begin{description}
+\item[Secrets:] User email and role.
+\item[Services:] Manages (reads, creates, updates) user records.
+\item[Implemented By:] MCT
+\item[Type of Module:] Abstract Object
+\end{description}
+
+\subsubsection{Authentication Module }
+
+\begin{description}
+\item[Secrets:] User email and password.
+\item[Services:] Registers and signs users to the MCT application.
+\item[Implemented By:] Auth0
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Database Module }
+
+\begin{description}
+\item[Secrets:] Records to store, update and remove from the database.
+\item[Services:] Stores data and provides read and write access to the data store.
+\item[Implemented By:] MongoDB
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Log Module }
+
+\begin{description}
+\item[Secrets:] SatelliteId to find logs for a particular satellite.
+\item[Services:] Gets logs for all executed commands for a specific satellite.
+\item[Implemented By:] MCT
+\item[Type of Module:] Abstract Object
+\end{description}
 
 \subsection{Software Decision Module}
 
+\subsubsection{SatelliteQueue Module}
+
 \begin{description}
-\item[Secrets:] The design decision based on mathematical theorems, physical
-  facts, or programming considerations. The secrets of this module are
-  \emph{not} described in the SRS.
-\item[Services:] Includes data structure and algorithms used in the system that
-  do not provide direct interaction with the user. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
-\item[Implemented By:] --
+\item[Secrets:] An array to manage scheduled command sequences for the next overpass in a FIFO order. This ensures that the queued commands will always be up to date.
+\item[Services:] Queue data structure to store commands scheduled for execution in the upcoming overpass.
+\item[Implemented By:] SatelliteQueue Module
 \end{description}
 
-\subsubsection{Etc.}
+
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -303,47 +370,145 @@ requirements and between the modules and the anticipated changes.
 
 % the table should use mref, the requirements should be named, use something
 % like fref
+
+ 
 \begin{table}[H]
 \centering
 \begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+
+REQ-MCT-001 & BackendService  \\ 
+
+REQ-MCT-002 & User \\ 
+
+REQ-MCT-003 & Authentication, User \\ 
+
+REQ-MCT-004 & Schedule \\ 
+
+REQ-MCT-005 & Schedule \\ 
+
+REQ-MCT-006 & Satellite \\ 
+
+REQ-MCT-007 & Satellite, Schedule \\ 
+
+REQ-MCT-008 & Satellite, Log \\ 
+
+REQ-MCT-009 & Schedule \\ 
+
+REQ-MCT-010 & Schedule \\ 
+
+REQ-MCT-011 & Schedule \\ 
+
+REQ-MCT-012 & Schedule \\ 
+
+REQ-MCT-013 & Schedule \\ 
+
+REQ-MCT-014 & Schedule \\ 
+
+REQ-MCT-015 & User \\ 
+
+REQ-MCT-016 & User \\ 
+
+REQ-MCT-017 & User \\ 
+
+REQ-MCT-018 & User, Schedule \\ 
+
+REQ-MCT-019 & Schedule \\ 
+
+REQ-MCT-020 & Schedule \\ 
+
+REQ-MCT-021 & Schedule \\ 
+
+REQ-MCT-022 & Satellite \\ 
+
+REQ-MCT-023 & Satellite \\ 
+
+REQ-MCT-024 & Satellite \\ 
+
+REQ-MCT-025 & Satellite \\ 
+
+REQ-MCT-026 & Satellite \\ 
+
+REQ-MCT-027 & Satellite, Schedule, SatelliteQueue \\ 
+
+REQ-MCT-028 & Satellite, Schedule, SatelliteQueue \\ 
+
+OPT-MCT-001 & Schedule \\ 
+
+OPT-MCT-002 & Schedule \\ 
+
+OPT-MCT-003 & Schedule \\ 
+
+OPT-MCT-004 & Schedule \\ 
+
+OPT-MCT-005 & Schedule \\ 
+
+OPT-MCT-006 & Schedule \\ 
+
+OPT-MCT-007 & Schedule \\ 
+
+OPT-MCT-008 & BackendService \\
+
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
 \label{TblRT}
 \end{table}
 
+
+ 
+% \begin{table}[H]
+% \centering
+% \begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
+% \toprule
+% \textbf{Req.} & \textbf{Modules}\\
+% \midrule
+% R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
+% R2 & \mref{mInput}, \mref{mParams}\\
+% R3 & \mref{mVerify}\\
+% R4 & \mref{mOutput}, \mref{mControl}\\
+% R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
+% R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
+% R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
+% R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
+% R9 & \mref{mVerifyOut}\\
+% R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
+% R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+% \bottomrule
+% \end{tabular}
+% \caption{Trace Between Requirements and Modules}
+% \label{TblRT}
+% \end{table}
+
 \begin{table}[H]
 \centering
 \begin{tabular}{p{0.2\textwidth} p{0.6\textwidth}}
 \toprule
-\textbf{AC} & \textbf{Modules}\\
+Anticipated Change
+& Modules
+\\
 \midrule
-\acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
+
+AC1
+& Satellite
+\\
+AC2
+& Satellite
+\\
+AC3
+& Satellite
+\\
+AC4
+& Satellite
+\\
+AC5
+& Satellite
+\\
+AC6
+& Satellite, Schedule
+\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -363,18 +528,38 @@ the modules. It can be seen that the graph is a directed acyclic graph
 system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
 
+
+
 \begin{figure}[H]
 \centering
 %\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
-\caption{Use hierarchy among modules}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{hierarchy_dag.png}
+    \caption{Enter Caption}
+    \label{Use hierarchy among modules}
+\end{figure}
 \label{FigUH}
 \end{figure}
 
+\section{Timeline}
+
+\begin{table}
+    \centering
+    \begin{tabular}{|c|c|c|} \hline 
+         \textbf{Module}&  \textbf{People Responsible}& \textbf{Deadline}\\ \hline 
+         Satellite&  Quinn& Jan 31, 2024\\ \hline 
+         Schedule&  Quinn, Umang, Rishi& Jan 31, 2024\\ \hline 
+         User&  Dhruv& Jan 25, 2024\\ \hline 
+         SatelliteQueue&  Umang, Rishi& Jan 31, 2024\\ \hline 
+         Log&  Quinn& Jan 20, 2024\\ \hline 
+         Authentication&  Diamond& Jan 25, 2024\\ \hline 
+         Database&  Umang, Rishi& Jan 31, 2024\\ \hline 
+         BackendService&  Diamond, Dhruv& Jan 31, 2024\\ \hline
+    \end{tabular}
+    \caption{Table for the timeline of the module}
+    \label{tab:my_label}
+\end{table}
 %\section*{References}
-
-\bibliographystyle {plainnat}
-\bibliography{../../../refs/References}
-
-\newpage{}
 
 \end{document}
