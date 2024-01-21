@@ -230,19 +230,6 @@ router.get(
   }
 );
 
-router.get("/get", async (req: GetCommandsByScheduleProp, res: any) => {
-  const { scheduleId, page = 1, limit = 10 } = req.query;
-
-  const filter = {
-    scheduleId: scheduleId,
-  };
-
-  const skip = (page - 1) * limit;
-
-  const commands = await Command.find(filter).limit(limit).skip(skip).exec();
-  res.status(201).json({ message: "Fetched commands", commands });
-});
-
 // Executing Requests
 router.post("/sendLiveRequest", async (req: any, res: any) => {
   const { body } = req;
