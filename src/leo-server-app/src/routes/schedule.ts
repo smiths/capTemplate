@@ -31,6 +31,13 @@ type UpdateScheduleProp = {
   };
 };
 
+type DeleteScheduleProp = {
+  query: {
+    commandId: string;
+    userId: string;
+  };
+};
+
 // ---- Helper Functions ----
 async function sendRequest(
   satelliteId: string,
@@ -163,6 +170,40 @@ router.patch(
     ).exec();
 
     return res.json({ message: "Updated command", updatedCommand });
+  }
+);
+
+router.delete(
+  "/deleteScheduledCommand",
+  async (req: DeleteScheduleProp, res: any) => {
+    const { userId, commandId } = req.query;
+
+    // Validation
+    if (
+      !mongoose.isValidObjectId(userId) ||
+      !mongoose.isValidObjectId(commandId)
+    ) {
+      return res.status(500).json({ error: "Invalid IDs" });
+    }
+
+    const userRecord = await User.findById(userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission
+    if (userRecord.role !== UserRole.ADMIN) {
+      const commandRecord = await Command.findById(commandId);
+      if (commandRecord?.userId?.toString() !== userId) {
+        return res.status(500).json({ error: "Invalid Credentials" });
+      }
+    }
+
+    // Remove command record
+    const cmd = await Command.findByIdAndDelete(commandId).exec();
+
+    return res.json({ message: "Removed command from schedule" });
   }
 );
 
