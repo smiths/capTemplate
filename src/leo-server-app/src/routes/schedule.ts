@@ -9,9 +9,27 @@ import Command from "../models/command";
 import User from "../models/user";
 import { UserRole } from "../types/user";
 import mongoose from "mongoose";
+import { ScheduleStatus } from "../types/schedule";
 
 const router = express.Router();
 router.use(express.json());
+
+type GetCommandsByScheduleProp = {
+  query: {
+    scheduleId: string;
+    page?: number;
+    limit?: number;
+  };
+};
+
+type GetSchedulesBySatelliteProp = {
+  query: {
+    satelliteId: string;
+    page?: number;
+    limit?: number;
+    status?: ScheduleStatus;
+  };
+};
 
 type CreateScheduleProp = {
   body: {
@@ -166,16 +184,63 @@ router.patch(
   }
 );
 
-router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
-  const { satelliteId } = req.query;
+router.get(
+  "/getSchedulesBySatellite",
+  async (req: GetSchedulesBySatelliteProp, res: any) => {
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {
+      satelliteId: satelliteId,
+      status: status,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const schedules = await Schedule.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched future schedules", schedules });
+  }
+);
+
+router.get(
+  "/getCommandsBySchedule",
+  async (req: GetCommandsByScheduleProp, res: any) => {
+    const { scheduleId, page = 1, limit = 10 } = req.query;
+
+    const filter = {
+      scheduleId: scheduleId,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const commands = await Command.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched commands", commands });
+  }
+);
+
+router.get("/get", async (req: GetCommandsByScheduleProp, res: any) => {
+  const { scheduleId, page = 1, limit = 10 } = req.query;
 
   const filter = {
-    satellite: satelliteId,
-    status: false,
+    scheduleId: scheduleId,
   };
 
-  const schedules = await Schedule.find(filter).exec();
-  res.status(201).json({ message: "Fetched schedules", schedules });
+  const skip = (page - 1) * limit;
+
+  const commands = await Command.find(filter).limit(limit).skip(skip).exec();
+  res.status(201).json({ message: "Fetched commands", commands });
 });
 
 // Executing Requests
