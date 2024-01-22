@@ -53,8 +53,8 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+\today & 1.0 & Finished MIS doc\\
+% Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
 
@@ -62,9 +62,29 @@ Date 2 & 1.1 & Notes\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \wss{give url}
+See SRS Documentation at \wss. This section records information for easy reference.
 
-\wss{Also add any additional symbols, abbreviations or acronyms}
+\subsection{Abbreviations and Acronyms}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  AC & Anticipated Change\\
+  DAG & Directed Acyclic Graph \\
+  M & Module \\
+  MG & Module Guide \\
+  OS & Operating System \\
+  R & Requirement\\
+  SC & Scientific Computing \\
+  SRS & Software Requirements Specification\\
+  UC & Unlikely Change \\
+  FIFO & First In First Out \\
+  MCT & Mission Control Terminal 
+  \wss{etc.} & \wss{...}\\
+  \bottomrule
+\end{tabular}\\
 
 \newpage
 
@@ -108,6 +128,7 @@ character & char & a single symbol or digit\\
 integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
 natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+Command & Object & Object representing command sequence record from database.\\
 \bottomrule
 \end{tabular} 
 \end{center}
@@ -131,21 +152,19 @@ The following table is taken directly from the Module Guide document for this pr
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding} & ~ \\
+{Hardware-Hiding} & N/A ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
-& Output Format\\
-& Output Verification\\
-& Temperature ODEs\\
-& Energy Equations\\ 
-& Control Module\\
-& Specification Parameters Module\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Satellite Module\\
+& Schedule Module\\
+& User Module\\
+& Log Module\\
+& Database Module\\
+& Authentication Module\\
+& BackendService Module \\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & {Sequence Data Structure}\\
-& ODE Solver\\
-& Plotting\\
+\multirow{1}{0.3\textwidth}{Software Decision} & SatelliteQueue Module \\
 \bottomrule
 
 \end{tabular}
@@ -156,86 +175,644 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
-  cross-referencing}
 
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
+\section{MIS of Database Module} \label{Module}
 
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
+\subsection{ Overview}
 
-\subsection{Module}
+This module utilizes the date and collectionType, formatted to align with the MongoDB database, to locate and retrieve stored data from the specified location. Additionally, it has the capability to store provided data using the inputs of date, collectionType, and data. Lastly, it can store edited data by utilizing date, collectionType, id, and data as inputs.
 
-\wss{Short name for the module}
+\subsection{ Uses}
+
+The database module is used to manage all of the data stored for the satellites, users, commands, logs and scheduling. This involves addition of new data, editing/modifying existing data and deleting values.
+
+\subsection{ Syntax}
+
+\subsubsection{ Exported Constants}
+
+N/A
+
+\subsubsection{ Exported Access Programs}
+
+N/A
+
+\subsection{ Semantics}
+
+\subsubsection{ State Variables}
+
+N/A
+
+\subsubsection{ Environment Variables}
+\begin{center}
+\begin{tabular}{p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+DB\_USER & String & Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & String & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & String & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{ Assumptions}
+
+MongoDB is an ACID compliant database and ensures persisted data is consistent.
+
+\subsubsection{ Access Routine Semantics}
+
+N/A
+
+\subsubsection{ Local Functions}
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+\hline
+insert() & \{databaseId: string, values: list of strings\} & N/A & Adds new values to the database \\
+\hline
+update() & \{databaseId: string, rowselector: string, values: list of strings\} &  & Updates an existing entry in the specified database \\
+\hline
+read() & \{databaseId: string, selector: string\} & \{result: list of strings\} & Returns values from the specified database based on the selectors and filter provided. \\
+\hline
+delete() & \{databaseId: string, rowselector: string\} & N/A & Deletes an entry from the specified database. \\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\section{MIS of Log Module} \label{Module}
+
+\subsection{ Overview}
+
+The Log module implements logging functionality which displays the runtime logs of the commands sent to a satellite and its response.
+
+\subsection{ Uses}
+
+The log module is used to view information regarding the commands transmitted to a satellite. This information contains data pertaining to the commands sent during a particular schedule, their run time and the response received. 
+
+\subsection{ Syntax}
+
+\subsubsection{ Exported Constants}
+
+N/A
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+\hline
+/getLogs & satelliteId & logs & N/A \\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsection{ Semantics}
+
+\subsubsection{ State Variables}
+
+N/A
+
+\subsubsection{ Environment Variables}
+
+\begin{center}
+\begin{tabular}{p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+DB\_USER & String& Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & String & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & String & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{ Assumptions}
+
+MongoDB is an ACID compliant database and ensures persisted data is consistent.
+
+\subsubsection{ Access Routine Semantics}
+
+N/A
+
+\subsubsection{ Local Functions}
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+\hline
+fetchLogs() & (satelliteId: string) & \{logs: string\} & Returns the logs associated with every command for the specified satellite. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+ 
+\section{MIS of {Satellite Module}} \label{Module} 
+
+\subsection{Overview}
+
+The Satellite module is responsible for all information related to a satellite, including calculating positional data, future overpasses, and generating polar plot data. 
 
 \subsection{Uses}
 
+The satellite module is used to provide relevant information regarding a satellite, including detailed information regarding its position, future overpasses, and relevant polar plot data for each overpass.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
 
+N/A
+
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\begin{tabular}{|p{4cm} |p{3cm} |p{5cm} |p{4cm}|}
 \hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
 \hline
-\wss{accessProg} & - & - & - \\
+/getSatelliteInfo & N/A & positionEci: $\mathbb{R}$,
+ velocityEci: $\mathbb{R}$,
+longitude: $\mathbb{R}$,
+latitude: $\mathbb{R}$,
+height: $\mathbb{R}$,
+azimuth: $\mathbb{R}$,
+elevation: $\mathbb{R}$ & N/A \\
+\hline
+/getPolarPlotData & startDate: Date, endDate: Date & [azimuth: $\mathbb{R}$, elevation: $\mathbb{R}$] & N/A \\
+\hline
+/getMaxElevation & startDate: Date, endDate: Date & maxElevation: $\mathbb{R}$ & N/A \\
+\hline
+/getNextPasses & startDate: Date, endDate: Date & type: string, time: string, azimuth: $\mathbb{R}$, elevation: number & N/A \\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsection{Semantics}
+
+
+ 
+\subsubsection{State Variables}
+\begin{center}
+\begin{tabular}{|p{4cm} |p{3cm} |p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+tleLine1 & String & TLE information for satellite tracking \\
+\hline
+tleLine2 & String & TLE information for satellite tracking \\
+\hline
+defaulttleLine1 & String & Default TLE information for satellite tracking \\
+\hline
+defaulttleLine2 & String & Default TLE information for satellite tracking \\
+\hline
+observerGd & \{
+
+longitude: Number
+
+latitude: Number
+
+height: Number
+
+\} & Observer location data \\
 \hline
 \end{tabular}
+
+\end{center}
+
+\subsubsection{Environment Variables}
+\begin{center}
+\begin{tabular}{|p{7cm} |p{3cm} |p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+SPACE\_TRACK\_USERNAME & String & Login information for SpaceTrack API \\
+\hline
+SPACE\_TRACK\_PASSWORD & String & Login information for SpaceTrack API \\
+\hline
+\end{tabular}
+\end{center}
+
+ 
+\subsubsection{Assumptions}
+Assuming that external APIs (Spacetrack) and libraries (SGP4) are always accurate for measurements.
+
+\subsubsection{Access Routine Semantics}
+
+N/A
+
+\subsubsection{Local Functions}
+\begin{center}
+\begin{tabular}{|p{4cm} |p{3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+\hline
+getSatelliteInfo() & (date : Date, tleLine1: string, tleLine2: String) & \{
+
+positionEci : number,
+
+velocityEci : number,
+
+longitude : number,
+
+latitude : number,
+
+height : number,
+
+azimuth : number,
+
+elevation : number,
+
+rangeSat : number,
+
+\} & Returns relevant satellite information given a certain date. Used by /getSatelliteInfo, /getPolarPlotData, /getMaxElevation. \\
+\hline
+\end{tabular}
+\end{center}
+
+ 
+
+\section{MIS of {Schedule Module}} \label{Module} 
+
+\subsection{Overview}
+
+The Schedule module is responsible for all logic pertaining to storing, updating, and executing command sequence(s) for a satellite target.
+
+\subsection{Uses}
+
+The Schedule module is used to schedule execution of command sequences for a satellite system during a specified overpass. This includes reading, adding, and updating command sequences as well as executing scheduled commands.
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+N/A
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{|p{4.8cm} | p{4cm} |p{3cm} |p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions} \\
+\hline
+/schedule/addCommand & scheduleId: string, satelliteId: string, userId: string, commandSequence: string & command: Command
+ & Ensure command sequence is included in both user and satellite system’s permission list criteria. \\
+\hline
+/schedule/updateCommand & commandId: string, scheduleId: string, satelliteId: string, userId: string, commandSequence: string & command: Command & Ensure command sequence is included in both user and satellite system’s permission list criteria. \\
+\hline
+/schedule/cancelCommand & commandId: string, userId: string, scheduleId: string & void & Ensure the user has required permissions to cancel the command. Ensure the overpass has not passed.
+ \\
+\hline
+/getNextPasses & startDate: Date, endDate: Date & type: string, time: string, azimuth: $\mathbb{R}$, elevation: number & N/A \\
+\hline
+
+\end{tabular}
+
 \end{center}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
 
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
+\begin{center}
+\begin{tabular}{|p{4.8cm} |p{3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+overpassQueueMap & { [key:string]:
+   SatelliteQueue } & A hashmap of key-value pairs. Each key is the ID of a satellite record and corresponds to a value of type SatelliteQueue, which represents the list of command sequences to be executed in the next overpass for a satellite system.\\
+\hline
+
+\end{tabular}
+
+\end{center}
 
 \subsubsection{Environment Variables}
 
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
+\begin{center}
+
+\begin{tabular}{|p{5cm} |p{5cm} |p{5cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+DB\_USER & string & Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & string & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & string & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
 
 \subsubsection{Assumptions}
 
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
+\begin{itemize}
+    \item MongoDB is an ACID compliant database and ensures persisted data is consistent.
+\end{itemize}
 
 \subsubsection{Access Routine Semantics}
 
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
+\begin{center}
+\begin{tabular}{|p{3.2cm} |p{3cm} | p{1.3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Transition} & \textbf{Output} & \textbf{Description} & \textbf{Exceptions} \\
+\hline
+executeOverpass() & Indexes state variable overpassQueueMap, then unloads a queue of type SatelliteQueue. Then, loads queue with command sequences scheduled for the satellite’s next overpass. & N/A & Executes all command sequences scheduled for the overpass in a FIFO order and records logs of the responses in the database & If a connection cannot be established with the satellite system, the indexed queue shall not be unloaded and therefore, will not be executed. \\
+\hline
+\end{tabular}
+\end{center}
 
 \subsubsection{Local Functions}
 
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
+\begin{center}
+\begin{tabular}{|p{3.2cm} |p{3cm} | p{1.3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Description} \\
+\hline
+executeOverpass() & satelliteId: string, overpassId: string & void & Executes all command sequences scheduled for the overpass in a FIFO order and records logs of the responses in the database \\
+\hline
+\end{tabular}
+\end{center}
 
-\newpage
 
-\bibliographystyle {plainnat}
-\bibliography {../../../refs/References}
+\section{MIS of {SatelliteQueue Module}} \label{Module} 
+
+\subsection{Overview}
+
+The SatelliteQueue module is responsible for managing future execution of command sequences for all satellite systems.
+
+\subsection{Uses}
+
+The SatelliteQueue module is used to store execution of command sequences for a satellite system during a specified overpass.
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+N/A
+
+\subsubsection{Exported Access Programs}
+
+N/A
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+\begin{center}
+\begin{tabular}{|p{4.8cm} |p{3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+overpassQueueMap & { [key:string]:
+   SatelliteQueue } & A hashmap of key-value pairs. Each key is the ID of a satellite record and corresponds to a value of type SatelliteQueue, which represents the list of command sequences to be executed in the next overpass for a satellite system.\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsubsection{Environment Variables}
+N/A
+
+
+\subsubsection{Assumptions}
+
+\begin{itemize}
+    \item Node.js is single-threaded and does not permit two requests to modify the state variable, overpassQueueMap to occur simultaneously.
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\begin{center}
+\begin{tabular}{|p{3.2cm} |p{3cm} | p{1.3cm} |p{5cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Transition} & \textbf{Output} & \textbf{Description} & \textbf{Exceptions} \\
+\hline
+push() & Modifies the overpassQueueMap and adds a command sequence to the queue of type SatelliteQueue. & N/A & Adds a command sequence to the queue of type SatelliteQueue. & N/A \\
+\hline
+pop() & Modifies the overpassQueueMap and removes the top item from the queue of type SatelliteQueue. & N/A & Removes the top command sequence from the queue of type SatelliteQueue. & N/A \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Local Functions}
+N/A
+
+
+
+\section{MIS of \wss{User Module}} \label{Module} 
+
+
+\subsection{Overview}
+The User module is responsible for storing information about users in the MIST application. This includes creating new users and updating information for existing users.
+
+\subsection{Uses}
+The User Module in the MIST application is designed to manage user-related data. Its primary functions include creating new users, updating information for existing users and getting a list of all the current operators.
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+N/A
+
+\subsubsection{Exported Access Programs}
+
+
+\begin{center}
+\begin{tabular}{p{6cm} p{2cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{Input} & \textbf{Output} & \textbf{Exceptions}\\
+\hline
+/createUser& Email, role& New user& N/A\\
+\hline
+/getAllOperators& N/A&  Returns all the operators& N/A\\
+\hline
+/updateOperatorRole/:userId& userId, role& Updates the user’s role& N/A\\
+
+\end{tabular}
+
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+N/A
+
+\subsubsection{Environment Variables}
+
+\begin{center}
+\begin{tabular}{|p{4cm} |p{4cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+DB\_USER & String& Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & String & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & String & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Assumptions}
+
+MongoDB is an ACID compliant database and ensures persisted data is consistent.
+
+\subsubsection{Access Routine Semantics}
+
+N/A
+
+
+
+\subsubsection{Local Functions}
+
+N/A
+
+\section{MIS of \wss{Authentication Module}} \label{Module} 
+
+
+
+\subsection{Overview}
+This module will employ the user’s email and password for authentication purposes and to fetch their complete information, a prerequisite for accessing the satellite and scheduling data.
+
+\subsection{Uses}
+The Authentication Module is a key part of the system, using the user's email and password to confirm their identity. After verification, it allows access to important features like satellite and scheduling data, requiring the user's complete information. This module ensures that only authorized users can interact with the system, enhancing security and controlling access to different functions.
+
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+N/A
+
+\subsubsection{Exported Access Programs}
+
+N/A
+
+\subsection{Semantics}
+
+
+
+\subsubsection{State Variables}
+\begin{center}
+\begin{tabular}{p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+email& String & The email address that operator uses to login\\
+\hline
+password& String & The operator’s password associated with their email\\
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Environment Variables}
+\begin{center}
+\begin{tabular}{p{4cm} p{4cm} p{4cm}}
+\hline
+\textbf{Input Name} & \textbf{Input Type} & \textbf{Description} \\
+\hline
+DB\_USER & String & Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & String & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & String & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Assumptions}
+
+
+\begin{itemize}
+    \item MongoDB is an ACID compliant database and ensures persisted data is consistent.
+    \item OAuth0 is the service used for authentication
+\end{itemize}
+ 
+
+\subsubsection{Access Routine Semantics}
+
+N/A
+
+\subsubsection{Local Functions}
+
+N/A
+
+\section{MIS of \wss{Backend Service}} \label{Module} 
+\subsection{Overview}
+This module bridges the front end user interface with all the other aforementioned modules that deal with the functionality of the application. It oversees the initiation of the application's backend processes.
+
+\subsection{Uses}
+
+The Backend Service module is responsible for ensuring the information from backend modules that deal with user authentication and managing user accounts, and  logging of satellite commands, responses and errors is accurately displaying in the UI according to requirements. 
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+N/A
+\subsubsection{Exported Access Programs}
+N/A
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+N/A
+
+\subsubsection{Environment Variables}
+
+\begin{center}
+\begin{tabular}{|p{4cm} |p{4cm} |p{4cm}|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+\hline
+DB\_USER & String& Login information for MongoDB Cluster \\
+\hline
+DB\_PASSWORD & String & Login information for MongoDB Cluster \\
+\hline
+DB\_URI & String & Connection path to MongoDB instance \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Assumptions}
+
+The only assumption that Backend service module depends on would be for the front-end and back-end to be running properly. 
+
+\subsubsection{Access Routine Semantics}
+
+N/A
+
+\subsubsection{Local Functions}
+
+N/A
 
 \newpage
 
 \section{Appendix} \label{Appendix}
 
-\wss{Extra information if required}
+\subsection{User Interface Design - Figma}
+
+Figma \href{https://www.figma.com/file/i2Q2VBK5So9Fr4Y0fTfo8U/MCT-Design?type=design&node-id=0%3A1&mode=design&t=luirTXz6ZzzY3WR5-1}{link} for the user interface design
+
+\subsection{Component Diagram}
+
+Link to \href{https://drive.google.com/file/d/1Ch1y_K63j26DbXrvBAeoG4raAhQos55k/view?usp=drive_link}{Component Diagram}
+
+\subsection{Reflection}
+The current limitations of the project stem from difficulties in verification and testing, particularly in connection with an operational ground system for scheduling on actual satellites. If we had unlimited resources, we would create our own fully operational ground server and test satellite architecture to ensure validity. However, the application's requirement is to be hosted on the MIST linux based server making communication challenging as functionalities like pinging are restricted. Having unlimited resources would allow us to establish our server capable of sending commands directly to the satellite. Another limitation of the project is the testing of command scheduling and satellite communication features. Currently, we lack a satellite for direct communication, so we must rely on a mock server for our tests. If unlimited resources were available, launching a test satellite to create a real-like environment for satellite communication testing would be the approach.
+
+Given the set of requirements imposed by external stakeholders, our design solutions were somewhat constrained. However, we actively managed complexity by decomposing our solution into distinct modules and implementing a high cohesion-low coupling approach to enhance the independence of these modules. This design approach aligned with good software engineering practices, particularly in terms of architectural considerations, as a component-based architecture was well-suited to our project requirements. Since the project description provided us with most of the functional and nonfunctional requirements, there was limited room for exploring alternative design ideas for our application. While we did contemplate design decisions related to the application's user interface, the core functionalities remained consistent. Our project's predefined requirements for both functionality and technology stack further limited the scope for exploring diverse implementation strategies at the outset of the project.
+
+
 
 \end{document}

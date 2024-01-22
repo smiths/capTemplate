@@ -1,7 +1,14 @@
+// TODO: FIX IMPORTS
+
 const express = require("express");
-const Satellite = require("../models/satellite");
 const Schedule = require("../models/schedule");
 const Log = require("../models/log");
+
+import Satellite from "../models/satellite";
+import Command from "../models/command";
+import User from "../models/user";
+import { UserRole } from "../types/user";
+import mongoose from "mongoose";
 
 const router = express.Router();
 router.use(express.json());
@@ -12,6 +19,15 @@ type CreateScheduleProp = {
     satelliteId: string;
     userId: string;
     executionTimestamp: Date;
+  };
+};
+
+type UpdateScheduleProp = {
+  query: {
+    command: string;
+    commandId: string;
+    satelliteId: string;
+    userId: string;
   };
 };
 
@@ -41,7 +57,7 @@ async function validateCommands(satelliteId: string, commands: string[]) {
   const satellite = await Satellite.findById(satelliteId).exec();
 
   // Check if commands are valid
-  return commands.every((cmd) => satellite.validCommands.includes(cmd));
+  return commands.every((cmd) => satellite?.validCommands.includes(cmd));
 }
 
 // ---- API Routes ----
@@ -79,6 +95,76 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
 
   res.status(201).json(resObj);
 });
+
+const isAdminCheck = async (userId: string) => {
+  const userRecord = await User.findById(userId);
+  console.log(userRecord?.role);
+  return userRecord?.role === UserRole.ADMIN;
+};
+
+const checkSatellitePermissionList = async (
+  satelliteId: string,
+  command: string
+) => {
+  // Fetch satellite
+  const satellite = await Satellite.findById(satelliteId);
+
+  const isValid = satellite?.validCommands.includes(command);
+  return isValid;
+};
+
+router.patch(
+  "/updateScheduledCommand",
+  async (req: UpdateScheduleProp, res: any) => {
+    const { userId, commandId, satelliteId, command } = req.query;
+
+    // Validation
+    if (
+      !mongoose.isValidObjectId(userId) ||
+      !mongoose.isValidObjectId(commandId)
+    ) {
+      return res.status(500).json({ error: "Invalid IDs" });
+    }
+
+    const userRecord = await User.findById(userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission
+    if (userRecord.role !== UserRole.ADMIN) {
+      const commandRecord = await Command.findById(commandId);
+      if (commandRecord?.userId?.toString() !== userId) {
+        return res.status(500).json({ error: "Invalid Credentials" });
+      }
+    }
+
+    // Add validation for invalid command sequence based on satellite and user permissions
+    // Check if command exists in the satellite's list of command sequences
+    const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
+      satelliteId,
+      command
+    );
+
+    if (!isCommandInSatelliteCriteria) {
+      return res.status(500).json({ error: "Invalid command sequence" });
+    }
+
+    // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
+
+    // Update command record
+    const updatedCommand = await Command.findByIdAndUpdate(
+      commandId,
+      {
+        command,
+      },
+      { new: true }
+    ).exec();
+
+    return res.json({ message: "Updated command", updatedCommand });
+  }
+);
 
 router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
   const { satelliteId } = req.query;
