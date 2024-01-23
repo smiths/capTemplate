@@ -11,6 +11,11 @@ import Satellite from "../models/satellite";
 import Schedule from "../models/schedule";
 import { ScheduleStatus } from "../types/schedule";
 
+// Helper methods
+const areIdsSame = (array1: string[], array2: string[]) =>
+  array1.length === array2.length &&
+  array1.every((val) => array2.includes(val));
+
 // -------- Update Schedule Endpoint --------
 
 describe("PATCH /updateScheduledCommand", () => {
@@ -24,8 +29,7 @@ describe("PATCH /updateScheduledCommand", () => {
   let commands: any[] = [];
 
   beforeAll(async () => {
-    console.log(process.env.NODE_ENV);
-    connectDB("test");
+    await connectDB("test");
 
     // First create users
     const user_1 = new User({
@@ -92,7 +96,7 @@ describe("PATCH /updateScheduledCommand", () => {
   });
 
   afterAll(async () => {
-    disconnectDB();
+    await disconnectDB();
   });
 
   it("Correctly updates existing command record", async () => {
@@ -117,3 +121,87 @@ describe("PATCH /updateScheduledCommand", () => {
 // Test 4 - update with invalid ids
 
 // Test 5 - Update with invalid command sequence
+
+// -------- GET Schedules by Satellite Endpoint --------
+describe("PATCH /getSchedulesBySatellite", () => {
+  let path = "/schedule/getSchedulesBySatellite";
+  let satelliteId: any;
+  let passedSchedules: any[] = [];
+  let futureSchedules: any[] = [];
+
+  beforeAll(async () => {
+    await connectDB("test");
+
+    // Create satellite record
+    const satellite = await Satellite.create({
+      name: "test1",
+      intlCode: 543,
+      validCommands: ["teardown", "start"],
+    });
+
+    satelliteId = satellite.id;
+
+    // Create future schedules
+    const _futureSchedules = [
+      {
+        startDate: new Date(Date.now() + 1000),
+        endDate: new Date(Date.now() + 10000),
+        satelliteId: satellite.id,
+      },
+      {
+        startDate: new Date(Date.now() + 100),
+        endDate: new Date(Date.now() + 900),
+        satelliteId: satellite.id,
+      },
+    ];
+
+    futureSchedules = await Schedule.create(_futureSchedules);
+
+    // Create passed schedules
+    const _passedSchedules = [
+      {
+        startDate: new Date(Date.now() - 1000),
+        endDate: new Date(Date.now() - 10000),
+        satelliteId: satellite.id,
+        status: ScheduleStatus.PASSED,
+      },
+      {
+        startDate: new Date(Date.now() - 100),
+        endDate: new Date(Date.now() - 900),
+        satelliteId: satellite.id,
+        status: ScheduleStatus.PASSED,
+      },
+    ];
+
+    passedSchedules = await Schedule.create(_passedSchedules);
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+  });
+
+  it("Correctly fetches future schedules for a satellite", async () => {
+    const res = await request.get(path).query({
+      satelliteId: satelliteId,
+    });
+    const expectedIds = futureSchedules.map((item) => item.id);
+    const actualIds = res.body.schedules
+      ? res.body.schedules.map((item: any) => item._id)
+      : [];
+
+    expect(areIdsSame(actualIds, expectedIds)).toBe(true);
+  });
+
+  it("Correctly fetches past schedules for a satellite", async () => {
+    const res = await request.get(path).query({
+      satelliteId: satelliteId,
+      status: ScheduleStatus.PASSED,
+    });
+    const expectedIds = passedSchedules.map((item) => item.id);
+    const actualIds = res.body.schedules
+      ? res.body.schedules.map((item: any) => item._id)
+      : [];
+
+    expect(areIdsSame(actualIds, expectedIds)).toBe(true);
+  });
+});
