@@ -5,13 +5,31 @@ const Log = require("../models/log");
 
 import Satellite from "../models/satellite";
 import Command from "../models/command";
+import Schedule from "../models/schedule";
 import User from "../models/user";
 import { UserRole } from "../types/user";
-import Schedule from "../models/schedule";
 import mongoose from "mongoose";
+import { ScheduleStatus } from "../types/schedule";
 
 const router = express.Router();
 router.use(express.json());
+
+type GetCommandsByScheduleProp = {
+  query: {
+    scheduleId: string;
+    page?: number;
+    limit?: number;
+  };
+};
+
+type GetSchedulesBySatelliteProp = {
+  query: {
+    satelliteId: string;
+    page?: number;
+    limit?: number;
+    status?: ScheduleStatus;
+  };
+};
 
 type CreateScheduleProp = {
   body: {
@@ -207,17 +225,51 @@ router.delete(
   }
 );
 
-router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
-  const { satelliteId } = req.query;
+router.get(
+  "/getSchedulesBySatellite",
+  async (req: GetSchedulesBySatelliteProp, res: any) => {
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      page = 1,
+      limit = 10,
+    } = req.query;
 
-  const filter = {
-    satellite: satelliteId,
-    status: false,
-  };
+    const filter = {
+      satelliteId: satelliteId,
+      status: status,
+    };
 
-  const schedules = await Schedule.find(filter).exec();
-  res.status(201).json({ message: "Fetched schedules", schedules });
-});
+    const skip = (page - 1) * limit;
+
+    const schedules = await Schedule.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched schedules", schedules });
+  }
+);
+
+router.get(
+  "/getCommandsBySchedule",
+  async (req: GetCommandsByScheduleProp, res: any) => {
+    const { scheduleId, page = 1, limit = 10 } = req.query;
+
+    const filter = {
+      scheduleId: scheduleId,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const commands = await Command.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched commands", commands });
+  }
+);
 
 // Executing Requests
 router.post("/sendLiveRequest", async (req: any, res: any) => {
@@ -259,20 +311,5 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
 
   res.status(201).json(resObj);
 });
-
-// router.post("/sendScheduledRequest", async (req: any, res: any) => {
-//   const { body } = req;
-
-//   // Get schedule
-//   const schedule = await Schedule.findById(body.scheduleId).exec();
-
-//   // api request
-//   const log = await sendRequest(
-//     body.satelliteId,
-//     body.scheduleId,
-//     schedule.commands
-//   );
-//   res.status(201).json({ message: "Sent command sequence", log });
-// });
 
 module.exports = router;
