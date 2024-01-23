@@ -1,10 +1,8 @@
 const supertest = require("supertest");
 const app = require("../app");
 const request = supertest(app);
-const mongoose = require("mongoose");
 const { connectDB, disconnectDB } = require("../database/database");
 
-const { MongoClient } = require("mongodb");
 import User from "../models/user";
 import Command from "../models/command";
 import Satellite from "../models/satellite";
@@ -17,7 +15,6 @@ const areIdsSame = (array1: string[], array2: string[]) =>
   array1.every((val) => array2.includes(val));
 
 // -------- Update Schedule Endpoint --------
-
 describe("PATCH /updateScheduledCommand", () => {
   let path = "/schedule/updateScheduledCommand";
   let satelliteId: any;
@@ -282,5 +279,82 @@ describe("GET /getCommandsBySchedule", () => {
       : [];
 
     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
+  });
+});
+
+// -------- Remove Scheduled Command Endpoint --------
+describe("DELETE /deleteScheduledCommand", () => {
+  let path = "/schedule/deleteScheduledCommand";
+  let users: any[] = [];
+  let schedule: any;
+  let commands: any[] = [];
+
+  beforeAll(async () => {
+    await connectDB("test");
+
+    // First create users
+    const user_1 = new User({
+      email: "test4@gmail.com",
+      role: "OPERATOR",
+    });
+    const user_2 = new User({
+      email: "test5@gmail.com",
+      role: "OPERATOR",
+    });
+    const user_3 = new User({
+      email: "test6@gmail.com",
+      role: "ADMIN",
+    });
+
+    users = await User.create([user_1, user_2, user_3]);
+    const firstUser = users[0];
+
+    // Create satellite record
+    const satellite = await Satellite.create({
+      name: "test1",
+      intlCode: 543,
+      validCommands: ["teardown", "start"],
+    });
+
+    // Create schedules
+    schedule = await Schedule.create({
+      startDate: new Date(Date.now() + 1000),
+      endDate: new Date(Date.now() + 100),
+      satelliteId: satellite.id,
+      status: ScheduleStatus.PASSED,
+    });
+
+    // Create command records
+    const _commands = [
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: firstUser.id,
+        scheduleId: schedule.id,
+      },
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: firstUser.id,
+        scheduleId: schedule.id,
+      },
+    ];
+
+    commands = await Command.create(_commands);
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+  });
+
+  it("Correctly deletes command record from schedule", async () => {
+    // delete record
+    await request.delete(path).query({
+      userId: users[0].id,
+      commandId: commands[1].id,
+    });
+
+    const cmd = await Command.findById(commands[1].id);
+    expect(cmd).toBeNull();
   });
 });
