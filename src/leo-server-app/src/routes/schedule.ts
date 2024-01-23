@@ -1,7 +1,6 @@
 // TODO: FIX IMPORTS
 
 const express = require("express");
-const Schedule = require("../models/schedule");
 const Log = require("../models/log");
 
 import Satellite from "../models/satellite";
@@ -10,6 +9,7 @@ import User from "../models/user";
 import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
+import Schedule from "../models/schedule";
 
 const router = express.Router();
 router.use(express.json());
@@ -206,7 +206,7 @@ router.get(
       .limit(limit)
       .skip(skip)
       .exec();
-    res.status(201).json({ message: "Fetched future schedules", schedules });
+    res.status(201).json({ message: "Fetched schedules", schedules });
   }
 );
 
@@ -260,11 +260,7 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
     const schedule = await Schedule.create(newSchedule);
 
     // api request
-    const log = await sendRequest(
-      body.satelliteId,
-      schedule._id,
-      body.commands
-    );
+    const log = await sendRequest(body.satelliteId, schedule.id, body.commands);
 
     resObj = {
       message: "Sent Command Sequence",
@@ -275,19 +271,19 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   res.status(201).json(resObj);
 });
 
-router.post("/sendScheduledRequest", async (req: any, res: any) => {
-  const { body } = req;
+// router.post("/sendScheduledRequest", async (req: any, res: any) => {
+//   const { body } = req;
 
-  // Get schedule
-  const schedule = await Schedule.findById(body.scheduleId).exec();
+//   // Get schedule
+//   const schedule = await Schedule.findById(body.scheduleId).exec();
 
-  // api request
-  const log = await sendRequest(
-    body.satelliteId,
-    body.scheduleId,
-    schedule.commands
-  );
-  res.status(201).json({ message: "Sent command sequence", log });
-});
+//   // api request
+//   const log = await sendRequest(
+//     body.satelliteId,
+//     body.scheduleId
+//     // schedule.
+//   );
+//   res.status(201).json({ message: "Sent command sequence", log });
+// });
 
 module.exports = router;
