@@ -166,9 +166,6 @@ router.get("/getNextPasses", (req: any, res: any) => {
     // Time window in milliseconds (1 minute)
     const WINDOWMILLIS = 60 * 1000;
 
-    // Elevation Entry
-    const MINELEVATION = 10;
-
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -197,7 +194,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
         })
         .replace(/\u202f/g, " ");
 
-      if (satelliteInfo.elevation > MINELEVATION) {
+      if (satelliteInfo.elevation > 0) {
         if (!enterElevation) {
           enterInfo = {
             type: "Enter",
