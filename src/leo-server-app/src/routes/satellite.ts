@@ -1,13 +1,13 @@
 import * as dotenv from "dotenv";
 import { TLEResponse } from "../types/satellites";
+import SatelliteModel from "../models/satellite";
+import User from "../models/user";
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
 
-const Satellite = require("../models/satellite");
-const User = require("../models/user");
 const satellite = require("satellite.js");
 
 const router = express.Router();
@@ -227,33 +227,33 @@ router.get("/getNextPasses", (req: any, res: any) => {
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
-  const newSatellite = new Satellite({
+  const newSatellite = new SatelliteModel({
     name: body.name,
     validCommands: body.validCommands,
     operators: body.operators,
   });
 
-  const user = await Satellite.create(newSatellite);
+  const user = await SatelliteModel.create(newSatellite);
   res.status(201).json({ message: "Satellite system added", user });
 });
 
 // Helper Function
 router.get("/getAllSatellites", async (req: any, res: any) => {
-  const satellites = await Satellite.find({});
+  const satellites = await SatelliteModel.find({});
   res.status(201).json({ message: "All satellite info", satellites });
 });
 
 router.get("/getSatellite", async (req: any, res: any) => {
   const satelliteId = req.query.satelliteId;
 
-  const satellite = await Satellite.findById(satelliteId);
+  const satellite = await SatelliteModel.findById(satelliteId);
   res.status(201).json({ message: "Fetched satellite", satellite });
 });
 
 router.get("/getAllSatellitesOfUser", async (req: any, res: any) => {
   const { userId } = req.query;
   const filter = { operators: { $in: [userId] } };
-  const satellites = await Satellite.find(filter).exec();
+  const satellites = await SatelliteModel.find(filter).exec();
   res.status(201).json({ message: "Fetched all satellites", satellites });
 });
 
@@ -274,10 +274,10 @@ router.post("/addOperatorToSatellite", async (req: any, res: any) => {
     user = await User.create(newUser);
   } else {
     // Check if user is already in satellite
-    isUserInSatellite = await User.exists({
+    isUserInSatellite = !!(await User.exists({
       _id: user._id,
       satellites: body.satelliteId,
-    });
+    }));
   }
 
   if (isUserInSatellite) {
@@ -287,7 +287,7 @@ router.post("/addOperatorToSatellite", async (req: any, res: any) => {
     };
   } else {
     // Update satellite and users to include references
-    const updateSatellite = await Satellite.findByIdAndUpdate(
+    const updateSatellite = await SatelliteModel.findByIdAndUpdate(
       body.satelliteId,
       {
         $push: { operators: user._id },

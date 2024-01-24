@@ -1,6 +1,7 @@
+import User from "../models/user";
+
 const express = require("express");
 const mongoose = require("mongoose");
-import User from "../models/user";
 
 const router = express.Router();
 router.use(express.json());
@@ -12,7 +13,7 @@ router.post("/createUser", async (req: any, res: any) => {
     email: email,
     role: role,
   });
-const user = await User.create(newUser);
+  const user = await User.create(newUser);
   res.status(201).json({ message: "User Created", user });
 });
 
