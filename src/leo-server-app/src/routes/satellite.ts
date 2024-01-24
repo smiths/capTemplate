@@ -318,21 +318,6 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
   }
 });
 
-router.get("/testSun", (req: any, res: any) => {
-  try {
-    var d = new Date();
-    var satelliteInfo = getSatelliteInfo(d, tleLine1, tleLine2);
-    let longitude = satelliteInfo.longitude;
-    let latitude = satelliteInfo.latitude;
-    let height = satelliteInfo.height;
-    const sunTimes = SunCalc.getTimes(d, longitude, latitude, height / 1000);
-
-    res.json({ sunTimes });
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
