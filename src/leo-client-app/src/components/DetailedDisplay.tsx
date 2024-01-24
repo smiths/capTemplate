@@ -183,23 +183,39 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
             .attr("alignment-baseline", "middle");
         });
 
-        // Draw data points
-        svg
-          .selectAll(".data-point")
+        // Draw all data points in red
+        svg.selectAll(".data-point")
           .data(data)
           .enter()
           .append("circle")
           .attr("class", "data-point")
-          .attr("cx", (d: any) => {
-            const point = d as DataPoint; // Type assertion
-            return rScale(point.elevation) * Math.cos(toRadians(point.azimuth));
-          })
-          .attr("cy", (d: any) => {
-            const point = d as DataPoint; // Type assertion
-            return rScale(point.elevation) * Math.sin(toRadians(point.azimuth));
-          })
+          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
+          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
+          .attr("r", 5)
+          .style("fill", "white");
+
+        // Draw the first data point in white
+        svg.selectAll(".entry-point")
+          .data([data[0]])
+          .enter()
+          .append("circle")
+          .attr("class", "entry-point")
+          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
+          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
+          .attr("r", 5)
+          .style("fill", "lime");
+
+        // Draw the last data point in blue
+        svg.selectAll(".exit-point")
+          .data([data[data.length - 1]])
+          .enter()
+          .append("circle")
+          .attr("class", "exit-point")
+          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
+          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
           .attr("r", 5)
           .style("fill", "red");
+                  console.log(data[0], data[data.length -1])
       })
       .catch((error) => {
         console.error("Error fetching polar plot data:", error);
@@ -209,6 +225,8 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
   return (
     <div>
       <div id="plot"></div>
+      <p>&#x1F7E2; Entry &#x1F534; Exit</p>
+      <br />
       {typeof startAzimuth === "number" && (
         <p>Start Azimuth: {startAzimuth}°</p>
       )}
