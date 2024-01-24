@@ -16,5 +16,5 @@ const satelliteSchema = new Schema(
   { timestamps: true }
 );
 
-const Satellite = mongoose.model("Satellite", satelliteSchema);
-export default Satellite;
+const SatelliteModel = mongoose.model("Satellite", satelliteSchema);
+export default SatelliteModel;
