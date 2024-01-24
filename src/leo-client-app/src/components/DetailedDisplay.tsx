@@ -183,7 +183,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
             .attr("alignment-baseline", "middle");
         });
 
-        // Draw all data points in red
+        // Draw all data points in white
         svg.selectAll(".data-point")
           .data(data)
           .enter()
@@ -194,7 +194,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
           .attr("r", 5)
           .style("fill", "white");
 
-        // Draw the first data point in white
+        // Draw the first data point in green
         svg.selectAll(".entry-point")
           .data([data[0]])
           .enter()
@@ -205,7 +205,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
           .attr("r", 5)
           .style("fill", "lime");
 
-        // Draw the last data point in blue
+        // Draw the last data point in red
         svg.selectAll(".exit-point")
           .data([data[data.length - 1]])
           .enter()
