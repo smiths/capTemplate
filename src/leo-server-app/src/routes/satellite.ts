@@ -1,13 +1,13 @@
 import * as dotenv from "dotenv";
 import { TLEResponse } from "../types/satellites";
+import Satellite from "../models/satellite";
+import User from "../models/user";
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
 
-const Satellite = require("../models/satellite");
-const User = require("../models/user");
 const satellite = require("satellite.js");
 
 const router = express.Router();
@@ -274,10 +274,10 @@ router.post("/addOperatorToSatellite", async (req: any, res: any) => {
     user = await User.create(newUser);
   } else {
     // Check if user is already in satellite
-    isUserInSatellite = await User.exists({
+    isUserInSatellite = !!(await User.exists({
       _id: user._id,
       satellites: body.satelliteId,
-    });
+    }));
   }
 
   if (isUserInSatellite) {
