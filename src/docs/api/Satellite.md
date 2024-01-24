@@ -24,7 +24,14 @@ Response: `{
     rangeSat
   }`
 
-Returns a dictionary of floats.
+Returns a dictionary of floats. The units are as follows:
+
+longitude : degrees
+latitude : degrees
+height : km
+azimuth : degrees
+elevation : degrees
+rangeSat: km
 
 This endpoint is for retrieving satellite information. Calculations are done through the `satellite.js` library based off TLE data, found [here](https://github.com/shashwatak/satellite-js). TLE data of a satellite can be found online, like on [n2yo](https://www.n2yo.com/database/?name=NEUDOSE#results).
 
