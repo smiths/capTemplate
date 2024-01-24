@@ -215,7 +215,6 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
           .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
           .attr("r", 5)
           .style("fill", "red");
-                  console.log(data[0], data[data.length -1])
       })
       .catch((error) => {
         console.error("Error fetching polar plot data:", error);
