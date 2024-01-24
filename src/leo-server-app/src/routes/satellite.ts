@@ -102,6 +102,13 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
 }
 
 function isSunlit(date: Date, lon: number, lat: number, height: number) {
+  if (isNaN(date.getTime())) {
+    throw new Error("Incorrect Date definition");
+  }
+  if (height > 2000) {
+    throw new Error("Height must be in km");
+  }
+
   const heightMeters = height * 1000; // Height from satellite.js are in km
   const sunTimes = SunCalc.getTimes(date, lat, lon, heightMeters);
 
@@ -109,8 +116,11 @@ function isSunlit(date: Date, lon: number, lat: number, height: number) {
   let sunlightEnd = new Date(
     (sunTimes.sunsetStart.getTime() + sunTimes.goldenHour.getTime()) / 2
   );
-  if (date > sunTimes.dawn && date < sunlightEnd) return true;
-  else return false;
+  if (date > sunTimes.dawn && date < sunlightEnd) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {

@@ -1,6 +1,10 @@
 const request = require("supertest");
 const app = require("../app");
-const { getSatelliteInfo, setTleLines } = require("../routes/satellite");
+const {
+  getSatelliteInfo,
+  setTleLines,
+  isSunlit,
+} = require("../routes/satellite");
 
 let defaultTleLine1 =
     "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
@@ -32,6 +36,20 @@ describe("getSatelliteInfo()", () => {
     await expect(() =>
       getSatelliteInfo(new Date("bad date"), defaultTleLine1, defaultTleLine2)
     ).toThrow();
+  });
+});
+
+describe("isSunlit()", () => {
+  test("Valid Input", async () => {
+    await expect(() => (new Date(), 0, 0, 0)).toBeDefined();
+  });
+
+  test("Invalid Date", async () => {
+    await expect(() => isSunlit(new Date("bad date"), 0, 0, 0)).toThrow();
+  });
+
+  test("Height in km", async () => {
+    await expect(() => isSunlit(new Date(), 0, 0, 2001)).toThrow();
   });
 });
 
@@ -104,6 +122,20 @@ describe("GET /getNextPasses", () => {
     setTleLines(defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getNextPasses")
+      .expect("Content-Type", /json/)
+      .expect(200);
+  });
+  it("Throws error if invalid TLE", async () => {
+    setTleLines(null, null);
+    await request(app).get("/satellite/getNextPasses").expect(500);
+  });
+});
+
+describe("GET /getSolarIlluminationCycle", () => {
+  it("Responds with json", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .get("/satellite/getSolarIlluminationCycle")
       .expect("Content-Type", /json/)
       .expect(200);
   });
