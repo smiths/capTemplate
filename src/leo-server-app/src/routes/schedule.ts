@@ -10,6 +10,7 @@ import User from "../models/user";
 import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
+import { CommandStatus } from "../types/command";
 
 const router = express.Router();
 router.use(express.json());
@@ -44,6 +45,15 @@ type UpdateScheduleProp = {
   query: {
     command: string;
     commandId: string;
+    satelliteId: string;
+    userId: string;
+  };
+};
+
+type CreateScheduleCommandProp = {
+  query: {
+    command: string;
+    scheduleId: string;
     satelliteId: string;
     userId: string;
   };
@@ -137,6 +147,58 @@ const checkSatellitePermissionList = async (
   const isValid = satellite?.validCommands.includes(command);
   return isValid;
 };
+
+router.post(
+  "/createScheduledCommand",
+  async (req: CreateScheduleCommandProp, res: any) => {
+    const { query } = req;
+
+    // Validation
+    if (
+      !mongoose.isValidObjectId(query.userId)
+    ) {
+      return res.status(500).json({ error: "Invalid user ID" });
+    }
+
+    const userRecord = await User.findById(query.userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission   ------- TODO - change when permission list functionality is added.
+    if (userRecord.role !== UserRole.ADMIN) {
+      return res.status(500).json({ error: "Invalid Credentials" });
+    }
+
+    // Add validation for invalid command sequence based on satellite and user permissions
+    // Check if command exists in the satellite's list of command sequences
+    const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
+      query.satelliteId,
+      query.command
+    );
+
+    if (!isCommandInSatelliteCriteria) {
+      return res.status(500).json({ error: "Invalid command sequence" });
+    }
+
+    // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
+
+    // add command record
+    const newCommand = {
+      userId: query.userId,
+      satelliteId: query.satelliteId,
+      command: query.command,
+      scheduleId: query.scheduleId,
+      status: CommandStatus.QUEUED,
+      delay: 0
+    }
+    const createCommand = await Command.create(newCommand);
+
+    return res.json({ message: "Created command", createCommand });
+  }
+);
+
 
 router.patch(
   "/updateScheduledCommand",
