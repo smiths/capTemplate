@@ -33,33 +33,42 @@ var defaultTleLine1 =
   defaultTleLine2 =
     "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
 
-spacetrack
-  .get({
-    type: "tle_latest",
-    query: [
-      { field: "NORAD_CAT_ID", condition: "55098" },
-      { field: "ORDINAL", condition: "1" },
-    ],
-    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
-  })
-  .then(
-    function (result: TLEResponse[]) {
-      setTleLines(
-        result[0]?.TLE_LINE1 || defaultTleLine1,
-        result[0]?.TLE_LINE2 || defaultTleLine2
-      );
-    },
-    function (err: Error) {
-      console.error("error", err.stack);
-    }
-  );
-
 // GS info
 var observerGd = {
   longitude: satellite.degreesToRadians(-79.9201),
   latitude: satellite.degreesToRadians(43.2585),
   height: 0.37,
 };
+
+function setTLE(noradId: string) {
+  return new Promise<void>((resolve, reject) => {
+    spacetrack
+      .get({
+        type: "tle_latest",
+        query: [
+          { field: "NORAD_CAT_ID", condition: noradId },
+          { field: "ORDINAL", condition: "1" },
+        ],
+        predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
+      })
+      .then(
+        function (result: any) {
+          if (!result[0].tle) {
+            console.error("TLE not set properly");
+          }
+          setTleLines(
+            result[0].tle[1] || defaultTleLine1,
+            result[0].tle[2] || defaultTleLine2
+          );
+          resolve();
+        },
+        function (err: Error) {
+          console.error("error", err.stack);
+          reject(err);
+        }
+      );
+  });
+}
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
 function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
@@ -332,6 +341,20 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
   }
 });
 
+router.post("/changeTLE", async (req: any, res: any) => {
+  const { body } = req;
+  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+    res.status(400).json({ error: "Bad request" });
+  }
+  try {
+    await setTLE(body.noradID as string);
+    res.status(200).json({ message: "TLE Changed to" + " " + body.noradID });
+  } catch (error) {
+    console.error("Error in changeTLE:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
@@ -412,4 +435,6 @@ router.post("/addOperatorToSatellite", async (req: any, res: any) => {
   res.status(201).json(resMsg);
 });
 
+// Set the default satellite to BDSAT-2
+setTLE("55098");
 module.exports = { router, getSatelliteInfo, setTleLines };
