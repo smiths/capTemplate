@@ -10,6 +10,7 @@ import User from "../models/user";
 import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
+import { CommandStatus } from "../types/command";
 
 const router = express.Router();
 router.use(express.json());
@@ -50,7 +51,7 @@ type UpdateScheduleProp = {
 };
 
 type CreateScheduleCommandProp = {
-  body: {
+  query: {
     command: string;
     scheduleId: string;
     satelliteId: string;
@@ -150,22 +151,22 @@ const checkSatellitePermissionList = async (
 router.post(
   "/createScheduledCommand",
   async (req: CreateScheduleCommandProp, res: any) => {
-    const { body } = req;
+    const { query } = req;
 
     // Validation
     if (
-      !mongoose.isValidObjectId(body.userId)
+      !mongoose.isValidObjectId(query.userId)
     ) {
       return res.status(500).json({ error: "Invalid user ID" });
     }
 
-    const userRecord = await User.findById(body.userId);
+    const userRecord = await User.findById(query.userId);
 
     if (!userRecord) {
       return res.status(500).json({ error: "User does not exist" });
     }
 
-    // Check if user has permission
+    // Check if user has permission   ------- TODO - change when permission list functionality is added.
     if (userRecord.role !== UserRole.ADMIN) {
       return res.status(500).json({ error: "Invalid Credentials" });
     }
@@ -173,8 +174,8 @@ router.post(
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
     const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
-      body.satelliteId,
-      body.command
+      query.satelliteId,
+      query.command
     );
 
     if (!isCommandInSatelliteCriteria) {
@@ -183,13 +184,13 @@ router.post(
 
     // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
 
-    // Update command record
+    // add command record
     const newCommand = {
-      userId: body.userId,
-      satelliteId: body.satelliteId,
-      command: body.command,
-      scheduleId: body.scheduleId,
-      status: "Queued",
+      userId: query.userId,
+      satelliteId: query.satelliteId,
+      command: query.command,
+      scheduleId: query.scheduleId,
+      status: CommandStatus.QUEUED,
       delay: 0
     }
     const createCommand = await Command.create(newCommand);
