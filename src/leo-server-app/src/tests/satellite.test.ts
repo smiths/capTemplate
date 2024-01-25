@@ -4,6 +4,7 @@ const {
   getSatelliteInfo,
   setTleLines,
   isSunlit,
+  setTLE,
 } = require("../routes/satellite");
 
 let defaultTleLine1 =
@@ -41,7 +42,7 @@ describe("getSatelliteInfo()", () => {
 
 describe("isSunlit()", () => {
   test("Valid Input", async () => {
-    await expect(() => (new Date(), 0, 0, 0)).toBeDefined();
+    await expect(() => isSunlit(new Date(), 0, 0, 0)).toBeDefined();
   });
 
   test("Invalid Date", async () => {
@@ -50,6 +51,20 @@ describe("isSunlit()", () => {
 
   test("Height in km", async () => {
     await expect(() => isSunlit(new Date(), 0, 0, 2001)).toThrow();
+  });
+});
+
+describe("setTLE()", () => {
+  test("Valid Input", async () => {
+    await expect(() => setTLE("55098").resolves());
+  });
+
+  test("Invalid Input", async () => {
+    await expect(() => setTLE("abcd").toThrow());
+  });
+
+  test("Empty Input", async () => {
+    await expect(() => setTLE("").toThrow());
   });
 });
 
@@ -142,5 +157,19 @@ describe("GET /getSolarIlluminationCycle", () => {
   it("Throws error if invalid TLE", async () => {
     setTleLines(null, null);
     await request(app).get("/satellite/getNextPasses").expect(500);
+  });
+});
+
+describe("POST /changeTLE", () => {
+  it("Changes TLE Successfully", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .post("/satellite/changeTLE")
+      .send({ noradID: "55098" })
+      .expect(200);
+  });
+  it("Does Not Change TLE with Empty Body", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app).post("/satellite/changeTLE").expect(400);
   });
 });

@@ -83,6 +83,13 @@ Returns an array of `[enterInfo, exitInfo]`, with both being a dictionary of the
 
 This endpoint is for retrieving the solar illumination cycles of a satellite for the given week. Only cycles of > 10 minutes are recorded to eliminate noise.
 
+##`/changeTLE`
+Type: `POST`
+Request: `{"noradID": string}`
+Response: `none`
+
+Changes the TLE of the currently viewed satellite on screen.
+
 ---
 
 # Database Endpoints
