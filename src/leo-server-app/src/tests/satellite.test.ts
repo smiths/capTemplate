@@ -4,6 +4,7 @@ const {
   getSatelliteInfo,
   setTleLines,
   isSunlit,
+  setTLE,
 } = require("../routes/satellite");
 
 let defaultTleLine1 =
@@ -41,7 +42,7 @@ describe("getSatelliteInfo()", () => {
 
 describe("isSunlit()", () => {
   test("Valid Input", async () => {
-    await expect(() => (new Date(), 0, 0, 0)).toBeDefined();
+    await expect(() => isSunlit(new Date(), 0, 0, 0)).toBeDefined();
   });
 
   test("Invalid Date", async () => {
@@ -50,6 +51,20 @@ describe("isSunlit()", () => {
 
   test("Height in km", async () => {
     await expect(() => isSunlit(new Date(), 0, 0, 2001)).toThrow();
+  });
+});
+
+describe("setTLE()", () => {
+  test("Valid Input", async () => {
+    await expect(() => setTLE("55098").resolves());
+  });
+
+  test("Invalid Input", async () => {
+    await expect(() => setTLE("abcd").toThrow());
+  });
+
+  test("Empty Input", async () => {
+    await expect(() => setTLE("").toThrow());
   });
 });
 
