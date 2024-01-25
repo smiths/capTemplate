@@ -1,17 +1,35 @@
 // TODO: FIX IMPORTS
 
 const express = require("express");
-const Schedule = require("../models/schedule");
 const Log = require("../models/log");
 
 import Satellite from "../models/satellite";
 import Command from "../models/command";
+import Schedule from "../models/schedule";
 import User from "../models/user";
 import { UserRole } from "../types/user";
 import mongoose from "mongoose";
+import { ScheduleStatus } from "../types/schedule";
 
 const router = express.Router();
 router.use(express.json());
+
+type GetCommandsByScheduleProp = {
+  query: {
+    scheduleId: string;
+    page?: number;
+    limit?: number;
+  };
+};
+
+type GetSchedulesBySatelliteProp = {
+  query: {
+    satelliteId: string;
+    page?: number;
+    limit?: number;
+    status?: ScheduleStatus;
+  };
+};
 
 type CreateScheduleProp = {
   body: {
@@ -27,6 +45,13 @@ type UpdateScheduleProp = {
     command: string;
     commandId: string;
     satelliteId: string;
+    userId: string;
+  };
+};
+
+type DeleteScheduleProp = {
+  query: {
+    commandId: string;
     userId: string;
   };
 };
@@ -166,17 +191,85 @@ router.patch(
   }
 );
 
-router.get("/getSchedulesBySatellite", async (req: any, res: any) => {
-  const { satelliteId } = req.query;
+router.delete(
+  "/deleteScheduledCommand",
+  async (req: DeleteScheduleProp, res: any) => {
+    const { userId, commandId } = req.query;
 
-  const filter = {
-    satellite: satelliteId,
-    status: false,
-  };
+    // Validation
+    if (
+      !mongoose.isValidObjectId(userId) ||
+      !mongoose.isValidObjectId(commandId)
+    ) {
+      return res.status(500).json({ error: "Invalid IDs" });
+    }
 
-  const schedules = await Schedule.find(filter).exec();
-  res.status(201).json({ message: "Fetched schedules", schedules });
-});
+    const userRecord = await User.findById(userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission
+    if (userRecord.role !== UserRole.ADMIN) {
+      const commandRecord = await Command.findById(commandId);
+      if (commandRecord?.userId?.toString() !== userId) {
+        return res.status(500).json({ error: "Invalid Credentials" });
+      }
+    }
+
+    // Remove command record
+    const cmd = await Command.findByIdAndDelete(commandId).exec();
+
+    return res.json({ message: "Removed command from schedule" });
+  }
+);
+
+router.get(
+  "/getSchedulesBySatellite",
+  async (req: GetSchedulesBySatelliteProp, res: any) => {
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {
+      satelliteId: satelliteId,
+      status: status,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const schedules = await Schedule.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched schedules", schedules });
+  }
+);
+
+router.get(
+  "/getCommandsBySchedule",
+  async (req: GetCommandsByScheduleProp, res: any) => {
+    const { scheduleId, page = 1, limit = 10 } = req.query;
+
+    const filter = {
+      scheduleId: scheduleId,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const commands = await Command.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched commands", commands });
+  }
+);
 
 // Executing Requests
 router.post("/sendLiveRequest", async (req: any, res: any) => {
@@ -208,11 +301,7 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
     const schedule = await Schedule.create(newSchedule);
 
     // api request
-    const log = await sendRequest(
-      body.satelliteId,
-      schedule._id,
-      body.commands
-    );
+    const log = await sendRequest(body.satelliteId, schedule.id, body.commands);
 
     resObj = {
       message: "Sent Command Sequence",
@@ -221,21 +310,6 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   }
 
   res.status(201).json(resObj);
-});
-
-router.post("/sendScheduledRequest", async (req: any, res: any) => {
-  const { body } = req;
-
-  // Get schedule
-  const schedule = await Schedule.findById(body.scheduleId).exec();
-
-  // api request
-  const log = await sendRequest(
-    body.satelliteId,
-    body.scheduleId,
-    schedule.commands
-  );
-  res.status(201).json({ message: "Sent command sequence", log });
 });
 
 module.exports = router;
