@@ -159,3 +159,17 @@ describe("GET /getSolarIlluminationCycle", () => {
     await request(app).get("/satellite/getNextPasses").expect(500);
   });
 });
+
+describe("POST /changeTLE", () => {
+  it("Changes TLE Successfully", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app)
+      .post("/satellite/changeTLE")
+      .send({ noradID: "55098" })
+      .expect(200);
+  });
+  it("Does Not Change TLE with Empty Body", async () => {
+    setTleLines(defaultTleLine1, defaultTleLine2);
+    await request(app).post("/satellite/changeTLE").expect(400);
+  });
+});
