@@ -7,6 +7,7 @@ dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
+let SunCalc = require("suncalc");
 
 const satellite = require("satellite.js");
 
@@ -98,6 +99,28 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
     elevation,
     rangeSat,
   };
+}
+
+function isSunlit(date: Date, lon: number, lat: number, height: number) {
+  if (isNaN(date.getTime())) {
+    throw new Error("Incorrect Date definition");
+  }
+  if (height > 2000) {
+    throw new Error("Height must be in km");
+  }
+
+  const heightMeters = height * 1000; // Height from satellite.js are in km
+  const sunTimes = SunCalc.getTimes(date, lat, lon, heightMeters);
+
+  // Get time between sunset start and golden hour for best accuracy
+  let sunlightEnd = new Date(
+    (sunTimes.sunsetStart.getTime() + sunTimes.goldenHour.getTime()) / 2
+  );
+  if (date > sunTimes.dawn && date < sunlightEnd) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
@@ -220,6 +243,91 @@ router.get("/getNextPasses", (req: any, res: any) => {
     res.json({ nextPasses });
   } catch (error) {
     console.error("Error in getNextPasses:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
+  try {
+    // Time window in milliseconds (1 minute)
+    const WINDOWMILLIS = 10 * 1000;
+    // Minimum duration for illumination cycle in milliseconds (10 minutes)
+    const MIN_CYCLE_DURATION = 10 * 60 * 1000;
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var nextIlluminations = [];
+    var enterIllumination = null;
+    var enterTime = null;
+    var enterInfo;
+    var exitInfo;
+
+    // Gets illuminations for the next week
+    for (let i = 0; i < 7 * 24 * 60; i++) {
+      // Calculate the next illumination
+      var nextIlluminationTime = new Date(today.getTime() + i * WINDOWMILLIS);
+
+      // Get satellite information for the next pass
+      var satelliteInfo = getSatelliteInfo(
+        nextIlluminationTime,
+        tleLine1,
+        tleLine2
+      );
+      let longitude = satelliteInfo.longitude;
+      let latitude = satelliteInfo.latitude;
+      let height = satelliteInfo.height;
+
+      // Format Time
+      const formattedTime = nextIlluminationTime
+        .toLocaleString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+        .replace(/\u202f/g, " ");
+
+      // Checks if satellite is illuminated
+      if (isSunlit(nextIlluminationTime, longitude, latitude, height)) {
+        // If satellite is entering illumniation, make a entry
+        if (!enterIllumination) {
+          enterInfo = {
+            type: "Enter",
+            time: formattedTime,
+            longitude: longitude,
+            latitude: latitude,
+          };
+          enterIllumination = true;
+          enterTime = nextIlluminationTime.getTime();
+        }
+      } else {
+        // If satellite is exiting illumniation, make a exit, and push
+        if (enterIllumination && enterTime !== null) {
+          exitInfo = {
+            type: "Exit",
+            time: formattedTime,
+            longitude: longitude,
+            latitude: latitude,
+          };
+
+          // Checks if the cycle > minimum cycle duration
+          if (
+            nextIlluminationTime.getTime() - enterTime >=
+            MIN_CYCLE_DURATION
+          ) {
+            nextIlluminations.push([enterInfo, exitInfo]);
+          }
+          enterIllumination = null;
+          enterTime = null;
+        }
+      }
+    }
+    res.json({ nextIlluminations });
+  } catch (error) {
+    console.error("Error in getSolarIlluminationCycle:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

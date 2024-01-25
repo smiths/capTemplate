@@ -24,7 +24,14 @@ Response: `{
     rangeSat
   }`
 
-Returns a dictionary of floats.
+Returns a dictionary of floats. The units are as follows:
+
+longitude : degrees
+latitude : degrees
+height : km
+azimuth : degrees
+elevation : degrees
+rangeSat: km
 
 This endpoint is for retrieving satellite information. Calculations are done through the `satellite.js` library based off TLE data, found [here](https://github.com/shashwatak/satellite-js). TLE data of a satellite can be found online, like on [n2yo](https://www.n2yo.com/database/?name=NEUDOSE#results).
 
@@ -60,6 +67,21 @@ Returns an array of `[enterInfo, exitInfo]`, with both being a dictionary of the
 }`. `type` can be "Enter" or "Exit", and time is a formatted human-readable time (i.e 9:00 AM)
 
 This endpoint is for retrieving the next passes for the given week.
+
+##`/getSolarIlluminationCycle`
+Type: `GET`
+Request: `none`
+Response: `{ nextIlluminations }`
+
+Returns an array of `[enterInfo, exitInfo]`, with both being a dictionary of the form:
+`{
+    type: string,
+    time: string,
+    longitude: float,
+    latitude: float,
+}`. `type` can be "Enter" or "Exit", and time is a formatted human-readable time (i.e 9:00 AM)
+
+This endpoint is for retrieving the solar illumination cycles of a satellite for the given week. Only cycles of > 10 minutes are recorded to eliminate noise.
 
 ---
 
