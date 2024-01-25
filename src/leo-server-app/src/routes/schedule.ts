@@ -49,6 +49,15 @@ type UpdateScheduleProp = {
   };
 };
 
+type CreateScheduleCommandProp = {
+  body: {
+    command: string;
+    scheduleId: string;
+    satelliteId: string;
+    userId: string;
+  };
+};
+
 type DeleteScheduleProp = {
   query: {
     commandId: string;
@@ -137,6 +146,58 @@ const checkSatellitePermissionList = async (
   const isValid = satellite?.validCommands.includes(command);
   return isValid;
 };
+
+router.post(
+  "/createScheduledCommand",
+  async (req: CreateScheduleCommandProp, res: any) => {
+    const { body } = req;
+
+    // Validation
+    if (
+      !mongoose.isValidObjectId(body.userId)
+    ) {
+      return res.status(500).json({ error: "Invalid user ID" });
+    }
+
+    const userRecord = await User.findById(body.userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Check if user has permission
+    if (userRecord.role !== UserRole.ADMIN) {
+      return res.status(500).json({ error: "Invalid Credentials" });
+    }
+
+    // Add validation for invalid command sequence based on satellite and user permissions
+    // Check if command exists in the satellite's list of command sequences
+    const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
+      body.satelliteId,
+      body.command
+    );
+
+    if (!isCommandInSatelliteCriteria) {
+      return res.status(500).json({ error: "Invalid command sequence" });
+    }
+
+    // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
+
+    // Update command record
+    const newCommand = {
+      userId: body.userId,
+      satelliteId: body.satelliteId,
+      command: body.command,
+      scheduleId: body.scheduleId,
+      status: "Queued",
+      delay: 0
+    }
+    const createCommand = await Command.create(newCommand);
+
+    return res.json({ message: "Created command", createCommand });
+  }
+);
+
 
 router.patch(
   "/updateScheduledCommand",
