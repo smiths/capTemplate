@@ -290,7 +290,9 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
         })
         .replace(/\u202f/g, " ");
 
+      // Checks if satellite is illuminated
       if (isSunlit(nextIlluminationTime, longitude, latitude, height)) {
+        // If satellite is entering illumniation, make a entry
         if (!enterIllumination) {
           enterInfo = {
             type: "Enter",
@@ -302,6 +304,7 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
           enterTime = nextIlluminationTime.getTime();
         }
       } else {
+        // If satellite is exiting illumniation, make a exit, and push
         if (enterIllumination && enterTime !== null) {
           exitInfo = {
             type: "Exit",
@@ -310,6 +313,7 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
             latitude: latitude,
           };
 
+          // Checks if the cycle > minimum cycle duration
           if (
             nextIlluminationTime.getTime() - enterTime >=
             MIN_CYCLE_DURATION
