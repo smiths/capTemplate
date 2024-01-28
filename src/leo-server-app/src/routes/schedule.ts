@@ -35,8 +35,6 @@ type GetSchedulesBySatelliteProp = {
 type GetScheduleBySatelliteAndTimeProp = {
   query: {
     satelliteId: string;
-    // page?: number;
-    // limit?: number;
     status?: ScheduleStatus;
     time: Date;
   };
