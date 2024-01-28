@@ -32,6 +32,16 @@ type GetSchedulesBySatelliteProp = {
   };
 };
 
+type GetScheduleBySatelliteAndTimeProp = {
+  query: {
+    satelliteId: string;
+    // page?: number;
+    // limit?: number;
+    status?: ScheduleStatus;
+    time: Date;
+  };
+};
+
 type CreateScheduleProp = {
   body: {
     commands: any[];
@@ -289,6 +299,32 @@ router.delete(
 
 router.get(
   "/getSchedulesBySatellite",
+  async (req: GetSchedulesBySatelliteProp, res: any) => {
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {
+      satelliteId: satelliteId,
+      status: status,
+    };
+
+    const skip = (page - 1) * limit;
+
+    const schedules = await Schedule.find(filter)
+      .sort({ createdAt: "desc" })
+      .limit(limit)
+      .skip(skip)
+      .exec();
+    res.status(201).json({ message: "Fetched schedules", schedules });
+  }
+);
+
+router.get(
+  "/getScheduleBySatelliteAndTime",
   async (req: GetSchedulesBySatelliteProp, res: any) => {
     const {
       satelliteId,
