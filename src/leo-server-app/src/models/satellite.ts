@@ -8,7 +8,7 @@ const satelliteSchema = new Schema(
       type: String,
       required: true,
     },
-    intlCode: { type: String, required: true, unique: true },
+    noradId: { type: String, required: true, unique: true },
     validCommands: {
       type: [String],
     },
