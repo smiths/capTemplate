@@ -49,7 +49,7 @@ describe("PATCH /updateScheduledCommand", () => {
     // Create satellite record
     const satellite = await Satellite.create({
       name: "test1",
-      intlCode: 543,
+      noradId: 543,
       validCommands: ["teardown", "start"],
     });
 
@@ -135,7 +135,7 @@ describe("GET /getSchedulesBySatellite", () => {
     // Create satellite record
     const satellite = await Satellite.create({
       name: "test1",
-      intlCode: 543,
+      noradId: 543,
       validCommands: ["teardown", "start"],
     });
 
@@ -230,7 +230,7 @@ describe("GET /getCommandsBySchedule", () => {
     // Create satellite record
     const satellite = await Satellite.create({
       name: "test1",
-      intlCode: 543,
+      noradId: 543,
       validCommands: ["teardown", "start"],
     });
 
@@ -312,7 +312,7 @@ describe("DELETE /deleteScheduledCommand", () => {
     // Create satellite record
     const satellite = await Satellite.create({
       name: "test1",
-      intlCode: 543,
+      noradId: 543,
       validCommands: ["teardown", "start"],
     });
 
