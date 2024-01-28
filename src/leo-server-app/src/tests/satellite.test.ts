@@ -7,7 +7,7 @@ const {
   setTLE,
 } = require("../routes/satellite");
 
-let noradId = "55098";
+let defaultNoradId = "55098";
 let defaultTleLine1 =
     "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
   defaultTleLine2 =
@@ -71,7 +71,7 @@ describe("setTLE()", () => {
 
 describe("GET /getSatelliteInfo", () => {
   it("Responds with json", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getSatelliteInfo")
       .expect("Content-Type", /json/)
@@ -106,7 +106,7 @@ describe("GET /getPolarPlotData", () => {
 
 describe("GET /getMaxElevation", () => {
   it("Responds with json", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     let startTime = "2024-01-06T10:15:00Z";
     let endTime = "2024-01-06T10:22:00Z";
     await request(app)
@@ -131,7 +131,7 @@ describe("GET /getMaxElevation", () => {
 
 describe("GET /getNextPasses", () => {
   it("Responds with json", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getNextPasses")
       .expect("Content-Type", /json/)
@@ -147,11 +147,11 @@ describe("GET /getNextPasses", () => {
 
 describe("GET /getSolarIlluminationCycle", () => {
   it("Responds with json", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getSolarIlluminationCycle")
       .query({
-        noradId: noradId,
+        noradId: defaultNoradId,
       })
       .expect("Content-Type", /json/)
       .expect(200);
@@ -168,14 +168,14 @@ describe("GET /getSolarIlluminationCycle", () => {
 
 describe("POST /changeTLE", () => {
   it("Changes TLE Successfully", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app)
       .post("/satellite/changeTLE")
-      .send({ noradID: noradId })
+      .send({ noradID: defaultNoradId })
       .expect(200);
   });
   it("Does Not Change TLE with Empty Body", async () => {
-    setTleLines(noradId, defaultTleLine1, defaultTleLine2);
+    setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app).post("/satellite/changeTLE").expect(400);
   });
 });
