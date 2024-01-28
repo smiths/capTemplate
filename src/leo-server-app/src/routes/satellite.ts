@@ -42,34 +42,45 @@ var observerGd = {
   height: 0.37,
 };
 
-function setTLE(noradId: string) {
-  return new Promise<void>((resolve, reject) => {
-    spacetrack
-      .get({
-        type: "tle_latest",
-        query: [
-          { field: "NORAD_CAT_ID", condition: noradId },
-          { field: "ORDINAL", condition: "1" },
-        ],
-        predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
-      })
-      .then(
-        function (result: any) {
-          if (!result[0].tle) {
-            console.error("TLE not set properly");
-          }
-          setTleLines(
-            result[0].tle[1] || defaultTleLine1,
-            result[0].tle[2] || defaultTleLine2
-          );
-          resolve();
-        },
-        function (err: Error) {
-          console.error("error", err.stack);
-          reject(err);
-        }
-      );
+// TODO: Merge getTLE and setTLE after
+async function getTLE(noradId: string) {
+  const result = await spacetrack.get({
+    type: "tle_latest",
+    query: [
+      { field: "NORAD_CAT_ID", condition: noradId },
+      { field: "ORDINAL", condition: "1" },
+    ],
+    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
   });
+
+  if (!result[0].tle) {
+    console.error("TLE not set properly");
+  }
+
+  return [
+    result[0].tle[1]?.toString() || defaultTleLine1,
+    result[0].tle[2]?.toString() || defaultTleLine2,
+  ];
+}
+
+async function setTLE(noradId: string) {
+  const result = await spacetrack.get({
+    type: "tle_latest",
+    query: [
+      { field: "NORAD_CAT_ID", condition: noradId },
+      { field: "ORDINAL", condition: "1" },
+    ],
+    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
+  });
+
+  if (!result[0].tle) {
+    console.error("TLE not set properly");
+  }
+
+  setTleLines(
+    result[0].tle[1] || defaultTleLine1,
+    result[0].tle[2] || defaultTleLine2
+  );
 }
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
@@ -360,10 +371,13 @@ router.post("/changeTLE", async (req: any, res: any) => {
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
+  const tleLines = await getTLE(body.intlCode);
+
   const newSatellite = new SatelliteModel({
     name: body.name,
+    intlCode: body.intlCode,
     validCommands: body.validCommands,
-    operators: body.operators,
+    tleLines: tleLines,
   });
 
   const user = await SatelliteModel.create(newSatellite);

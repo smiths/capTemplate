@@ -12,6 +12,9 @@ const satelliteSchema = new Schema(
     validCommands: {
       type: [String],
     },
+    tleLines: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );
