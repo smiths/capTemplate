@@ -3,6 +3,10 @@ export interface MyGlobals {
 }
 
 const globals: MyGlobals = {
+  /* This global variable is a map of key-value pairs
+   * Key: Norad Id for a satellite
+   * Value: Array of length two, corresponding to TLE lines
+   */
   tleLines: {
     "55098": [
       "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
