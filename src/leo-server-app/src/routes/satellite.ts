@@ -1,7 +1,6 @@
 import * as dotenv from "dotenv";
-import { TLEResponse } from "../types/satellites";
 import SatelliteModel from "../models/satellite";
-import User from "../models/user";
+import globals from "../globals/globals";
 
 dotenv.config({ path: `.env.local`, override: true });
 
@@ -19,14 +18,8 @@ spacetrack.login({
   password: process.env.SPACE_TRACK_PASSWORD,
 });
 
-let tleLine1: string =
-  "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991";
-let tleLine2: string =
-  "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
-
-function setTleLines(line1: string, line2: string) {
-  tleLine1 = line1;
-  tleLine2 = line2;
+function setTleLines(noradId: string, line1: string, line2: string) {
+  globals.tleLines[noradId] = [line1, line2];
 }
 
 // BDSAT-2 TLE from Space-Track accessed 12/25/2023
@@ -42,7 +35,7 @@ var observerGd = {
   height: 0.37,
 };
 
-// TODO: Merge getTLE and setTLE after
+// Fetch TLE data given a NORAD_ID using spacetrack
 async function getTLE(noradId: string) {
   const result = await spacetrack.get({
     type: "tle_latest",
@@ -63,24 +56,10 @@ async function getTLE(noradId: string) {
   ];
 }
 
+// Set TLE data for a NORAD_ID in global variable
 async function setTLE(noradId: string) {
-  const result = await spacetrack.get({
-    type: "tle_latest",
-    query: [
-      { field: "NORAD_CAT_ID", condition: noradId },
-      { field: "ORDINAL", condition: "1" },
-    ],
-    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
-  });
-
-  if (!result[0].tle) {
-    console.error("TLE not set properly");
-  }
-
-  setTleLines(
-    result[0].tle[1] || defaultTleLine1,
-    result[0].tle[2] || defaultTleLine2
-  );
+  const result = await getTLE(noradId);
+  setTleLines(noradId, result[0], result[1]);
 }
 
 // For more satellite info, check out: https://github.com/shashwatak/satellite-js
@@ -146,7 +125,10 @@ function isSunlit(date: Date, lon: number, lat: number, height: number) {
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
+  const noradId = req.query.noradId ?? "55098";
+
   try {
+    const [tleLine1, tleLine2] = globals.tleLines[noradId];
     const satelliteInfo = getSatelliteInfo(new Date(), tleLine1, tleLine2);
     res.json(satelliteInfo);
   } catch (error) {
@@ -156,8 +138,11 @@ router.get("/getSatelliteInfo", (req: any, res: any) => {
 });
 
 router.get("/getPolarPlotData", (req: any, res: any) => {
-  let startDate = new Date(req.query.START_DATE);
-  let endDate = new Date(req.query.END_DATE);
+  const noradId = req.query.noradId ?? "55098";
+  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+
+  const startDate = new Date(req.query.START_DATE);
+  const endDate = new Date(req.query.END_DATE);
 
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
     return res.status(500).send("Invalid start or end date");
@@ -179,6 +164,9 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
 });
 
 router.get("/getMaxElevation", (req: any, res: any) => {
+  const noradId = req.query.noradId ?? "55098";
+  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+
   let startDate = new Date(req.query.START_DATE);
   let endDate = new Date(req.query.END_DATE);
 
@@ -207,6 +195,9 @@ router.get("/getMaxElevation", (req: any, res: any) => {
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {
+  const noradId = req.query.noradId ?? "55098";
+  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+
   try {
     // Time window in milliseconds (1 minute)
     const WINDOWMILLIS = 60 * 1000;
@@ -270,6 +261,9 @@ router.get("/getNextPasses", (req: any, res: any) => {
 });
 
 router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
+  const noradId = req.query.noradId ?? "55098";
+  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+
   try {
     // Time window in milliseconds (1 minute)
     const WINDOWMILLIS = 10 * 1000;
@@ -371,16 +365,27 @@ router.post("/changeTLE", async (req: any, res: any) => {
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
-  const tleLines = await getTLE(body.intlCode);
+  const tleLines = await getTLE(body.noradId);
+  setTleLines(body.noradId, tleLines[0], tleLines[1]);
 
   const newSatellite = new SatelliteModel({
     name: body.name,
-    intlCode: body.intlCode,
+    noradId: body.noradId,
     validCommands: body.validCommands,
     tleLines: tleLines,
   });
 
   const user = await SatelliteModel.create(newSatellite);
+  res.status(201).json({ message: "Satellite system added", user });
+});
+
+router.patch("/updateSatelliteTargetCommands", async (req: any, res: any) => {
+  const { query, body } = req;
+
+  const filter = { _id: query.id };
+  const update = { validCommands: body.validCommands };
+
+  const user = await SatelliteModel.findOneAndUpdate(filter, update);
   res.status(201).json({ message: "Satellite system added", user });
 });
 
@@ -397,6 +402,4 @@ router.get("/getSatellite", async (req: any, res: any) => {
   res.status(201).json({ message: "Fetched satellite", satellite });
 });
 
-// Set the default satellite to BDSAT-2
-setTLE("55098");
 module.exports = { router, getSatelliteInfo, setTleLines };
