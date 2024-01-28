@@ -325,25 +325,25 @@ router.get(
 
 router.get(
   "/getScheduleBySatelliteAndTime",
-  async (req: GetSchedulesBySatelliteProp, res: any) => {
+  async (req: GetScheduleBySatelliteAndTimeProp, res: any) => {
     const {
       satelliteId,
       status = ScheduleStatus.FUTURE,
-      page = 1,
-      limit = 10,
+      time,
     } = req.query;
 
     const filter = {
       satelliteId: satelliteId,
       status: status,
+      $and: [
+        { startDate: { $lte: time } },
+        { endDate: { $gte: time } },
+      ],
     };
 
-    const skip = (page - 1) * limit;
 
     const schedules = await Schedule.find(filter)
       .sort({ createdAt: "desc" })
-      .limit(limit)
-      .skip(skip)
       .exec();
     res.status(201).json({ message: "Fetched schedules", schedules });
   }
