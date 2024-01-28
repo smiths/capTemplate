@@ -22,14 +22,19 @@ function setTleLines(noradId: string, line1: string, line2: string) {
   globals.tleLines[noradId] = [line1, line2];
 }
 
+function getNoradId(noradId: string | undefined) {
+  return noradId ?? defaultNoradId;
+}
+
 // BDSAT-2 TLE from Space-Track accessed 12/25/2023
-var defaultTleLine1 =
+let defaultNoradId = "55098";
+let defaultTleLine1 =
     "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
   defaultTleLine2 =
     "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
 
 // GS info
-var observerGd = {
+let observerGd = {
   longitude: satellite.degreesToRadians(-79.9201),
   latitude: satellite.degreesToRadians(43.2585),
   height: 0.37,
@@ -70,23 +75,23 @@ function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
   if (isNaN(date.getTime())) {
     throw new Error("Incorrect Date definition");
   }
-  var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
+  let satrec = satellite.twoline2satrec(tleLine1, tleLine2);
 
-  var positionAndVelocity = satellite.propagate(satrec, date);
-  var gmst = satellite.gstime(date);
+  let positionAndVelocity = satellite.propagate(satrec, date);
+  let gmst = satellite.gstime(date);
 
-  var positionEci = positionAndVelocity.position,
+  let positionEci = positionAndVelocity.position,
     velocityEci = positionAndVelocity.velocity;
 
-  var positionEcf = satellite.eciToEcf(positionEci, gmst),
+  let positionEcf = satellite.eciToEcf(positionEci, gmst),
     positionGd = satellite.eciToGeodetic(positionEci, gmst),
     lookAngles = satellite.ecfToLookAngles(observerGd, positionEcf);
 
-  var longitude = satellite.degreesLong(positionGd.longitude),
+  let longitude = satellite.degreesLong(positionGd.longitude),
     latitude = satellite.degreesLat(positionGd.latitude),
     height = positionGd.height;
 
-  var azimuth = satellite.radiansToDegrees(lookAngles.azimuth),
+  let azimuth = satellite.radiansToDegrees(lookAngles.azimuth),
     elevation = satellite.radiansToDegrees(lookAngles.elevation),
     rangeSat = lookAngles.rangeSat;
 
@@ -125,7 +130,7 @@ function isSunlit(date: Date, lon: number, lat: number, height: number) {
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
-  const noradId = req.query.noradId ?? "55098";
+  const noradId = getNoradId(req.query.noradId);
 
   try {
     const [tleLine1, tleLine2] = globals.tleLines[noradId];
@@ -138,7 +143,7 @@ router.get("/getSatelliteInfo", (req: any, res: any) => {
 });
 
 router.get("/getPolarPlotData", (req: any, res: any) => {
-  const noradId = req.query.noradId ?? "55098";
+  const noradId = getNoradId(req.query.noradId);
   const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   const startDate = new Date(req.query.START_DATE);
@@ -164,7 +169,7 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
 });
 
 router.get("/getMaxElevation", (req: any, res: any) => {
-  const noradId = req.query.noradId ?? "55098";
+  const noradId = getNoradId(req.query.noradId);
   const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   let startDate = new Date(req.query.START_DATE);
@@ -195,28 +200,28 @@ router.get("/getMaxElevation", (req: any, res: any) => {
 });
 
 router.get("/getNextPasses", (req: any, res: any) => {
-  const noradId = req.query.noradId ?? "55098";
+  const noradId = getNoradId(req.query.noradId);
   const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   try {
     // Time window in milliseconds (1 minute)
     const WINDOWMILLIS = 60 * 1000;
 
-    var today = new Date();
+    let today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    var nextPasses = [];
-    var enterElevation = null;
-    var enterInfo;
-    var exitInfo;
+    let nextPasses = [];
+    let enterElevation = null;
+    let enterInfo;
+    let exitInfo;
 
     // Gets overpasses for the next week
     for (let i = 0; i < 7 * 24 * 60; i++) {
       // Calculate the next pass
-      var nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
+      let nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
 
       // Get satellite information for the next pass
-      var satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
+      let satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
 
       // Format Time
       const formattedTime = nextPassTime
@@ -261,7 +266,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
 });
 
 router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
-  const noradId = req.query.noradId ?? "55098";
+  const noradId = getNoradId(req.query.noradId);
   const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   try {
@@ -270,22 +275,22 @@ router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
     // Minimum duration for illumination cycle in milliseconds (10 minutes)
     const MIN_CYCLE_DURATION = 10 * 60 * 1000;
 
-    var today = new Date();
+    let today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    var nextIlluminations = [];
-    var enterIllumination = null;
-    var enterTime = null;
-    var enterInfo;
-    var exitInfo;
+    let nextIlluminations = [];
+    let enterIllumination = null;
+    let enterTime = null;
+    let enterInfo;
+    let exitInfo;
 
     // Gets illuminations for the next week
     for (let i = 0; i < 7 * 24 * 60; i++) {
       // Calculate the next illumination
-      var nextIlluminationTime = new Date(today.getTime() + i * WINDOWMILLIS);
+      let nextIlluminationTime = new Date(today.getTime() + i * WINDOWMILLIS);
 
       // Get satellite information for the next pass
-      var satelliteInfo = getSatelliteInfo(
+      let satelliteInfo = getSatelliteInfo(
         nextIlluminationTime,
         tleLine1,
         tleLine2
