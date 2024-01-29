@@ -32,6 +32,14 @@ type GetSchedulesBySatelliteProp = {
   };
 };
 
+type GetScheduleBySatelliteAndTimeProp = {
+  query: {
+    satelliteId: string;
+    status?: ScheduleStatus;
+    time: Date;
+  };
+};
+
 type CreateScheduleProp = {
   body: {
     commands: any[];
@@ -310,6 +318,33 @@ router.get(
       .skip(skip)
       .exec();
     res.status(201).json({ message: "Fetched schedules", schedules });
+  }
+);
+
+router.get(
+  "/getScheduleBySatelliteAndTime",
+  async (req: GetScheduleBySatelliteAndTimeProp, res: any) => {
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      time,
+    } = req.query;
+
+    const convertedTime = new Date(time);
+
+    const filter = {
+      satelliteId: satelliteId,
+      status: status,
+      $and: [
+        {startDate: { '$lte': convertedTime }} ,
+        { endDate: { '$gte': convertedTime } },
+      ],
+    };
+
+    const schedules = await Schedule.find(filter)
+      .sort({ createdAt: "desc" })
+      .exec();
+    res.status(201).json({ message: "Fetched schedules by satelliteId and Time", schedules });
   }
 );
 
