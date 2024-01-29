@@ -36,7 +36,7 @@ type GetScheduleBySatelliteAndTimeProp = {
   query: {
     satelliteId: string;
     status?: ScheduleStatus;
-    time: string;
+    time: Date;
   };
 };
 
@@ -331,13 +331,15 @@ router.get(
     } = req.query;
 
     const convertedTime = new Date(time);
+    // console.log("Time");
+    // console.log(convertedTime);
 
     const filter = {
       // satelliteId: satelliteId,
       // status: status,
       $and: [
-        { startDate: { $lte: {convertedTime} } },
-        { endDate: { $gte: convertedTime } },
+        {startDate: { '$lt': convertedTime }} ,
+        // { endDate: { '$gte': convertedTime } },
       ],
     };
 
