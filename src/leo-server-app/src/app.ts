@@ -11,6 +11,7 @@ const usersRoute = require("./routes/user");
 const { router: satelliteRoute } = require("./routes/satellite");
 const scheduleRoute = require("./routes/schedule");
 const logRoute = require("./routes/log");
+const pingRoute = require("./routes/ping");
 
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -25,6 +26,7 @@ app.use("/users", usersRoute);
 app.use("/satellite", satelliteRoute);
 app.use("/schedule", scheduleRoute);
 app.use("/log", logRoute);
+app.use("/ping", pingRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, this is Express + TypeScript");
