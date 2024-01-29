@@ -331,23 +331,20 @@ router.get(
     } = req.query;
 
     const convertedTime = new Date(time);
-    // console.log("Time");
-    // console.log(convertedTime);
 
     const filter = {
-      // satelliteId: satelliteId,
-      // status: status,
+      satelliteId: satelliteId,
+      status: status,
       $and: [
-        {startDate: { '$lt': convertedTime }} ,
-        // { endDate: { '$gte': convertedTime } },
+        {startDate: { '$lte': convertedTime }} ,
+        { endDate: { '$gte': convertedTime } },
       ],
     };
-
 
     const schedules = await Schedule.find(filter)
       .sort({ createdAt: "desc" })
       .exec();
-    res.status(201).json({ message: "Fetched schedules", schedules });
+    res.status(201).json({ message: "Fetched schedules by satelliteId and Time", schedules });
   }
 );
 
