@@ -24,6 +24,16 @@ type GetLogByCommandeProp = {
   };
 };
 
+type CreateLogProp = {
+  body: {
+    command: string;
+    satelliteId: string;
+    user: string;
+    scheduleId: string;
+    response: string;
+  };
+};
+
 router.get("/getLogsBySatellite", async (req: GetLogBySatelliteProp, res: any) => {
   const { satelliteId } = req.query;
 
@@ -57,6 +67,28 @@ router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
 
   const logs = await Log.find(filter).exec();
   res.status(201).json({ message: "Fetched logs by satelliteId and commandId", logs });
+});
+
+router.post("/createLog", async (req: CreateLogProp, res: any) => {
+  const { body } = req;
+
+  let resObj = {};
+
+  const newLog = {
+    satellite: body.satelliteId,
+    command: body.command,
+    scheduleId: body.scheduleId,
+    response: body.response,
+    user: body.user,
+  };
+
+  const log = await Log.create(newLog);
+  resObj = {
+    message: "Created Log",
+    log,
+  };
+
+  res.status(201).json(resObj);
 });
 
 module.exports = router;
