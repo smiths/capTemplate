@@ -6,11 +6,11 @@ const Schema = mongoose.Schema;
 const logSchema = new Schema(
   {
     response: Schema.Types.Mixed,
-    command: {
+    commandId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Command",
     },
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },

@@ -26,9 +26,9 @@ type GetLogByCommandeProp = {
 
 type CreateLogProp = {
   query: {
-    command: string;
+    commandId: string;
     satelliteId: string;
-    user: string;
+    userId: string;
     scheduleId: string;
     response: string;
   };
@@ -38,18 +38,18 @@ router.get("/getLogsBySatellite", async (req: GetLogBySatelliteProp, res: any) =
   const { satelliteId } = req.query;
 
   const filter = {
-    satellite: satelliteId,
+    satelliteId: satelliteId,
   };
 
   const logs = await Log.find(filter).exec();
   res.status(201).json({ message: "Fetched logs by satelliteId", logs });
 });
 
-router.get("/getLogsbySchedule", async (req: GetLogByScheduleProp, res: any) => {
+router.get("/getLogsBySchedule", async (req: GetLogByScheduleProp, res: any) => {
   const { satelliteId, scheduleId } = req.query;
 
   const filter = {
-    satellite: satelliteId,
+    satelliteId: satelliteId,
     scheduleId: scheduleId,
   };
 
@@ -61,8 +61,8 @@ router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
   const { satelliteId, commandId } = req.query;
 
   const filter = {
-    satellite: satelliteId,
-    command: commandId,
+    satelliteId: satelliteId,
+    commandId: commandId,
   };
 
   const logs = await Log.find(filter).exec();
@@ -75,11 +75,11 @@ router.post("/createLog", async (req: CreateLogProp, res: any) => {
   let resObj = {};
 
   const newLog = {
-    satellite: query.satelliteId,
-    command: query.command,
+    satelliteId: query.satelliteId,
+    commandId: query.commandId,
     scheduleId: query.scheduleId,
     response: query.response,
-    user: query.user,
+    userId: query.userId,
   };
 
   const log = await Log.create(newLog);
