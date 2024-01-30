@@ -25,7 +25,7 @@ type GetLogByCommandeProp = {
 };
 
 type CreateLogProp = {
-  body: {
+  query: {
     command: string;
     satelliteId: string;
     user: string;
@@ -70,16 +70,16 @@ router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
 });
 
 router.post("/createLog", async (req: CreateLogProp, res: any) => {
-  const { body } = req;
+  const { query } = req;
 
   let resObj = {};
 
   const newLog = {
-    satellite: body.satelliteId,
-    command: body.command,
-    scheduleId: body.scheduleId,
-    response: body.response,
-    user: body.user,
+    satellite: query.satelliteId,
+    command: query.command,
+    scheduleId: query.scheduleId,
+    response: query.response,
+    user: query.user,
   };
 
   const log = await Log.create(newLog);
