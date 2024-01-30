@@ -90,6 +90,12 @@ Response: `none`
 
 Changes the TLE of the currently viewed satellite on screen.
 
+##`/ping`
+Type: `GET`
+Request: `none`
+Response `{ pingRespone: String }`
+
+This endpoint pings the mock ground station server to establish a response.
 ---
 
 # Database Endpoints
