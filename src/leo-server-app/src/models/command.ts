@@ -27,6 +27,10 @@ export const commandSchema = new Schema(
       enum: Object.values(CommandStatus),
       default: CommandStatus.QUEUED,
     },
+    priority: {
+      type: Number,
+      default: 1,
+    },
   },
   { timestamps: true }
 );
