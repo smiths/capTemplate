@@ -1,5 +1,5 @@
 const express = require("express");
-const Log = require("../models/log");
+import Log from "../models/log";
 
 const router = express.Router();
 router.use(express.json());
