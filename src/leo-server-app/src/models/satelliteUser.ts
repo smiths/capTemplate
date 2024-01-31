@@ -17,11 +17,11 @@ const satelliteUserSchema = new Schema(
       ref: "Admin",
     },
     validCommands: {
-      type: [String],
+      type: Set<String>,
     },
   },
   { timestamps: true }
 );
 
-const SatelliteUserModel = mongoose.model("SatelliteUser", satelliteUserSchema);
-export default SatelliteUserModel;
+const SatelliteUser = mongoose.model("SatelliteUser", satelliteUserSchema);
+export default SatelliteUser;

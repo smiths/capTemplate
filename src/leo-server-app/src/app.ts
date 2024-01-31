@@ -8,6 +8,7 @@ const app: Express = express();
 const cors = require("cors");
 
 const usersRoute = require("./routes/user");
+const sateliiteUserRoute = require("./routes/satelliteUser")
 const { router: satelliteRoute } = require("./routes/satellite");
 const scheduleRoute = require("./routes/schedule");
 const logRoute = require("./routes/log");
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 // Connect routes to app
+app.use("/satelliteUser", sateliiteUserRoute);
 app.use("/users", usersRoute);
 app.use("/satellite", satelliteRoute);
 app.use("/schedule", scheduleRoute);
