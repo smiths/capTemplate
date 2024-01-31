@@ -107,4 +107,6 @@ export const getNextPasses = (noradId: string) => {
       }
     }
   }
+
+  return nextPasses;
 };
