@@ -73,11 +73,24 @@ const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
 const SchedulesPage: React.FC = () => {
   return (
     <div className="schedules-page">
-      <header>
+      {/* this is for satellite name title; for now its being hardcoded later on it will be dynamic (another pr) */}
+      <header> 
         <div className='satellite-name'>
           Satellite Name
         </div>
       </header>
+      {/* All schedules for that particular satellite */}
+      <header>
+        <div className='all-schedules'>
+            All Schedules
+          </div>
+      </header>
+      <header> 
+        <div className='schedule-queue'> 
+      Schedule Queue
+        </div> 
+      </header>
+  
       <div className="schedule-queue">
         {schedules.map((schedule, index) => (
           <ScheduleComponent key={index} schedule={schedule} />
@@ -85,6 +98,7 @@ const SchedulesPage: React.FC = () => {
       </div>
       <button className="add-schedule">+</button>
     </div>
+   
   );
 };
 
