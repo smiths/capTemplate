@@ -8,6 +8,7 @@ import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
 import { ScheduleEventEmitter } from "../event/schedule.event";
 import { ScheduleStatus } from "../types/schedule";
 
+// Executes command sequences for the specified schedule
 export const executeScheduledCommands = async (
   satelliteId: string,
   scheduleId: string
@@ -76,6 +77,7 @@ export const executeScheduledCommands = async (
   );
 };
 
+// Reschedules remaining commands to a satellite's next overpass
 export const rescheduleLeftoverCommands = async (
   satelliteId: string,
   scheduleId: string
@@ -97,6 +99,7 @@ export const rescheduleLeftoverCommands = async (
   return nextSchedule;
 };
 
+// Fetches and records a satellite's overpass schedules for the next 7 days
 export const addSchedulesForNext7Days = async (
   satelliteId: string,
   noradId: string
