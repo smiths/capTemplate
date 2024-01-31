@@ -6,6 +6,7 @@ import nodeSchedule from "node-schedule";
 import { getNextPasses } from "../utils/satellite.utils";
 import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
 import { ScheduleEventEmitter } from "../event/schedule.event";
+import { ScheduleStatus } from "../types/schedule";
 
 export const executeScheduledCommands = async (
   satelliteId: string,
@@ -25,15 +26,11 @@ export const executeScheduledCommands = async (
   const length = commands.length;
   let ind = 0;
 
+  const endTime = schedule?.endDate.getTime();
   let currTime = Date.now();
 
   // ---- Loop through commands and execute them ----
-  while (
-    schedule?.startDate &&
-    schedule.endDate &&
-    schedule?.startDate?.getTime() <= Date.now() &&
-    schedule?.endDate.getTime() > currTime
-  ) {
+  while (schedule?.startDate && endTime && endTime > Date.now()) {
     if (ind >= length) {
       continue;
     }
@@ -65,7 +62,10 @@ export const executeScheduledCommands = async (
   }
 
   // ---- Reschedule any left over commands ----
-  const nextSchedule = await rescheduleLeftoverCommands(scheduleId);
+  const nextSchedule = await rescheduleLeftoverCommands(
+    satelliteId,
+    scheduleId
+  );
 
   //   Emit event to create new schedule
   ScheduleEventEmitter.emit(
@@ -76,9 +76,15 @@ export const executeScheduledCommands = async (
   );
 };
 
-export const rescheduleLeftoverCommands = async (scheduleId: string) => {
+export const rescheduleLeftoverCommands = async (
+  satelliteId: string,
+  scheduleId: string
+) => {
   //   Get next scheduled overpass
-  const nextSchedule = await Schedule.findOne({ scheduleId: scheduleId })
+  const nextSchedule = await Schedule.findOne({
+    satelliteId: satelliteId,
+    status: ScheduleStatus.FUTURE,
+  })
     .sort({ created: "desc" })
     .exec();
 
