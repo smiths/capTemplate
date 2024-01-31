@@ -4,16 +4,14 @@ import Scheduler from "@/components/Scheduler";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
+import EditSchedule_Page from "@/components/EditSchedules";
 
-function SchedulerPage() {
+function EditSchedulePage() {
 
   return (
     <main>
       <Navbar />
-      <Scheduler />
-      
-
-
+      <EditSchedule_Page />
 
     {/*<Stack spacing={3} alignItems="center" p={2}>
       </Stack>*/}
@@ -21,4 +19,4 @@ function SchedulerPage() {
   );
 }
 
-export default withPageAuthRequired(SchedulerPage);
+export default withPageAuthRequired(EditSchedulePage);
