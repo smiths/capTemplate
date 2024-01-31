@@ -58,7 +58,7 @@ const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
     <div className="schedule">
       <div className="schedule-header">
         {schedule.date} 
-        <br> </br>
+        <br/>
         {schedule.startTime} - {schedule.endTime}
       </div>
       <ul className="commands">
