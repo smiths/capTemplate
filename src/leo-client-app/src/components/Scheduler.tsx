@@ -1,97 +1,92 @@
-"use client";
+import React from 'react';
+import '../components/Scheduler.css'; // Import the CSS styles
 
-import React, { useEffect, useState } from "react";
+interface Command {
+  name: string;
+}
 
-const Scheduler: React.FC = () => {
+interface Schedule {
+  date: string;
+  startTime: string;
+  endTime: string;
+  commands: Command[];
+}
 
-  // TODO: Dynamicall get satelliteId from somewhere
-  const satelliteId = "655acd63d122507055d3d2ea";
-  const [validCommands, setValidCommands] = useState([]);
-  const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
+// Mock data
+const schedules: Schedule[] = [
+  {
+    date: "Jan 9 2024",
+    startTime: "9:10 AM",
+    endTime: "9:12 AM",
+    commands: [
+      { name: "Setup" },
+      { name: "Command 1" },
+      { name: "Command 2" },
+      { name: "Command 3" },
+      { name: "Teardown" },
+    ],
+  },
+  {
+    date: "Jan 9 2024",
+    startTime: "9:10 AM",
+    endTime: "9:12 AM",
+    commands: [
+      { name: "Setup" },
+      { name: "Command 1" },
+      { name: "Command 2" },
+      { name: "Command 3" },
+      { name: "Teardown" },
+    ],
+  },
+  {
+    date: "Jan 9 2024",
+    startTime: "9:10 AM",
+    endTime: "9:12 AM",
+    commands: [
+      { name: "Setup" },
+      { name: "Command 1" },
+      { name: "Command 2" },
+      { name: "Command 3" },
+      { name: "Teardown" },
+    ],
+  },
+  // ... more schedules
+];
 
-  const fetchValidCommands = (satelliteId: string) => {
-    fetch(`http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`)
-      .then((response) => response.json())
-      .then(data => {
-        setValidCommands(data.satellite.validCommands);
-      })
-      .catch((error) => {
-        console.error("Error fetching valid commands:", error);
-      }); 
-  };
-
-  const addCommand = (command : string) => {
-    setCurrentSchedule(prevCommands => [...prevCommands, command]);
-  };
-
-  const removeCommand = (index: number) => {
-    setCurrentSchedule(currentSchedule => currentSchedule.filter((_, i) => i !== index));
-  };
-
-  // Function will load schedule somewhere, currently console log for POC demo
-  const sendSchedule = () => {
-    console.log(currentSchedule)
-    setCurrentSchedule([])
-  }
-
-  useEffect(() => {
-    fetchValidCommands(satelliteId);
-  }, [satelliteId]);
-
-    return (
-    <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-start' }}>
-      <div style={{
-        minWidth: '200px',
-        border: '2px solid white',
-        borderRadius: '16px',
-        padding: '10px'
-      }}>
-        <h2>Valid Commands</h2>
-        <div>
-          {validCommands && validCommands.length > 0 && validCommands.map((command, index) => (
-            <button 
-              key={index} 
-              className="scheduleButton" 
-              onClick={() => addCommand(command)}
-            >
-              {command}
-            </button>
-          ))}
-        </div>
+const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+  return (
+    <div className="schedule">
+      <div className="schedule-header">
+        {schedule.date} 
+        <br> </br>
+        {schedule.startTime} - {schedule.endTime}
       </div>
-
-      <div style={{ width: '50px' }}></div>
-
-      <div style={{
-        border: '2px solid white',
-        borderRadius: '16px',
-        padding: '10px',
-        overflow: 'auto' 
-      }}>
-        <h2>Current Schedule</h2>
-        {currentSchedule && currentSchedule.length > 0 && currentSchedule.map((command, index) => (
-           <button 
-            key={index} 
-            className="removeButton scheduleButton" 
-            onClick={() => removeCommand(index)}
-          >
-            <span className="buttonText">{command}</span>
-            <span className="closeButton">X</span>
-          </button>
+      <ul className="commands">
+        {schedule.commands.map((command, index) => (
+          <li key={index}>{command.name}</li>
         ))}
-        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <button onClick={() => setCurrentSchedule([])}
-            style={{ display: 'block', margin: '5px 0' }}>
-            Clear Schedule
-          </button>
-          <button onClick={() => sendSchedule()}
-            style={{ display: 'block', margin: '5px 0' }}>
-            Send Schedule
-          </button>
-        </div>
-      </div>
+      </ul>
     </div>
   );
 };
 
-export default Scheduler;
+const SchedulesPage: React.FC = () => {
+  return (
+    <div className="schedules-page">
+      <header>
+        <div className='satellite-name'>
+          Satellite Name
+        </div>
+      </header>
+      <div className="schedule-queue">
+        {schedules.map((schedule, index) => (
+          <ScheduleComponent key={index} schedule={schedule} />
+        ))}
+      </div>
+      <button className="add-schedule">+</button>
+    </div>
+  );
+};
+
+export default SchedulesPage;
+
