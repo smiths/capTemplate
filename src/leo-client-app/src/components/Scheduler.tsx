@@ -188,6 +188,7 @@ const SchedulesPage: React.FC = () => {
         {schedules.map((schedule, index) => (
           <ScheduleComponent key={index} schedule={schedule} />
         ))}
+        {/* button for edit schedules */}
       </div>
       <button className="add-schedule">+</button>
     </div>
