@@ -78,4 +78,12 @@ router.post("/createSatelliteUser", async (req: CreateUser, res: any) =>{
       res.status(201).json(resObj);
 });
 
+router.get("/getUserBySatellite");
+
+router.get("/getCommandsBySatelliteAndUser");
+
+router.update("/updateByUser");
+
+router.delete("/deleteByUser");
+
 module.exports = router;
