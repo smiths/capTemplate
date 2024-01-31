@@ -78,7 +78,16 @@ router.post("/createSatelliteUser", async (req: CreateUser, res: any) =>{
       res.status(201).json(resObj);
 });
 
-router.get("/getUserBySatellite");
+router.get("/getUserBySatellite",
+async (satellite: string, res: any) =>{
+    const filter = {
+        satelliteId: satellite,
+      };
+    const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
+
+    res.status(201).json({message: "Users fetched by satellite", record});
+    
+});
 
 router.get("/getCommandsBySatelliteAndUser");
 
