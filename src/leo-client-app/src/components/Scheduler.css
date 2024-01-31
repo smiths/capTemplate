@@ -1,0 +1,61 @@
+/* ScheduleStyles.css */
+.schedules-page {
+    background-color: #1a1a1a; /* Dark background */
+    color: white; /* White text color */
+    font-family: 'Arial', sans-serif; /* Font family */
+    padding: 20px; /* Padding around the page */
+  }
+  
+  .schedule {
+    background-color: rgba(247, 155, 155, 0.714); /* Darker background for schedule entry */
+    margin-bottom: 10px; /* Space between schedule entries */
+    padding: 10px; /* Padding inside each schedule entry */
+    border-radius: 28px; /* Rounded corners for schedule entry */
+    border: 2px solid white;
+  }
+  .schedule-queue{
+    border: 2px solid white; /* This will create a white border around the schedule */
+    padding: 10px; /* Padding around the border */
+    border-radius: 28px; /* Rounded corners for schedule entry */
+  
+
+  }
+  
+  .schedule-header {
+    font-weight: bold; /* Bold font for schedule header */
+    
+  }
+  
+  .commands {
+    list-style: none; /* Remove bullet points from list */
+    padding: 0; /* Remove padding from list */
+  }
+  
+  .commands li {
+    padding: 5px 0; /* Padding for each command */
+  }
+  
+  .add-schedule {
+    background-color: #ff4081; /* Pink color for add button */
+    border: none; /* No border */
+    border-radius: 50%; /* Circular button */
+    color: white; /* White text */
+    font-size: 24px; /* Larger font size */
+    position: fixed; /* Fixed position to bottom-right */
+    right: 20px; /* 20px from the right */
+    bottom: 20px; /* 20px from the bottom */
+    width: 50px; /* Width of the button */
+    height: 50px; /* Height of the button */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  /*this is for satellite-title name*/
+.satellite-name{
+    color: red;
+    font-size: 50px;
+    font: Calibri; 
+    /*background-color: #333; /* Dark background for the header */
+    padding: 10px 20px; /* Some padding around the content */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out the items */
+}
