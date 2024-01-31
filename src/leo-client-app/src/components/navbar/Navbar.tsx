@@ -19,7 +19,7 @@ const navbarItems = [
     path: "/satellite-logs",
   },
   {
-    heading: "Log Out",
+    heading: "Account",
     path: "/api/auth/logout",
   },
   
@@ -31,15 +31,15 @@ const Navbar: React.FC = () => {
       direction="row"
       alignItems="center"
       justifyContent="flex-end"
-      spacing={5}
-      sx={{ background: "#40403fb0", py: 2, px: 4 }}>
+      spacing={23}
+      sx={{ background: "#1a1a1a", py: 2, px:20 }}>
       {navbarItems.map((item, index) => (
         <Link
           key={item.path + index}
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "#6cb6ff" }}>
+          sx={{ color: "white" }}>
           {item.heading}
         </Link>
       ))}
