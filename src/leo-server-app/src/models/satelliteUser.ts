@@ -17,7 +17,7 @@ const satelliteUserSchema = new Schema(
       ref: "Admin",
     },
     validCommands: {
-      type: Set<String>,
+      type: [String],
     },
   },
   { timestamps: true }
