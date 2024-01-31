@@ -4,7 +4,8 @@ import Schedule from "../models/schedule";
 import { CommandStatus } from "../types/command";
 import nodeSchedule from "node-schedule";
 import { getNextPasses } from "../utils/satellite.utils";
-import { scheduleJobForNextOverpass } from "../jobs/overpass";
+import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
+import { ScheduleEventEmitter } from "../event/schedule.event";
 
 export const executeScheduledCommands = async (
   satelliteId: string,
@@ -64,7 +65,15 @@ export const executeScheduledCommands = async (
   }
 
   // ---- Reschedule any left over commands ----
-  await rescheduleLeftoverCommands(scheduleId);
+  const nextSchedule = await rescheduleLeftoverCommands(scheduleId);
+
+  //   Emit event to create new schedule
+  ScheduleEventEmitter.emit(
+    "overpassFinished",
+    satelliteId,
+    nextSchedule?.id,
+    nextSchedule?.startDate
+  );
 };
 
 export const rescheduleLeftoverCommands = async (scheduleId: string) => {
@@ -78,6 +87,8 @@ export const rescheduleLeftoverCommands = async (scheduleId: string) => {
     { scheduleId: scheduleId, status: CommandStatus.QUEUED },
     { $set: { scheduleId: nextSchedule?.id, priority: 2 } }
   ).exec();
+
+  return nextSchedule;
 };
 
 export const addSchedulesForNext7Days = async (
