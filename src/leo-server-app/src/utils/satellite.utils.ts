@@ -1,4 +1,8 @@
 import globals from "../globals/globals";
+import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
+import SatelliteModel from "../models/satellite";
+import Schedule from "../models/schedule";
+import { ScheduleStatus } from "../types/schedule";
 const satellite = require("satellite.js");
 
 // GS info
@@ -109,4 +113,30 @@ export const getNextPasses = (noradId: string) => {
   }
 
   return nextPasses;
+};
+
+/* Edge Case:
+ * If server restarts, reschedules overpass jobs for all satellites
+ */
+export const scheduleJobsForSatellitesOnBoot = async () => {
+  // Fetch all satellites
+  const satellites = await SatelliteModel.find().exec();
+
+  for (let target of satellites) {
+    // Get earliest schedule
+    const nextSchedule = await Schedule.findOne({
+      satelliteId: target.id,
+      status: ScheduleStatus.FUTURE,
+    })
+      .sort({ created: "desc" })
+      .exec();
+
+    if (nextSchedule) {
+      scheduleJobForNextOverpass(
+        target.id,
+        nextSchedule?.id,
+        nextSchedule?.startDate
+      );
+    }
+  }
 };
