@@ -22,10 +22,6 @@ const scheduleSchema = new Schema(
       enums: Object.values(ScheduleStatus),
       default: ScheduleStatus.FUTURE,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
   },
   { timestamps: true }
 );
