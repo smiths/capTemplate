@@ -1,4 +1,5 @@
-"use client";
+import React from 'react';
+import '../components/Scheduler.css'; // Import the CSS styles
 
 import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -162,4 +163,23 @@ const Scheduler: React.FC = () => {
   );
 };
 
-export default Scheduler;
+const SchedulesPage: React.FC = () => {
+  return (
+    <div className="schedules-page">
+      <header>
+        <div className='satellite-name'>
+          Satellite Name
+        </div>
+      </header>
+      <div className="schedule-queue">
+        {schedules.map((schedule, index) => (
+          <ScheduleComponent key={index} schedule={schedule} />
+        ))}
+      </div>
+      <button className="add-schedule">+</button>
+    </div>
+  );
+};
+
+export default SchedulesPage;
+
