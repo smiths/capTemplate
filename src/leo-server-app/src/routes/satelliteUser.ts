@@ -9,14 +9,21 @@ import { UserRole } from "../types/user";
 const router = express.Router();
 router.use(express.json());
 
-type CreateUser = {
+type CreateUserProp = {
     body: {
         satelliteId: string;
         adminId: string;
         userId: string;
         validCommands: string[];
     }
-}
+};
+
+type GetCommandsBySatelliteAndUserProp = {
+    query: {
+        satelliteId: string;
+        userId: string;
+    }
+};
 
 const isAdminCheck = async (userId: string) => {
     const userRecord = await User.findById(userId);
@@ -37,7 +44,7 @@ async function validateCommands(satelliteId: string, commands: string[]) {
     return commands.every((cmd) => satellite?.validCommands.includes(cmd));
 };
 
-router.post("/createSatelliteUser", async (req: CreateUser, res: any) =>{
+router.post("/createSatelliteUser", async (req: CreateUserProp, res: any) =>{
     const { body } = req;
     const isCommandsValid = await validateCommands(
         body.satelliteId,
@@ -89,7 +96,18 @@ async (satellite: string, res: any) =>{
     
 });
 
-router.get("/getCommandsBySatelliteAndUser");
+router.get("/getCommandsBySatelliteAndUser",
+async (req: GetCommandsBySatelliteAndUserProp, res: any) =>{
+    const {satelliteId, userId} = req.query;
+    const filter = {
+        satelliteId: satelliteId,
+        userId: userId,
+      };
+    const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
+
+    res.status(201).json({message: "Commands fetched by satellite and User", record});
+    
+});
 
 router.update("/updateByUser");
 
