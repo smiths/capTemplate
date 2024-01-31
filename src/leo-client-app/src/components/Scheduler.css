@@ -5,7 +5,6 @@
     font-family: 'Arial', sans-serif; /* Font family */
     padding: 20px; /* Padding around the page */
   }
-  
   .schedule {
     background-color: rgba(247, 155, 155, 0.714); /* Darker background for schedule entry */
     margin-bottom: 10px; /* Space between schedule entries */
@@ -14,11 +13,9 @@
     border: 2px solid white;
   }
   .schedule-queue{
-    border: 2px solid white; /* This will create a white border around the schedule */
+    text-indent: 10px; /* Adjust the value as needed */
     padding: 10px; /* Padding around the border */
     border-radius: 28px; /* Rounded corners for schedule entry */
-  
-
   }
   
   .schedule-header {
@@ -50,8 +47,18 @@
   }
   /*this is for satellite-title name*/
 .satellite-name{
-    color: red;
+    color: rgb(233, 209, 209);
     font-size: 50px;
+    font: Calibri; 
+    /*background-color: #333; /* Dark background for the header */
+    padding: 10px 20px; /* Some padding around the content */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out the items */
+}
+.all-schedules{
+    color: rgb(233, 209, 209);
+    font-size: 30px;
     font: Calibri; 
     /*background-color: #333; /* Dark background for the header */
     padding: 10px 20px; /* Some padding around the content */
