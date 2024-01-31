@@ -2,13 +2,13 @@ import * as dotenv from "dotenv";
 import SatelliteModel from "../models/satellite";
 import globals from "../globals/globals";
 import { getNextPasses, getSatelliteInfo } from "../utils/satellite.utils";
+import { SatelliteEventEmitter } from "../event/satellite.event";
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
 let SunCalc = require("suncalc");
-
 const satellite = require("satellite.js");
 
 const router = express.Router();
@@ -288,8 +288,16 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
     tleLines: tleLines,
   });
 
-  const user = await SatelliteModel.create(newSatellite);
-  res.status(201).json({ message: "Satellite system added", user });
+  const satellite = await SatelliteModel.create(newSatellite);
+
+  // Emit event to create schedules for next 7 days
+  SatelliteEventEmitter.emit(
+    "satelliteCreated",
+    satellite.id,
+    satellite.noradId
+  );
+
+  res.status(201).json({ message: "Satellite system added", satellite });
 });
 
 router.patch("/updateSatelliteTargetCommands", async (req: any, res: any) => {
