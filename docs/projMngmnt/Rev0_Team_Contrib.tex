@@ -1,0 +1,107 @@
+\documentclass{article}
+
+\usepackage{float}
+\restylefloat{table}
+
+\usepackage{booktabs}
+
+\title{Team Contributions: Rev 0\\\progname}
+
+\author{\authname}
+
+\date{}
+
+\input{./Comments}
+\input{./Common}
+
+\begin{document}
+
+\maketitle
+
+\section{Demo Plans}
+
+For the Revision 0 Demonstration, we will primarily be showcasing the Mission Control Terminal (MCT) application's scheduling features. This includes viewing an overpass schedule, in addition to adding, updating, and removing command sequences from a schedule. Since the execution of an overpass schedule will occur asynchronously, a video will be provided showing this functionality of the application. Furthermore, user and satellite management will also be shown in the demonstration. This will include tracking a satellite's telemetry data and displaying its anticipated trajectory over a fixed location.
+
+\section{Meeting Attendance}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Student} & \textbf{Meetings}\\
+\midrule
+Total & 10\\
+Buu Ha & 9\\
+Rishi Vaya & 10\\
+Diaomnd Ahuja & 10\\
+Dhruv Cheemakurti & 9\\
+Umang Rajkarnikar & 10\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Lecture Attendance}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Student} & \textbf{Lectures}\\
+\midrule
+Total & 2\\
+Buu Ha & 0\\
+Rishi Vaya & 0\\
+Diaomnd Ahuja & 1\\
+Dhruv Cheemakurti & 0\\
+Umang Rajkarnikar & 0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Commits}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Student} & \textbf{Commits} & \textbf{Percent}\\
+\midrule
+Total & 229 & 100\% \\
+Buu Ha & 105 & 45.8\% \\
+Rishi Vaya & 35 & 15.3\% \\
+Diamond Ahuja & 8 & 3.5\% \\
+Dhruv Cheemakurti & 3 & 1.3\% \\
+Umang Rajkarnikar & 78 & 34.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Diamond - Explanation for lower number of commits: It was mutually decided by the team that since there is a portion of this project which is not entirely dependent on us (team), like the ground station. I was held responsible for mimicking its functionality. I also worked to set up our application on the MIST server. This however meant that I would be working outside contributing to the code and hence resulting in the lower number of commits. Additionally, I'm keeping my best efforts to document everything. Moreover, I will be working to finish some of the remaining issues before our Rev0 presentation with the team. \\
+
+Dhruv - Explanation for lower number of commits: Mainly the reason for lower commits for my portion of the project is because I have been working on an entirely new branch. There are more commits on that branch, and the reason for working on a separate branch is because it has to do with front-end aspects of the application. If those changes were merged to the main, there would be some issues between the backend and front end which would cause the entire application to fail. This is because I was tasked to recreate the schedule interface according to our Figma design as one of my issues. In order to do that, it would involve changing the path in which the mock server is connected to our frontend framework. This can be tricky in execution and wanted to be cautious. Therefore, I am working on a separate branch to avoid any issues and will merge to main when I know for certain no errors will occur. I am planning to merge to main for many of my issues before Rev0 Presentation so it can display the work I was doing.
+
+
+\section{Issue Tracker}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Student} & \textbf{Authored (O+C)} & \textbf{Assigned (C only)}\\
+\midrule
+Buu Ha & 66 & 8 \\
+Rishi Vaya & 0 & 5 \\
+Diamond Ahuja & 19 & 1 \\
+Dhruv Cheemakurti & 0 & 1 \\
+Umang Rajkarnikar & 10 & 13 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{CICD}
+
+Github Actions is used to set up the CI/CD pipeline which includes integrated status checks and deployment checks. This will primarily be used to compare pull requests with the main branch, such that the code must pass a series of deployment checks before merging. To add, the project
+also uses Github Actions to manage secrets such as private API keys. This ensures that sensitive information can easily be accessible in the code while maintaining
+confidentiality and integrity of the secrets.
+
+\end{document}
