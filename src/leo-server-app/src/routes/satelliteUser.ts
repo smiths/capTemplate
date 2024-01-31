@@ -25,6 +25,13 @@ type GetCommandsBySatelliteAndUserProp = {
     }
 };
 
+type DeleteUserProp = {
+    query: {
+        satelliteUserId: string;
+        adminId: string;
+    }
+}
+
 const isAdminCheck = async (userId: string) => {
     const userRecord = await User.findById(userId);
     // console.log(userRecord?.role);
@@ -111,6 +118,29 @@ async (req: GetCommandsBySatelliteAndUserProp, res: any) =>{
 
 router.update("/updateByUser");
 
-router.delete("/deleteByUser");
+router.delete("/deleteByUser",
+async (req: DeleteUserProp, res: any) => {
+    const { satelliteUserId, adminId } = req.query;
+
+    // Validation
+    if (
+      !mongoose.isValidObjectId(satelliteUserId)
+    ) {
+      return res.status(500).json({ error: "Invalid IDs" });
+    }
+
+    // Check if user has permission
+    const adminCheck = await isAdminCheck(adminId)
+
+    if (!adminCheck) {
+    return res.status(500).json({ error: "Admin does not have right permisisons" });
+    }
+
+    // Remove command record
+    const cmd = await SatelliteUser.findByIdAndDelete(satelliteUserId).exec();
+
+    return res.json({ message: "Removed User from satellite" });
+  }
+);
 
 module.exports = router;
