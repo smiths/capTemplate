@@ -6,12 +6,14 @@ import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
 
 function SchedulerPage() {
+
   return (
     <main>
       <Navbar />
-      <Stack spacing={3} alignItems="center" p={2}>
-        <Scheduler />
-      </Stack>
+      <Scheduler />
+
+    {/*<Stack spacing={3} alignItems="center" p={2}>
+      </Stack>*/}
     </main>
   );
 }
