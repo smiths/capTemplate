@@ -49,24 +49,22 @@ router.get("/getLogsBySchedule", async (req: GetLogByScheduleProp, res: any) => 
   const { satelliteId, scheduleId } = req.query;
 
   const filter = {
-    satelliteId: satelliteId,
     scheduleId: scheduleId,
   };
 
   const logs = await Log.find(filter).exec();
-  res.status(201).json({ message: "Fetched logs by satelliteId and ScheduleId", logs });
+  res.status(201).json({ message: "Fetched logs by ScheduleId", logs });
 });
 
 router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
   const { satelliteId, commandId } = req.query;
 
   const filter = {
-    satelliteId: satelliteId,
     commandId: commandId,
   };
 
   const logs = await Log.find(filter).exec();
-  res.status(201).json({ message: "Fetched logs by satelliteId and commandId", logs });
+  res.status(201).json({ message: "Fetched logs by commandId", logs });
 });
 
 router.post("/createLog", async (req: CreateLogProp, res: any) => {
