@@ -1,5 +1,9 @@
 import React from 'react';
 import '../components/Scheduler.css'; // Import the CSS styles
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import EditSchedulePage from "@/components/EditSchedules";
+
 
 import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -163,6 +167,9 @@ const Scheduler: React.FC = () => {
   );
 };
 
+// const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+  
+
 const SchedulesPage: React.FC = () => {
   return (
     <div className="schedules-page">
@@ -191,7 +198,11 @@ const SchedulesPage: React.FC = () => {
         {/* button for edit schedules */}
       </div>
       <button className="add-schedule">+</button>
+      
+      
+
     </div>
+    
    
   );
 };
