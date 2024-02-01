@@ -8,6 +8,15 @@ import Command from "../models/command";
 import Satellite from "../models/satellite";
 import Schedule from "../models/schedule";
 import { ScheduleStatus } from "../types/schedule";
+import {
+  addSchedulesForNext7Days,
+  executeScheduledCommands,
+  rescheduleLeftoverCommands,
+} from "../utils/schedule.utils";
+import { CommandStatus } from "../types/command";
+
+// Globals
+let defaultNoradId = "55098";
 
 // Helper methods
 const areIdsSame = (array1: string[], array2: string[]) =>
@@ -356,5 +365,206 @@ describe("DELETE /deleteScheduledCommand", () => {
 
     const cmd = await Command.findById(commands[1].id);
     expect(cmd).toBeNull();
+  });
+});
+
+describe("UTIL executeScheduledCommands", () => {
+  let satelliteId: string;
+  let scheduleId: string;
+
+  beforeAll(async () => {
+    // Connect to mock DB
+    await connectDB("test");
+
+    // First create users
+    const user_1 = new User({
+      email: "test4@gmail.com",
+      role: "OPERATOR",
+    });
+
+    const user = await User.create(user_1);
+
+    // Create satellite record
+    const satellite = await Satellite.create({
+      name: "test1",
+      noradId: 543,
+      validCommands: ["teardown", "start"],
+    });
+
+    satelliteId = satellite.id;
+
+    // Create schedules
+    const overpassStart = new Date();
+    overpassStart.setDate(overpassStart.getDate() + 1);
+
+    const overpassEnd = new Date();
+    overpassEnd.setDate(overpassStart.getDate() + 1);
+
+    let schedule = await Schedule.create({
+      startDate: new Date(Date.now()),
+      endDate: new Date(Date.now() + 100),
+      satelliteId: satellite.id,
+      status: ScheduleStatus.FUTURE,
+    });
+
+    scheduleId = schedule.id;
+
+    // Create command records
+    const commands = [
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: user.id,
+        scheduleId: schedule.id,
+      },
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: user.id,
+        scheduleId: schedule.id,
+      },
+    ];
+
+    await Command.create(commands);
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+  });
+
+  it("Commands are executed for this overpass", async () => {
+    await executeScheduledCommands(satelliteId, scheduleId);
+    const commandsExecuted = await Command.find({
+      scheduleId: scheduleId,
+    }).exec();
+
+    let areCommandsExecuted = true;
+
+    for (const command of commandsExecuted) {
+      if (command.status !== CommandStatus.EXECUTED) {
+        areCommandsExecuted = false;
+        break;
+      }
+    }
+
+    expect(areCommandsExecuted).toBeTruthy();
+  });
+});
+
+describe("UTIL rescheduleLeftoverCommands", () => {
+  let satelliteId: string;
+  let pastScheduleId: string;
+  let futureScheduleId: string;
+
+  beforeAll(async () => {
+    // Connect to mock DB
+    await connectDB("test");
+
+    // First create users
+    const user_1 = new User({
+      email: "test4@gmail.com",
+      role: "OPERATOR",
+    });
+
+    const user = await User.create(user_1);
+
+    // Create satellite record
+    const satellite = await Satellite.create({
+      name: "test1",
+      noradId: 543,
+      validCommands: ["teardown", "start"],
+    });
+
+    satelliteId = satellite.id;
+
+    // Create schedules
+    const overpassStart = new Date();
+    overpassStart.setDate(overpassStart.getDate() + 1);
+
+    const overpassEnd = new Date();
+    overpassEnd.setDate(overpassStart.getDate() + 1);
+
+    // Create past and future schedule
+    const pastSchedule = await Schedule.create({
+      startDate: new Date(Date.now() - 1000),
+      endDate: new Date(Date.now() - 100),
+      satelliteId: satellite.id,
+      status: ScheduleStatus.PASSED,
+    });
+
+    const futureSchedule = await Schedule.create({
+      startDate: overpassStart,
+      endDate: overpassEnd,
+      satelliteId: satellite.id,
+      status: ScheduleStatus.FUTURE,
+    });
+
+    // Store these schedule ids
+    pastScheduleId = pastSchedule.id;
+    futureScheduleId = futureSchedule.id;
+
+    // Create command records tied to past Schedule
+    const commands = [
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: user.id,
+        scheduleId: pastSchedule.id,
+      },
+      {
+        command: "teardown",
+        satelliteId: satellite.id,
+        userId: user.id,
+        scheduleId: pastSchedule.id,
+      },
+    ];
+
+    await Command.create(commands);
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+  });
+
+  it("Commands should be rescheduled", async () => {
+    await rescheduleLeftoverCommands(satelliteId, pastScheduleId);
+
+    const commandsQueued = await Command.find({
+      scheduleId: futureScheduleId,
+    }).exec();
+
+    expect(commandsQueued.length > 0).toBeTruthy();
+  });
+});
+
+describe("UTIL addSchedulesForNext7Days", () => {
+  let satelliteId: string;
+  let noradId: string;
+
+  beforeAll(async () => {
+    // Connect to mock DB
+    await connectDB("test");
+
+    // Create satellite record
+    const satellite = await Satellite.create({
+      name: "test1",
+      noradId: defaultNoradId,
+      validCommands: ["teardown", "start"],
+    });
+
+    satelliteId = satellite.id;
+    noradId = satellite.noradId;
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+  });
+
+  it("Satellite should have schedules", async () => {
+    //  Add schedules
+    await addSchedulesForNext7Days(satelliteId, noradId);
+    const schedules = await Schedule.find({ satelliteId: satelliteId });
+
+    expect(schedules.length > 0).toBeTruthy();
   });
 });

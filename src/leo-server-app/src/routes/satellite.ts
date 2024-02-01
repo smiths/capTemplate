@@ -1,14 +1,18 @@
 import * as dotenv from "dotenv";
 import SatelliteModel from "../models/satellite";
 import globals from "../globals/globals";
+import {
+  getNextPasses,
+  getSatelliteInfo,
+  getTLE,
+  isSunlit,
+} from "../utils/satellite.utils";
+import { SatelliteEventEmitter } from "../event/satellite.event";
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
-let SunCalc = require("suncalc");
-
-const satellite = require("satellite.js");
 
 const router = express.Router();
 router.use(express.json());
@@ -28,105 +32,11 @@ function getNoradId(noradId: string | undefined) {
 
 // BDSAT-2 TLE from Space-Track accessed 12/25/2023
 let defaultNoradId = "55098";
-let defaultTleLine1 =
-    "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
-  defaultTleLine2 =
-    "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
-
-// GS info
-let observerGd = {
-  longitude: satellite.degreesToRadians(-79.9201),
-  latitude: satellite.degreesToRadians(43.2585),
-  height: 0.37,
-};
-
-// Fetch TLE data given a NORAD_ID using spacetrack
-async function getTLE(noradId: string) {
-  const result = await spacetrack.get({
-    type: "tle_latest",
-    query: [
-      { field: "NORAD_CAT_ID", condition: noradId },
-      { field: "ORDINAL", condition: "1" },
-    ],
-    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
-  });
-
-  if (!result[0].tle) {
-    console.error("TLE not set properly");
-  }
-
-  return [
-    result[0].tle[1]?.toString() || defaultTleLine1,
-    result[0].tle[2]?.toString() || defaultTleLine2,
-  ];
-}
 
 // Set TLE data for a NORAD_ID in global variable
 async function setTLE(noradId: string) {
   const result = await getTLE(noradId);
   setTleLines(noradId, result[0], result[1]);
-}
-
-// For more satellite info, check out: https://github.com/shashwatak/satellite-js
-function getSatelliteInfo(date: Date, tleLine1: string, tleLine2: string) {
-  if (!tleLine1 || !tleLine2) {
-    throw new Error("Incorrect TLE definition");
-  }
-  if (isNaN(date.getTime())) {
-    throw new Error("Incorrect Date definition");
-  }
-  let satrec = satellite.twoline2satrec(tleLine1, tleLine2);
-
-  let positionAndVelocity = satellite.propagate(satrec, date);
-  let gmst = satellite.gstime(date);
-
-  let positionEci = positionAndVelocity.position,
-    velocityEci = positionAndVelocity.velocity;
-
-  let positionEcf = satellite.eciToEcf(positionEci, gmst),
-    positionGd = satellite.eciToGeodetic(positionEci, gmst),
-    lookAngles = satellite.ecfToLookAngles(observerGd, positionEcf);
-
-  let longitude = satellite.degreesLong(positionGd.longitude),
-    latitude = satellite.degreesLat(positionGd.latitude),
-    height = positionGd.height;
-
-  let azimuth = satellite.radiansToDegrees(lookAngles.azimuth),
-    elevation = satellite.radiansToDegrees(lookAngles.elevation),
-    rangeSat = lookAngles.rangeSat;
-
-  return {
-    positionEci,
-    velocityEci,
-    longitude,
-    latitude,
-    height,
-    azimuth,
-    elevation,
-    rangeSat,
-  };
-}
-
-function isSunlit(date: Date, lon: number, lat: number, height: number) {
-  if (isNaN(date.getTime())) {
-    throw new Error("Incorrect Date definition");
-  }
-  if (height > 2000) {
-    throw new Error("Height must be in km");
-  }
-
-  const heightMeters = height * 1000; // Height from satellite.js are in km
-  const sunTimes = SunCalc.getTimes(date, lat, lon, heightMeters);
-
-  // Get time between sunset start and golden hour for best accuracy
-  let sunlightEnd = new Date(
-    (sunTimes.sunsetStart.getTime() + sunTimes.goldenHour.getTime()) / 2
-  );
-  if (date > sunTimes.dawn && date < sunlightEnd) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {
@@ -204,60 +114,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
   const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   try {
-    // Time window in milliseconds (1 minute)
-    const WINDOWMILLIS = 60 * 1000;
-
-    let today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    let nextPasses = [];
-    let enterElevation = null;
-    let enterInfo;
-    let exitInfo;
-
-    // Gets overpasses for the next week
-    for (let i = 0; i < 7 * 24 * 60; i++) {
-      // Calculate the next pass
-      let nextPassTime = new Date(today.getTime() + i * WINDOWMILLIS);
-
-      // Get satellite information for the next pass
-      let satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
-
-      // Format Time
-      const formattedTime = nextPassTime
-        .toLocaleString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        })
-        .replace(/\u202f/g, " ");
-
-      if (satelliteInfo.elevation > 0) {
-        if (!enterElevation) {
-          enterInfo = {
-            type: "Enter",
-            time: formattedTime,
-            azimuth: satelliteInfo.azimuth,
-            elevation: satelliteInfo.elevation,
-          };
-          enterElevation = satelliteInfo.elevation;
-        }
-      } else {
-        if (enterElevation) {
-          exitInfo = {
-            type: "Exit",
-            time: formattedTime,
-            azimuth: satelliteInfo.azimuth,
-            elevation: satelliteInfo.elevation,
-          };
-          nextPasses.push([enterInfo, exitInfo]);
-          enterElevation = null;
-        }
-      }
-    }
+    const nextPasses = getNextPasses(noradId);
     res.json({ nextPasses });
   } catch (error) {
     console.error("Error in getNextPasses:", error);
@@ -380,8 +237,16 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
     tleLines: tleLines,
   });
 
-  const user = await SatelliteModel.create(newSatellite);
-  res.status(201).json({ message: "Satellite system added", user });
+  const satellite = await SatelliteModel.create(newSatellite);
+
+  // Emit event to create schedules for next 7 days
+  SatelliteEventEmitter.emit(
+    "satelliteCreated",
+    satellite.id,
+    satellite.noradId
+  );
+
+  res.status(201).json({ message: "Satellite system added", satellite });
 });
 
 router.patch("/updateSatelliteTargetCommands", async (req: any, res: any) => {
