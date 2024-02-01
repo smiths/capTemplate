@@ -1,15 +1,18 @@
 import * as dotenv from "dotenv";
 import SatelliteModel from "../models/satellite";
 import globals from "../globals/globals";
-import { getNextPasses, getSatelliteInfo } from "../utils/satellite.utils";
+import {
+  getNextPasses,
+  getSatelliteInfo,
+  getTLE,
+  isSunlit,
+} from "../utils/satellite.utils";
 import { SatelliteEventEmitter } from "../event/satellite.event";
 
 dotenv.config({ path: `.env.local`, override: true });
 
 const express = require("express");
 let spacetrack = require("spacetrack");
-let SunCalc = require("suncalc");
-const satellite = require("satellite.js");
 
 const router = express.Router();
 router.use(express.json());
@@ -29,65 +32,11 @@ function getNoradId(noradId: string | undefined) {
 
 // BDSAT-2 TLE from Space-Track accessed 12/25/2023
 let defaultNoradId = "55098";
-let defaultTleLine1 =
-    "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
-  defaultTleLine2 =
-    "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
-
-// GS info
-let observerGd = {
-  longitude: satellite.degreesToRadians(-79.9201),
-  latitude: satellite.degreesToRadians(43.2585),
-  height: 0.37,
-};
-
-// Fetch TLE data given a NORAD_ID using spacetrack
-async function getTLE(noradId: string) {
-  const result = await spacetrack.get({
-    type: "tle_latest",
-    query: [
-      { field: "NORAD_CAT_ID", condition: noradId },
-      { field: "ORDINAL", condition: "1" },
-    ],
-    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
-  });
-
-  if (!result[0].tle) {
-    console.error("TLE not set properly");
-  }
-
-  return [
-    result[0].tle[1]?.toString() || defaultTleLine1,
-    result[0].tle[2]?.toString() || defaultTleLine2,
-  ];
-}
 
 // Set TLE data for a NORAD_ID in global variable
 async function setTLE(noradId: string) {
   const result = await getTLE(noradId);
   setTleLines(noradId, result[0], result[1]);
-}
-
-function isSunlit(date: Date, lon: number, lat: number, height: number) {
-  if (isNaN(date.getTime())) {
-    throw new Error("Incorrect Date definition");
-  }
-  if (height > 2000) {
-    throw new Error("Height must be in km");
-  }
-
-  const heightMeters = height * 1000; // Height from satellite.js are in km
-  const sunTimes = SunCalc.getTimes(date, lat, lon, heightMeters);
-
-  // Get time between sunset start and golden hour for best accuracy
-  let sunlightEnd = new Date(
-    (sunTimes.sunsetStart.getTime() + sunTimes.goldenHour.getTime()) / 2
-  );
-  if (date > sunTimes.dawn && date < sunlightEnd) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 router.get("/getSatelliteInfo", (req: any, res: any) => {

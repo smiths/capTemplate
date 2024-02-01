@@ -1,15 +1,79 @@
+import * as dotenv from "dotenv";
 import globals from "../globals/globals";
 import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
 import SatelliteModel from "../models/satellite";
 import Schedule from "../models/schedule";
 import { ScheduleStatus } from "../types/schedule";
+
+dotenv.config({ path: `.env.local`, override: true });
+
 const satellite = require("satellite.js");
+const SunCalc = require("suncalc");
+let spacetrack = require("spacetrack");
+
+spacetrack.login({
+  username: process.env.SPACE_TRACK_USERNAME,
+  password: process.env.SPACE_TRACK_PASSWORD,
+});
+
+let defaultTleLine1 =
+    "1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991",
+  defaultTleLine2 =
+    "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
 
 // GS info
 let observerGd = {
   longitude: satellite.degreesToRadians(-79.9201),
   latitude: satellite.degreesToRadians(43.2585),
   height: 0.37,
+};
+
+// Fetch TLE data given a NORAD_ID using spacetrack
+export const getTLE = async (noradId: string) => {
+  const result = await spacetrack.get({
+    type: "tle_latest",
+    query: [
+      { field: "NORAD_CAT_ID", condition: noradId },
+      { field: "ORDINAL", condition: "1" },
+    ],
+    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
+  });
+
+  if (!result[0].tle) {
+    console.error("TLE not set properly");
+  }
+
+  return [
+    result[0].tle[1]?.toString() || defaultTleLine1,
+    result[0].tle[2]?.toString() || defaultTleLine2,
+  ];
+};
+
+export const isSunlit = (
+  date: Date,
+  lon: number,
+  lat: number,
+  height: number
+) => {
+  if (isNaN(date.getTime())) {
+    throw new Error("Incorrect Date definition");
+  }
+  if (height > 2000) {
+    throw new Error("Height must be in km");
+  }
+
+  const heightMeters = height * 1000; // Height from satellite.js are in km
+  const sunTimes = SunCalc.getTimes(date, lat, lon, heightMeters);
+
+  // Get time between sunset start and golden hour for best accuracy
+  let sunlightEnd = new Date(
+    (sunTimes.sunsetStart.getTime() + sunTimes.goldenHour.getTime()) / 2
+  );
+  if (date > sunTimes.dawn && date < sunlightEnd) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const getSatelliteInfo = (
