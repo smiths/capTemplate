@@ -1,5 +1,9 @@
 import React from 'react';
 import '../components/Scheduler.css'; // Import the CSS styles
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import EditSchedulePage from "@/components/EditSchedules";
+
 
 interface Command {
   name: string;
@@ -54,6 +58,12 @@ const schedules: Schedule[] = [
 ];
 
 const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+
+  // let navigate = useNavigate();
+
+  // const handleEditClick = () => {
+  //   navigate('/edit-schedules/index.tsx');
+  // };
   return (
     <div className="schedule">
       <div className="schedule-header">
@@ -66,11 +76,17 @@ const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
           <li key={index}>{command.name}</li>
         ))}
       </ul>
-      <button className="save-button">Edit</button>
+      {/* <button className="edit-button">Edit</button> */}
+     <button className="edit-button" onClick={handleEditClick}>Edit</button> 
+      
+
 
     </div>
   );
 };
+
+// const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+  
 
 const SchedulesPage: React.FC = () => {
   return (
@@ -100,7 +116,11 @@ const SchedulesPage: React.FC = () => {
         {/* button for edit schedules */}
       </div>
       <button className="add-schedule">+</button>
+      
+      
+
     </div>
+    
    
   );
 };
