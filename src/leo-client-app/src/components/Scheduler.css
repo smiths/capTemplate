@@ -66,13 +66,16 @@
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space out the items */
 }
-.save-button{
+.edit-button{
 
   color: white;
   font-size: 15px;
   font: Calibri; 
   border-radius: 20px; /* Circular button */
-  padding: 10px 20px; /* Some padding around the content */
-  size: 40px;
+  padding: 5px 15px; /* Some padding around the content */
+  border: none;
+  background-color: rgb(0, 0, 0);
+  cursor: pointer;
+
 
 }
