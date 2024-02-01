@@ -30,7 +30,17 @@ type DeleteUserProp = {
         satelliteUserId: string;
         adminId: string;
     }
+};
+
+type UpdateUserProp = {
+    query: {
+        satelliteUserId: string;
+        adminId: string;
+        satelliteId: string;
+        validCommands: string[];
+    }
 }
+
 
 const isAdminCheck = async (userId: string) => {
     const userRecord = await User.findById(userId);
@@ -116,7 +126,41 @@ async (req: GetCommandsBySatelliteAndUserProp, res: any) =>{
     
 });
 
-router.update("/updateByUser");
+router.patch("/updateByUser",
+async (req: UpdateUserProp, res: any) => {
+  const { satelliteUserId, validCommands, adminId, satelliteId } = req.query;
+
+  // Validation
+  if (
+    !mongoose.isValidObjectId(satelliteUserId)
+  ) {
+    return res.status(500).json({ error: "Invalid User" });
+  }
+
+  // Check if user has permission
+  const isAdmin = await isAdminCheck(adminId);
+  if (!isAdmin) {
+    return res.status(500).json({ error: "Invalid Admin" });
+  }
+  
+  const isCommandsValid = await validateCommands(
+    satelliteId,
+    validCommands
+  );
+  if (!isCommandsValid) {
+    return res.status(500).json({ error: "Invalid Commands" });
+  }
+  // Update User record
+  const updatedUserCommands = await SatelliteUser.findByIdAndUpdate(
+    satelliteUserId,
+    {
+      validCommands: validCommands,
+    },
+    { new: true }
+  ).exec();
+
+  return res.json({ message: "Updated user Commands", updatedUserCommands });
+});
 
 router.delete("/deleteByUser",
 async (req: DeleteUserProp, res: any) => {
