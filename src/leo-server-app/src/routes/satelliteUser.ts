@@ -33,12 +33,18 @@ type DeleteUserProp = {
 };
 
 type UpdateUserProp = {
-    query: {
+    body: {
         satelliteUserId: string;
         adminId: string;
         satelliteId: string;
         validCommands: string[];
     }
+}
+
+type GetUsersBySatellite = {
+  query: {
+    satelliteId: string;
+  }
 }
 
 
@@ -63,6 +69,7 @@ async function validateCommands(satelliteId: string, commands: string[]) {
 
 router.post("/createSatelliteUser", async (req: CreateUserProp, res: any) =>{
     const { body } = req;
+    console.log(body.validCommands);
     const isCommandsValid = await validateCommands(
         body.satelliteId,
         body.validCommands
@@ -103,9 +110,9 @@ router.post("/createSatelliteUser", async (req: CreateUserProp, res: any) =>{
 });
 
 router.get("/getUserBySatellite",
-async (satellite: string, res: any) =>{
+async (req: GetUsersBySatellite, res: any) =>{
     const filter = {
-        satelliteId: satellite,
+        satelliteId: req.query.satelliteId,
       };
     const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
 
@@ -128,14 +135,7 @@ async (req: GetCommandsBySatelliteAndUserProp, res: any) =>{
 
 router.patch("/updateByUser",
 async (req: UpdateUserProp, res: any) => {
-  const { satelliteUserId, validCommands, adminId, satelliteId } = req.query;
-
-  // Validation
-  if (
-    !mongoose.isValidObjectId(satelliteUserId)
-  ) {
-    return res.status(500).json({ error: "Invalid User" });
-  }
+  const { satelliteUserId, validCommands, adminId, satelliteId } = req.body;
 
   // Check if user has permission
   const isAdmin = await isAdminCheck(adminId);
@@ -155,6 +155,7 @@ async (req: UpdateUserProp, res: any) => {
     satelliteUserId,
     {
       validCommands: validCommands,
+      adminId: adminId,
     },
     { new: true }
   ).exec();
