@@ -77,7 +77,7 @@ const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
         ))}
       </ul>
       {/* <button className="edit-button">Edit</button> */}
-     <button className="edit-button" onClick={handleEditClick}>Edit</button> 
+     {/* <button className="edit-button" onClick={handleEditClick}>Edit</button>  */}
       
 
 
