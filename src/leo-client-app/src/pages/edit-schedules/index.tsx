@@ -11,7 +11,7 @@ function EditSchedulePage() {
   return (
     <main>
       <Navbar />
-      <EditSchedule_Page />
+      <EditSchedule_Page/>
 
     {/*<Stack spacing={3} alignItems="center" p={2}>
       </Stack>*/}

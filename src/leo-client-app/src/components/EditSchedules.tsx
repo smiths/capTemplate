@@ -1,5 +1,5 @@
 import React from 'react';
-import './EditSchedulePage.css'; // Your stylesheet filename
+// import './EditSchedulePage.css'; // Your stylesheet filename
 
 interface Command {
   id: number;
