@@ -11,6 +11,7 @@ import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
 import { CommandStatus } from "../types/command";
+import { validateUserCommands } from "../utils/schedule.utils";
 
 const router = express.Router();
 router.use(express.json());
@@ -101,6 +102,15 @@ async function validateCommands(satelliteId: string, commands: string[]) {
 
   // Check if commands are valid
   return commands.every((cmd) => satellite?.validCommands.includes(cmd));
+}
+
+async function verifyUserCommands(satelliteId: string, userId: string, commands: string[]) {
+  // Get satellite data
+  // const satellite = await Satellite.findById(satelliteId).exec();
+  const comms = await validateUserCommands(satelliteId, userId)
+
+  // Check if commands are valid
+  return commands.every((cmd) => comms?.includes(cmd));
 }
 
 // ---- API Routes ----
