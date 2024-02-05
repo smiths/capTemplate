@@ -116,7 +116,7 @@ describe("PATCH /updateScheduledCommand", () => {
       command: newCommand,
     });
 
-    expect(res.body.updatedCommand.command).not.toEqual(newCommand);
+    expect(res.body.updatedCommand?.command).not.toEqual(newCommand);
   });
 });
 
