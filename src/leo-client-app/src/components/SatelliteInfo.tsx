@@ -1,6 +1,7 @@
 "use client";
 
-import { Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const fetchDelay = 1000;
@@ -24,7 +25,11 @@ interface SatelliteInfoState {
   rangeSat: number;
 }
 
-const SatelliteInfo: React.FC = () => {
+type Props = {
+  noradId: string;
+};
+
+const SatelliteInfo = ({ noradId }: Props) => {
   const [state, setState] = useState<SatelliteInfoState>({
     positionEci: {
       x: 0,
@@ -43,20 +48,29 @@ const SatelliteInfo: React.FC = () => {
     elevation: -10,
     rangeSat: 0,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fetchData = () => {
-    fetch("http://localhost:3001/satellite/getSatelliteInfo") // TODO: Fix endpoint for when server is hosted
-      .then((response) => response.json())
-      .then((data: SatelliteInfoState) => {
-        setState(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3001/satellite/getSatelliteInfo",
+        {
+          params: { noradId: noradId },
+        }
+      );
+      setState(res.data as SatelliteInfoState);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
-    fetchData(); // Fetch data initially
+    const runFetch = async () => {
+      setIsLoading(true);
+      await fetchData(); // Fetch data initially
+      setIsLoading(false);
+    };
+    void runFetch();
 
     // Update data every 1000ms (1s)
     const dataFetchInterval = setInterval(fetchData, fetchDelay);
@@ -65,7 +79,7 @@ const SatelliteInfo: React.FC = () => {
       // Clear the interval when the component is unmounted to prevent memory leaks
       clearInterval(dataFetchInterval);
     };
-  }, []);
+  }, [noradId]);
 
   const {
     positionEci,
@@ -81,38 +95,52 @@ const SatelliteInfo: React.FC = () => {
   return (
     <Stack alignItems="center" spacing={2}>
       <h2>Satellite Information</h2>
-      <Stack spacing={1}>
-        <div>
-          <strong>Position ECI:</strong>
-          <ul>
-            <li>X: {positionEci.x}</li>
-            <li>Y: {positionEci.y}</li>
-            <li>Z: {positionEci.z}</li>
-          </ul>
-        </div>
-        <br />
-        <div>
-          <strong>Velocity ECI:</strong>
-          <ul>
-            <li>X: {velocityEci.x}</li>
-            <li>Y: {velocityEci.y}</li>
-            <li>Z: {velocityEci.z}</li>
-          </ul>
-        </div>
-        <br />
-        <div>
-          <strong>Other Info:</strong>
-          <ul>
-            <li>Longitude: {longitude}</li>
-            <li>Latitude: {latitude}</li>
-            <li>Height: {height}</li>
-            <br />
-            <li>Azimuth: {azimuth}</li>
-            <li>Elevation: {elevation}</li>
-            <li>rangeSat: {rangeSat}</li>
-          </ul>
-        </div>
-      </Stack>
+      {isLoading && (
+        <Box
+          sx={{
+            width: "100%",
+            minHeight: "200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <CircularProgress />
+        </Box>
+      )}
+      {!isLoading && (
+        <Stack spacing={1}>
+          <div>
+            <strong>Position ECI:</strong>
+            <ul>
+              <li>X: {positionEci.x}</li>
+              <li>Y: {positionEci.y}</li>
+              <li>Z: {positionEci.z}</li>
+            </ul>
+          </div>
+          <br />
+          <div>
+            <strong>Velocity ECI:</strong>
+            <ul>
+              <li>X: {velocityEci.x}</li>
+              <li>Y: {velocityEci.y}</li>
+              <li>Z: {velocityEci.z}</li>
+            </ul>
+          </div>
+          <br />
+          <div>
+            <strong>Other Info:</strong>
+            <ul>
+              <li>Longitude: {longitude}</li>
+              <li>Latitude: {latitude}</li>
+              <li>Height: {height}</li>
+              <br />
+              <li>Azimuth: {azimuth}</li>
+              <li>Elevation: {elevation}</li>
+              <li>rangeSat: {rangeSat}</li>
+            </ul>
+          </div>
+        </Stack>
+      )}
     </Stack>
   );
 };

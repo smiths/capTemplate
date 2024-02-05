@@ -9,8 +9,9 @@ interface DataPoint {
 }
 
 interface DetailedDisplayProps {
-  startTime?: string | string[];
-  endTime?: string | string[];
+  startTime?: string;
+  endTime?: string;
+  noradId: string;
 }
 
 function formatTime(time: string): string {
@@ -28,6 +29,7 @@ function formatTime(time: string): string {
 }
 
 const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
+  noradId,
   startTime,
   endTime,
 }) => {
@@ -42,7 +44,9 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get start Azimuth
     fetch(
-      "http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(startTime)}"
+      `http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(
+        startTime ?? ""
+      )}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -59,7 +63,9 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get end Azimuth
     fetch(
-      "http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(endTime)}"
+      `http://localhost:3001/satellite/getSatelliteInfo?noradId=${noradId}&searchDate=${encodeURIComponent(
+        endTime ?? ""
+      )}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -76,7 +82,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get max elevation
     fetch(
-      `http://localhost:3001/satellite/getMaxElevation?START_DATE=${startTime}&END_DATE=${endTime}`
+      `http://localhost:3001/satellite/getMaxElevation?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -93,7 +99,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     //Plot the polar plot
     fetch(
-      `http://localhost:3001/satellite/getPolarPlotData?START_DATE=${startTime}&END_DATE=${endTime}`
+      `http://localhost:3001/satellite/getPolarPlotData?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -184,42 +190,63 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
         });
 
         // Draw all data points in white
-        svg.selectAll(".data-point")
+        svg
+          .selectAll(".data-point")
           .data(data)
           .enter()
           .append("circle")
           .attr("class", "data-point")
-          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
-          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
+          .attr(
+            "cx",
+            (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth))
+          )
+          .attr(
+            "cy",
+            (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth))
+          )
           .attr("r", 5)
           .style("fill", "white");
 
         // Draw the first data point in green
-        svg.selectAll(".entry-point")
+        svg
+          .selectAll(".entry-point")
           .data([data[0]])
           .enter()
           .append("circle")
           .attr("class", "entry-point")
-          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
-          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
+          .attr(
+            "cx",
+            (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth))
+          )
+          .attr(
+            "cy",
+            (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth))
+          )
           .attr("r", 5)
           .style("fill", "lime");
 
         // Draw the last data point in red
-        svg.selectAll(".exit-point")
+        svg
+          .selectAll(".exit-point")
           .data([data[data.length - 1]])
           .enter()
           .append("circle")
           .attr("class", "exit-point")
-          .attr("cx", (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth)))
-          .attr("cy", (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth)))
+          .attr(
+            "cx",
+            (d: any) => rScale(d.elevation) * Math.cos(toRadians(d.azimuth))
+          )
+          .attr(
+            "cy",
+            (d: any) => rScale(d.elevation) * Math.sin(toRadians(d.azimuth))
+          )
           .attr("r", 5)
           .style("fill", "red");
       })
       .catch((error) => {
         console.error("Error fetching polar plot data:", error);
       });
-  }, [startTime, endTime]);
+  }, [noradId, startTime, endTime]);
 
   return (
     <div>
