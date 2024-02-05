@@ -115,7 +115,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
 
   try {
     const nextPasses = getNextPasses(noradId);
-    res.json({ nextPasses });
+    res.status(200).json({ nextPasses });
   } catch (error) {
     console.error("Error in getNextPasses:", error);
     res.status(500).json({ error: "Internal Server Error" });
