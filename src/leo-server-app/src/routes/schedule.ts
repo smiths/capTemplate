@@ -104,6 +104,12 @@ async function validateCommands(satelliteId: string, commands: string[]) {
   return commands.every((cmd) => satellite?.validCommands.includes(cmd));
 }
 
+const isAdminCheck = async (userId: string) => {
+  const userRecord = await User.findById(userId);
+  console.log(userRecord?.role);
+  return userRecord?.role === UserRole.ADMIN;
+};
+
 async function verifyUserCommands(satelliteId: string, userId: string, commands: string[]) {
   // Get satellite data
   // const satellite = await Satellite.findById(satelliteId).exec();
@@ -153,22 +159,16 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   res.status(201).json(resObj);
 });
 
-const isAdminCheck = async (userId: string) => {
-  const userRecord = await User.findById(userId);
-  console.log(userRecord?.role);
-  return userRecord?.role === UserRole.ADMIN;
-};
+// const checkSatellitePermissionList = async (
+//   satelliteId: string,
+//   command: string
+// ) => {
+//   // Fetch satellite
+//   const satellite = await Satellite.findById(satelliteId);
 
-const checkSatellitePermissionList = async (
-  satelliteId: string,
-  command: string
-) => {
-  // Fetch satellite
-  const satellite = await Satellite.findById(satelliteId);
-
-  const isValid = satellite?.validCommands.includes(command);
-  return isValid;
-};
+//   const isValid = satellite?.validCommands.includes(command);
+//   return isValid;
+// };
 
 router.post(
   "/createScheduledCommand",
@@ -176,22 +176,17 @@ router.post(
     const { query } = req;
 
     // Validation
-    // if (
-    //   !mongoose.isValidObjectId(query.userId)
-    // ) {
-    //   return res.status(500).json({ error: "Invalid user ID" });
-    // }
+    if (
+      !mongoose.isValidObjectId(query.userId)
+    ) {
+      return res.status(500).json({ error: "Invalid user ID" });
+    }
 
-    // const userRecord = await User.findById(query.userId);
+    const userRecord = await User.findById(query.userId);
 
-    // if (!userRecord) {
-    //   return res.status(500).json({ error: "User does not exist" });
-    // }
-
-    // // Check if user has permission   ------- TODO - change when permission list functionality is added.
-    // if (userRecord.role !== UserRole.ADMIN) {
-    //   return res.status(500).json({ error: "Invalid Credentials" });
-    // }
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
 
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
@@ -242,26 +237,18 @@ router.patch(
       return res.status(500).json({ error: "User does not exist" });
     }
 
-    // Check if user has permission
-    if (userRecord.role !== UserRole.ADMIN) {
-      const commandRecord = await Command.findById(commandId);
-      if (commandRecord?.userId?.toString() !== userId) {
-        return res.status(500).json({ error: "Invalid Credentials" });
-      }
-    }
-
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
-    const isCommandInSatelliteCriteria = await checkSatellitePermissionList(
+    const isCommandInSatelliteCriteria = await verifyUserCommands(
       satelliteId,
-      command
+      userId,
+      [command]
     );
+    const adm = await isAdminCheck(userId);
 
-    if (!isCommandInSatelliteCriteria) {
-      return res.status(500).json({ error: "Invalid command sequence" });
+    if (!isCommandInSatelliteCriteria && !adm) {
+      return res.status(500).json({ error: "Invalid command sequence or user permissions" });
     }
-
-    // TODO:  Check if command exists in the user's permission list for satellite unless they are admin
 
     // Update command record
     const updatedCommand = await Command.findByIdAndUpdate(
@@ -388,16 +375,19 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   const { body } = req;
 
   // validate commands
-  const isCommandsValid = await validateCommands(
+  const isCommandsValid = await verifyUserCommands(
     body.satelliteId,
+    body.userId,
     body.commands
   );
 
+  const adm = await isAdminCheck(body.userId)
+
   let resObj = {};
 
-  if (!isCommandsValid) {
+  if (!isCommandsValid && !adm) {
     resObj = {
-      message: "Invalid Command Sequence",
+      message: "Invalid Command Sequence or user permissions",
       log: undefined,
     };
   } else {
