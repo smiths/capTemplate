@@ -11,12 +11,12 @@ export default function Index() {
     {/* this router component will connect the edit schedules page with the all schedules page
       -- had to be declared in the global index.tsx page for it work; testing it out; didnt work
   */}
-  <Router>
-    <Routes>
-      <Route path="/" element={<SchedulesPage />} />
-      <Route path="/edit-schedule" element={<EditSchedulePage />} />
-    </Routes>
-  </Router>
+  // <Router>
+  //   <Routes>
+  //     <Route path="/" element={<SchedulesPage />} />
+  //     <Route path="/edit-schedule" element={<EditSchedulePage />} />
+  //   </Routes>
+  // </Router>
   // let navigate = useNavigate();
 
   // const handleEditClick = () => {
