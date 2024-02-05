@@ -52,7 +52,6 @@ async function setTLE(noradId: string) {
 
 router.get("/getSatelliteInfo", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  console.log(noradId);
   try {
     const [tleLine1, tleLine2] = await getTleLines(noradId);
     const satelliteInfo = getSatelliteInfo(new Date(), tleLine1, tleLine2);
