@@ -115,7 +115,7 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   const { body } = req;
 
   // validate commands
-  const isCommandsValid = await validateCommands(
+  const isCommandsValid = await verifyUserCommands(
     body.satelliteId,
     body.userId,
     body.commands
@@ -169,7 +169,7 @@ router.post(
 
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
-    const isCommandInSatelliteCriteria = await validateCommands(
+    const isCommandInSatelliteCriteria = await verifyUserCommands(
       query.satelliteId,
       query.userId,
       [query.command]
@@ -218,7 +218,7 @@ router.patch(
 
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
-    const isCommandInSatelliteCriteria = await validateCommands(
+    const isCommandInSatelliteCriteria = await verifyUserCommands(
       satelliteId,
       userId,
       [command]
@@ -354,7 +354,7 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   const { body } = req;
 
   // validate commands
-  const isCommandsValid = await validateCommands(
+  const isCommandsValid = await verifyUserCommands(
     body.satelliteId,
     body.userId,
     body.commands

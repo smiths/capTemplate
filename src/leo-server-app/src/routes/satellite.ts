@@ -118,7 +118,7 @@ router.get("/getNextPasses", (req: any, res: any) => {
     res.json({ nextPasses });
   } catch (error) {
     console.error("Error in getNextPasses:", error);
-    // res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
