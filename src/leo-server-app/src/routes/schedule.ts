@@ -96,7 +96,7 @@ async function sendRequest(
   return log;
 }
 
-async function validateCommands(satelliteId: string, commands: string[]) {
+async function validateCommands(satelliteId: string, userId: string, commands: string[]) {
   // Get satellite data
   const satellite = await Satellite.findById(satelliteId).exec();
 
@@ -117,7 +117,7 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   // validate commands
   const isCommandsValid = await validateCommands(
     body.satelliteId,
-    // body.userId,
+    body.userId,
     body.commands
   );
 
@@ -125,7 +125,7 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
 
   const adm = await isAdminCheck(body.userId);
     console.log(isCommandsValid, adm)
-  if (!isCommandsValid || !adm ) {
+  if (!isCommandsValid && !adm ) {
     resObj = {
       message: "Invalid Command Sequence or user permissions",
       schedule: undefined,
@@ -169,7 +169,7 @@ router.post(
 
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
-    const isCommandInSatelliteCriteria = await verifyUserCommands(
+    const isCommandInSatelliteCriteria = await validateCommands(
       query.satelliteId,
       query.userId,
       [query.command]
@@ -218,7 +218,7 @@ router.patch(
 
     // Add validation for invalid command sequence based on satellite and user permissions
     // Check if command exists in the satellite's list of command sequences
-    const isCommandInSatelliteCriteria = await verifyUserCommands(
+    const isCommandInSatelliteCriteria = await validateCommands(
       satelliteId,
       userId,
       [command]
@@ -354,7 +354,7 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   const { body } = req;
 
   // validate commands
-  const isCommandsValid = await verifyUserCommands(
+  const isCommandsValid = await validateCommands(
     body.satelliteId,
     body.userId,
     body.commands
