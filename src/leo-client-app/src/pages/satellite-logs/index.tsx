@@ -10,6 +10,7 @@ function LogsPage() {
 
   return (
     <main>
+      
       <Navbar />
       <Stack sx={{ width: "100%" }} alignItems="center" p={2}>
         <Logs />
