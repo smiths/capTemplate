@@ -22,28 +22,39 @@ spacetrack.login({
   password: process.env.SPACE_TRACK_PASSWORD,
 });
 
+// BDSAT-2 TLE from Space-Track accessed 12/25/2023
+let defaultNoradId = "55098";
+
 function setTleLines(noradId: string, line1: string, line2: string) {
   globals.tleLines[noradId] = [line1, line2];
+}
+
+async function getTleLines(noradId: string) {
+  let tleLines = globals.tleLines[noradId];
+
+  if (!tleLines) {
+    tleLines = await getTLE(noradId);
+  }
+  globals.tleLines[noradId] = tleLines;
+  return tleLines;
 }
 
 function getNoradId(noradId: string | undefined) {
   return noradId ?? defaultNoradId;
 }
 
-// BDSAT-2 TLE from Space-Track accessed 12/25/2023
-let defaultNoradId = "55098";
-
 // Set TLE data for a NORAD_ID in global variable
 async function setTLE(noradId: string) {
   const result = await getTLE(noradId);
+  defaultNoradId = noradId;
   setTleLines(noradId, result[0], result[1]);
 }
 
-router.get("/getSatelliteInfo", (req: any, res: any) => {
+router.get("/getSatelliteInfo", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-
+  console.log(noradId);
   try {
-    const [tleLine1, tleLine2] = globals.tleLines[noradId];
+    const [tleLine1, tleLine2] = await getTleLines(noradId);
     const satelliteInfo = getSatelliteInfo(new Date(), tleLine1, tleLine2);
     res.json(satelliteInfo);
   } catch (error) {
@@ -52,9 +63,9 @@ router.get("/getSatelliteInfo", (req: any, res: any) => {
   }
 });
 
-router.get("/getPolarPlotData", (req: any, res: any) => {
+router.get("/getPolarPlotData", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   const startDate = new Date(req.query.START_DATE);
   const endDate = new Date(req.query.END_DATE);
@@ -78,9 +89,9 @@ router.get("/getPolarPlotData", (req: any, res: any) => {
   res.json(data);
 });
 
-router.get("/getMaxElevation", (req: any, res: any) => {
+router.get("/getMaxElevation", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   let startDate = new Date(req.query.START_DATE);
   let endDate = new Date(req.query.END_DATE);
@@ -109,9 +120,9 @@ router.get("/getMaxElevation", (req: any, res: any) => {
   res.json({ maxElevation: maxElevation });
 });
 
-router.get("/getNextPasses", (req: any, res: any) => {
+router.get("/getNextPasses", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   try {
     const nextPasses = getNextPasses(noradId);
@@ -122,9 +133,9 @@ router.get("/getNextPasses", (req: any, res: any) => {
   }
 });
 
-router.get("/getSolarIlluminationCycle", (req: any, res: any) => {
+router.get("/getSolarIlluminationCycle", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   try {
     // Time window in milliseconds (1 minute)
