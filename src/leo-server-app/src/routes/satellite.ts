@@ -214,14 +214,14 @@ router.post("/changeTLE", async (req: any, res: any) => {
   const { body } = req;
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.status(400).json({ error: "Bad request" });
-  }
+  } else{
   try {
     await setTLE(body.noradID as string);
     res.status(200).json({ message: "TLE Changed to" + " " + body.noradID });
   } catch (error) {
     console.error("Error in changeTLE:", error);
     res.status(500).json({ message: "Internal Server Error" });
-  }
+  }}
 });
 
 router.post("/addSatelliteTarget", async (req: any, res: any) => {
