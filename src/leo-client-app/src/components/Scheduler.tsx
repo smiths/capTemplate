@@ -3,6 +3,7 @@ import '../components/Scheduler.css'; // Import the CSS styles
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import EditSchedulePage from "@/components/EditSchedules";
+import { useRouter } from "next/router";
 
 
 interface Command {
@@ -58,6 +59,7 @@ const schedules: Schedule[] = [
 ];
 
 const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+const { pathname, replace } = useRouter();
 
   // let navigate = useNavigate();
 
@@ -76,7 +78,7 @@ const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
           <li key={index}>{command.name}</li>
         ))}
       </ul>
-      {/* <button className="edit-button">Edit</button> */}
+      <button className="edit-button" onClick={() => {replace("/edit-schedules")}}>Edit</button>
      {/* <button className="edit-button" onClick={handleEditClick}>Edit</button>  */}
       
 
