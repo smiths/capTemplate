@@ -109,6 +109,9 @@ export const validateUserCommands = async (
     userId: userId,
   };
 const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
+console.log(record)
+
+if (record == undefined || record.length < 1){return [];}
 
 return record[0].validCommands;
 };
