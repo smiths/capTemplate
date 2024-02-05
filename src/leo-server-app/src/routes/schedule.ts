@@ -110,14 +110,6 @@ const isAdminCheck = async (userId: string) => {
   return userRecord?.role === UserRole.ADMIN;
 };
 
-// async function verifyUserCommands(satelliteId: string, userId: string, commands: string[]) {
-//   // Get satellite data
-//   const comms = await validateUserCommands(satelliteId, userId)
-
-//   // Check if commands are valid
-//   return commands.every((cmd) => comms?.includes(cmd));
-// }
-
 // ---- API Routes ----
 router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   const { body } = req;
@@ -156,17 +148,6 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
 
   res.status(201).json(resObj);
 });
-
-// const checkSatellitePermissionList = async (
-//   satelliteId: string,
-//   command: string
-// ) => {
-//   // Fetch satellite
-//   const satellite = await Satellite.findById(satelliteId);
-
-//   const isValid = satellite?.validCommands.includes(command);
-//   return isValid;
-// };
 
 router.post(
   "/createScheduledCommand",
