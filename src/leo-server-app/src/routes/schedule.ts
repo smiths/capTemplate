@@ -115,9 +115,9 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   const { body } = req;
 
   // validate commands
-  const isCommandsValid = await verifyUserCommands(
+  const isCommandsValid = await validateCommands(
     body.satelliteId,
-    body.userId,
+    // body.userId,
     body.commands
   );
 
@@ -125,7 +125,7 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
 
   const adm = await isAdminCheck(body.userId);
     console.log(isCommandsValid, adm)
-  if (!isCommandsValid && !adm ) {
+  if (!isCommandsValid || !adm ) {
     resObj = {
       message: "Invalid Command Sequence or user permissions",
       schedule: undefined,
