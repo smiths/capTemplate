@@ -11,7 +11,7 @@ import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
 import { CommandStatus } from "../types/command";
-import { validateUserCommands } from "../utils/schedule.utils";
+import { verifyUserCommands } from "../utils/schedule.utils";
 
 const router = express.Router();
 router.use(express.json());
@@ -110,15 +110,13 @@ const isAdminCheck = async (userId: string) => {
   return userRecord?.role === UserRole.ADMIN;
 };
 
-async function verifyUserCommands(satelliteId: string, userId: string, commands: string[]) {
-  // Get satellite data
-  // const satellite = await Satellite.findById(satelliteId).exec();
-  const comms = await validateUserCommands(satelliteId, userId)
-  console.log(comms)
+// async function verifyUserCommands(satelliteId: string, userId: string, commands: string[]) {
+//   // Get satellite data
+//   const comms = await validateUserCommands(satelliteId, userId)
 
-  // Check if commands are valid
-  return commands.every((cmd) => comms?.includes(cmd));
-}
+//   // Check if commands are valid
+//   return commands.every((cmd) => comms?.includes(cmd));
+// }
 
 // ---- API Routes ----
 router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {

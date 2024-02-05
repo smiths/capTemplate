@@ -100,6 +100,14 @@ export const rescheduleLeftoverCommands = async (
   return nextSchedule;
 };
 
+export const verifyUserCommands = async (satelliteId: string, userId: string, commands: string[]) => {
+  // Get satellite data
+  const comms = await validateUserCommands(satelliteId, userId)
+
+  // Check if commands are valid
+  return commands.every((cmd) => comms?.includes(cmd));
+}
+
 export const validateUserCommands = async (
   satelliteId: string,
   userId: string,
