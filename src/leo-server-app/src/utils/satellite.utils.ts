@@ -40,7 +40,7 @@ export const getTLE = async (noradId: string) => {
   });
 
   if (result[0] == undefined || !result[0].tle) {
-    console.error("TLE not set properly");
+    // console.error("TLE not set properly");
     return [];
   }
 
