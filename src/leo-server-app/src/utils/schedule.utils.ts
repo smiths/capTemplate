@@ -7,6 +7,7 @@ import { getNextPasses } from "../utils/satellite.utils";
 import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
 import { ScheduleEventEmitter } from "../event/schedule.event";
 import { ScheduleStatus } from "../types/schedule";
+import SatelliteUser from "../models/satelliteUser";
 
 // Executes command sequences for the specified schedule
 export const executeScheduledCommands = async (
@@ -97,6 +98,30 @@ export const rescheduleLeftoverCommands = async (
   ).exec();
 
   return nextSchedule;
+};
+
+export const verifyUserCommands = async (satelliteId: string, userId: string, commands: string[]) => {
+  // Get satellite data
+  const comms = await validateUserCommands(satelliteId, userId)
+
+  // Check if commands are valid
+  return commands.every((cmd) => comms?.includes(cmd));
+}
+
+export const validateUserCommands = async (
+  satelliteId: string,
+  userId: string,
+) => {
+  const filter = {
+    satelliteId: satelliteId,
+    userId: userId,
+  };
+const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
+console.log(record)
+
+if (record == undefined || record.length < 1){return [];}
+
+return record[0].validCommands;
 };
 
 // Fetches and records a satellite's overpass schedules for the next 7 days
