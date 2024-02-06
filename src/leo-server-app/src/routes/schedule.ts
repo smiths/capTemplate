@@ -125,7 +125,6 @@ async function validateCommands(
 
 const isAdminCheck = async (userId: string) => {
   const userRecord = await User.findById(userId);
-  console.log(userRecord?.role);
   return userRecord?.role === UserRole.ADMIN;
 };
 
