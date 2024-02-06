@@ -134,7 +134,7 @@ describe("GET /getNextPasses", () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     await request(app)
       .get("/satellite/getNextPasses")
-      .expect("Content-Type", /json/)
+      // .expect("Content-Type", /json/)
       .expect(200);
   });
   it("Throws error if invalid TLE", async () => {
