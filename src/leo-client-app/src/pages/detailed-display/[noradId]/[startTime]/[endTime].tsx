@@ -8,15 +8,16 @@ import Navbar from "@/components/navbar/Navbar";
 
 function DetailedSatelliteInfoPage() {
   const router = useRouter();
-  const { startTime, endTime } = router.query;
+  const { noradId, startTime, endTime } = router.query;
 
   return (
     <main>
       <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
         <DetailedDisplay
-          startTime={startTime as string}
-          endTime={endTime as string}
+          noradId={noradId?.toString() ?? ""}
+          startTime={startTime?.toString() ?? ""}
+          endTime={endTime?.toString() ?? ""}
         />
       </Stack>
     </main>
