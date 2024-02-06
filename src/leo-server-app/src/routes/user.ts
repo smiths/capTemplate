@@ -39,9 +39,9 @@ router.patch("/updateOperatorRole/:userId", async (req: any, res: any) => {
 });
 
 router.get("/getUserSatellites", async (req: any, res: any) => {
-  const { query } = req;
+  const { body } = req;
 
-  const satellitesOfInterest = (await User.findById(query.userId))?.satellites;
+  const satellitesOfInterest = (await User.findById(body.userId))?.satellites;
   res.status(201).json({ message: "Fetched satellites of interest", satellitesOfInterest });
 });
 
