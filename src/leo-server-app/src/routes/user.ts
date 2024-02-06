@@ -38,4 +38,21 @@ router.patch("/updateOperatorRole/:userId", async (req: any, res: any) => {
   res.status(201).json({ message: "Fetched operators", operator });
 });
 
+router.get("/getUserSatellites", async (req: any, res: any) => {
+  const { query } = req;
+
+  const satellitesOfInterest = (await User.findById(query.userId))?.satellites;
+  res.status(201).json({ message: "Fetched satellites of interest", satellitesOfInterest });
+});
+
+router.patch("/updateUserSatellites", async (req: any, res: any) => {
+  const { body } = req;
+
+  const updateUserSatellites = await User.findByIdAndUpdate(body.userId, {
+    satellites: body.satellites,
+  }).exec();
+
+  res.status(201).json({ message: "Updated User's satellites of interest", updateUserSatellites });
+});
+
 module.exports = router;
