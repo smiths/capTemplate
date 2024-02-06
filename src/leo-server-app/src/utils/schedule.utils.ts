@@ -161,3 +161,13 @@ export const addSchedulesForNext7Days = async (
 
   return createdSchedules;
 };
+
+export const hasSchedulePassed = async (scheduleId: string) => {
+  const scheduleRecord = await Schedule.findById(scheduleId);
+
+  const endTime = scheduleRecord?.endDate?.getTime();
+  if (endTime && endTime < Date.now()) {
+    return true;
+  }
+  return false;
+};
