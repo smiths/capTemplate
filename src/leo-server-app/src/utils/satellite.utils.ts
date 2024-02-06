@@ -39,7 +39,11 @@ export const getTLE = async (noradId: string) => {
     predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
   });
 
-  if (result[0] == undefined || !result[0].tle) {
+  if (!result.length) {
+    return [defaultTleLine1, defaultTleLine2];
+  }
+
+  if (!result[0].tle) {
     console.error("TLE not set properly");
   }
 

@@ -4,29 +4,21 @@ import { Stack, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
 
-const SatelliteTLE: React.FC = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [submittedValue, setSubmittedValue] = useState("");
+type Props = {
+  noradId: string;
+  setNoradId: any;
+};
+
+const SatelliteTLE = ({ noradId, setNoradId }: Props) => {
+  const [inputValue, setInputValue] = useState(noradId);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/satellite/changeTLE",
-        {
-          noradID: inputValue,
-        }
-      );
-    } catch (error) {
-      console.error("Error submitting TLE:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    setNoradId(inputValue);
   };
 
   return (
@@ -43,11 +35,9 @@ const SatelliteTLE: React.FC = () => {
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               Submit
             </Button>
-            {submittedValue && <div>Submitted Value: {submittedValue}</div>}
           </div>
         </Stack>
       </Stack>
-      {isLoading && <p>loading new TLE</p>}
     </div>
   );
 };
