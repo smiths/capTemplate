@@ -11,6 +11,8 @@ import { UserRole } from "../types/user";
 import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
 import { CommandStatus } from "../types/command";
+import { cancelScheduleJob, executeScheduleJob } from "../jobs/schedule.job";
+import { hasSchedulePassed } from "../utils/schedule.utils";
 
 const router = express.Router();
 router.use(express.json());
@@ -71,6 +73,20 @@ type DeleteScheduleProp = {
   query: {
     commandId: string;
     userId: string;
+  };
+};
+
+type PostExecuteScheduleProp = {
+  query: {
+    satelliteId: string;
+    scheduleId: string;
+  };
+};
+
+type CancelScheduleProp = {
+  query: {
+    satelliteId: string;
+    scheduleId: string;
   };
 };
 
@@ -162,9 +178,7 @@ router.post(
     const { query } = req;
 
     // Validation
-    if (
-      !mongoose.isValidObjectId(query.userId)
-    ) {
+    if (!mongoose.isValidObjectId(query.userId)) {
       return res.status(500).json({ error: "Invalid user ID" });
     }
 
@@ -199,14 +213,13 @@ router.post(
       command: query.command,
       scheduleId: query.scheduleId,
       status: CommandStatus.QUEUED,
-      delay: 0
-    }
+      delay: 0,
+    };
     const createCommand = await Command.create(newCommand);
 
     return res.json({ message: "Created command", createCommand });
   }
 );
-
 
 router.patch(
   "/updateScheduledCommand",
@@ -324,11 +337,7 @@ router.get(
 router.get(
   "/getScheduleBySatelliteAndTime",
   async (req: GetScheduleBySatelliteAndTimeProp, res: any) => {
-    const {
-      satelliteId,
-      status = ScheduleStatus.FUTURE,
-      time,
-    } = req.query;
+    const { satelliteId, status = ScheduleStatus.FUTURE, time } = req.query;
 
     const convertedTime = new Date(time);
 
@@ -336,15 +345,18 @@ router.get(
       satelliteId: satelliteId,
       status: status,
       $and: [
-        {startDate: { '$lte': convertedTime }} ,
-        { endDate: { '$gte': convertedTime } },
+        { startDate: { $lte: convertedTime } },
+        { endDate: { $gte: convertedTime } },
       ],
     };
 
     const schedules = await Schedule.find(filter)
       .sort({ createdAt: "desc" })
       .exec();
-    res.status(201).json({ message: "Fetched schedules by satelliteId and Time", schedules });
+    res.status(201).json({
+      message: "Fetched schedules by satelliteId and Time",
+      schedules,
+    });
   }
 );
 
@@ -407,6 +419,51 @@ router.post("/sendLiveRequest", async (req: any, res: any) => {
   }
 
   res.status(201).json(resObj);
+});
+
+// Execute a schedule
+router.post(
+  "/executeSchedule",
+  async (req: PostExecuteScheduleProp, res: any) => {
+    const { satelliteId, scheduleId } = req.query;
+
+    // Check if schedule is in the past
+    const isScheduleInPast = await hasSchedulePassed(scheduleId);
+    if (isScheduleInPast) {
+      return res.status(500).json({ error: "Schedule has already passed" });
+    }
+
+    const jobName = executeScheduleJob(satelliteId, scheduleId);
+
+    if (!jobName) {
+      return res
+        .status(500)
+        .json({ error: "Schedule was not able to be executed" });
+    }
+
+    res.status(201).json({ message: "Canceled schedule" });
+  }
+);
+
+// Cancel a schedule during execution
+router.post("/cancelSchedule", async (req: CancelScheduleProp, res: any) => {
+  const { satelliteId, scheduleId } = req.query;
+
+  // Check if schedule is in the past
+  const isScheduleInPast = await hasSchedulePassed(scheduleId);
+  if (isScheduleInPast) {
+    return res.status(500).json({ error: "Schedule has already passed" });
+  }
+
+  const isJobCanceled = cancelScheduleJob(satelliteId, scheduleId);
+
+  if (!isJobCanceled) {
+    return res
+      .status(500)
+      .json({ error: "Schedule was not able to be canceled" });
+  }
+
+  res.status(201).json({ message: "Canceled schedule" });
 });
 
 module.exports = router;
