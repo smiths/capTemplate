@@ -64,64 +64,75 @@ router.get("/getSatelliteInfo", async (req: any, res: any) => {
 
 router.get("/getPolarPlotData", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
-  const startDate = new Date(req.query.START_DATE);
-  const endDate = new Date(req.query.END_DATE);
+  try {
+    const [tleLine1, tleLine2] = await getTleLines(noradId);
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(500).send("Invalid start or end date");
+    const startDate = new Date(req.query.START_DATE);
+    const endDate = new Date(req.query.END_DATE);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(500).send("Invalid start or end date");
+    }
+
+    let current = startDate;
+    const tenSecond = 10000; // Incrementing by 10 seconds
+    let data = [];
+
+    while (current <= endDate) {
+      const info = getSatelliteInfo(current, tleLine1, tleLine2);
+      data.push({ azimuth: info.azimuth, elevation: info.elevation });
+
+      // Increment current date by ten seconds
+      current = new Date(current.getTime() + tenSecond);
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error("Error in getNextPasses:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-
-  let current = startDate;
-  const tenSecond = 10000; // Incrementing by 10 seconds
-  let data = [];
-
-  while (current <= endDate) {
-    const info = getSatelliteInfo(current, tleLine1, tleLine2);
-    data.push({ azimuth: info.azimuth, elevation: info.elevation });
-
-    // Increment current date by ten seconds
-    current = new Date(current.getTime() + tenSecond);
-  }
-
-  res.json(data);
 });
 
 router.get("/getMaxElevation", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
-  let startDate = new Date(req.query.START_DATE);
-  let endDate = new Date(req.query.END_DATE);
+  try {
+    const [tleLine1, tleLine2] = await getTleLines(noradId);
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(500).send("Invalid start or end date");
-  }
+    let startDate = new Date(req.query.START_DATE);
+    let endDate = new Date(req.query.END_DATE);
 
-  let current = startDate;
-  const oneSecond = 1000; // Incrementing by 1 second
-  let maxElevation = 0; // Initialize max elevation
-
-  while (current <= endDate) {
-    const info = getSatelliteInfo(current, tleLine1, tleLine2);
-
-    // Update max elevation if current elevation is higher
-    if (info.elevation > maxElevation) {
-      maxElevation = info.elevation;
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(500).send("Invalid start or end date");
     }
 
-    // Increment current date by one second
-    current = new Date(current.getTime() + oneSecond);
-  }
+    let current = startDate;
+    const oneSecond = 1000; // Incrementing by 1 second
+    let maxElevation = 0; // Initialize max elevation
 
-  // Return the maximum elevation
-  res.json({ maxElevation: maxElevation });
+    while (current <= endDate) {
+      const info = getSatelliteInfo(current, tleLine1, tleLine2);
+
+      // Update max elevation if current elevation is higher
+      if (info.elevation > maxElevation) {
+        maxElevation = info.elevation;
+      }
+
+      // Increment current date by one second
+      current = new Date(current.getTime() + oneSecond);
+    }
+
+    // Return the maximum elevation
+    res.json({ maxElevation: maxElevation });
+  } catch (error) {
+    console.error("Error in getMaxElevation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.get("/getNextPasses", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   try {
     const nextPasses = getNextPasses(noradId);
@@ -134,9 +145,9 @@ router.get("/getNextPasses", async (req: any, res: any) => {
 
 router.get("/getSolarIlluminationCycle", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
-  const [tleLine1, tleLine2] = await getTleLines(noradId);
 
   try {
+    const [tleLine1, tleLine2] = await getTleLines(noradId);
     // Time window in milliseconds (1 minute)
     const WINDOWMILLIS = 10 * 1000;
     // Minimum duration for illumination cycle in milliseconds (10 minutes)
