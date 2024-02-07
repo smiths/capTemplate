@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from "axios";
+import axios from "axios";
 
 export const BACKEND_URL = "http://localhost:3001";
 
@@ -16,4 +16,54 @@ export const updateOperatorRole = async (userId: string, data: any) => {
     }
   );
   return operator.data;
+};
+
+export const sendCommandSchedule = async (
+  userId: string,
+  scheduleId: string,
+  satelliteId: string,
+  commands: string[]
+) => {
+  const body = {
+    userId,
+    scheduleId,
+    satelliteId,
+    commands,
+  };
+  const res = await axios.post(
+    `${BACKEND_URL}/schedule/createBatchScheduledCommand`,
+    body,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return res.data;
+};
+
+export const removeCommandFromSchedule = async (
+  commandId: string,
+  userId: string
+) => {
+  const res = await axios.delete(
+    `${BACKEND_URL}/schedule/deleteScheduledCommand`,
+    {
+      params: {
+        commandId,
+        userId,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const getCommandsBySchedule = async (scheduleId: string) => {
+  const res = await axios.get(`${BACKEND_URL}/schedule/getCommandsBySchedule`, {
+    params: {
+      scheduleId,
+      limit: 100,
+    },
+  });
+  return res.data;
 };
