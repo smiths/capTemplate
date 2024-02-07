@@ -149,7 +149,7 @@ const Scheduler: React.FC = () => {
           </div>
         </div>
       </div>
-      <ViewScheduleCard scheduleId={scheduleId} />
+      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
     </div>
   );
 };

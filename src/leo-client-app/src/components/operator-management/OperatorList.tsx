@@ -20,8 +20,6 @@ const OperatorList: React.FC = () => {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<any>(null);
 
-  console.log(operators.data);
-
   const handleModalOpen = (userData: any) => {
     setUserToEdit(userData);
     setOpenEditModal(true);

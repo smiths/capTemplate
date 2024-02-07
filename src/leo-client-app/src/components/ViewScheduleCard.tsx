@@ -11,14 +11,17 @@ import {
   TableRow,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 type Props = {
   scheduleId: string;
+  userId: string;
 };
 
-const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
+const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
   const commandsData = useGetCommandsBySchedule(scheduleId);
   const queryClient = useQueryClient();
+  const [error, setError] = useState("");
 
   // Mutation function
   const { mutate } = useMutation({
@@ -29,14 +32,24 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
     },
 
+    onError: () => {
+      setError("Invalid permissions");
+      queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
+    },
+
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
     },
   });
 
-  const removeCommand = async (commandId: string, userId: string) => {
+  const removeCommand = async (commandId: string) => {
+    setError("");
     mutate({ commandId, userId });
   };
+
+  useEffect(() => {
+    setError("");
+  }, [commandsData.data]);
 
   return (
     <div
@@ -47,6 +60,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
         padding: "10px",
       }}>
       <h2>Current Schedule</h2>
+      {error && <h3 style={{ color: "red" }}>{error}</h3>}
       <br></br>
       <TableContainer
         component={Paper}
@@ -113,7 +127,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
                     <Button
                       variant="text"
                       sx={{ color: "red" }}
-                      onClick={() => removeCommand(item._id, item.userId._id)}>
+                      onClick={() => removeCommand(item._id)}>
                       Delete
                     </Button>
                   </TableCell>
