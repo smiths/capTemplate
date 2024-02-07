@@ -34,27 +34,33 @@ type CreateLogProp = {
   };
 };
 
-router.get("/getLogsBySatellite", async (req: GetLogBySatelliteProp, res: any) => {
-  const { satelliteId } = req.query;
+router.get(
+  "/getLogsBySatellite",
+  async (req: GetLogBySatelliteProp, res: any) => {
+    const { satelliteId } = req.query;
 
-  const filter = {
-    satelliteId: satelliteId,
-  };
+    const filter = {
+      satelliteId: satelliteId,
+    };
 
-  const logs = await Log.find(filter).exec();
-  res.status(201).json({ message: "Fetched logs by satelliteId", logs });
-});
+    const logs = await Log.find(filter).sort({ createdAt: "desc" }).exec();
+    res.status(201).json({ message: "Fetched logs by satelliteId", logs });
+  }
+);
 
-router.get("/getLogsBySchedule", async (req: GetLogByScheduleProp, res: any) => {
-  const { satelliteId, scheduleId } = req.query;
+router.get(
+  "/getLogsBySchedule",
+  async (req: GetLogByScheduleProp, res: any) => {
+    const { satelliteId, scheduleId } = req.query;
 
-  const filter = {
-    scheduleId: scheduleId,
-  };
+    const filter = {
+      scheduleId: scheduleId,
+    };
 
-  const logs = await Log.find(filter).exec();
-  res.status(201).json({ message: "Fetched logs by ScheduleId", logs });
-});
+    const logs = await Log.find(filter).exec();
+    res.status(201).json({ message: "Fetched logs by ScheduleId", logs });
+  }
+);
 
 router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
   const { satelliteId, commandId } = req.query;
