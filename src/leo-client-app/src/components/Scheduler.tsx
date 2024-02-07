@@ -60,7 +60,6 @@ const Scheduler: React.FC = () => {
 
   // Function will load schedule somewhere, currently console log for POC demo
   const sendSchedule = async () => {
-    console.log(currentSchedule);
     mutate();
   };
 

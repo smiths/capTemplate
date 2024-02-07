@@ -1,3 +1,4 @@
+import { removeCommandFromSchedule } from "@/constants/api";
 import { useGetCommandsBySchedule } from "@/constants/hooks";
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   scheduleId: string;
@@ -16,8 +18,25 @@ type Props = {
 
 const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
   const commandsData = useGetCommandsBySchedule(scheduleId);
+  const queryClient = useQueryClient();
 
-  const removeCommand = (commandId: string) => {};
+  // Mutation function
+  const { mutate } = useMutation({
+    mutationFn: (values: any) =>
+      removeCommandFromSchedule(values.commandId, values.userId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
+    },
+  });
+
+  const removeCommand = async (commandId: string, userId: string) => {
+    mutate({ commandId, userId });
+  };
 
   return (
     <div
@@ -94,7 +113,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
                     <Button
                       variant="text"
                       sx={{ color: "red" }}
-                      onClick={() => removeCommand(item._id)}>
+                      onClick={() => removeCommand(item._id, item.userId._id)}>
                       Delete
                     </Button>
                   </TableCell>

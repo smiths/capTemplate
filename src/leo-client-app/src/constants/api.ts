@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from "axios";
+import axios from "axios";
 
 export const BACKEND_URL = "http://localhost:3001";
 
@@ -36,6 +36,22 @@ export const sendCommandSchedule = async (
     {
       headers: {
         "Content-Type": "application/json",
+      },
+    }
+  );
+  return res.data;
+};
+
+export const removeCommandFromSchedule = async (
+  commandId: string,
+  userId: string
+) => {
+  const res = await axios.delete(
+    `${BACKEND_URL}/schedule/deleteScheduledCommand`,
+    {
+      params: {
+        commandId,
+        userId,
       },
     }
   );
