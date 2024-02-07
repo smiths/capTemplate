@@ -1,4 +1,14 @@
 import { useGetCommandsBySchedule } from "@/constants/hooks";
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 type Props = {
   scheduleId: string;
@@ -18,18 +28,81 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId }) => {
         padding: "10px",
       }}>
       <h2>Current Schedule</h2>
-      <div>
-        {commandsData.data?.commands &&
-          commandsData.data.commands.length > 0 &&
-          commandsData.data.commands.map((item: any, index: number) => (
-            <button
-              key={item._id + index}
-              className="scheduleButton"
-              onClick={() => removeCommand(item.id)}>
-              {item.command}
-            </button>
-          ))}
-      </div>
+      <br></br>
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxWidth: 800,
+          background: "#40403fb0",
+        }}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ color: "white !important" }} align="left">
+                Command
+              </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="left">
+                Status
+              </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="left">
+                Operator
+              </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="left">
+                Created
+              </TableCell>
+              <TableCell sx={{ color: "white !important" }} align="left">
+                Delete
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {commandsData.data?.commands &&
+              commandsData.data.commands.length > 0 &&
+              commandsData.data.commands.map((item: any, index: number) => (
+                <TableRow
+                  key={item._id + index}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}>
+                  <TableCell
+                    sx={{ color: "white !important" }}
+                    align="left"
+                    component="th"
+                    scope="row">
+                    {item.command}
+                  </TableCell>
+                  <TableCell sx={{ color: "white !important" }} align="left">
+                    {item.status}
+                  </TableCell>
+                  <TableCell sx={{ color: "white !important" }} align="left">
+                    {item.userId.email}
+                  </TableCell>
+                  <TableCell sx={{ color: "white !important" }} align="left">
+                    {new Date(item.createdAt.toString()).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        second: "numeric",
+                      }
+                    )}
+                  </TableCell>
+                  <TableCell sx={{ color: "white !important" }} align="left">
+                    <Button
+                      variant="text"
+                      sx={{ color: "red" }}
+                      onClick={() => removeCommand(item._id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
