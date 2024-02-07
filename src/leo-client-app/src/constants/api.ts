@@ -30,10 +30,14 @@ export const sendCommandSchedule = async (
     satelliteId,
     commands,
   };
-
   const res = await axios.post(
     `${BACKEND_URL}/schedule/createBatchScheduledCommand`,
-    body
+    body,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   );
   return res.data;
 };
