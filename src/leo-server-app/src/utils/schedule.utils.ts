@@ -41,7 +41,6 @@ export const executeScheduledCommands = async (
 
     // Execute command
     let response = {};
-    console.log(currCommand.command);
     setTimeout(() => {}, currCommand.delay); // delay
 
     // update cmd
@@ -100,28 +99,35 @@ export const rescheduleLeftoverCommands = async (
   return nextSchedule;
 };
 
-export const verifyUserCommands = async (satelliteId: string, userId: string, commands: string[]) => {
+export const verifyUserCommands = async (
+  satelliteId: string,
+  userId: string,
+  commands: string[]
+) => {
   // Get satellite data
-  const comms = await validateUserCommands(satelliteId, userId)
+  const comms = await validateUserCommands(satelliteId, userId);
 
   // Check if commands are valid
   return commands.every((cmd) => comms?.includes(cmd));
-}
+};
 
 export const validateUserCommands = async (
   satelliteId: string,
-  userId: string,
+  userId: string
 ) => {
   const filter = {
     satelliteId: satelliteId,
     userId: userId,
   };
-const record = await SatelliteUser.find(filter).sort({createdAt: "desc"}).exec();
-console.log(record)
+  const record = await SatelliteUser.find(filter)
+    .sort({ createdAt: "desc" })
+    .exec();
 
-if (record == undefined || record.length < 1){return [];}
+  if (record == undefined || record.length < 1) {
+    return [];
+  }
 
-return record[0].validCommands;
+  return record[0].validCommands;
 };
 
 // Fetches and records a satellite's overpass schedules for the next 7 days
