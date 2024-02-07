@@ -127,6 +127,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
                     <Button
                       variant="text"
                       sx={{ color: "red" }}
+                      disabled={item.status === "EXECUTED"}
                       onClick={() => removeCommand(item._id)}>
                       Delete
                     </Button>
