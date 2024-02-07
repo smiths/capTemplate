@@ -101,32 +101,35 @@ const FuturePasses = ({ noradId }: Props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {passes.map((passPair, index) => (
-                <TableRow
-                  key={passPair[0].time + index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                  <TableCell
-                    sx={{ color: "white !important" }}
-                    align="center"
-                    component="th"
-                    scope="row">
-                    {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
-                  </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="center">
-                    {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
-                  </TableCell>
-                  <TableCell sx={{ color: "white !important" }}>
-                    <NextLink
-                      href={`/detailed-display/${noradId}/${encodeURIComponent(
-                        formatDateToISO(passPair[0].time)
-                      )}/${encodeURIComponent(
-                        formatDateToISO(passPair[1].time)
-                      )}`}>
-                      <u>View Details</u>
-                    </NextLink>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {passes &&
+                passes?.map((passPair, index) => (
+                  <TableRow
+                    key={passPair[0].time + index}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell
+                      sx={{ color: "white !important" }}
+                      align="center"
+                      component="th"
+                      scope="row">
+                      {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
+                    </TableCell>
+                    <TableCell
+                      sx={{ color: "white !important" }}
+                      align="center">
+                      {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
+                    </TableCell>
+                    <TableCell sx={{ color: "white !important" }}>
+                      <NextLink
+                        href={`/detailed-display/${noradId}/${encodeURIComponent(
+                          formatDateToISO(passPair[0].time)
+                        )}/${encodeURIComponent(
+                          formatDateToISO(passPair[1].time)
+                        )}`}>
+                        <u>View Details</u>
+                      </NextLink>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

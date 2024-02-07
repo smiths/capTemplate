@@ -123,8 +123,20 @@ export const getSatelliteInfo = (
   };
 };
 
-export const getNextPasses = (noradId: string) => {
-  const [tleLine1, tleLine2] = globals.tleLines[noradId];
+export const getTleLines = async (noradId: string) => {
+  let tleLines = globals.tleLines[noradId];
+
+  if (!tleLines) {
+    tleLines = await getTLE(noradId);
+  }
+  globals.tleLines[noradId] = tleLines;
+  return tleLines;
+};
+
+export const getNextPasses = async (noradId: string) => {
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
+
+  // const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   const WINDOWMILLIS = 60 * 1000;
 

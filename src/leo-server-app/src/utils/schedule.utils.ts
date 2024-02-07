@@ -135,7 +135,7 @@ export const addSchedulesForNext7Days = async (
   satelliteId: string,
   noradId: string
 ) => {
-  const nextPasses = getNextPasses(noradId);
+  const nextPasses = await getNextPasses(noradId);
   let requestObjArray = [];
 
   // Loop through each overpass and format the request
