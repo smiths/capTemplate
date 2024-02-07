@@ -422,8 +422,8 @@ router.get(
       .sort({ createdAt: "desc" })
       .limit(limit)
       .skip(skip)
+      .populate("userId")
       .exec();
-
     res.status(201).json({ message: "Fetched commands", commands });
   }
 );
