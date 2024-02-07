@@ -13,8 +13,11 @@ const Scheduler: React.FC = () => {
 
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
 
-  const userId: string = "65a5e11fe0d601e0e8c4a385";
-  // const userId: string = "65a8181f36ea10b4366e1dd9";
+  // admin
+  // const userId: string = "65a5e11fe0d601e0e8c4a385";
+
+  // operator
+  const userId: string = "65a8181f36ea10b4366e1dd9";
 
   const scheduleId = "65a8182036ea10b4366e1de6";
   const isAdmin = adminUserId === userId;

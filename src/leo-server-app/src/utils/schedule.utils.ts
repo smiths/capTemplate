@@ -34,7 +34,7 @@ export const executeScheduledCommands = async (
   // ---- Loop through commands and execute them ----
   while (schedule?.startDate && endTime && endTime > Date.now()) {
     if (ind >= length) {
-      continue;
+      break;
     }
 
     const currCommand = commands[ind];

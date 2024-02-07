@@ -419,7 +419,7 @@ router.get(
     const skip = (page - 1) * limit;
 
     const commands = await Command.find(filter)
-      .sort({ createdAt: "desc" })
+      .sort({ createdAt: "asc" })
       .limit(limit)
       .skip(skip)
       .populate("userId")
@@ -492,7 +492,7 @@ router.post(
         .json({ error: "Schedule was not able to be executed" });
     }
 
-    res.status(201).json({ message: "Canceled schedule" });
+    res.status(201).json({ message: "Executed schedule" });
   }
 );
 
