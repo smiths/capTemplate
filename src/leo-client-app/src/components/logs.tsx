@@ -14,6 +14,8 @@ import {
 import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
 import moment from 'moment';
+import { Button, Paper, Stack, Typography, Box } from "@mui/material";
+
 
 const Logs: React.FC = () => {
 
@@ -49,6 +51,7 @@ const handleLogOpen = (logData: any) => {
   }, [satelliteId]);
 
     return (
+      <Box sx={{ width: "100%", bgcolor: "#121212", minHeight: "100vh", color: "white" }}>
         <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
         <Typography variant="h5">Logs</Typography>
         <TableContainer
@@ -108,6 +111,8 @@ const handleLogOpen = (logData: any) => {
           handleClose={handleLogClose}
         />
       </Stack>
+      </Box>
+
     );
   };
   
