@@ -151,7 +151,6 @@ router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   let resObj = {};
 
   const adm = await isAdminCheck(body.userId);
-  console.log(isCommandsValid, adm);
   if (!isCommandsValid && !adm) {
     resObj = {
       message: "Invalid Command Sequence or user permissions",
@@ -269,10 +268,8 @@ router.post(
 
       requestObjArray.push(newCommand);
     }
-
     // add batch command record
     const createCommand = await Command.insertMany(requestObjArray);
-
     return res.json({ message: "Created command", createCommand });
   }
 );
@@ -426,6 +423,7 @@ router.get(
       .limit(limit)
       .skip(skip)
       .exec();
+
     res.status(201).json({ message: "Fetched commands", commands });
   }
 );
