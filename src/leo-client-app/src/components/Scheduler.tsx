@@ -10,22 +10,37 @@ const Scheduler: React.FC = () => {
 
   // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
-  const userId = "65a5e11fe0d601e0e8c4a385";
+  // const userId = "65a5e11fe0d601e0e8c4a385";
+  const userId = "65a8181f36ea10b4366e1dd9";
   const scheduleId = "65a8182036ea10b4366e1de6";
+  const isAdmin = false;
   const [validCommands, setValidCommands] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
 
   const fetchValidCommands = (satelliteId: string) => {
-    fetch(
-      `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setValidCommands(data.satellite.validCommands);
-      })
-      .catch((error) => {
-        console.error("Error fetching valid commands:", error);
-      });
+    if (isAdmin) {
+      fetch(
+        `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setValidCommands(data.satellite.validCommands);
+        })
+        .catch((error) => {
+          console.error("Error fetching valid commands:", error);
+        });
+    } else {
+      fetch(
+        `http://localhost:3001/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setValidCommands(data.record[0].validCommands);
+        })
+        .catch((error) => {
+          console.error("Error fetching valid commands:", error);
+        });
+    }
   };
 
   const addCommand = (command: string) => {
