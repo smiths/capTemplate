@@ -69,6 +69,15 @@ type CreateScheduleCommandProp = {
   };
 };
 
+type CreateBatchScheduleCommandProp = {
+  body: {
+    commands: string[];
+    scheduleId: string;
+    satelliteId: string;
+    userId: string;
+  };
+};
+
 type DeleteScheduleProp = {
   query: {
     commandId: string;
@@ -209,6 +218,60 @@ router.post(
       delay: 0,
     };
     const createCommand = await Command.create(newCommand);
+
+    return res.json({ message: "Created command", createCommand });
+  }
+);
+
+router.post(
+  "/createBatchScheduledCommand",
+  async (req: CreateBatchScheduleCommandProp, res: any) => {
+    const { body } = req;
+
+    // Validation
+    if (!mongoose.isValidObjectId(body.userId)) {
+      return res.status(500).json({ error: "Invalid user ID" });
+    }
+
+    const userRecord = await User.findById(body.userId);
+
+    if (!userRecord) {
+      return res.status(500).json({ error: "User does not exist" });
+    }
+
+    // Add validation for invalid command sequence based on satellite and user permissions
+    // Check if command exists in the satellite's list of command sequences
+    const isCommandInSatelliteCriteria = await verifyUserCommands(
+      body.satelliteId,
+      body.userId,
+      body.commands
+    );
+
+    const adm = await isAdminCheck(body.userId);
+
+    if (!isCommandInSatelliteCriteria && !adm) {
+      return res
+        .status(500)
+        .json({ error: "Invalid command sequence or user permission" });
+    }
+
+    let requestObjArray = [];
+
+    for (let cmd of body.commands) {
+      const newCommand = {
+        userId: body.userId,
+        satelliteId: body.satelliteId,
+        command: cmd,
+        scheduleId: body.scheduleId,
+        status: CommandStatus.QUEUED,
+        delay: 0,
+      };
+
+      requestObjArray.push(newCommand);
+    }
+
+    // add batch command record
+    const createCommand = await Command.insertMany(requestObjArray);
 
     return res.json({ message: "Created command", createCommand });
   }
