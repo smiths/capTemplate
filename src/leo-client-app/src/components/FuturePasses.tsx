@@ -15,6 +15,8 @@ import {
 import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
 import axios from "axios";
+import "../styles.css";
+import "./styles/component.css";
 
 interface Pass {
   type: string;
@@ -71,21 +73,15 @@ const FuturePasses = ({ noradId }: Props) => {
     <Stack alignItems="center" spacing={2}>
       <h1>Next Week&apos;s Passes</h1>
       {isLoading && (
-        <Box
-          sx={{
-            width: "100%",
-            minHeight: "200px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
+        <Box className="loadingBox">
           <CircularProgress />
         </Box>
       )}
       {!isLoading && (
         <TableContainer
           component={Paper}
-          sx={{ maxWidth: 650, background: "#40403fb0" }}>
+          sx={{ maxWidth: 650, background: "#40403fb0" }}
+        >
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -105,17 +101,20 @@ const FuturePasses = ({ noradId }: Props) => {
                 passes?.map((passPair, index) => (
                   <TableRow
                     key={passPair[0].time + index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell
                       sx={{ color: "white !important" }}
                       align="center"
                       component="th"
-                      scope="row">
+                      scope="row"
+                    >
                       {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
                     </TableCell>
                     <TableCell
                       sx={{ color: "white !important" }}
-                      align="center">
+                      align="center"
+                    >
                       {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
                     </TableCell>
                     <TableCell sx={{ color: "white !important" }}>
@@ -124,7 +123,8 @@ const FuturePasses = ({ noradId }: Props) => {
                           formatDateToISO(passPair[0].time)
                         )}/${encodeURIComponent(
                           formatDateToISO(passPair[1].time)
-                        )}`}>
+                        )}`}
+                      >
                         <u>View Details</u>
                       </NextLink>
                     </TableCell>
