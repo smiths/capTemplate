@@ -2,13 +2,64 @@ import React from "react";
 import "../styles.css";
 import "./styles/component.css";
 import "./styles/upcomingSchedules.css";
+import { Stack } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 type Props = {
   noradId: string;
 };
 
 const UpcomingSchedules = ({ noradId }: Props) => {
-  return <div className="upcomingSchedulesBox"></div>;
+  return (
+    <div className="upcomingSchedulesBox">
+      <Stack alignItems="flex-start" spacing={1}>
+        <p className="headerBox">Schedule Queue</p>
+        <div className="contentBox">
+          <Stack direction="row" alignItems="flex-start" spacing={1}>
+            <Card sx={{ minWidth: 275, margin: 1 }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Time 1
+                </Typography>
+                <Typography variant="body2">Command 1</Typography>
+              </CardContent>
+            </Card>
+            <Card sx={{ minWidth: 275, margin: 1 }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Time 1
+                </Typography>
+                <Typography variant="body2">Command 1</Typography>
+              </CardContent>
+            </Card>
+            <Card sx={{ minWidth: 275, margin: 1 }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Time 1
+                </Typography>
+                <Typography variant="body2">Command 1</Typography>
+              </CardContent>
+            </Card>
+            {/* Cards go here */}
+          </Stack>
+        </div>
+      </Stack>
+    </div>
+  );
 };
 
 export default UpcomingSchedules;
