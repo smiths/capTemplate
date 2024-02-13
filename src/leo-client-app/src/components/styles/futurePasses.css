@@ -1,0 +1,21 @@
+.futurePassesBox {
+  border: 2px solid var(--material-theme-sys-light-on-primary);
+  border-radius: 15px;
+  padding: 0.5%;
+  margin-top: -10px;
+  width: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.cardTitle {
+  font-family: var(--material-themetitleLarge);
+  color: var(--material-theme-sys-light-on-surface);
+}
+
+.cardSubtitle {
+  font-family: var(--material-themetitleMedium);
+  color: var(--material-theme-sys-light-on-surface-variant);
+}

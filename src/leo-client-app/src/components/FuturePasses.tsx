@@ -12,11 +12,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { Card, CardContent, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
 import axios from "axios";
 import "../styles.css";
 import "./styles/component.css";
+import "./styles/futurePasses.css";
 
 interface Pass {
   type: string;
@@ -28,6 +30,32 @@ interface Pass {
 type Props = {
   noradId: string;
 };
+
+// Helper functions to format date and time
+function formatDate(dateString: string) {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, options);
+}
+
+function formatTimeRange(startTime: string, endTime: string) {
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  const startHours = startDate.getHours();
+  const startMinutes = startDate.getMinutes().toString().padStart(2, "0");
+  const endHours = endDate.getHours();
+  const endMinutes = endDate.getMinutes().toString().padStart(2, "0");
+
+  const formattedStartTime = startHours + ":" + startMinutes;
+  const formattedEndTime = endHours + ":" + endMinutes;
+
+  return `${formattedStartTime} - ${formattedEndTime}`;
+}
 
 const FuturePasses = ({ noradId }: Props) => {
   const [passes, setPasses] = useState<Pass[][]>([]);
@@ -70,71 +98,59 @@ const FuturePasses = ({ noradId }: Props) => {
   }, [noradId]);
 
   return (
-    <Stack alignItems="center" spacing={2}>
-      <h1>Next Week&apos;s Passes</h1>
-      {isLoading && (
-        <Box className="loadingBox">
-          <CircularProgress />
-        </Box>
-      )}
-      {!isLoading && (
-        <TableContainer
-          component={Paper}
-          sx={{ maxWidth: 650, background: "#40403fb0" }}
-        >
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: "white !important" }} align="center">
-                  Entry
-                </TableCell>
-                <TableCell sx={{ color: "white !important" }} align="center">
-                  Exit
-                </TableCell>
-                <TableCell sx={{ color: "white !important" }} align="center">
-                  More Info
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {passes &&
-                passes?.map((passPair, index) => (
-                  <TableRow
-                    key={passPair[0].time + index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    <div className="futurePasses">
+      <Stack alignItems="flex-start" spacing={1}>
+        <p className="headerBox">Next Week&apos;s Passes</p>
+        {isLoading ? (
+          <Box className="loadingBox">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid className="futurePassesBox" container spacing={2}>
+            {" "}
+            {passes &&
+              passes.map((passPair, index) => (
+                <Grid item key={index}>
+                  {" "}
+                  <NextLink
+                    href={`/detailed-display/${noradId}/${encodeURIComponent(
+                      formatDateToISO(passPair[0].time)
+                    )}/${encodeURIComponent(
+                      formatDateToISO(passPair[1].time)
+                    )}`}
+                    passHref
                   >
-                    <TableCell
-                      sx={{ color: "white !important" }}
-                      align="center"
-                      component="th"
-                      scope="row"
+                    <Card
+                      sx={{
+                        minWidth: 150,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-inverse-on-surface)",
+                        cursor: "pointer",
+                        borderRadius: 3,
+                      }}
                     >
-                      {passPair[0].type === "Enter" && <>{passPair[0].time}</>}
-                    </TableCell>
-                    <TableCell
-                      sx={{ color: "white !important" }}
-                      align="center"
-                    >
-                      {passPair[1].type === "Exit" && <>{passPair[1].time}</>}
-                    </TableCell>
-                    <TableCell sx={{ color: "white !important" }}>
-                      <NextLink
-                        href={`/detailed-display/${noradId}/${encodeURIComponent(
-                          formatDateToISO(passPair[0].time)
-                        )}/${encodeURIComponent(
-                          formatDateToISO(passPair[1].time)
-                        )}`}
-                      >
-                        <u>View Details</u>
-                      </NextLink>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </Stack>
+                      <CardContent>
+                        <Stack spacing={0}>
+                          <p className="cardTitle">
+                            {formatDate(passPair[0].time)}
+                          </p>
+                          <p className="cardSubtitle">
+                            {formatTimeRange(
+                              passPair[0].time,
+                              passPair[1].time
+                            )}
+                          </p>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </NextLink>
+                </Grid>
+              ))}
+          </Grid>
+        )}
+      </Stack>
+    </div>
   );
 };
 
