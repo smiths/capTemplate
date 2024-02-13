@@ -1,0 +1,20 @@
+.loadingBox {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerBox {
+  font-family: var(--material-themetitlemedium);
+  margin-bottom: 0;
+}
+
+.contentBox {
+  border: 2px solid var(--material-theme-sys-light-on-primary);
+  border-radius: 15px;
+  padding: 5%;
+  margin-top: -10px;
+  width: auto;
+}

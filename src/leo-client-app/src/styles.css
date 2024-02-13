@@ -573,3 +573,19 @@
   line-height: 1.45;
   letter-spacing: 0.5px;
 }
+
+.inner-list {
+  list-style-type: none; /* Remove default list bullets */
+  padding-left: 10px;
+  margin-left: 0;
+}
+
+.inner-list li::before {
+  content: "•"; /* Unicode character for bullet */
+  font-size: 17px; /* Adjust size as needed */
+  color: var(
+    --material-theme-sys-light-on-primary
+  ); /* Change color if needed */
+  padding-right: 8px; /* Adjust space between the bullet and the text */
+  vertical-align: middle; /* Aligns bullet vertically with the text */
+}

@@ -4,6 +4,7 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "../styles.css";
+import "./styles/SatelliteInfo.css";
 
 const fetchDelay = 1000;
 
@@ -94,56 +95,55 @@ const SatelliteInfo = ({ noradId }: Props) => {
   } = state;
 
   return (
-    <Stack alignItems="center" spacing={2}>
-      <p className="material-themebodylarge">Satellite Information</p>
-      {isLoading && (
-        <Box
-          sx={{
-            width: "100%",
-            minHeight: "200px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
-      {!isLoading && (
-        <Stack spacing={1}>
-          <div>
-            <strong>Position ECI:</strong>
-            <ul>
-              <li>X: {positionEci.x}</li>
-              <li>Y: {positionEci.y}</li>
-              <li>Z: {positionEci.z}</li>
-            </ul>
-          </div>
-          <br />
-          <div>
-            <strong>Velocity ECI:</strong>
-            <ul>
-              <li>X: {velocityEci.x}</li>
-              <li>Y: {velocityEci.y}</li>
-              <li>Z: {velocityEci.z}</li>
-            </ul>
-          </div>
-          <br />
-          <div>
-            <strong>Other Info:</strong>
-            <ul>
-              <li>Longitude: {longitude}</li>
-              <li>Latitude: {latitude}</li>
-              <li>Height: {height}</li>
-              <br />
-              <li>Azimuth: {azimuth}</li>
-              <li>Elevation: {elevation}</li>
-              <li>rangeSat: {rangeSat}</li>
-            </ul>
-          </div>
-        </Stack>
-      )}
-    </Stack>
+    <div className="satelliteInfo">
+      <Stack alignItems="flex-start" spacing={1}>
+        <p className="headerBox">Satellite Information</p>
+        {isLoading && (
+          <Box className="loadingBox">
+            <CircularProgress />
+          </Box>
+        )}
+        {!isLoading && (
+          <Stack className="contentBox" spacing={0}>
+            <div className="material-themebodylarge">
+              Position ECI:
+              <ul className="inner-list">
+                <li>X: {positionEci.x.toFixed(2)}</li>
+                <li>Y: {positionEci.y.toFixed(2)}</li>
+                <li>Z: {positionEci.z.toFixed(2)}</li>
+              </ul>
+            </div>
+            <br />
+            <div>
+              Velocity ECI:
+              <ul className="inner-list">
+                <li>X: {velocityEci.x.toFixed(2)}</li>
+                <li>Y: {velocityEci.y.toFixed(2)}</li>
+                <li>Z: {velocityEci.z.toFixed(2)}</li>
+              </ul>
+            </div>
+            <br />
+            <div>
+              Geodetic Info:
+              <ul className="inner-list">
+                <li>Longitude: {longitude.toFixed(2)}</li>
+                <li>Latitude: {latitude.toFixed(2)}</li>
+                <li>Height: {height.toFixed(2)}</li>
+              </ul>
+            </div>
+            <br />
+            <div>
+              Other Info:
+              <ul className="inner-list">
+                <li>Azimuth: {azimuth.toFixed(2)}</li>
+                <li>Elevation: {elevation.toFixed(2)}</li>
+                <li>rangeSat: {rangeSat.toFixed(2)}</li>
+              </ul>
+            </div>
+          </Stack>
+        )}
+      </Stack>
+    </div>
   );
 };
 
