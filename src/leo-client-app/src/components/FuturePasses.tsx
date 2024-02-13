@@ -1,18 +1,12 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Box,
+  Card,
+  CardContent,
   CircularProgress,
-  Link,
-  Paper,
+  Grid,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from "@mui/material";
-import { Card, CardContent, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
 import axios from "axios";
