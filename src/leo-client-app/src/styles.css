@@ -575,17 +575,21 @@
 }
 
 .inner-list {
-  list-style-type: none; /* Remove default list bullets */
+  list-style-type: none;
   padding-left: 10px;
   margin-left: 0;
 }
 
+.inner-list li {
+  display: block;
+  white-space: nowrap;
+}
+
+/*Custom bullet point spacing*/
 .inner-list li::before {
-  content: "•"; /* Unicode character for bullet */
-  font-size: 17px; /* Adjust size as needed */
-  color: var(
-    --material-theme-sys-light-on-primary
-  ); /* Change color if needed */
-  padding-right: 8px; /* Adjust space between the bullet and the text */
-  vertical-align: middle; /* Aligns bullet vertically with the text */
+  content: "•";
+  font-size: 17px;
+  color: var(--material-theme-sys-light-on-primary);
+  padding-right: 8px;
+  vertical-align: middle;
 }
