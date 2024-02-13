@@ -409,9 +409,8 @@
 
 @font-face {
   font-family: Roboto;
-  src: local(Roboto-Regular), url(/path/to/Roboto-Regular.woff2) format("woff2"),
-    url(/path/to/Roboto-Regular.woff) format("woff"),
-    url(/path/to/Roboto-Regular.ttf) format("truetype");
+  src: local(Roboto-Regular),
+    url(resources/Roboto-Regular.ttf) format("truetype");
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -419,9 +418,7 @@
 
 @font-face {
   font-family: Roboto;
-  src: local(Roboto-Medium), url(/path/to/Roboto-Medium.woff2) format("woff2"),
-    url(/path/to/Roboto-Medium.woff) format("woff"),
-    url(/path/to/Roboto-Medium.ttf) format("truetype");
+  src: local(Roboto-Medium), url(resources/Roboto-Medium.ttf) format("truetype");
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
@@ -575,4 +572,24 @@
   font-style: normal;
   line-height: 1.45;
   letter-spacing: 0.5px;
+}
+
+.inner-list {
+  list-style-type: none;
+  padding-left: 10px;
+  margin-left: 0;
+}
+
+.inner-list li {
+  display: block;
+  white-space: nowrap;
+}
+
+/*Custom bullet point spacing*/
+.inner-list li::before {
+  content: "•";
+  font-size: 17px;
+  color: var(--material-theme-sys-light-on-primary);
+  padding-right: 8px;
+  vertical-align: middle;
 }
