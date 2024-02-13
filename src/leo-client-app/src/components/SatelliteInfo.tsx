@@ -4,7 +4,8 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "../styles.css";
-import "./styles/SatelliteInfo.css";
+import "./styles/satelliteInfo.css";
+import "./styles/component.css";
 
 const fetchDelay = 1000;
 
