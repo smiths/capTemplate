@@ -6,6 +6,6 @@
   align-items: center;
   border: 2px solid var(--material-theme-sys-light-on-primary);
   border-radius: 15px;
-  padding: 5%;
+  padding: 10%;
   margin-top: -10px;
 }
