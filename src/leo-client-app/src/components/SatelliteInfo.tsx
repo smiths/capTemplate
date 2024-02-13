@@ -3,6 +3,7 @@
 import { Box, CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import "../styles.css";
 
 const fetchDelay = 1000;
 
@@ -94,7 +95,7 @@ const SatelliteInfo = ({ noradId }: Props) => {
 
   return (
     <Stack alignItems="center" spacing={2}>
-      <h2>Satellite Information</h2>
+      <p className="material-themebodylarge">Satellite Information</p>
       {isLoading && (
         <Box
           sx={{
@@ -103,7 +104,8 @@ const SatelliteInfo = ({ noradId }: Props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-          }}>
+          }}
+        >
           <CircularProgress />
         </Box>
       )}
