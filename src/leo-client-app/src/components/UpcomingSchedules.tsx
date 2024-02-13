@@ -1,3 +1,18 @@
+import React from "react";
+import "../styles.css";
+import "./styles/component.css";
+import "./styles/upcomingSchedules.css";
+
+type Props = {
+  noradId: string;
+};
+
+const UpcomingSchedules = ({ noradId }: Props) => {
+  return <div className="upcomingSchedulesBox"></div>;
+};
+
+export default UpcomingSchedules;
+
 import React, { useEffect, useState } from "react";
 import "../styles.css";
 import "./styles/component.css";
