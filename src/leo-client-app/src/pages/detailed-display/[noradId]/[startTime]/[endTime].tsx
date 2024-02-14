@@ -12,8 +12,8 @@ function DetailedSatelliteInfoPage() {
 
   return (
     <main>
-      <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
+        <Navbar />
         <DetailedDisplay
           noradId={noradId?.toString() ?? ""}
           startTime={startTime?.toString() ?? ""}
