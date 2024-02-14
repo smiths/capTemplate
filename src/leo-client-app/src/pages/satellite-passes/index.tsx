@@ -6,7 +6,6 @@ import UpcomingSchedules from "@/components/UpcomingSchedules";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack, Box } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
-import SatelliteTLE from "@/components/SatelliteTLE";
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
 
