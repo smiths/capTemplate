@@ -125,7 +125,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
           <Grid
             className="futureSchedulesBox"
             container
-            spacing={2}
+            spacing={0}
             sx={{
               display: "flex",
               flexWrap: "nowrap",
