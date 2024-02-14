@@ -35,6 +35,13 @@ rangeSat: km
 
 This endpoint is for retrieving satellite information. Calculations are done through the `satellite.js` library based off TLE data, found [here](https://github.com/shashwatak/satellite-js). TLE data of a satellite can be found online, like on [n2yo](https://www.n2yo.com/database/?name=NEUDOSE#results).
 
+##`/getSatelliteName`
+Type: `GET`
+Request: `{noradId: String}`
+Response: `{ satelliteName: string}`
+
+Returns the satellite name for a given NORAD id.
+
 ##`/getPolarPlotData`
 Type: `GET`
 Request: `{START_DATE: String, END_DATE: String}`
@@ -97,6 +104,7 @@ Response `{ pingRespone: String }`
 
 This endpoint pings the mock ground station server to establish a response.
 Make this addition to the server .env.local: `MOCK_GS_IP="YOUR_IP"`
+
 ---
 
 # Database Endpoints
