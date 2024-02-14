@@ -7,7 +7,6 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
 import SatelliteTLE from "@/components/SatelliteTLE";
-import UpcomingSchedules from "@/components/UpcomingSchedules";
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
 
