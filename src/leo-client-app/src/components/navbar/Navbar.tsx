@@ -4,6 +4,10 @@ import "../styles/navbar.css";
 
 const navbarItems = [
   {
+    heading: "Satellites",
+    path: "/satellite-passes",
+  },
+  {
     heading: "Scheduler",
     path: "/schedule-commands",
   },
@@ -31,19 +35,6 @@ const Navbar: React.FC = () => {
       className="navBar"
       style={{ width: "100%", margin: 0, padding: 0 }}
     >
-      {/* Add the first item before the pseudo-element */}
-      <Link
-        component={NextLink}
-        href="/satellites"
-        underline="none"
-        sx={{
-          color: "var(--material-theme-sys-light-inverse-on-surface)",
-          flexShrink: 0,
-        }} // prevent the first item from shrinking
-      >
-        Satellites
-      </Link>
-
       {navbarItems.map((item, index) => (
         <Link
           key={item.path + index}
