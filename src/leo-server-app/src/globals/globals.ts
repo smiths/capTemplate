@@ -1,5 +1,6 @@
 export interface MyGlobals {
   tleLines: { [id: string]: string[] };
+  satelliteName: string;
 }
 
 const globals: MyGlobals = {
@@ -13,6 +14,7 @@ const globals: MyGlobals = {
       "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199",
     ],
   },
+  satelliteName: "BDSAT-2",
 };
 
 export default globals;

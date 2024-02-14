@@ -3,6 +3,7 @@
 import SatelliteInfo from "@/components/SatelliteInfo";
 import FuturePasses from "@/components/FuturePasses";
 import UpcomingSchedules from "@/components/UpcomingSchedules";
+import SatelliteTLE from "@/components/SatelliteTLE";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack, Box } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
@@ -53,6 +54,7 @@ function SatelliteInfoPage() {
           <SatelliteInfo noradId={selectedNoradId} />
         </Grid>
       </Grid>
+      <SatelliteTLE noradId={selectedNoradId} setNoradId={setSelectedNoradId} />
     </Stack>
   );
 }
