@@ -8,8 +8,8 @@ import Navbar from "@/components/navbar/Navbar";
 function SchedulerPage() {
   return (
     <main>
-      <Navbar />
       <Stack spacing={3} alignItems="center" p={2}>
+        <Navbar />
         <Scheduler />
       </Stack>
     </main>
