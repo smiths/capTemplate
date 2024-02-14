@@ -61,7 +61,7 @@ function formatTimeRange(startTime: string, endTime: string) {
 
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
-const UpcomingSchedules = ({ noradId }: Props) => {
+const Scheduler = ({ noradId }: Props) => {
   // TODO: Dynamically get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
   const [schedules1, setSchedules] = useState<Schedule[]>([]);
@@ -191,9 +191,9 @@ const UpcomingSchedules = ({ noradId }: Props) => {
             spacing={2}
             sx={{
               display: "flex",
-              flexWrap: "nowrap",
-              overflowX: "auto",
-              maxWidth: "98vw", // Use 100vw to ensure it considers the full viewport width
+              //flexWrap: "nowrap",
+              //overflowX: "auto",
+              maxWidth: "45vw", // Use 100vw to ensure it considers the full viewport width
               boxSizing: "border-box",
               "& .MuiGrid-item": {
                 flex: "0 0 auto",
@@ -206,7 +206,8 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                 <Grid item key={index}>
                   <Card
                     sx={{
-                      minWidth: 150,
+                      minWidth: 900,
+                      minHeight: 200,
                       margin: 0.5,
                       backgroundColor:
                         "var(--material-theme-sys-light-inverse-on-surface)",
@@ -254,7 +255,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   );
 
             };
-export default UpcomingSchedules;
+export default Scheduler;
 
 
 

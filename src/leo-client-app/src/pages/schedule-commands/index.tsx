@@ -6,6 +6,8 @@ import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
 import { useNavigate } from 'react-router-dom';
 import SchedulesPage from "@/components/Scheduler";
+import UpcomingSchedules from "@/components/Scheduler";
+import Scheduler from "@/components/Scheduler";
 
 
 function SchedulerPage() {
@@ -18,7 +20,7 @@ function SchedulerPage() {
   return (
     <main>
       <Navbar />
-      <SchedulesPage />
+      <Scheduler />
 
 
       
