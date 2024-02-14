@@ -73,7 +73,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import { color } from 'd3';
-//import './EditSchedulePage.css'; // Your stylesheet filename
+import '../components/EditSchedules.css'; // Your stylesheet filename
 
 
 
@@ -208,7 +208,7 @@ const Scheduler: React.FC = () => {
             padding: "10px",
             overflow: "auto",
           }}>
-          <h2>Current Schedule</h2>
+          <h2>Current Schedules</h2>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
