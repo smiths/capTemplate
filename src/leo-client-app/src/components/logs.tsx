@@ -1,19 +1,9 @@
 "use client";
-import {
-  Button,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Button, Paper, Stack, Typography, Box } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import LogDialog from "./logModal";
-import moment from 'moment';
+import moment from "moment";
 
 
 const Logs: React.FC = () => {
@@ -23,7 +13,6 @@ const Logs: React.FC = () => {
   const [logs, setLogs] = useState<any>([]);
   const [logData, setLogData] = useState<any>(null);
   const [openLog, setOpenLog] = useState<boolean>(false);
-
 const handleLogOpen = (logData: any) => {
     setLogData(logData);
     setOpenLog(true);
@@ -34,10 +23,11 @@ const handleLogOpen = (logData: any) => {
   };
 
   const fetchLogs = (satelliteId: string) => {
-    fetch(`http://localhost:3001/log/getLogs?satelliteId=${satelliteId}`)
+    fetch(`http://localhost:3001/log/getLogsBySatellite?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then(data => {
         setLogs(data?.logs??[]);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching satellite logs:", error);
@@ -50,67 +40,71 @@ const handleLogOpen = (logData: any) => {
   }, [satelliteId]);
 
     return (
-      //<Box sx={{ width: "100%", bgcolor: "#121212", minHeight: "100vh", color: "white" }}>
-        <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
-        <Typography variant="h5">Logs</Typography>
-        <TableContainer
-          component={Paper}
+
+    <Box sx={{ width: "100%", bgcolor: "#121212", minHeight: "100vh", color: "white" }}>
+       <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
+        <Typography variant="h4" gutterBottom>
+          All Logs
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          Logs per Schedule
+        </Typography>
+        {logs.map((log: any, index: number) => (
+          <Paper
+            key={log._id}
+            sx={{
+              bgcolor: "#252525",
+              p: 2,
+              mb: 2,
+              width: "80%",
+              maxWidth: "800px"
+            }}
+          >
+            <Typography variant="subtitle2">
+              {moment.utc(log.createdAt).local().format("MMM D YYYY")}
+              <br />
+              {moment.utc(log.createdAt).local().format("h:mm A")} -{" "}
+              {moment.utc(log.updatedAt).local().format("h:mm A")}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              log preview
+            </Typography>
+            <Button
+              variant="text"
+              sx={{ color: "white", mt: 1 }}
+              onClick={() => handleLogOpen(log)}
+            >
+              Show Logs
+            </Button>
+          </Paper>
+        ))}
+        <Button
           sx={{
-            maxWidth: 800,
-            background: "#40403fb0",
-          }}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: "white !important" }} align="left">
-                  Created At
-                </TableCell>
-                <TableCell sx={{ color: "white !important" }} align="left">
-                  Last Updated
-                </TableCell>
-                <TableCell sx={{ color: "white !important" }} align="left">
-                  Logs
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {logs &&
-                logs?.map((data: any, index: number) => (
-                  <TableRow
-                    key={data._id + index}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}>
-                    <TableCell
-                      sx={{ color: "white !important" }}
-                      align="left"
-                      component="th"
-                      scope="row">
-                      {moment.utc(data.createdAt).local().format('DD/MM/YYYY HH:mm:ss')}
-                    </TableCell>
-                    <TableCell sx={{ color: "white !important" }} align="left">
-                      {moment.utc(data.updatedAt).local().format('DD/MM/YYYY HH:mm:ss')}
-                    </TableCell>
-                    <TableCell sx={{ color: "white !important" }} align="left">
-                      <Button
-                        variant="text"
-                        sx={{ color: "#6cb6ff" }}
-                        onClick={() => handleLogOpen(data)}>
-                        Show Logs
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+            bgcolor: "pink",
+            '&:hover': {
+              bgcolor: "pink", // theme.palette.error.main
+              opacity: [0.9, 0.8, 0.7],
+            },
+            color: "white",
+            borderRadius: "50%",
+            minWidth: "56px",
+            height: "56px"
+          }}
+          onClick={() => {/* handle add new log */}}
+        >
+        {/* <AddIcon /> */}
+        </Button>
         <LogDialog
           open={openLog}
           logData={logData}
           handleClose={handleLogClose}
         />
       </Stack>
-
+    </Box>
+      
     );
   };
   
