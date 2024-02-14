@@ -9,7 +9,7 @@
   justify-content: flex-start; /* Align items to the start */
   max-width: 100%;
   height: auto; /* Adjust based on the height of a single row of your content */
-  min-height: 200px;
+  min-height: 150px;
   overflow-x: auto;
   overflow-y: hidden;
 

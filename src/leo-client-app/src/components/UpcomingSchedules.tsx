@@ -125,18 +125,17 @@ const UpcomingSchedules = ({ noradId }: Props) => {
           <Grid
             className="futureSchedulesBox"
             container
-            spacing={2}
+            spacing={0}
             sx={{
               display: "flex",
               flexWrap: "nowrap",
               overflowX: "auto",
               maxWidth: "98vw", // Use 100vw to ensure it considers the full viewport width
-              boxSizing: "border-box", // Ensure padding and borders are included in the element's total width
+              boxSizing: "border-box",
               "& .MuiGrid-item": {
                 flex: "0 0 auto",
               },
-              // Consider padding or margins that might affect the total width
-              mx: -2, // Adjust this value based on your layout needs, to compensate for outer margins if necessary
+              mx: -2,
             }}
           >
             {schedules &&

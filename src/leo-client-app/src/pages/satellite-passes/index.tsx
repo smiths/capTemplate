@@ -21,15 +21,27 @@ function SatelliteInfoPage() {
   return (
     <main>
       <Navbar />
-      <Stack spacing={3} alignItems="center" p={2}>
-        <SatelliteTLE
-          noradId={selectedNoradId}
-          setNoradId={setSelectedNoradId}
-        />
-        <SatelliteInfo noradId={selectedNoradId} />
-        <UpcomingSchedules noradId={selectedNoradId} />
-        <FuturePasses noradId={selectedNoradId} />
-      </Stack>
+      <Grid
+        container
+        spacing={3}
+        alignItems="start"
+        justifyContent="center"
+        p={2}
+      >
+        <Grid item xs={12} md={8}>
+          <Stack spacing={3}>
+            {/* <SatelliteTLE
+              noradId={selectedNoradId}
+              setNoradId={setSelectedNoradId}
+            /> */}
+            <UpcomingSchedules noradId={selectedNoradId} />
+            <FuturePasses noradId={selectedNoradId} />
+          </Stack>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <SatelliteInfo noradId={selectedNoradId} />
+        </Grid>
+      </Grid>
     </main>
   );
 }
