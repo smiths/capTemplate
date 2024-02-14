@@ -27,7 +27,7 @@ function SatelliteInfoPage() {
         />
         <SatelliteInfo noradId={selectedNoradId} />
         <UpcomingSchedules noradId={selectedNoradId} />
-        {/* <FuturePasses noradId={selectedNoradId} /> */}
+        <FuturePasses noradId={selectedNoradId} />
       </Stack>
     </main>
   );
