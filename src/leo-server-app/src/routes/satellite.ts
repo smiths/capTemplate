@@ -5,6 +5,7 @@ import {
   getNextPasses,
   getSatelliteInfo,
   getTLE,
+  getSatelliteName,
   isSunlit,
 } from "../utils/satellite.utils";
 import { SatelliteEventEmitter } from "../event/satellite.event";
@@ -24,9 +25,14 @@ spacetrack.login({
 
 // BDSAT-2 TLE from Space-Track accessed 12/25/2023
 let defaultNoradId = "55098";
+let defaultName = "BDSAT-2";
 
 function setTleLines(noradId: string, line1: string, line2: string) {
   globals.tleLines[noradId] = [line1, line2];
+}
+
+function setSatelliteName(satelliteName: string) {
+  globals.satelliteName = satelliteName;
 }
 
 async function getTleLines(noradId: string) {
@@ -50,6 +56,12 @@ async function setTLE(noradId: string) {
   setTleLines(noradId, result[0], result[1]);
 }
 
+async function setName(noradId: string) {
+  const result = await getSatelliteName(noradId);
+  defaultName = result;
+  setSatelliteName(defaultName);
+}
+
 router.get("/getSatelliteInfo", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
   try {
@@ -58,6 +70,17 @@ router.get("/getSatelliteInfo", async (req: any, res: any) => {
     res.json(satelliteInfo);
   } catch (error) {
     console.error("Error in getSatelliteInfo():", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/getSatelliteName", async (req: any, res: any) => {
+  const noradId = getNoradId(req.query.noradId);
+  try {
+    const satelliteName = await getSatelliteName(noradId);
+    res.json(satelliteName);
+  } catch (error) {
+    console.error("Error in getSatelliteName():", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

@@ -3,19 +3,43 @@
 import SatelliteInfo from "@/components/SatelliteInfo";
 import FuturePasses from "@/components/FuturePasses";
 import UpcomingSchedules from "@/components/UpcomingSchedules";
+import SatelliteTLE from "@/components/SatelliteTLE";
+import SatelliteName from "@/components/SatelliteName";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack, Box } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
+import axios from "axios";
+import "../../styles.css";
 
 const defaultNoradId = "55098";
 
 function SatelliteInfoPage() {
-  const [isLoading, setIsLoading] = useState(false);
-
   const [selectedNoradId, setSelectedNoradId] =
     useState<string>(defaultNoradId);
+  const [satelliteName, setSatelliteName] = useState<string>();
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3001/satellite/getSatelliteName",
+        {
+          params: { noradId: selectedNoradId },
+        }
+      );
+      setSatelliteName(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const runFetch = async () => {
+      await fetchData(); // Fetch data initially
+    };
+    void runFetch();
+  }, [selectedNoradId]);
 
   return (
     <Stack
@@ -27,32 +51,44 @@ function SatelliteInfoPage() {
       <Navbar />
       <Grid
         container
-        spacing={3}
+        spacing={2}
         sx={{
-          justifyContent: "center",
           alignItems: "flex-start",
-          height: "calc(100% - 64px)",
           maxWidth: "1280px",
-          margin: "0 auto",
+          boxSizing: "border-box",
+          justifyContent: "center",
+          mx: "auto",
         }}
       >
-        <Grid item xs={12} lg={8}>
-          <Stack spacing={3}>
-            <Box>
-              {/* Your Schedule Queue goes here */}
-              <UpcomingSchedules noradId={selectedNoradId} />
-            </Box>
-            <Box>
-              {/* Your Next Week's Passes goes here */}
-              <FuturePasses noradId={selectedNoradId} />
-            </Box>
-          </Stack>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          {/* Your Satellite Information goes here */}
-          <SatelliteInfo noradId={selectedNoradId} />
+        <SatelliteName noradId={selectedNoradId} />
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            height: "auto",
+            maxWidth: "1280px",
+            boxSizing: "border-box",
+          }}
+        >
+          <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
+            <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
+              <Box>
+                <UpcomingSchedules noradId={selectedNoradId} />
+              </Box>
+              <Box>
+                <FuturePasses noradId={selectedNoradId} />
+              </Box>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} lg={2} sx={{ boxSizing: "border-box" }}>
+            <SatelliteInfo noradId={selectedNoradId} />
+          </Grid>
         </Grid>
       </Grid>
+
+      <SatelliteTLE noradId={selectedNoradId} setNoradId={setSelectedNoradId} />
     </Stack>
   );
 }

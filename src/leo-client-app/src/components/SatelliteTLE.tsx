@@ -2,7 +2,6 @@
 
 import { Stack, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
-import axios from "axios";
 
 type Props = {
   noradId: string;
@@ -11,7 +10,6 @@ type Props = {
 
 const SatelliteTLE = ({ noradId, setNoradId }: Props) => {
   const [inputValue, setInputValue] = useState(noradId);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);

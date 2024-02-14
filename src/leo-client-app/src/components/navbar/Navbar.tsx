@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
       justifyContent="space-between"
       spacing={5}
       className="navBar"
-      style={{ width: "100%", margin: 0, padding: 0 }}
+      style={{ width: "100%", margin: 0, padding: 0, marginTop: "100px" }}
     >
       {navbarItems.map((item, index) => (
         <Link

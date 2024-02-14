@@ -9,7 +9,7 @@
   justify-content: center;
   max-width: 100%;
   justify-content: flex-start;
-  max-height: 300px; /* height for two rows of cards */
+  max-height: 230px; /* height for two rows of cards */
   overflow-y: auto;
 
   /* Hide scrollbar for Chrome, Safari and Opera */
