@@ -4,6 +4,7 @@ import SatelliteInfo from "@/components/SatelliteInfo";
 import FuturePasses from "@/components/FuturePasses";
 import UpcomingSchedules from "@/components/UpcomingSchedules";
 import SatelliteTLE from "@/components/SatelliteTLE";
+import SatelliteName from "@/components/SatelliteName";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack, Box } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
@@ -59,17 +60,7 @@ function SatelliteInfoPage() {
           mx: "auto",
         }}
       >
-        <Box
-          className="material-themedisplaymedium"
-          sx={{
-            width: "100%",
-            textAlign: "left",
-            boxSizing: "border-box",
-            marginTop: "50px",
-          }}
-        >
-          {satelliteName}
-        </Box>
+        <SatelliteName noradId={selectedNoradId} />
         <Grid
           container
           spacing={3}
