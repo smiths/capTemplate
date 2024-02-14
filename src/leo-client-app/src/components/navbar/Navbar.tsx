@@ -1,11 +1,8 @@
 import { Link, Stack } from "@mui/material";
 import NextLink from "next/link";
+import "../styles/navbar.css";
 
 const navbarItems = [
-  {
-    heading: "Satellite passes",
-    path: "/satellite-passes",
-  },
   {
     heading: "Scheduler",
     path: "/schedule-commands",
@@ -22,24 +19,39 @@ const navbarItems = [
     heading: "Log Out",
     path: "/api/auth/logout",
   },
-  
 ];
 
 const Navbar: React.FC = () => {
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
+      alignItems="left"
+      justifyContent="space-between"
       spacing={5}
-      sx={{ background: "#40403fb0", py: 2, px: 4 }}>
+      className="navBar"
+      style={{ width: "100%", margin: 0, padding: 0 }}
+    >
+      {/* Add the first item before the pseudo-element */}
+      <Link
+        component={NextLink}
+        href="/satellites"
+        underline="none"
+        sx={{
+          color: "var(--material-theme-sys-light-inverse-on-surface)",
+          flexShrink: 0,
+        }} // prevent the first item from shrinking
+      >
+        Satellites
+      </Link>
+
       {navbarItems.map((item, index) => (
         <Link
           key={item.path + index}
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "#6cb6ff" }}>
+          sx={{ color: "var(--material-theme-sys-light-inverse-on-surface)" }}
+        >
           {item.heading}
         </Link>
       ))}
