@@ -13,7 +13,6 @@ import axios from "axios";
 import "../../styles.css";
 
 const defaultNoradId = "55098";
-const fetchDelay = 1000;
 
 function SatelliteInfoPage() {
   const [selectedNoradId, setSelectedNoradId] =
