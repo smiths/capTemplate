@@ -62,7 +62,12 @@ function SatelliteInfoPage() {
       >
         <Box
           className="material-themedisplaymedium"
-          sx={{ width: "100%", textAlign: "left", boxSizing: "border-box" }}
+          sx={{
+            width: "100%",
+            textAlign: "left",
+            boxSizing: "border-box",
+            marginTop: "50px",
+          }}
         >
           {satelliteName}
         </Box>
