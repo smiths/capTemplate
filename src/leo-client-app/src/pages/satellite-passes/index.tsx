@@ -6,6 +6,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Stack } from "@mui/material";
 import Navbar from "@/components/navbar/Navbar";
 import SatelliteTLE from "@/components/SatelliteTLE";
+import UpcomingSchedules from "@/components/UpcomingSchedules";
 import React, { useState } from "react";
 
 const defaultNoradId = "55098";
@@ -25,7 +26,8 @@ function SatelliteInfoPage() {
           setNoradId={setSelectedNoradId}
         />
         <SatelliteInfo noradId={selectedNoradId} />
-        <FuturePasses noradId={selectedNoradId} />
+        <UpcomingSchedules noradId={selectedNoradId} />
+        {/* <FuturePasses noradId={selectedNoradId} /> */}
       </Stack>
     </main>
   );
