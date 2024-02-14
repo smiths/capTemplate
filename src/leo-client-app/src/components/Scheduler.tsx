@@ -1,3 +1,4 @@
+
 import '../components/Scheduler.css'; // Import the CSS styles
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
