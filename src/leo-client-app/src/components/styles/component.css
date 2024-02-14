@@ -10,3 +10,13 @@
   margin-top: -10px;
   width: auto;
 }
+
+.cardTitle {
+  font-family: var(--material-themetitleLarge);
+  color: var(--material-theme-sys-light-on-surface);
+}
+
+.cardSubtitle {
+  font-family: var(--material-themetitleMedium);
+  color: var(--material-theme-sys-light-on-surface-variant);
+}
