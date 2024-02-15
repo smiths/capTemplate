@@ -148,8 +148,8 @@ const Scheduler = ({ noradId }: Props) => {
             spacing={2}
             sx={{
               display: "flex",
-              //flexWrap: "nowrap",
-              //overflowX: "auto",
+              // flexWrap: "nowrap",
+              // overflowX: "auto",
               maxWidth: "10vw", // Use 100vw to ensure it considers the full viewport width
               boxSizing: "border-box",
               "& .MuiGrid-item": {
@@ -163,7 +163,7 @@ const Scheduler = ({ noradId }: Props) => {
                 <Grid item key={index}>
                   <Card
                     sx={{
-                      minWidth: 900,
+                      minWidth: 800,
                       minHeight: 200,
                       margin: 0.5,
                       backgroundColor:
@@ -171,6 +171,7 @@ const Scheduler = ({ noradId }: Props) => {
                       cursor: "pointer",
                       borderRadius: 3,
                     }}
+                    
                   >
                     <CardContent>
                       <Stack spacing={0}>
@@ -199,9 +200,10 @@ const Scheduler = ({ noradId }: Props) => {
                           ) : (
                             <p className="cardSubtitle">No commands</p>
                           )}
-                          <button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
                         </>
                       </Stack>
+                      <button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
+
                     </CardContent>
                   </Card>
                 </Grid>

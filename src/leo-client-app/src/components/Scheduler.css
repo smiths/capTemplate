@@ -90,11 +90,13 @@
   font-size: 15px;
   font: Calibri; 
   border-radius: 20px; /* Circular button */
-  padding: 10px 5px; /* Some padding around the content */
+  padding: 10px ; /*Some padding around the content */
   border: none;
   background-color: rgb(0, 0, 0);
   cursor: pointer;
-  margin: 10px;
+  margin-left: 0px;
+  margin-top: 150px;
+
 
 }
 .main-schedule{
