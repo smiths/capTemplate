@@ -130,7 +130,10 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <div className="upcomingSchedulesBox" >
-      <p className="headerBox">Schedule Queue</p>
+      <p className="headerBox">Satellite Name</p>
+      <p className="headerBox2">All Schedules</p>
+      <p className="headerBox3">Schedule Queue</p>
+
       <div className="main-schedule"> 
 
       <Stack alignItems="flex-start" spacing={1}>
@@ -147,7 +150,7 @@ const Scheduler = ({ noradId }: Props) => {
               display: "flex",
               //flexWrap: "nowrap",
               //overflowX: "auto",
-              maxWidth: "45vw", // Use 100vw to ensure it considers the full viewport width
+              maxWidth: "10vw", // Use 100vw to ensure it considers the full viewport width
               boxSizing: "border-box",
               "& .MuiGrid-item": {
                 flex: "0 0 auto",
@@ -196,7 +199,7 @@ const Scheduler = ({ noradId }: Props) => {
                           ) : (
                             <p className="cardSubtitle">No commands</p>
                           )}
-                          <button onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
+                          <button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
                         </>
                       </Stack>
                     </CardContent>
