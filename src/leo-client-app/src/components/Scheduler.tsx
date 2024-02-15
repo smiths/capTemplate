@@ -109,6 +109,7 @@ const Scheduler = ({ noradId }: Props) => {
     fetch(
       `http://localhost:3001/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
     )
+    
       .then((response) => response.json())
       .then((data) => {
         setScheduleCommands((prevCommands) => ({
@@ -125,61 +126,14 @@ const Scheduler = ({ noradId }: Props) => {
     fetchSchedules(satelliteId);
   }, [satelliteId]);
 
-  // const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
-  //   const router = useRouter();
-  //   return (
-  //     <div className="schedule">
-  //       <div className="schedule-header">
-  //         {schedule.startDate} 
-  //         {/* <br> </br> */}
-  //         {schedule.startTime} - {schedule.endTime}
-  //       </div>
-  //       <ul className="commands">
-  //         {schedule.commands.map((command, index) => (
-  //           <li key={index}>{command.name}</li>
-  //         ))}
-  //       </ul>
+  const router = useRouter();
 
-  //       <button onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
-        
-  //     </div>
-  //   )};
-          
-  // const SchedulesPage: React.FC = () => {
-  //   return (
-  //     <div className="schedules-page">
-  //       {/* this is for satellite name title; for now its being hardcoded later on it will be dynamic (another pr) */}
-  //       <header> 
-  //         <div className='satellite-name'>
-  //           Satellite Name
-  //         </div>
-  //       </header>
-  //       {/* All schedules for that particular satellite */}
-  //       <header>
-  //         <div className='all-schedules'>
-  //             All Schedules
-  //           </div>
-  //       </header>
-  //       <header> 
-  //         <div className='schedule-queue'> 
-  //       Schedule Queue
-  //         </div> 
-  //       </header>
-    
-  //       <div className="schedule-queue">
-  //         {schedules1.map((schedule, index) => (
-  //           <ScheduleComponent key={index} schedule={schedule} />
-  //         ))}
-  //         {/* button for edit schedules */}
-  //       </div>
-  //       <button className="add-schedule">+</button>
-  //     </div>
-  // )};
-  
   return (
-    <div className="upcomingSchedulesBox">
+    <div className="upcomingSchedulesBox" >
+      <p className="headerBox">Schedule Queue</p>
+      <div className="main-schedule"> 
+
       <Stack alignItems="flex-start" spacing={1}>
-        <p className="headerBox">Schedule Queue</p>
         {isLoading ? (
           <Box className="loadingBox">
             <CircularProgress />
@@ -242,6 +196,7 @@ const Scheduler = ({ noradId }: Props) => {
                           ) : (
                             <p className="cardSubtitle">No commands</p>
                           )}
+                          <button onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
                         </>
                       </Stack>
                     </CardContent>
@@ -251,13 +206,66 @@ const Scheduler = ({ noradId }: Props) => {
           </Grid>
         )}
       </Stack>
-    </div>
+      </div>
+
+      </div>
+    
   );
 
             };
 export default Scheduler;
 
 
+  // const ScheduleComponent: React.FC<{ schedule: Schedule }> = ({ schedule }) => {
+  //   const router = useRouter();
+  //   return (
+  //     <div className="schedule">
+  //       <div className="schedule-header">
+  //         {schedule.startDate} 
+  //         {/* <br> </br> */}
+  //         {schedule.startTime} - {schedule.endTime}
+  //       </div>
+  //       <ul className="commands">
+  //         {schedule.commands.map((command, index) => (
+  //           <li key={index}>{command.name}</li>
+  //         ))}
+  //       </ul>
+
+  //       <button onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
+        
+  //     </div>
+  //   )};
+          
+  // const SchedulesPage: React.FC = () => {
+  //   return (
+  //     <div className="schedules-page">
+  //       {/* this is for satellite name title; for now its being hardcoded later on it will be dynamic (another pr) */}
+  //       <header> 
+  //         <div className='satellite-name'>
+  //           Satellite Name
+  //         </div>
+  //       </header>
+  //       {/* All schedules for that particular satellite */}
+  //       <header>
+  //         <div className='all-schedules'>
+  //             All Schedules
+  //           </div>
+  //       </header>
+  //       <header> 
+  //         <div className='schedule-queue'> 
+  //       Schedule Queue
+  //         </div> 
+  //       </header>
+    
+  //       <div className="schedule-queue">
+  //         {schedules1.map((schedule, index) => (
+  //           <ScheduleComponent key={index} schedule={schedule} />
+  //         ))}
+  //         {/* button for edit schedules */}
+  //       </div>
+  //       <button className="add-schedule">+</button>
+  //     </div>
+  // )};
 
 
 // // Mock data
