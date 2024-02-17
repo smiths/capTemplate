@@ -2,28 +2,21 @@ import '../components/Scheduler.css';
 import { useRouter } from "next/router";
 import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import {React, useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 
-
-
-
-const Scheduler: React.FC = () => {
+const Scheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-
-
   // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
 
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
-
   // admin
   // const userId: string = "65a5e11fe0d601e0e8c4a385";
 
   // operator
   const userId: string = "65a8181f36ea10b4366e1dd9";
-
   const scheduleId = "65a8182036ea10b4366e1de6";
   const isAdmin = adminUserId === userId;
 
@@ -128,9 +121,7 @@ const Scheduler: React.FC = () => {
               ))}
           </div>
         </div>
-
         <div style={{ width: "50px" }}></div>
-
         <div
           style={{
             border: "2px solid white",
@@ -168,6 +159,5 @@ const Scheduler: React.FC = () => {
     </div>
   );
 };
-
 
 export default Scheduler;
