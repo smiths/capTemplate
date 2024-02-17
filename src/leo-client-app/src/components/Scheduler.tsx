@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../components/Scheduler.css'; // Import the CSS styles
+import '../components/Scheduler.css'; 
 import { useRouter } from "next/router";
 import {
   Box,
@@ -10,11 +10,9 @@ import {
   Stack,
 } from "@mui/material";
 
-
 interface Command {
   name: string;
 }
-
 interface Schedule {
   id: string;
   startDate: string;
@@ -24,7 +22,6 @@ interface Schedule {
   createdAt: string;
   updatedAt: string;
 }
-
 type Props = {
   noradId: string;
 };
@@ -55,7 +52,6 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 const Scheduler = ({ noradId }: Props) => {
-  // TODO: Dynamically get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
   const [schedules1, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -64,7 +60,7 @@ const Scheduler = ({ noradId }: Props) => {
   }>({});
 
   const fetchSchedules = (satelliteId: string) => {
-    setIsLoading(true); // Set loading state to true when starting to fetch
+    setIsLoading(true); 
     fetch(
       `http://localhost:3001/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
     )
@@ -81,9 +77,7 @@ const Scheduler = ({ noradId }: Props) => {
             createdAt: schedule.createdAt,
             updatedAt: schedule.updatedAt,
           }));
-          // Set the transformed schedules
           setSchedules(transformedSchedules);
-          // After setting schedules, fetch commands for each schedule
           transformedSchedules.forEach((schedule: Schedule) => {
             fetchCommandsPerScheduleAndUpdateState(schedule.id);
           });
@@ -94,7 +88,7 @@ const Scheduler = ({ noradId }: Props) => {
       .catch((error) => {
         console.error("Error fetching satellite schedules:", error);
       })
-      .finally(() => setIsLoading(false)); // Reset loading state regardless of result
+      .finally(() => setIsLoading(false)); 
   };
 
   const fetchCommandsPerScheduleAndUpdateState = (scheduleId: string) => {
@@ -201,4 +195,3 @@ const Scheduler = ({ noradId }: Props) => {
   );
             };
 export default Scheduler;
-

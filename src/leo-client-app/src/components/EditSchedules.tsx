@@ -4,7 +4,6 @@ import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
-import '../components/EditSchedules.css';
 
 
 
