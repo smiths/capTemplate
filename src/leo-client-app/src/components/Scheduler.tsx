@@ -53,7 +53,7 @@ function formatTimeRange(startTime: string, endTime: string) {
 }
 const Scheduler = ({ noradId }: Props) => {
   const satelliteId = "655acd63d122507055d3d2ea";
-  const [schedules1, setSchedules] = useState<Schedule[]>([]);
+  const [scheduleForCard, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scheduleCommands, setScheduleCommands] = useState<{
     [scheduleId: string]: string[];
@@ -132,8 +132,6 @@ const Scheduler = ({ noradId }: Props) => {
             spacing={2}
             sx={{
               display: "flex",
-              // flexWrap: "nowrap",
-              // overflowX: "auto",
               maxWidth: "10vw", 
               boxSizing: "border-box",
               "& .MuiGrid-item": {
@@ -142,8 +140,8 @@ const Scheduler = ({ noradId }: Props) => {
               mx: -2,
             }}
           >
-            {schedules1 &&
-              schedules1.map((schedule, index) => (
+            {scheduleForCard &&
+              scheduleForCard.map((schedule, index) => (
                 <Grid item key={index}>
                   <Card
                     sx={{

@@ -8,9 +8,7 @@ import ViewScheduleCard from "./ViewScheduleCard";
 const Scheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
-
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
   // admin
   // const userId: string = "65a5e11fe0d601e0e8c4a385";
@@ -92,7 +90,7 @@ const Scheduler = ({noradId}: Props) => {
         alignItems: "flex-start",
         gap: "4rem",
       }}>
-      <h1> Satellite Name </h1>
+      <h1> Satellite Names </h1>
 
       <div
         style={{
