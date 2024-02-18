@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { ForkLeft } from "../../../../../node_modules/@mui/icons-material/index";
 import '../styles.css';
 
 type Props = {
@@ -56,18 +57,21 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
     <div
       style={{
         minWidth: "200px",
-        border: "2px solid black",
+        // border: "2px solid black",
         borderRadius: "16px",
         padding: "10px",
-      }}>
-      <h2>Current Schedule</h2>
+        margin: "100px",
+        // margin-left: "100px",
+              }}>
+      <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Current Schedule</h2>
       {error && <h3 style={{ color: "red" }}>{error}</h3>}
       <br></br>
       <TableContainer
         component={Paper}
         sx={{
-          minWidth: 800,
+          minWidth: 1000,
           background: "#ffdad9",
+          // padding: "100px"
         }}>
         <Table aria-label="simple table">
           <TableHead>

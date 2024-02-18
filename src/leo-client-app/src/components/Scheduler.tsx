@@ -116,7 +116,7 @@ const Scheduler = ({ noradId }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="upcomingSchedulesBox" >
+    <div className="schedulesPageContainer">
       <p className="headerBox">Satellite Name</p>
       <p className="headerBox2">All Schedules</p>
       <p className="headerBox3">Schedule Queue</p>
@@ -146,16 +146,16 @@ const Scheduler = ({ noradId }: Props) => {
                 <Grid item key={index}>
                   <Card
                     sx={{
-                      minWidth: 900,
-                      minHeight: 200,
+                      minWidth: 1180,
+                      minHeight: 80,
                       margin: 0.5,
                       backgroundColor:
                         "var(--material-theme-sys-light-primary-container)",
                       cursor: "pointer",
-                      borderRadius: 3,
+                      borderRadius: 4,
                     }}>
                     <CardContent>
-                      <Stack spacing={0}>
+                      <Stack spacing={1}>
                         <p className="cardTitle">
                           {formatDate(schedule.startDate)}
                         </p>
@@ -190,7 +190,7 @@ const Scheduler = ({ noradId }: Props) => {
         )}
       </Stack>
       </div>
-      </div>
+    </div>
   );
             };
 export default Scheduler;

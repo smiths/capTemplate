@@ -1,10 +1,11 @@
-import '../components/Scheduler.css'; 
 import { useRouter } from "next/router";
 import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {React, useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
+import cssstyles from "../styles.css/";
+
 
 const Scheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
@@ -90,9 +91,11 @@ const Scheduler = ({noradId}: Props) => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "4rem",
+        backgroundColor: "var(--material-theme-sys-dark-background)"
       }}
       >
-      <h1> Satellite Names </h1>
+      <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}> 
+      Satellite Names </h1>
 
       <div
         style={{
@@ -107,9 +110,10 @@ const Scheduler = ({noradId}: Props) => {
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
+            //"white",
           }}
           >
-          <h2>Valid Commands</h2>
+          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Valid Commands</h2>
           <div>
             {validCommands &&
               validCommands.length > 0 &&
@@ -117,7 +121,8 @@ const Scheduler = ({noradId}: Props) => {
                 <button
                   key={index}
                   className="scheduleButton"
-                  onClick={() => addCommand(command)}>
+                  onClick={() => addCommand(command)}
+                  style = {{color: "white", fontFamily: "Roboto"}}>
                   {command}
                 </button>
               ))}
@@ -131,15 +136,16 @@ const Scheduler = ({noradId}: Props) => {
             padding: "10px",
             overflow: "auto",
           }}>
-          <h2>Current Schedules</h2>
+          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Current Schedules</h2>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
               <button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}>
-                <span className="buttonText">{command}</span>
+                onClick={() => removeCommand(index)}
+                style = {{color: "white", fontFamily: "Roboto"}}>
+                <span className="buttonText" style= {{textAlign:"center"}}>{command}</span>
                 <span className="closeButton">X</span>
               </button>
             ))}
