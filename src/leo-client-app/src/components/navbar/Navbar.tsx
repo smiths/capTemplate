@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
       alignItems="center"
       justifyContent="flex-end"
       spacing={23}
-      sx={{ background: "#1a1a1a", py: 2, px:20 }}>
+      sx={{ background: "var(--material-theme-sys-dark-background)", py: 2, px:20 }}>
       {navbarItems.map((item, index) => (
         <Link
           key={item.path + index}
