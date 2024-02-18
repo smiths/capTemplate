@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import '../styles.css';
 
 type Props = {
   scheduleId: string;
@@ -55,7 +56,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
     <div
       style={{
         minWidth: "200px",
-        border: "2px solid white",
+        border: "2px solid black",
         borderRadius: "16px",
         padding: "10px",
       }}>
@@ -65,25 +66,25 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
       <TableContainer
         component={Paper}
         sx={{
-          maxWidth: 800,
-          background: "#40403fb0",
+          minWidth: 800,
+          background: "#ffdad9",
         }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell sx={{ color: "black !important" }} align="left">
                 Command
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell sx={{ color: "black !important" }} align="left">
                 Status
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell sx={{ color: "black !important" }} align="left">
                 Operator
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell sx={{ color: "black !important" }} align="left">
                 Created
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell sx={{ color: "black !important" }} align="left">
                 Delete
               </TableCell>
             </TableRow>
@@ -95,22 +96,22 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
                 <TableRow
                   key={item._id + index}
                   sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
+                    "&:last-child td, &:last-child th": { border: 1 },
                   }}>
                   <TableCell
-                    sx={{ color: "white !important" }}
+                    sx={{ color: "black !important" }}
                     align="left"
                     component="th"
                     scope="row">
                     {item.command}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell sx={{ color: "black !important" }} align="left">
                     {item.status}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell sx={{ color: "black !important" }} align="left">
                     {item.userId.email}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell sx={{ color: "black !important" }} align="left">
                     {new Date(item.createdAt.toString()).toLocaleDateString(
                       "en-US",
                       {

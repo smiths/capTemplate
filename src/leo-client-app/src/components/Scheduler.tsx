@@ -9,6 +9,7 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+import "../styles.css";
 
 interface Command {
   name: string;
@@ -145,11 +146,11 @@ const Scheduler = ({ noradId }: Props) => {
                 <Grid item key={index}>
                   <Card
                     sx={{
-                      minWidth: 800,
+                      minWidth: 900,
                       minHeight: 200,
                       margin: 0.5,
                       backgroundColor:
-                        "var(--material-theme-sys-light-inverse-on-surface)",
+                        "var(--material-theme-sys-light-primary-container)",
                       cursor: "pointer",
                       borderRadius: 3,
                     }}>

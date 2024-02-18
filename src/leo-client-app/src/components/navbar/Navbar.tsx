@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "white" }}>
+          sx={{ color: "var(--material-theme-white)"}}>
           {item.heading}
         </Link>
       ))}

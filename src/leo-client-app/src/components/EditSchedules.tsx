@@ -4,6 +4,7 @@ import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {React, useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
+import './styles/component.css';
 
 const Scheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
@@ -89,7 +90,8 @@ const Scheduler = ({noradId}: Props) => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "4rem",
-      }}>
+      }}
+      >
       <h1> Satellite Names </h1>
 
       <div
@@ -98,13 +100,15 @@ const Scheduler = ({noradId}: Props) => {
           justifyContent: "space-around",
           alignItems: "flex-start",
         }}>
-        <div
+        <div 
+        // className='contentBox'
           style={{
             minWidth: "200px",
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
-          }}>
+          }}
+          >
           <h2>Valid Commands</h2>
           <div>
             {validCommands &&
