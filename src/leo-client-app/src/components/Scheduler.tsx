@@ -157,10 +157,10 @@ const Scheduler = ({ noradId }: Props) => {
                     }}>
                     <CardContent>
                       <Stack spacing={1}>
-                        <p className="cardTitle">
+                        <p className="cardTitle" style={{ fontFamily: "Roboto", padding: "0px", fontSize: "18px", color: "var(--material-theme-black)"}}>
                           {formatDate(schedule.startDate)}
                         </p>
-                        <p className="cardSubtitle">
+                        <p className="cardSubtitle" >
                           {formatTimeRange(
                             schedule.startDate,
                             schedule.endDate
@@ -178,11 +178,11 @@ const Scheduler = ({ noradId }: Props) => {
                               )
                             )
                           ) : (
-                            <p className="cardSubtitle">No commands</p>
+                            <p className="cardSubtitle" style={{padding: "0px", fontSize: "15px", color: "var(--material-theme-black)"}}>No commands</p>
                           )}
                         </>
                       </Stack>
-                      <Button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} style = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
+                      <Button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} sx = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
                     </CardContent>
                   </Card>
                 </Grid>

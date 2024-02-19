@@ -125,7 +125,7 @@ const Scheduler = ({noradId}: Props) => {
                   key={index}
                   className="scheduleButton"
                   onClick={() => addCommand(command)}
-                  style = {{color: "white", fontFamily: "Roboto"}}>
+                  style = {{color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
                   {command}
                 </Button>
               ))}
@@ -147,7 +147,7 @@ const Scheduler = ({noradId}: Props) => {
                 key={index}
                 className="removeButton scheduleButton"
                 onClick={() => removeCommand(index)}
-                style = {{color: "white", fontFamily: "Roboto"}}>
+                style = {{color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
                 <span className="buttonText" style= {{textAlign:"center"}}>{command}</span>
                 <span className="closeButton">X</span>
               </Button>
