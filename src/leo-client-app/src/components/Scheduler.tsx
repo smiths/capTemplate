@@ -118,7 +118,8 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <div className="schedulesPageContainer">
-      <p className="headerBox">Satellite Name</p>
+      {/* for line 122, use the satellitename component after pulling */}
+      <p className="headerBox">Satellite Name</p> 
       <p className="headerBox2">All Schedules</p>
       <p className="headerBox3">Schedule Queue</p>
       <div className="main-schedule"> 
@@ -171,7 +172,6 @@ const Scheduler = ({ noradId }: Props) => {
                           scheduleCommands[schedule.id].length > 0 ? (
                             scheduleCommands[schedule.id].map(
                               (commandObj: any, cmdIndex) => (
-                                // Render each command in a separate <p> tag
                                 <p key={cmdIndex} className="cardSubtitle">
                                   {commandObj.command}
                                 </p>

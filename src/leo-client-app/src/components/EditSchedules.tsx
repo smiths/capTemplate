@@ -94,7 +94,7 @@ const Scheduler = ({noradId}: Props) => {
   };
 
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         flexDirection: "column",
@@ -104,7 +104,7 @@ const Scheduler = ({noradId}: Props) => {
       }}>
       <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "200px", marginTop: "50px"}}> 
       Satellite Names </h1>
-     <div style={{
+     <Box style={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",}}>
@@ -148,8 +148,8 @@ const Scheduler = ({noradId}: Props) => {
                 className="removeButton scheduleButton"
                 onClick={() => removeCommand(index)}
                 style = {{color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
-                <span className="buttonText" style= {{textAlign:"center"}}>{command}</span>
-                <span className="closeButton">X</span>
+                <Box className="buttonText" style= {{textAlign:"center"}}>{command}</Box>
+                <Box className="closeButton">X</Box>
               </Button>
             ))}
             {/* need this div for clear formatting within the cards */}
@@ -166,9 +166,9 @@ const Scheduler = ({noradId}: Props) => {
             </Button>
           </div>
         </Card>
-      </div>
+      </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-    </div>
+    </Box>
   );
 };
 
