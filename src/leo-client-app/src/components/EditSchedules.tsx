@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Grid,
   Stack,
+  Button,
 } from "@mui/material";
 
 
@@ -120,13 +121,13 @@ const Scheduler = ({noradId}: Props) => {
             {validCommands &&
               validCommands.length > 0 &&
               validCommands.map((command, index) => (
-                <button
+                <Button
                   key={index}
                   className="scheduleButton"
                   onClick={() => addCommand(command)}
                   style = {{color: "white", fontFamily: "Roboto"}}>
                   {command}
-                </button>
+                </Button>
               ))}
         </Card>
         <Card
@@ -138,31 +139,31 @@ const Scheduler = ({noradId}: Props) => {
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
-          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Current Schedules</h2>
+          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</h2>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
-              <button
+              <Button
                 key={index}
                 className="removeButton scheduleButton"
                 onClick={() => removeCommand(index)}
                 style = {{color: "white", fontFamily: "Roboto"}}>
                 <span className="buttonText" style= {{textAlign:"center"}}>{command}</span>
                 <span className="closeButton">X</span>
-              </button>
+              </Button>
             ))}
             {/* need this div for clear formatting within the cards */}
           <div style={{ display: "flex", justifyContent: "space-around" }}> 
-            <button
+            <Button
               onClick={() => setCurrentSchedule([])}
-              style={{ display: "block", margin: "5px 0" }}>
+              style={{ display: "block", margin: "5px 0", color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
               Clear Schedule
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => sendSchedule()}
-              style={{ display: "block", margin: "5px 0" }}>
+              style={{ display: "block", margin: "5px 0",color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
               Send Schedule
-            </button>
+            </Button>
           </div>
         </Card>
       </div>

@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Grid,
   Stack,
+  Button,
 } from "@mui/material";
 import "../styles.css";
 
@@ -181,7 +182,7 @@ const Scheduler = ({ noradId }: Props) => {
                           )}
                         </>
                       </Stack>
-                      <button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} > Edit Schedules </button>
+                      <Button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} style = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
                     </CardContent>
                   </Card>
                 </Grid>
