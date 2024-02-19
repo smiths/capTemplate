@@ -60,18 +60,18 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
         // border: "2px solid black",
         borderRadius: "16px",
         padding: "10px",
-        margin: "100px",
-        // margin-left: "100px",
+        marginLeft: "80px",
+        marginTop: "100px"
               }}>
-      <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Current Schedule</h2>
+      <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "500px"}}>Current Schedule</h2>
       {error && <h3 style={{ color: "red" }}>{error}</h3>}
       <br></br>
       <TableContainer
         component={Paper}
         sx={{
           minWidth: 1000,
-          background: "#ffdad9",
-          // padding: "100px"
+          background: "var(--material-theme-sys-dark-primary-fixed)",
+          marginLeft: "110px"
         }}>
         <Table aria-label="simple table">
           <TableHead>

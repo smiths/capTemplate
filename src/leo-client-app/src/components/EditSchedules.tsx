@@ -5,6 +5,14 @@ import {React, useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
 import cssstyles from "../styles.css/";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Stack,
+} from "@mui/material";
 
 
 const Scheduler = ({noradId}: Props) => {
@@ -91,30 +99,24 @@ const Scheduler = ({noradId}: Props) => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "4rem",
-        backgroundColor: "var(--material-theme-sys-dark-background)"
-      }}
-      >
-      <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}> 
+        backgroundColor: "var(--material-theme-sys-dark-background)",
+      }}>
+      <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "200px", marginTop: "50px"}}> 
       Satellite Names </h1>
-
-      <div
-        style={{
+     <div style={{
           display: "flex",
           justifyContent: "space-around",
-          alignItems: "flex-start",
-        }}>
-        <div 
-        // className='contentBox'
-          style={{
+          alignItems: "flex-start",}}>
+        <Card
+          sx={{
             minWidth: "200px",
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
-            //"white",
-          }}
-          >
+            marginLeft: "250px",
+            backgroundColor: "var(--material-theme-sys-dark-background)"
+          }}>
           <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Valid Commands</h2>
-          <div>
             {validCommands &&
               validCommands.length > 0 &&
               validCommands.map((command, index) => (
@@ -126,15 +128,15 @@ const Scheduler = ({noradId}: Props) => {
                   {command}
                 </button>
               ))}
-          </div>
-        </div>
-        <div style={{ width: "50px" }}></div>
-        <div
-          style={{
+        </Card>
+        <Card
+          sx={{
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
             overflow: "auto",
+            marginLeft: "220px",
+            backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
           <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Current Schedules</h2>
           {currentSchedule &&
@@ -149,7 +151,8 @@ const Scheduler = ({noradId}: Props) => {
                 <span className="closeButton">X</span>
               </button>
             ))}
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            {/* need this div for clear formatting within the cards */}
+          <div style={{ display: "flex", justifyContent: "space-around" }}> 
             <button
               onClick={() => setCurrentSchedule([])}
               style={{ display: "block", margin: "5px 0" }}>
@@ -161,7 +164,7 @@ const Scheduler = ({noradId}: Props) => {
               Send Schedule
             </button>
           </div>
-        </div>
+        </Card>
       </div>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
     </div>
