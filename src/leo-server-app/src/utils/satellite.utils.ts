@@ -21,6 +21,8 @@ let defaultTleLine1 =
   defaultTleLine2 =
     "2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199";
 
+let defaultName = "BDSAT-2";
+
 // GS info
 let observerGd = {
   longitude: satellite.degreesToRadians(-79.9201),
@@ -51,6 +53,28 @@ export const getTLE = async (noradId: string) => {
     result[0].tle[1]?.toString() || defaultTleLine1,
     result[0].tle[2]?.toString() || defaultTleLine2,
   ];
+};
+
+// Fetch Name data given a NORAD_ID using spacetrack
+export const getSatelliteName = async (noradId: string) => {
+  const result = await spacetrack.get({
+    type: "tle_latest",
+    query: [
+      { field: "NORAD_CAT_ID", condition: noradId },
+      { field: "ORDINAL", condition: "1" },
+    ],
+    predicates: ["OBJECT_NAME", "TLE_LINE0", "TLE_LINE1", "TLE_LINE2"],
+  });
+
+  if (!result.length) {
+    return defaultName;
+  }
+
+  if (!result[0].name) {
+    console.error("Satellite name not set properly");
+  }
+
+  return result[0].name?.toString() || defaultName;
 };
 
 export const isSunlit = (

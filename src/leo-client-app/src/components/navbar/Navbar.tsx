@@ -1,9 +1,10 @@
 import { Link, Stack } from "@mui/material";
 import NextLink from "next/link";
+import "../styles/navbar.css";
 
 const navbarItems = [
   {
-    heading: "Satellite passes",
+    heading: "Satellites",
     path: "/satellite-passes",
   },
   {
@@ -22,7 +23,6 @@ const navbarItems = [
     heading: "Account",
     path: "/api/auth/logout",
   },
-  
 ];
 
 const Navbar: React.FC = () => {

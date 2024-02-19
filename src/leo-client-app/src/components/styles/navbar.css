@@ -1,0 +1,8 @@
+.navBar {
+  /* border: 1px solid red; */
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the width */
+  margin: 0; /* Reset default margin */
+  padding: 0; /* Reset default padding */
+  max-width: 1280px;
+}
