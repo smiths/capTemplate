@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Box
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -54,7 +55,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
   }, [commandsData.data]);
 
   return (
-    <div
+    <Box
       style={{
         minWidth: "200px",
         padding: "10px",
@@ -74,19 +75,19 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "black !important" }} align="left">
+              <TableCell sx={{ color: "black !important", borderLeft: 2, borderRight: 2 }} align="left">
                 Command
               </TableCell>
-              <TableCell sx={{ color: "black !important" }} align="left">
+              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
                 Status
               </TableCell>
-              <TableCell sx={{ color: "black !important" }} align="left">
+              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
                 Operator
               </TableCell>
-              <TableCell sx={{ color: "black !important" }} align="left">
+              <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
                 Created
               </TableCell>
-              <TableCell sx={{ color: "black !important" }} align="left">
+              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
                 Delete
               </TableCell>
             </TableRow>
@@ -97,23 +98,23 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
               commandsData.data.commands.map((item: any, index: number) => (
                 <TableRow
                   key={item._id + index}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 1 },
+                  sx={{ borderBottom: 2, borderTop: 2, borderLeft: 2,borderRight: 2
+                    // "&:last-child td, &:last-child th": { border: 1 },
                   }}>
                   <TableCell
-                    sx={{ color: "black !important" }}
+                    sx={{ color: "black !important", borderRight: 2 }}
                     align="left"
                     component="th"
                     scope="row">
                     {item.command}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important" }} align="left">
+                  <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
                     {item.status}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important" }} align="left">
+                  <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
                     {item.userId.email}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important" }} align="left">
+                  <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
                     {new Date(item.createdAt.toString()).toLocaleDateString(
                       "en-US",
                       {
@@ -140,7 +141,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
