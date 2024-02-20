@@ -16,6 +16,10 @@ import {
   Button,
 } from "@mui/material";
 
+type Props = {
+  noradId: string;
+};
+
 
 const Scheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
