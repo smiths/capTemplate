@@ -120,9 +120,9 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-sys-dark-background)", padding: "20px" }}>
-      <SatelliteName />
-      <Typography class="headerBox2">All Schedules</Typography>
-      <Typography class="headerBox3">Schedule Queue</Typography>
+      <SatelliteName noradId="55098"/>
+      <Typography className="headerBox2">All Schedules</Typography>
+      <Typography className="headerBox3">Schedule Queue</Typography>
       <Box className="main-schedule"> 
       <Stack alignItems="flex-start" spacing={1}>
         {isLoading ? (
@@ -158,10 +158,10 @@ const Scheduler = ({ noradId }: Props) => {
                     }}>
                     <CardContent>
                       <Stack spacing={1}>
-                        <Typography class="cardTitle"> 
+                        <Typography className="cardTitle"> 
                           {formatDate(schedule.startDate)}
                         </Typography>
-                        <Typography class="cardSubtitle" >
+                        <Typography className="cardSubtitle" >
                           {formatTimeRange(
                             schedule.startDate,
                             schedule.endDate
@@ -172,7 +172,7 @@ const Scheduler = ({ noradId }: Props) => {
                           scheduleCommands[schedule.id].length > 0 ? (
                             scheduleCommands[schedule.id].map(
                               (commandObj: any, cmdIndex) => (
-                                <Typography key={cmdIndex} class="cardSubtitle">
+                                <Typography key={cmdIndex} className="cardSubtitle">
                                   {commandObj.command}
                                 </Typography>
                               )
