@@ -20,3 +20,26 @@
   font-family: var(--material-themetitleMedium);
   color: var(--material-theme-sys-light-on-surface-variant);
 }
+.headerBox2{
+  font-size: 32px;
+  color: rgba(243, 182, 182, 0.714);
+  margin-left: 100px;
+  margin-top: 30px;
+}
+.headerBox3{
+  font-size: 24px;
+  color: rgba(249, 216, 216, 0.714);
+  margin-left: 100px;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.main-schedule{
+  border: 2px solid #fff;
+  border-radius: 24px;
+  border-width: 2px;
+  padding: 1px; 
+  margin: 25px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
