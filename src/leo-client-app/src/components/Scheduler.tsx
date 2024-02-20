@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import '../components/Scheduler.css'; 
 import { useRouter } from "next/router";
 import {
   Box,
@@ -9,8 +8,11 @@ import {
   Grid,
   Stack,
   Button,
+  Typography,
 } from "@mui/material";
 import "../styles.css";
+import SatelliteName from './SatelliteName';
+import './styles/component.css';
 
 interface Command {
   name: string;
@@ -117,12 +119,11 @@ const Scheduler = ({ noradId }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="schedulesPageContainer">
-      {/* for line 122, use the satellitename component after pulling */}
-      <p className="headerBox">Satellite Name</p> 
-      <p className="headerBox2">All Schedules</p>
-      <p className="headerBox3">Schedule Queue</p>
-      <div className="main-schedule"> 
+    <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-sys-dark-background)", padding: "20px" }}>
+      <SatelliteName />
+      <Typography class="headerBox2">All Schedules</Typography>
+      <Typography class="headerBox3">Schedule Queue</Typography>
+      <Box className="main-schedule"> 
       <Stack alignItems="flex-start" spacing={1}>
         {isLoading ? (
           <Box className="loadingBox">
@@ -141,8 +142,7 @@ const Scheduler = ({ noradId }: Props) => {
                 flex: "0 0 auto",
               },
               mx: -2,
-            }}
-          >
+            }}>
             {scheduleForCard &&
               scheduleForCard.map((schedule, index) => (
                 <Grid item key={index}>
@@ -158,27 +158,27 @@ const Scheduler = ({ noradId }: Props) => {
                     }}>
                     <CardContent>
                       <Stack spacing={1}>
-                        <p className="cardTitle" style={{ fontFamily: "Roboto", padding: "0px", fontSize: "18px", color: "var(--material-theme-black)"}}>
+                        <Typography class="cardTitle"> 
                           {formatDate(schedule.startDate)}
-                        </p>
-                        <p className="cardSubtitle" >
+                        </Typography>
+                        <Typography class="cardSubtitle" >
                           {formatTimeRange(
                             schedule.startDate,
                             schedule.endDate
                           )}
-                        </p>
+                        </Typography>
                         <>
                           {scheduleCommands[schedule.id] &&
                           scheduleCommands[schedule.id].length > 0 ? (
                             scheduleCommands[schedule.id].map(
                               (commandObj: any, cmdIndex) => (
-                                <p key={cmdIndex} className="cardSubtitle">
+                                <Typography key={cmdIndex} class="cardSubtitle">
                                   {commandObj.command}
-                                </p>
+                                </Typography>
                               )
                             )
                           ) : (
-                            <p className="cardSubtitle" style={{padding: "0px", fontSize: "15px", color: "var(--material-theme-black)"}}>No commands</p>
+                            <Typography className="cardSubtitle" sx={{padding: "0px", fontSize: "15px", color: "var(--material-theme-black)"}}>No commands</Typography>
                           )}
                         </>
                       </Stack>
@@ -190,8 +190,8 @@ const Scheduler = ({ noradId }: Props) => {
           </Grid>
         )}
       </Stack>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
             };
 export default Scheduler;

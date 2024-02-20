@@ -139,7 +139,7 @@ const Scheduler = ({noradId}: Props) => {
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
-          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</h2>
+          <h2 className="material-themedisplaysmall" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</h2>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
