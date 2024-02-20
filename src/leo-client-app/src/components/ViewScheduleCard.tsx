@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ForkLeft } from "../../../../../node_modules/@mui/icons-material/index";
 import '../styles.css';
 
 type Props = {
