@@ -12,7 +12,7 @@ function EditSchedulePage({ noradId }: Props) {
   return (
     <main>
       <Navbar />
-      <EditSchedule_Page/>
+      <EditSchedule_Page noradId="55098"/>
     </main>
   );
 }

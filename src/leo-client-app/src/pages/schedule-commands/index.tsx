@@ -8,7 +8,7 @@ function SchedulerPage() {
   return (
     <main>
       <Navbar />
-      <Scheduler />
+      <Scheduler noradId="55098"/>
     </main>
   );
 }
