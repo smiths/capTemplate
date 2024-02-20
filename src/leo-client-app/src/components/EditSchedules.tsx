@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
 import cssstyles from "../styles.css/";
