@@ -182,7 +182,7 @@ const Scheduler = ({ noradId }: Props) => {
                           )}
                         </>
                       </Stack>
-                      <Button className="edit-button" onClick={()=>{router.push('/edit-schedules')}} sx = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
+                      <Button className="edit-button" onClick={()=>{router.push({pathname: '/edit-schedules', query: {satelliteId}})}} sx = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
                     </CardContent>
                   </Card>
                 </Grid>
