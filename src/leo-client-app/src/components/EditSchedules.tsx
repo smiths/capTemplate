@@ -25,7 +25,8 @@ const EditScheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   // const satelliteId = "655acd63d122507055d3d2ea";
-  const satelliteId = router.query.satelliteId;
+  const satelliteId = router.query?.satelliteId?.toString() ?? '';
+  // console.log(typeof(satelliteId), "hi");
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
   // admin
   // const userId: string = "65a5e11fe0d601e0e8c4a385";
@@ -42,6 +43,7 @@ const EditScheduler = ({noradId}: Props) => {
     if (isAdmin) {
       fetch(
         `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
+        
       )
         .then((response) => response.json())
         .then((data) => {
