@@ -21,10 +21,11 @@ type Props = {
 };
 
 
-const Scheduler = ({noradId}: Props) => {
+const EditScheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const satelliteId = "655acd63d122507055d3d2ea";
+  // const satelliteId = "655acd63d122507055d3d2ea";
+  const satelliteId = router.query.satelliteId;
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
   // admin
   // const userId: string = "65a5e11fe0d601e0e8c4a385";
@@ -177,4 +178,4 @@ const Scheduler = ({noradId}: Props) => {
   );
 };
 
-export default Scheduler;
+export default EditScheduler;

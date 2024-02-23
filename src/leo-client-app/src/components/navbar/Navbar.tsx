@@ -20,7 +20,8 @@ const navbarItems = [
     path: "/satellite-logs",
   },
   {
-    heading: "Account",
+    // heading: "Account",
+    heading: "Log Out",
     path: "/api/auth/logout",
   },
 ];
