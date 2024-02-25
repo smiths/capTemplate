@@ -120,9 +120,11 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-sys-dark-background)", padding: "20px" }}>
-      <SatelliteName noradId="55098"/>
+      <Box px = {"100px"}>
+        <SatelliteName noradId="55098" />
       <Typography className="headerBox2">All Schedules</Typography>
       <Typography className="headerBox3">Schedule Queue</Typography>
+      </Box>      
       <Box className="main-schedule"> 
       <Stack alignItems="flex-start" spacing={1}>
         {isLoading ? (
