@@ -81,15 +81,17 @@ const EditScheduler = ({noradId}: Props) => {
   }, [satelliteId]);
 
   // Mutation function
+  // asynchronous call to handle the api in order to send commands
   const { mutate } = useMutation({
     mutationFn: () =>
       sendCommandSchedule(userId, scheduleId, satelliteId, currentSchedule),
 
+      //the callback function if calling api endpoint is successful
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
     },
-
+      //the callback function if calling api endpoint is complete
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
