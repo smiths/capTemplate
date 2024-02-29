@@ -13,6 +13,7 @@ import {
 import "../styles.css";
 import SatelliteName from './SatelliteName';
 import './styles/component.css';
+import { CenterFocusStrong } from "../../../../../node_modules/@mui/icons-material/index";
 
 interface Command {
   name: string;
@@ -120,7 +121,7 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-sys-dark-background)", padding: "20px" }}>
-      <Box px = {"100px"}>
+      <Box px = {"200px"}>
         <SatelliteName noradId="55098" />
       <Typography className="headerBox2">All Schedules</Typography>
       <Typography className="headerBox3">Schedule Queue</Typography>
@@ -138,26 +139,28 @@ const Scheduler = ({ noradId }: Props) => {
             spacing={2}
             sx={{
               display: "flex",
-              maxWidth: "10vw", 
               boxSizing: "border-box",
               "& .MuiGrid-item": {
                 flex: "0 0 auto",
               },
+              border: 3,
+              borderRadius: "24px",
+              borderColor: 'white',
+              width: '85%',
               mx: -2,
             }}>
             {scheduleForCard &&
               scheduleForCard.map((schedule, index) => (
-                <Grid item key={index}>
-                  <Card
-                    sx={{
-                      minWidth: 1180,
-                      minHeight: 80,
-                      margin: 0.5,
-                      backgroundColor:
-                        "var(--material-theme-sys-light-primary-container)",
-                      cursor: "pointer",
-                      borderRadius: 4,
-                    }}>
+                <Grid item key={index} sx={{width:'98%'}} >
+                  <Card sx={{
+                  width: '99%',
+                  minHeight: 100,
+                  margin: 0.5,
+                  backgroundColor:
+                    "var(--material-theme-sys-light-primary-container)",
+                  cursor: "pointer",
+                  borderRadius: 4,
+                  }}>
                     <CardContent>
                       <Stack spacing={1}>
                         <Typography className="cardTitle"> 
@@ -192,6 +195,7 @@ const Scheduler = ({ noradId }: Props) => {
               ))}
           </Grid>
         )}
+        <Box/>
       </Stack>
       </Box>
     </Box>
