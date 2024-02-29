@@ -6,7 +6,6 @@ import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
 import "../styles.css";
 import SatelliteName from './SatelliteName';
-
 import {
   Box,
   Card,
@@ -26,8 +25,7 @@ const EditScheduler = ({noradId}: Props) => {
   const satelliteId = router.query?.satelliteId?.toString() ?? '';
   // console.log(typeof(satelliteId), "hi");
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
-  // admin
-  // const userId: string = "65a5e11fe0d601e0e8c4a385";
+  
 
   // operator
   const userId: string = "65a8181f36ea10b4366e1dd9";
@@ -47,7 +45,7 @@ const EditScheduler = ({noradId}: Props) => {
           setValidCommands(data.satellite.validCommands);
         })
         .catch((error) => {
-          console.error("Error fetching valid commands:", error);
+          console.error("Error fetching valid commands Admin:", error);
         });
     } else {
       fetch(
@@ -58,7 +56,7 @@ const EditScheduler = ({noradId}: Props) => {
           setValidCommands(data.record[0].validCommands);
         })
         .catch((error) => {
-          console.error("Error fetching valid commands:", error);
+          console.error("Error fetching valid commands for this user:", error);
         });
     }
   };
@@ -153,17 +151,17 @@ const EditScheduler = ({noradId}: Props) => {
               <Button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}
-                style = {{color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
+                onClick={() => removeCommand(index)}>
                 <Box className="buttonText" style= {{textAlign:"center"}}>{command}</Box>
                 <Box className="closeButton">X</Box>
               </Button>
             ))}
             {/* need this div for clear formatting within the cards */}
           <div style={{ display: "flex", justifyContent: "space-around" }}> 
-            <Button
+            <Button className = "ClearScheduleButton"
               onClick={() => setCurrentSchedule([])}
-              style={{ display: "block", margin: "5px 0", color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
+              style={{ display: "block", margin: "5px 0", color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}
+              >
               Clear Schedule
             </Button>
             <Button
