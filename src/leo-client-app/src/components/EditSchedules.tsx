@@ -10,9 +10,7 @@ import SatelliteName from './SatelliteName';
 import {
   Box,
   Card,
-  CardContent,
-  CircularProgress,
-  Grid,
+  Typography,
   Stack,
   Button,
 } from "@mui/material";
@@ -103,33 +101,31 @@ const EditScheduler = ({noradId}: Props) => {
   };
 
   return (
-    <Card
+    <Stack
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        gap: "4rem",
-        backgroundColor: "var(--material-theme-sys-dark-background)",
+        gap: "2rem",
       }}>
-      {/* <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "200px", marginTop: "50px"}}> 
-      Satellite Names </h1> */}
-      <Box px = {"200px"}>
+      <Box px = {"4px"} >
         <SatelliteName noradId="55098" />
-      </Box> 
+      </Box>
      <Box style={{
           display: "flex",
           justifyContent: "space-around",
-          alignItems: "flex-start",}}>
+          alignItems: "flex-start",
+        }}
+          >
         <Card
           sx={{
             minWidth: "200px",
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
-            marginLeft: "250px",
             backgroundColor: "var(--material-theme-sys-dark-background)"
           }}>
-          <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Valid Commands</h2>
+          <Typography variant = "h4" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Valid Commands</Typography>
             {validCommands &&
               validCommands.length > 0 &&
               validCommands.map((command, index) => (
@@ -150,7 +146,7 @@ const EditScheduler = ({noradId}: Props) => {
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
-          <h2 className="material-themedisplaysmall" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</h2>
+          <Typography variant = "h4" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</Typography>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
@@ -177,11 +173,9 @@ const EditScheduler = ({noradId}: Props) => {
             </Button>
           </div>
         </Card>
-
       </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-              
-    </Card>
+    </Stack>
   );
 };
 
