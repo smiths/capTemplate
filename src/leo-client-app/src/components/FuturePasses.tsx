@@ -100,7 +100,12 @@ const FuturePasses = ({ noradId }: Props) => {
             <CircularProgress />
           </Box>
         ) : (
-          <Grid className="futurePassesBox" container spacing={2}>
+          <Grid
+            className="futurePassesBox"
+            container
+            spacing={1}
+            justifyContent="center"
+          >
             {" "}
             {passes &&
               passes.map((passPair, index) => (

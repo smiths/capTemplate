@@ -144,11 +144,16 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                   <Card
                     sx={{
                       minWidth: 150,
+                      maxWidth: 150,
                       margin: 0.5,
                       backgroundColor:
                         "var(--material-theme-sys-light-inverse-on-surface)",
                       cursor: "pointer",
                       borderRadius: 3,
+                      minHeight: 150,
+                      maxHeight: 150,
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                   >
                     <CardContent>
@@ -167,14 +172,19 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                         <>
                           {scheduleCommands[schedule.id] &&
                           scheduleCommands[schedule.id].length > 0 ? (
-                            scheduleCommands[schedule.id].map(
-                              (commandObj: any, cmdIndex) => (
-                                // Render each command in a separate <p> tag
-                                <p key={cmdIndex} className="cardSubtitle">
-                                  {commandObj.command}
-                                </p>
-                              )
-                            )
+                            <>
+                              {scheduleCommands[schedule.id]
+                                .slice(0, 3)
+                                .map((commandObj: any, cmdIndex) => (
+                                  // Render each command in a separate <p> tag
+                                  <p key={cmdIndex} className="cardSubtitle">
+                                    {commandObj.command}
+                                  </p>
+                                ))}
+                              {scheduleCommands[schedule.id].length > 3 && (
+                                <p className="cardSubtitle">...</p>
+                              )}
+                            </>
                           ) : (
                             <p className="cardSubtitle">No commands</p>
                           )}
