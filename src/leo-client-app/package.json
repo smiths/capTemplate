@@ -10,7 +10,7 @@
     "all": "concurrently \"cd ../leo-server-app && npm run start:dev\" \"npm run dev\""
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3.2.0",
+    "@auth0/nextjs-auth0": "^3.5.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.17",
