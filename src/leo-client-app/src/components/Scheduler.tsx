@@ -99,7 +99,6 @@ const Scheduler = ({ noradId }: Props) => {
     fetch(
       `http://localhost:3001/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
     )
-    
       .then((response) => response.json())
       .then((data) => {
         setScheduleCommands((prevCommands) => ({
@@ -119,7 +118,7 @@ const Scheduler = ({ noradId }: Props) => {
   const router = useRouter();
 
   return (
-    <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-sys-dark-background)", padding: "20px" }}>
+    <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-black)", padding: "20px" }}>
       <Box px = {"200px"}>
         <SatelliteName noradId="55098" />
       <Typography className="headerBox2">All Schedules</Typography>
@@ -144,7 +143,7 @@ const Scheduler = ({ noradId }: Props) => {
               },
               border: 3,
               borderRadius: "24px",
-              borderColor: 'white',
+              borderColor: "var(--material-theme-white)",
               width: '85%',
               mx: -2,
             }}>
@@ -174,13 +173,20 @@ const Scheduler = ({ noradId }: Props) => {
                         <>
                           {scheduleCommands[schedule.id] &&
                           scheduleCommands[schedule.id].length > 0 ? (
-                            scheduleCommands[schedule.id].map(
+                            <>
+                            {scheduleCommands[schedule.id]
+                            .slice(0,3)
+                            .map(
                               (commandObj: any, cmdIndex) => (
                                 <Typography key={cmdIndex} className="cardSubtitle">
                                   {commandObj.command}
                                 </Typography>
                               )
-                            )
+                            )}
+                            {scheduleCommands[schedule.id].length > 3 && (
+                              <Typography classname = "cardSubtitle"> ... </Typography> 
+                            )}
+                            </> 
                           ) : (
                             <Typography className="cardSubtitle" sx={{padding: "0px", fontSize: "15px", color: "var(--material-theme-black)"}}>No commands</Typography>
                           )}
