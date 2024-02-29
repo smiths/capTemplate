@@ -1,12 +1,14 @@
 "use client";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import Navbar from "@/components/navbar/Navbar";
-import Scheduler from "@/components/Scheduler";
+import EditScheduler from "@/components/EditSchedules";
 import { Stack } from "@mui/material";
 
+type Props = {
+  noradId: string;
+};
 
-
-function SchedulerPage() {
+function EditSchedulePage({ noradId }: Props) {
   return (
     <main>
       <Stack
@@ -14,14 +16,11 @@ function SchedulerPage() {
       justifyContent="center"
       spacing={1}
       sx={{ width: "100%" }}> 
-
-      <Navbar />
-      <Scheduler noradId="55098"/>
+        <Navbar />
+      <EditScheduler noradId="55098"/>
       </Stack>
     </main>
   );
 }
 
-
-
-export default withPageAuthRequired(SchedulerPage);
+export default withPageAuthRequired(EditSchedulePage);
