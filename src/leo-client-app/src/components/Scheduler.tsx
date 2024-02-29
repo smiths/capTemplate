@@ -184,7 +184,7 @@ const Scheduler = ({ noradId }: Props) => {
                               )
                             )}
                             {scheduleCommands[schedule.id].length > 3 && (
-                              <Typography classname = "cardSubtitle"> ... </Typography> 
+                              <Typography className= "cardSubtitle"> ... </Typography> 
                             )}
                             </> 
                           ) : (
