@@ -30,22 +30,26 @@ const Navbar: React.FC = () => {
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
-      spacing={23}
-      sx={{ background: "var(--material-theme-sys-dark-background)", py: 2, px:20 }}>
+      alignItems="left"
+      justifyContent="space-between"
+      spacing={5}
+      className="navBar"
+      style={{ width: "100%", margin: 0, padding: 0, marginTop: "100px" }}
+    >
       {navbarItems.map((item, index) => (
         <Link
           key={item.path + index}
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "var(--material-theme-white)"}}>
+          sx={{ color: "var(--material-theme-sys-light-inverse-on-surface)" }}
+        >
           {item.heading}
         </Link>
       ))}
     </Stack>
   );
 };
+
 
 export default Navbar;
