@@ -9,7 +9,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Box
+  Typography,
+  Stack,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -54,39 +55,34 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
   }, [commandsData.data]);
 
   return (
-    <Box
-      style={{
-        minWidth: "200px",
-        padding: "10px",
-        marginLeft: "80px",
-        marginTop: "80px",
-        marginBottom: "20px" }}>
-      <h2 className="material-themedisplaysmall " style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "500px", marginBottom: "8px" }}>Current Schedule</h2>
-      {error && <h3 style={{ color: "red" }}>{error}</h3>}
+    <Stack
+      sx={{ width: "100%" }} alignItems="center" spacing={4} py={10}>
+      <Typography align = "center" variant = "h3" style={{width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginBottom: "1px"}}>Current Schedule</Typography>
+      {error && <Typography style={{ color: "var(--material-theme-sys-light-error)" }}>{error}</Typography>}
       <br></br>
       <TableContainer
         component={Paper}
         sx={{
-          minWidth: 1000,
+          maxWidth: 800,
           background: "var(--material-theme-sys-dark-primary-fixed)",
-          marginLeft: "110px"
+          // marginLeft: "2px"
         }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "black !important", borderLeft: 2, borderRight: 2 }} align="left">
+              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderLeft: 2, borderRight: 2}} align="left">
                 Command
               </TableCell>
-              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
+              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
                 Status
               </TableCell>
-              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
+              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
                 Operator
               </TableCell>
-              <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
+              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2 }} align="left">
                 Created
               </TableCell>
-              <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
+              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
                 Delete
               </TableCell>
             </TableRow>
@@ -129,7 +125,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
                   <TableCell sx={{ color: "white !important" }} align="left">
                     <Button
                       variant="text"
-                      sx={{ color: "red" }}
+                      sx={{ color: "var(--material-theme-sys-light-error)" }}
                       disabled={item.status === "EXECUTED"}
                       onClick={() => removeCommand(item._id)}>
                       Delete
@@ -140,7 +136,7 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </Stack>
   );
 };
 

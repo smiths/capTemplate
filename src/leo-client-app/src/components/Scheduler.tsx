@@ -118,11 +118,11 @@ const Scheduler = ({ noradId }: Props) => {
   const router = useRouter();
 
   return (
-    <Box className="schedulesPageContainer" sx={{backgroundColor: "var(--material-theme-black)", padding: "20px" }}>
+    <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
       <Box px = {"200px"}>
         <SatelliteName noradId="55098" />
-      <Typography className="headerBox2">All Schedules</Typography>
-      <Typography className="headerBox3">Schedule Queue</Typography>
+      <Typography variant = "h5" className="headerBox2">All Schedules</Typography>
+      <Typography variant = "h5" className="headerBox3">Schedule Queue</Typography>
       </Box>      
       <Box className="main-schedule"> 
       <Stack alignItems="flex-start" spacing={1}>

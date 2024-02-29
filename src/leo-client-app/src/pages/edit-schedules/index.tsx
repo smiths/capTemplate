@@ -2,7 +2,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import Navbar from "@/components/navbar/Navbar";
 import EditScheduler from "@/components/EditSchedules";
-
+import { Stack } from "@mui/material";
 
 type Props = {
   noradId: string;
@@ -11,8 +11,14 @@ type Props = {
 function EditSchedulePage({ noradId }: Props) {
   return (
     <main>
-      <Navbar />
+      <Stack
+      alignItems="center"
+      justifyContent="center"
+      spacing={1}
+      sx={{ width: "100%" }}> 
+        <Navbar />
       <EditScheduler noradId="55098"/>
+      </Stack>
     </main>
   );
 }
