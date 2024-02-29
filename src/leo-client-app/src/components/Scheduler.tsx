@@ -13,7 +13,6 @@ import {
 import "../styles.css";
 import SatelliteName from './SatelliteName';
 import './styles/component.css';
-import { CenterFocusStrong } from "../../../../../node_modules/@mui/icons-material/index";
 
 interface Command {
   name: string;
