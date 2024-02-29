@@ -35,12 +35,11 @@
 }
 
 .main-schedule{
-  /* border: 2px solid #fff;
-  border-radius: 24px;
-  border-width: 2px;
-  padding: 1px;  */
-  /* margin: 25px; */
   margin-left: 200px;
   margin-top: 30px;
-  /* margin-right: 100px; */
+}
+
+.scheduleButton{
+  color: var(--material-theme-sys-light-secondary-container) !important;
+  font-family: "Roboto";
 }

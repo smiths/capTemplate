@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
 import "../styles.css";
+import SatelliteName from './SatelliteName';
 
 import {
   Box,
@@ -19,7 +20,6 @@ import {
 type Props = {
   noradId: string;
 };
-
 
 const EditScheduler = ({noradId}: Props) => {
   const queryClient = useQueryClient();
@@ -43,7 +43,6 @@ const EditScheduler = ({noradId}: Props) => {
     if (isAdmin) {
       fetch(
         `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
-        
       )
         .then((response) => response.json())
         .then((data) => {
@@ -86,12 +85,12 @@ const EditScheduler = ({noradId}: Props) => {
     mutationFn: () =>
       sendCommandSchedule(userId, scheduleId, satelliteId, currentSchedule),
 
-      //the callback function if calling api endpoint is successful
+  //the callback function if calling api endpoint is successful
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
     },
-      //the callback function if calling api endpoint is complete
+  //the callback function if calling api endpoint is complete
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
@@ -104,7 +103,7 @@ const EditScheduler = ({noradId}: Props) => {
   };
 
   return (
-    <Box
+    <Card
       style={{
         display: "flex",
         flexDirection: "column",
@@ -112,8 +111,11 @@ const EditScheduler = ({noradId}: Props) => {
         gap: "4rem",
         backgroundColor: "var(--material-theme-sys-dark-background)",
       }}>
-      <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "200px", marginTop: "50px"}}> 
-      Satellite Names </h1>
+      {/* <h1 className="material-themedisplaymedium" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginLeft: "200px", marginTop: "50px"}}> 
+      Satellite Names </h1> */}
+      <Box px = {"200px"}>
+        <SatelliteName noradId="55098" />
+      </Box> 
      <Box style={{
           display: "flex",
           justifyContent: "space-around",
@@ -134,15 +136,14 @@ const EditScheduler = ({noradId}: Props) => {
                 <Button
                   key={index}
                   className="scheduleButton"
-                  onClick={() => addCommand(command)}
-                  style = {{color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
+                  onClick={() => addCommand(command)}>
                   {command}
                 </Button>
               ))}
         </Card>
         <Card
           sx={{
-            border: "2px solid white",
+            border: "2px solid var(--material-theme-white)",
             borderRadius: "16px",
             padding: "10px",
             overflow: "auto",
@@ -176,9 +177,11 @@ const EditScheduler = ({noradId}: Props) => {
             </Button>
           </div>
         </Card>
+
       </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-    </Box>
+              
+    </Card>
   );
 };
 
