@@ -13,6 +13,7 @@ import {
 import "../styles.css";
 import SatelliteName from './SatelliteName';
 import './styles/component.css';
+import './styles/Scheduler.css';
 
 interface Command {
   name: string;

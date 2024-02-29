@@ -20,36 +20,4 @@
   font-family: var(--material-themetitleMedium);
   color: var(--material-theme-sys-light-on-surface-variant);
 }
-.headerBox2{
-  font-size: 32px;
-  color: var(" --material-theme-black");
-  margin-left: 100px;
-  margin-top: 30px;
-}
-.headerBox3{
-  font-size: 24px;
-  color: var( " --material-theme-black");
-  margin-left: 100px;
-  margin-top: 30px;
-  margin-bottom: 40px;
-}
 
-.main-schedule{
-  margin-left: 200px;
-  margin-top: 30px;
-}
-
-.scheduleButton{
-  color: var(--material-theme-sys-light-secondary-container) !important;
-  font-family: "Roboto";
-}
-.removeButton scheduleButton{
-  color: "var(--material-theme-sys-light-secondary-container)";
-  fontFamily: "Roboto";
-}
-.ClearScheduleButton{
-  display: "block";
-  margin: "5px 0";
-  color: "var(--material-theme-sys-light-secondary-container)";
-  fontFamily: "Roboto";
-}

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
 import './styles/component.css';
 import "../styles.css";
+import './styles/Scheduler.css';
 import SatelliteName from './SatelliteName';
 import {
   Box,
