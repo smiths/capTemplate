@@ -1,6 +1,6 @@
 "use client";
 
-import { sendCommandSchedule } from "@/constants/api";
+import { BACKEND_URL, sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
@@ -27,9 +27,7 @@ const Scheduler: React.FC = () => {
 
   const fetchValidCommands = (satelliteId: string) => {
     if (isAdmin) {
-      fetch(
-        `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
-      )
+      fetch(`${BACKEND_URL}/satellite/getSatellite?satelliteId=${satelliteId}`)
         .then((response) => response.json())
         .then((data) => {
           setValidCommands(data.satellite.validCommands);
@@ -39,7 +37,7 @@ const Scheduler: React.FC = () => {
         });
     } else {
       fetch(
-        `http://localhost:3001/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
+        `${BACKEND_URL}/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
       )
         .then((response) => response.json())
         .then((data) => {

@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import axios from "axios";
 import "../../styles.css";
+import { BACKEND_URL } from "@/constants/api";
 
 const defaultNoradId = "55098";
 
@@ -22,12 +23,9 @@ function SatelliteInfoPage() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/satellite/getSatelliteName",
-        {
-          params: { noradId: selectedNoradId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatelliteName`, {
+        params: { noradId: selectedNoradId },
+      });
       setSatelliteName(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -46,8 +44,7 @@ function SatelliteInfoPage() {
       alignItems="center"
       justifyContent="center"
       spacing={1}
-      sx={{ height: "100vh", margin: "0 auto", width: "100%" }}
-    >
+      sx={{ height: "100vh", margin: "0 auto", width: "100%" }}>
       <Navbar />
       <Grid
         container
@@ -58,8 +55,7 @@ function SatelliteInfoPage() {
           boxSizing: "border-box",
           justifyContent: "center",
           mx: "auto",
-        }}
-      >
+        }}>
         <SatelliteName noradId={selectedNoradId} />
         <Grid
           container
@@ -70,8 +66,7 @@ function SatelliteInfoPage() {
             height: "auto",
             maxWidth: "1280px",
             boxSizing: "border-box",
-          }}
-        >
+          }}>
           <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
             <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
               <Box>
