@@ -14,7 +14,7 @@ function SatellitesOfInterestPage() {
         sx={{ width: "100%" }}
       >
         <Navbar />
-        <SatellitesOfInterest noradId="55098" />
+        <SatellitesOfInterest userId="65a5e14ee0d601e0e8c4a387" />
       </Stack>
     </main>
   );
