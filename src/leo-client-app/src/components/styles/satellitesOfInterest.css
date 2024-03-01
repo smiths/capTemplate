@@ -12,10 +12,10 @@
   margin-top: -10px;
   width: 100%;
   display: flex;
-  flex-wrap: nowrap; /* Keep items in a single row */
-  justify-content: flex-start; /* Align items to the start */
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   max-width: 100%;
-  height: auto; /* Adjust based on the height of a single row of your content */
+  height: auto;
   min-height: 150px;
   overflow-x: auto;
   overflow-y: hidden;

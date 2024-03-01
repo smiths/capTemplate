@@ -14,19 +14,7 @@ function SatellitesOfInterestPage() {
         sx={{ width: "100%" }}
       >
         <Navbar />
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            alignItems: "flex-start",
-            maxWidth: "1280px",
-            boxSizing: "border-box",
-            justifyContent: "center",
-            mx: "auto",
-          }}
-        >
-          <SatellitesOfInterest userId="65a5e14ee0d601e0e8c4a387" />
-        </Grid>
+        <SatellitesOfInterest userId="65a5e14ee0d601e0e8c4a387" />
       </Stack>
     </main>
   );
