@@ -1,0 +1,31 @@
+.satellitesOfInterest {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.satellitesOfInterestBox {
+  border: 2px solid var(--material-theme-sys-light-on-primary);
+  border-radius: 15px;
+  padding: 0.5%;
+  margin-top: -10px;
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap; /* Keep items in a single row */
+  justify-content: flex-start; /* Align items to the start */
+  max-width: 100%;
+  height: auto; /* Adjust based on the height of a single row of your content */
+  min-height: 150px;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
