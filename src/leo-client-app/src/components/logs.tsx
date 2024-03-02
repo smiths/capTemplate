@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Button,
   Paper,
@@ -13,7 +14,9 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
+import "./styles/logs.css"
 import moment from "moment";
+
 
 const Logs: React.FC = () => {
   // TODO: Dynamicall get satelliteId from somewhere
@@ -49,25 +52,22 @@ const Logs: React.FC = () => {
   }, [satelliteId]);
 
   return (
-    <Stack sx={{ width: "100%" }} alignItems="center" spacing={3} py={5}>
+    <Stack className="stack" alignItems="center" spacing={3} py={5}>
       <Typography variant="h5">Logs</Typography>
       <TableContainer
         component={Paper}
-        sx={{
-          maxWidth: 800,
-          background: "#40403fb0",
-        }}
+        className="table-container"
       >
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell className="table-cell">
                 Created At
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell className="table-cell">
                 Last Updated
               </TableCell>
-              <TableCell sx={{ color: "white !important" }} align="left">
+              <TableCell className="table-cell">
                 Logs
               </TableCell>
             </TableRow>
@@ -77,13 +77,10 @@ const Logs: React.FC = () => {
               logs?.map((data: any, index: number) => (
                 <TableRow
                   key={data._id + index}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
+                  className="table-row"
                 >
                   <TableCell
-                    sx={{ color: "white !important" }}
-                    align="left"
+                    className="table-cell"
                     component="th"
                     scope="row"
                   >
@@ -92,16 +89,16 @@ const Logs: React.FC = () => {
                       .local()
                       .format("DD/MM/YYYY HH:mm:ss")}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell className="table-cell">
                     {moment
                       .utc(data.updatedAt)
                       .local()
                       .format("DD/MM/YYYY HH:mm:ss")}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell className="table-cell">
                     <Button
                       variant="text"
-                      sx={{ color: "#6cb6ff" }}
+                      className="button"
                       onClick={() => handleLogOpen(data)}
                     >
                       Show Logs
