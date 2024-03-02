@@ -8,8 +8,7 @@ import "../styles.css";
 import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
-
-export const BACKEND_URL = "http://localhost:3001";
+import { BACKEND_URL } from "@/constants/api";
 
 type Props = {
   userId: string;
@@ -71,8 +70,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           className="satellitesOfInterestBox"
           alignItems="flex-start"
           direction="row"
-          spacing={5}
-        >
+          spacing={5}>
           {satellites.map((satellite, index) => (
             <Grid item key={index} spacing={1}>
               <Link href={`/satellite/${satellite.noradId}`} passHref>
@@ -93,8 +91,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
                     alignItems: "center",
                     marginLeft: 2,
                     marginRight: 2,
-                  }}
-                >
+                  }}>
                   <CardContent>
                     <p className="cardTitle">{satellite.name}</p>
                     <p className="cardSubtitle">{satellite.noradId}</p>

@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "@/constants/api";
 
 const defaultNoradId = "55098";
 
@@ -15,12 +16,9 @@ const SatelliteName = ({ noradId }: Props) => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/satellite/getSatelliteName",
-        {
-          params: { noradId: selectedNoradId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatelliteName`, {
+        params: { noradId: selectedNoradId },
+      });
       setSatelliteName(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -45,8 +43,7 @@ const SatelliteName = ({ noradId }: Props) => {
         textAlign: "left",
         boxSizing: "border-box",
         marginTop: "50px",
-      }}
-    >
+      }}>
       {satelliteName}
     </Box>
   );

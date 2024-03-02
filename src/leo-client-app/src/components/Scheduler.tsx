@@ -14,6 +14,7 @@ import "../styles.css";
 import SatelliteName from "./SatelliteName";
 import "./styles/component.css";
 import "./styles/Scheduler.css";
+import { BACKEND_URL } from "@/constants/api";
 
 interface Command {
   name: string;
@@ -66,7 +67,7 @@ const Scheduler = ({ noradId }: Props) => {
   const fetchSchedules = (satelliteId: string) => {
     setIsLoading(true);
     fetch(
-      `http://localhost:3001/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
+      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -97,7 +98,7 @@ const Scheduler = ({ noradId }: Props) => {
 
   const fetchCommandsPerScheduleAndUpdateState = (scheduleId: string) => {
     fetch(
-      `http://localhost:3001/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
+      `${BACKEND_URL}/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -150,8 +151,7 @@ const Scheduler = ({ noradId }: Props) => {
                 borderColor: "var(--material-theme-white)",
                 width: "85%",
                 mx: -2,
-              }}
-            >
+              }}>
               {scheduleForCard &&
                 scheduleForCard.map((schedule, index) => (
                   <Grid item key={index} sx={{ width: "98%" }}>
@@ -164,8 +164,7 @@ const Scheduler = ({ noradId }: Props) => {
                           "var(--material-theme-sys-light-primary-container)",
                         cursor: "pointer",
                         borderRadius: 4,
-                      }}
-                    >
+                      }}>
                       <CardContent>
                         <Stack spacing={1}>
                           <Typography className="cardTitle">
@@ -186,8 +185,7 @@ const Scheduler = ({ noradId }: Props) => {
                                   .map((commandObj: any, cmdIndex) => (
                                     <Typography
                                       key={cmdIndex}
-                                      className="cardSubtitle"
-                                    >
+                                      className="cardSubtitle">
                                       {commandObj.command}
                                     </Typography>
                                   ))}
@@ -205,8 +203,7 @@ const Scheduler = ({ noradId }: Props) => {
                                   padding: "0px",
                                   fontSize: "15px",
                                   color: "var(--material-theme-black)",
-                                }}
-                              >
+                                }}>
                                 No commands
                               </Typography>
                             )}
@@ -225,8 +222,7 @@ const Scheduler = ({ noradId }: Props) => {
                             color: "var(--material-theme-black)",
                             fontFamily: "Roboto",
                             marginTop: "10px",
-                          }}
-                        >
+                          }}>
                           {" "}
                           Edit Schedules{" "}
                         </Button>
