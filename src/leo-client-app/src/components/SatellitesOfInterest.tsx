@@ -9,6 +9,8 @@ import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
 
+export const BACKEND_URL = "http://localhost:3001";
+
 type Props = {
   userId: string;
 };
@@ -24,7 +26,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
   const fetchSatellites = async (satelliteId: string) => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/satellite/getSatellite",
+        `${BACKEND_URL}/satellite/getSatellite`,
         {
           params: { satelliteId: satelliteId },
         }
@@ -42,12 +44,9 @@ const SatellitesOfInterest = ({ userId }: Props) => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/users/getUserSatellites",
-        {
-          params: { userId: userId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/users/getUserSatellites`, {
+        params: { userId: userId },
+      });
       const satelliteIds = res.data.satellitesOfInterest;
       const satelliteNamesPromises = satelliteIds.map((satelliteId: string) =>
         fetchSatellites(satelliteId)

@@ -13,6 +13,7 @@ import { Grid } from "@mui/material";
 import axios from "axios";
 import "../../styles.css";
 import { useRouter } from "next/router";
+export const BACKEND_URL = "http://localhost:3001";
 
 const defaultNoradId = "55098";
 
@@ -26,12 +27,9 @@ function SatelliteInfoPage() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/satellite/getSatelliteName",
-        {
-          params: { noradId: selectedNoradId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatelliteName`, {
+        params: { noradId: selectedNoradId },
+      });
       setSatelliteName(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
