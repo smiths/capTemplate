@@ -1,32 +1,25 @@
 import { useRouter } from "next/router";
-import { sendCommandSchedule } from "@/constants/api";
+import { BACKEND_URL, sendCommandSchedule } from "@/constants/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import ViewScheduleCard from "./ViewScheduleCard";
-import './styles/component.css';
+import "./styles/component.css";
 import "../styles.css";
-import './styles/Scheduler.css';
-import SatelliteName from './SatelliteName';
-import {
-  Box,
-  Card,
-  Typography,
-  Stack,
-  Button,
-} from "@mui/material";
+import "./styles/Scheduler.css";
+import SatelliteName from "./SatelliteName";
+import { Box, Card, Typography, Stack, Button } from "@mui/material";
 
 type Props = {
   noradId: string;
 };
 
-const EditScheduler = ({noradId}: Props) => {
+const EditScheduler = ({ noradId }: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   // const satelliteId = "655acd63d122507055d3d2ea";
-  const satelliteId = router.query?.satelliteId?.toString() ?? '';
+  const satelliteId = router.query?.satelliteId?.toString() ?? "";
   // console.log(typeof(satelliteId), "hi");
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
-  
 
   // operator
   const userId: string = "65a8181f36ea10b4366e1dd9";
@@ -38,9 +31,7 @@ const EditScheduler = ({noradId}: Props) => {
 
   const fetchValidCommands = (satelliteId: string) => {
     if (isAdmin) {
-      fetch(
-        `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
-      )
+      fetch(`${BACKEND_URL}/satellite/getSatellite?satelliteId=${satelliteId}`)
         .then((response) => response.json())
         .then((data) => {
           setValidCommands(data.satellite.validCommands);
@@ -50,7 +41,7 @@ const EditScheduler = ({noradId}: Props) => {
         });
     } else {
       fetch(
-        `http://localhost:3001/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
+        `${BACKEND_URL}/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -82,12 +73,12 @@ const EditScheduler = ({noradId}: Props) => {
     mutationFn: () =>
       sendCommandSchedule(userId, scheduleId, satelliteId, currentSchedule),
 
-  //the callback function if calling api endpoint is successful
+    //the callback function if calling api endpoint is successful
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
     },
-  //the callback function if calling api endpoint is complete
+    //the callback function if calling api endpoint is complete
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
       setCurrentSchedule([]);
@@ -107,34 +98,41 @@ const EditScheduler = ({noradId}: Props) => {
         alignItems: "flex-start",
         gap: "2rem",
       }}>
-      <Box px = {"4px"} >
+      <Box px={"4px"}>
         <SatelliteName noradId="55098" />
       </Box>
-     <Box style={{
+      <Box
+        style={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",
-        }}
-          >
+        }}>
         <Card
           sx={{
             minWidth: "200px",
             border: "2px solid white",
             borderRadius: "16px",
             padding: "10px",
-            backgroundColor: "var(--material-theme-sys-dark-background)"
+            backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
-          <Typography variant = "h4" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container"}}>Valid Commands</Typography>
-            {validCommands &&
-              validCommands.length > 0 &&
-              validCommands.map((command, index) => (
-                <Button
-                  key={index}
-                  className="scheduleButton"
-                  onClick={() => addCommand(command)}>
-                  {command}
-                </Button>
-              ))}
+          <Typography
+            variant="h4"
+            style={{
+              width: "100%",
+              color: "var(--material-theme-sys-light-secondary-container",
+            }}>
+            Valid Commands
+          </Typography>
+          {validCommands &&
+            validCommands.length > 0 &&
+            validCommands.map((command, index) => (
+              <Button
+                key={index}
+                className="scheduleButton"
+                onClick={() => addCommand(command)}>
+                {command}
+              </Button>
+            ))}
         </Card>
         <Card
           sx={{
@@ -145,7 +143,14 @@ const EditScheduler = ({noradId}: Props) => {
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
           }}>
-          <Typography variant = "h4" style={{ width: "100%", color: "var(--material-theme-sys-light-secondary-container)"}}>Current Schedules</Typography>
+          <Typography
+            variant="h4"
+            style={{
+              width: "100%",
+              color: "var(--material-theme-sys-light-secondary-container)",
+            }}>
+            Current Schedules
+          </Typography>
           {currentSchedule &&
             currentSchedule.length > 0 &&
             currentSchedule.map((command, index) => (
@@ -153,21 +158,33 @@ const EditScheduler = ({noradId}: Props) => {
                 key={index}
                 className="removeButton scheduleButton"
                 onClick={() => removeCommand(index)}>
-                <Box className="buttonText" style= {{textAlign:"center"}}>{command}</Box>
+                <Box className="buttonText" style={{ textAlign: "center" }}>
+                  {command}
+                </Box>
                 <Box className="closeButton">X</Box>
               </Button>
             ))}
-            {/* need this div for clear formatting within the cards */}
-          <div style={{ display: "flex", justifyContent: "space-around" }}> 
-            <Button className = "ClearScheduleButton"
+          {/* need this div for clear formatting within the cards */}
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <Button
+              className="ClearScheduleButton"
               onClick={() => setCurrentSchedule([])}
-              style={{ display: "block", margin: "5px 0", color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}
-              >
+              style={{
+                display: "block",
+                margin: "5px 0",
+                color: "var(--material-theme-sys-light-secondary-container)",
+                fontFamily: "Roboto",
+              }}>
               Clear Schedule
             </Button>
             <Button
               onClick={() => sendSchedule()}
-              style={{ display: "block", margin: "5px 0",color: "var(--material-theme-sys-light-secondary-container)", fontFamily: "Roboto"}}>
+              style={{
+                display: "block",
+                margin: "5px 0",
+                color: "var(--material-theme-sys-light-secondary-container)",
+                fontFamily: "Roboto",
+              }}>
               Send Schedule
             </Button>
           </div>
