@@ -2,13 +2,8 @@
     width: 100%;
   }
   
-  .table-container {
-    max-width: 800px;
-    background: #40403fb0;
-  }
-  
   .table-cell {
-    color: black;
+    color: black !important;
     text-align: left;
   }
   
