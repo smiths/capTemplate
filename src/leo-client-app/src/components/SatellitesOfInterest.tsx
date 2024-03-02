@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, Grid, Stack } from "@mui/material";
+import Link from "next/link";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "../styles.css";
@@ -12,10 +13,15 @@ type Props = {
   userId: string;
 };
 
-const SatellitesOfInterest = ({ userId }: Props) => {
-  const [satellites, setSatellites] = useState<string[]>([]);
+type SatelliteDetails = {
+  name: string;
+  noradId: string;
+};
 
-  const fetchSatelliteName = async (satelliteId: string) => {
+const SatellitesOfInterest = ({ userId }: Props) => {
+  const [satellites, setSatellites] = useState<SatelliteDetails[]>([]);
+
+  const fetchSatellites = async (satelliteId: string) => {
     try {
       const response = await axios.get(
         "http://localhost:3001/satellite/getSatellite",
@@ -23,8 +29,11 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           params: { satelliteId: satelliteId },
         }
       );
-      // Return just the name of the satellite instead of the whole object
-      return response.data.satellite.name;
+
+      return {
+        name: response.data.satellite.name,
+        noradId: response.data.satellite.noradId,
+      };
     } catch (error) {
       console.error("Error fetching satellite name:", error);
       return "";
@@ -41,10 +50,10 @@ const SatellitesOfInterest = ({ userId }: Props) => {
       );
       const satelliteIds = res.data.satellitesOfInterest;
       const satelliteNamesPromises = satelliteIds.map((satelliteId: string) =>
-        fetchSatelliteName(satelliteId)
+        fetchSatellites(satelliteId)
       );
-      const satelliteNames = await Promise.all(satelliteNamesPromises);
-      setSatellites(satelliteNames);
+      const satellites = await Promise.all(satelliteNamesPromises);
+      setSatellites(satellites);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -65,31 +74,34 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           direction="row"
           spacing={5}
         >
-          {satellites.map((satelliteName, index) => (
+          {satellites.map((satellite, index) => (
             <Grid item key={index} spacing={1}>
-              <Card
-                sx={{
-                  minWidth: 150,
-                  maxWidth: 150,
-                  margin: 0.5,
-                  backgroundColor:
-                    "var(--material-theme-sys-light-inverse-on-surface)",
-                  cursor: "pointer",
-                  borderRadius: 3,
-                  minHeight: 150,
-                  maxHeight: 150,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: 2,
-                  marginRight: 2,
-                }}
-              >
-                <CardContent>
-                  <p className="cardTitle">{satelliteName}</p>
-                </CardContent>
-              </Card>
+              <Link href={`/satellite/${satellite.noradId}`} passHref>
+                <Card
+                  sx={{
+                    minWidth: 150,
+                    maxWidth: 150,
+                    margin: 0.5,
+                    backgroundColor:
+                      "var(--material-theme-sys-light-inverse-on-surface)",
+                    cursor: "pointer",
+                    borderRadius: 3,
+                    minHeight: 150,
+                    maxHeight: 150,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginLeft: 2,
+                    marginRight: 2,
+                  }}
+                >
+                  <CardContent>
+                    <p className="cardTitle">{satellite.name}</p>
+                    <p className="cardSubtitle">{satellite.noradId}</p>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
           ))}
         </Stack>
