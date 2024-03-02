@@ -1,0 +1,21 @@
+.stack {
+    width: 100%;
+  }
+  
+  .table-container {
+    max-width: 800px;
+    background: #40403fb0;
+  }
+  
+  .table-cell {
+    color: black;
+    text-align: left;
+  }
+  
+  .table-row:last-child td, .table-row:last-child th {
+    border: 0;
+  }
+  
+  .button {
+    color: #6cb6ff;
+  }
