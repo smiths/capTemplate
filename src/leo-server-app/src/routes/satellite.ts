@@ -11,7 +11,10 @@ import {
 import { SatelliteEventEmitter } from "../event/satellite.event";
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV || "local"}`,
+  path: `.env.${
+    (process.env.NODE_ENV === "development" ? "local" : process.env.NODE_ENV) ||
+    "local"
+  }`,
   override: true,
 });
 
