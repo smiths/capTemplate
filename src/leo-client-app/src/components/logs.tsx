@@ -50,66 +50,77 @@ const Logs: React.FC = () => {
   }, [satelliteId]);
 
   return (
-    <div className="logsBox">
-      <Stack className="stack" alignItems="flex-start" spacing={3} py={8}>
-        <Typography variant="h5">Logs</Typography>
-        <TableContainer
-          component={Paper}
-          sx={{
-            maxWidth: 800,
-            background: "var(--material-theme-sys-light-primary-fixed)",
-            '& .MuiTableCell-root': {  // This targets all TableCell components
-              borderBottom: "2px solid black",
-            },
-          }}
-        >
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className="table-cell">Created At</TableCell>
-                <TableCell className="table-cell">Last Updated</TableCell>
-                <TableCell className="table-cell">Logs</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {logs &&
-                logs?.map((data: any, index: number) => (
-                  <TableRow key={data._id + index} className="table-row">
-                    <TableCell
-                      className="table-cell"
-                      component="th"
-                      scope="row"
-                    >
-                      {moment
-                        .utc(data.createdAt)
-                        .local()
-                        .format("DD/MM/YYYY HH:mm:ss")}
-                    </TableCell>
-                    <TableCell className="table-cell">
-                      {moment
-                        .utc(data.updatedAt)
-                        .local()
-                        .format("DD/MM/YYYY HH:mm:ss")}
-                    </TableCell>
-                    <TableCell className="table-cell">
-                      <Button
-                        variant="text"
-                        className="button"
-                        onClick={() => handleLogOpen(data)}
+    <div className="logs">
+      <Stack className="stack" style={{ width: "100%" }} spacing={3} py={8}>
+        <Typography variant="h4">Logs</Typography>
+        <div className="logsBox">
+          <TableContainer
+            component={Paper}
+            style={{ width: "100%" }}
+            sx={{
+              maxWidth: "100%",
+              background: "var(--material-theme-sys-light-primary-fixed)",
+              "& .MuiTableCell-root": {
+                borderBottom: "2px solid black",
+                color: "var(--material-theme-black)",
+                textAlign: "left",
+                fontSize: "15px",
+              },
+            }}
+          >
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="table-cell">Created At</TableCell>
+                  <TableCell className="table-cell">Last Updated</TableCell>
+                  <TableCell className="table-cell">Logs</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {logs &&
+                  logs?.map((data: any, index: number) => (
+                    <TableRow key={data._id + index} className="table-row">
+                      <TableCell
+                        className="table-cell"
+                        component="th"
+                        scope="row"
                       >
-                        Show Logs
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <LogDialog
-          open={openLog}
-          logData={logData}
-          handleClose={handleLogClose}
-        />
+                        {moment
+                          .utc(data.createdAt)
+                          .local()
+                          .format("DD/MM/YYYY HH:mm:ss")}
+                      </TableCell>
+                      <TableCell className="table-cell">
+                        {moment
+                          .utc(data.updatedAt)
+                          .local()
+                          .format("DD/MM/YYYY HH:mm:ss")}
+                      </TableCell>
+                      <TableCell className="table-cell">
+                        <Button
+                          variant="text"
+                          className="button"
+                          sx={{
+                            color: "var(--material-theme-sys-dark-on-primary)", 
+                            backgroundColor: "var(--material-theme-sys-dark-primary)",
+                            borderRadius: "10px",
+                          }}
+                          onClick={() => handleLogOpen(data)}
+                        >
+                          Show Logs
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <LogDialog
+            open={openLog}
+            logData={logData}
+            handleClose={handleLogClose}
+          />
+        </div>
       </Stack>
     </div>
   );
