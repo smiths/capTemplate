@@ -40,7 +40,21 @@ export const executeScheduledCommands = async (
     const currCommand = commands[ind];
 
     // Execute command
-    let response = {};
+    // Checks if it sending command times out
+    const respMsg = await Promise.race([
+      // TODO: Replace with websocket call
+      new Promise((resolve, reject) =>
+        setTimeout(() => resolve("Command successfully sent"), 500)
+      ),
+      new Promise((resolve, reject) =>
+        setTimeout(() => reject("Command timeout"), currCommand.delay ?? 1000)
+      ),
+    ])
+      .then((res) => res)
+      .catch((error) => error);
+
+    const response = { message: respMsg };
+
     setTimeout(() => {}, currCommand.delay); // delay
 
     // update cmd
