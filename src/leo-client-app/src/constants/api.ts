@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BACKEND_URL = "http://localhost:3001";
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACK_END_URL;
 
 export const getAllOperators = async () => {
   const operators = await axios.get(`${BACKEND_URL}/users/getAllOperators`);

@@ -5,7 +5,7 @@ import "../styles/navbar.css";
 const navbarItems = [
   {
     heading: "Satellites",
-    path: "/satellite-passes",
+    path: "/satellites-of-interest",
   },
   {
     heading: "Scheduler",
@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "var(--material-theme-sys-light-inverse-on-surface)"}}
+          sx={{ color: "var(--material-theme-sys-light-inverse-on-surface)" }}
         >
           {item.heading}
         </Link>
@@ -50,6 +50,5 @@ const Navbar: React.FC = () => {
     </Stack>
   );
 };
-
 
 export default Navbar;

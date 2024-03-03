@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import "../styles.css";
 import "./styles/satelliteInfo.css";
 import "./styles/component.css";
+import { BACKEND_URL } from "@/constants/api";
 
 const fetchDelay = 1000;
 
@@ -55,12 +56,9 @@ const SatelliteInfo = ({ noradId }: Props) => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/satellite/getSatelliteInfo",
-        {
-          params: { noradId: noradId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatelliteInfo`, {
+        params: { noradId: noradId },
+      });
       setState(res.data as SatelliteInfoState);
     } catch (error) {
       console.error("Error fetching data:", error);

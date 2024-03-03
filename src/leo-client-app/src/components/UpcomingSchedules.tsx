@@ -10,6 +10,7 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+import { BACKEND_URL } from "@/constants/api";
 
 interface Schedule {
   id: string;
@@ -62,7 +63,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   const fetchSchedules = (satelliteId: string) => {
     setIsLoading(true); // Set loading state to true when starting to fetch
     fetch(
-      `http://localhost:3001/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
+      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -95,7 +96,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
 
   const fetchCommandsPerScheduleAndUpdateState = (scheduleId: string) => {
     fetch(
-      `http://localhost:3001/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
+      `${BACKEND_URL}/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -136,8 +137,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                 flex: "0 0 auto",
               },
               mx: -2,
-            }}
-          >
+            }}>
             {schedules &&
               schedules.map((schedule, index) => (
                 <Grid item key={index}>
@@ -154,8 +154,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                       maxHeight: 150,
                       display: "flex",
                       flexDirection: "column",
-                    }}
-                  >
+                    }}>
                     <CardContent>
                       <Stack spacing={0}>
                         <p className="cardTitle">

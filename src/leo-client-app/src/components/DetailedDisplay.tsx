@@ -2,6 +2,7 @@
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { BACKEND_URL } from "@/constants/api";
 
 interface DataPoint {
   elevation: number;
@@ -44,7 +45,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get start Azimuth
     fetch(
-      `http://localhost:3001/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(
+      `${BACKEND_URL}/satellite/getSatelliteInfo?searchDate=${encodeURIComponent(
         startTime ?? ""
       )}`
     )
@@ -63,7 +64,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get end Azimuth
     fetch(
-      `http://localhost:3001/satellite/getSatelliteInfo?noradId=${noradId}&searchDate=${encodeURIComponent(
+      `${BACKEND_URL}/satellite/getSatelliteInfo?noradId=${noradId}&searchDate=${encodeURIComponent(
         endTime ?? ""
       )}`
     )
@@ -82,7 +83,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     // Get max elevation
     fetch(
-      `http://localhost:3001/satellite/getMaxElevation?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
+      `${BACKEND_URL}/satellite/getMaxElevation?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -99,7 +100,7 @@ const DetailedDisplay: React.FC<DetailedDisplayProps> = ({
 
     //Plot the polar plot
     fetch(
-      `http://localhost:3001/satellite/getPolarPlotData?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
+      `${BACKEND_URL}/satellite/getPolarPlotData?noradId=${noradId}&START_DATE=${startTime}&END_DATE=${endTime}`
     )
       .then((response) => {
         if (!response.ok) {

@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
 import "./styles/logs.css";
 import moment from "moment";
+import { BACKEND_URL } from "@/constants/api";
 
 const Logs: React.FC = () => {
   // TODO: Dynamicall get satelliteId from somewhere
@@ -34,9 +35,7 @@ const Logs: React.FC = () => {
   };
 
   const fetchLogs = (satelliteId: string) => {
-    fetch(
-      `http://localhost:3001/log/getLogsBySatellite?satelliteId=${satelliteId}`
-    )
+    fetch(`${BACKEND_URL}/log/getLogsBySatellite?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then((data) => {
         setLogs(data?.logs ?? []);

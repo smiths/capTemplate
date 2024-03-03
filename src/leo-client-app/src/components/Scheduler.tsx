@@ -11,9 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import "../styles.css";
-import SatelliteName from './SatelliteName';
-import './styles/component.css';
-import './styles/Scheduler.css';
+import SatelliteName from "./SatelliteName";
+import "./styles/component.css";
+import "./styles/Scheduler.css";
+import { BACKEND_URL } from "@/constants/api";
 
 interface Command {
   name: string;
@@ -50,7 +51,6 @@ function formatTimeRange(startTime: string, endTime: string) {
   const endHours = endDate.getHours();
   const endMinutes = endDate.getMinutes().toString().padStart(2, "0");
 
-
   const formattedStartTime = startHours + ":" + startMinutes;
   const formattedEndTime = endHours + ":" + endMinutes;
 
@@ -65,9 +65,9 @@ const Scheduler = ({ noradId }: Props) => {
   }>({});
 
   const fetchSchedules = (satelliteId: string) => {
-    setIsLoading(true); 
+    setIsLoading(true);
     fetch(
-      `http://localhost:3001/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
+      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -93,12 +93,12 @@ const Scheduler = ({ noradId }: Props) => {
       .catch((error) => {
         console.error("Error fetching satellite schedules:", error);
       })
-      .finally(() => setIsLoading(false)); 
+      .finally(() => setIsLoading(false));
   };
 
   const fetchCommandsPerScheduleAndUpdateState = (scheduleId: string) => {
     fetch(
-      `http://localhost:3001/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
+      `${BACKEND_URL}/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -120,91 +120,122 @@ const Scheduler = ({ noradId }: Props) => {
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
-      <Box px = {"200px"}>
-        <SatelliteName noradId="55098" />
-      <Typography variant = "h5" className="headerBox2">All Schedules</Typography>
-      <Typography variant = "h5" className="headerBox3">Schedule Queue</Typography>
-      </Box>      
-      <Box className="main-schedule"> 
-      <Stack alignItems="flex-start" spacing={1}>
-        {isLoading ? (
-          <Box className="loadingBox">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Grid
-            className="futureSchedulesBox"
-            container
-            spacing={2}
-            sx={{
-              display: "flex",
-              boxSizing: "border-box",
-              "& .MuiGrid-item": {
-                flex: "0 0 auto",
-              },
-              border: 3,
-              borderRadius: "24px",
-              borderColor: "var(--material-theme-white)",
-              width: '85%',
-              mx: -2,
-            }}>
-            {scheduleForCard &&
-              scheduleForCard.map((schedule, index) => (
-                <Grid item key={index} sx={{width:'98%'}} >
-                  <Card sx={{
-                  width: '99%',
-                  minHeight: 100,
-                  margin: 0.5,
-                  backgroundColor:
-                    "var(--material-theme-sys-light-primary-container)",
-                  cursor: "pointer",
-                  borderRadius: 4,
-                  }}>
-                    <CardContent>
-                      <Stack spacing={1}>
-                        <Typography className="cardTitle"> 
-                          {formatDate(schedule.startDate)}
-                        </Typography>
-                        <Typography className="cardSubtitle" >
-                          {formatTimeRange(
-                            schedule.startDate,
-                            schedule.endDate
-                          )}
-                        </Typography>
-                        <>
-                          {scheduleCommands[schedule.id] &&
-                          scheduleCommands[schedule.id].length > 0 ? (
-                            <>
-                            {scheduleCommands[schedule.id]
-                            .slice(0,3)
-                            .map(
-                              (commandObj: any, cmdIndex) => (
-                                <Typography key={cmdIndex} className="cardSubtitle">
-                                  {commandObj.command}
-                                </Typography>
-                              )
+      <Box px={"200px"}>
+        <SatelliteName noradId={noradId} />
+        <Typography variant="h5" className="headerBox2">
+          All Schedules
+        </Typography>
+        <Typography variant="h5" className="headerBox3">
+          Schedule Queue
+        </Typography>
+      </Box>
+      <Box className="main-schedule">
+        <Stack alignItems="flex-start" spacing={1}>
+          {isLoading ? (
+            <Box className="loadingBox">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid
+              className="futureSchedulesBox"
+              container
+              spacing={2}
+              sx={{
+                display: "flex",
+                boxSizing: "border-box",
+                "& .MuiGrid-item": {
+                  flex: "0 0 auto",
+                },
+                border: 3,
+                borderRadius: "24px",
+                borderColor: "var(--material-theme-white)",
+                width: "85%",
+                mx: -2,
+              }}>
+              {scheduleForCard &&
+                scheduleForCard.map((schedule, index) => (
+                  <Grid item key={index} sx={{ width: "98%" }}>
+                    <Card
+                      sx={{
+                        width: "99%",
+                        minHeight: 100,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-primary-container)",
+                        cursor: "pointer",
+                        borderRadius: 4,
+                      }}>
+                      <CardContent>
+                        <Stack spacing={1}>
+                          <Typography className="cardTitle">
+                            {formatDate(schedule.startDate)}
+                          </Typography>
+                          <Typography className="cardSubtitle">
+                            {formatTimeRange(
+                              schedule.startDate,
+                              schedule.endDate
                             )}
-                            {scheduleCommands[schedule.id].length > 3 && (
-                              <Typography className= "cardSubtitle"> ... </Typography> 
+                          </Typography>
+                          <>
+                            {scheduleCommands[schedule.id] &&
+                            scheduleCommands[schedule.id].length > 0 ? (
+                              <>
+                                {scheduleCommands[schedule.id]
+                                  .slice(0, 3)
+                                  .map((commandObj: any, cmdIndex) => (
+                                    <Typography
+                                      key={cmdIndex}
+                                      className="cardSubtitle">
+                                      {commandObj.command}
+                                    </Typography>
+                                  ))}
+                                {scheduleCommands[schedule.id].length > 3 && (
+                                  <Typography className="cardSubtitle">
+                                    {" "}
+                                    ...{" "}
+                                  </Typography>
+                                )}
+                              </>
+                            ) : (
+                              <Typography
+                                className="cardSubtitle"
+                                sx={{
+                                  padding: "0px",
+                                  fontSize: "15px",
+                                  color: "var(--material-theme-black)",
+                                }}>
+                                No commands
+                              </Typography>
                             )}
-                            </> 
-                          ) : (
-                            <Typography className="cardSubtitle" sx={{padding: "0px", fontSize: "15px", color: "var(--material-theme-black)"}}>No commands</Typography>
-                          )}
-                        </>
-                      </Stack>
-                      {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
-                      <Button className="edit-button" onClick={()=>{router.push({pathname: '/edit-schedules', query: {satelliteId}})}} sx = {{color: "var(--material-theme-black)", fontFamily: "Roboto", marginTop: "10px"}}> Edit Schedules </Button>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-          </Grid>
-        )}
-        <Box/>
-      </Stack>
+                          </>
+                        </Stack>
+                        {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
+                        <Button
+                          className="edit-button"
+                          onClick={() => {
+                            router.push({
+                              pathname: "/edit-schedules",
+                              query: { satelliteId },
+                            });
+                          }}
+                          sx={{
+                            color: "var(--material-theme-black)",
+                            fontFamily: "Roboto",
+                            marginTop: "10px",
+                          }}>
+                          {" "}
+                          Edit Schedules{" "}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+          <Box />
+        </Stack>
       </Box>
     </Box>
   );
-            };
+};
 export default Scheduler;

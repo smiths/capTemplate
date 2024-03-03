@@ -12,11 +12,15 @@ import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import axios from "axios";
 import "../../styles.css";
+import { useRouter } from "next/router";
 import { BACKEND_URL } from "@/constants/api";
 
 const defaultNoradId = "55098";
 
 function SatelliteInfoPage() {
+  const router = useRouter();
+  const { noradId } = router.query;
+
   const [selectedNoradId, setSelectedNoradId] =
     useState<string>(defaultNoradId);
   const [satelliteName, setSatelliteName] = useState<string>();
@@ -38,6 +42,10 @@ function SatelliteInfoPage() {
     };
     void runFetch();
   }, [selectedNoradId]);
+
+  useEffect(() => {
+    setSelectedNoradId(noradId as string);
+  }, []);
 
   return (
     <Stack
