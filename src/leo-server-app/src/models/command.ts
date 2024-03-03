@@ -22,6 +22,10 @@ export const commandSchema = new Schema(
       type: Number,
       default: 0,
     },
+    sequenceTimeout: {
+      type: Number,
+      default: 1000,
+    },
     status: {
       type: String,
       enum: Object.values(CommandStatus),
