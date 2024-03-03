@@ -22,10 +22,7 @@ const logRoute = require("./routes/log");
 const pingRoute = require("./routes/ping");
 
 const corsOptions = {
-  origin: [
-    "https://lower-earth-orbiters.netlify.app/",
-    ...(process.env.FRONTEND_END_URL ? [process.env.FRONTEND_END_URL] : []),
-  ],
+  origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
 
