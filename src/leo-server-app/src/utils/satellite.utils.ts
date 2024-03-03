@@ -6,9 +6,13 @@ import Schedule from "../models/schedule";
 import { ScheduleStatus } from "../types/schedule";
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV || "local"}`,
+  path: `.env.${
+    (process.env.NODE_ENV === "development" ? "local" : process.env.NODE_ENV) ||
+    "local"
+  }`,
   override: true,
 });
+
 const satellite = require("satellite.js");
 const SunCalc = require("suncalc");
 let spacetrack = require("spacetrack");
