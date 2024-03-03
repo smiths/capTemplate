@@ -47,6 +47,14 @@ const Logs: React.FC = () => {
 
   useEffect(() => {
     fetchLogs(satelliteId);
+  
+    const intervalId = setInterval(() => {
+      fetchLogs(satelliteId);
+    }, 30000); // fetches logs after every 30 sec
+  
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [satelliteId]);
 
   return (
