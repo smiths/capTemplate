@@ -10,7 +10,10 @@ import {
 } from "../utils/satellite.utils";
 import { SatelliteEventEmitter } from "../event/satellite.event";
 
-dotenv.config({ path: `.env.local`, override: true });
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "local"}`,
+  override: true,
+});
 
 const express = require("express");
 let spacetrack = require("spacetrack");
