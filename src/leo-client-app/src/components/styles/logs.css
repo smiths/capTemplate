@@ -1,32 +1,33 @@
 .logs {
   width: 75%;
 }
-  
-  .table-row:last-child td, .table-row:last-child th {
-    border: 0;
+
+.table-row:last-child td,
+.table-row:last-child th {
+  border: 0;
+}
+
+.logsBox {
+  border: 2px solid var(--material-theme-sys-light-on-primary);
+  border-radius: 15px;
+  padding: 18px;
+  margin-top: -10px;
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  max-width: 100%;
+  height: auto;
+  min-height: 150px;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
   }
 
-  .logsBox {
-    border: 2px solid var(--material-theme-sys-light-on-primary);
-    border-radius: 15px;
-    padding: 18px;
-    margin-top: -10px;
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    max-width: 100%;
-    height: auto;
-    min-height: 150px;
-    overflow-x: auto;
-    overflow-y: hidden;
-  
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  
-    /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

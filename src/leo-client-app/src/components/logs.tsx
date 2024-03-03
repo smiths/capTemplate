@@ -101,8 +101,9 @@ const Logs: React.FC = () => {
                           variant="text"
                           className="button"
                           sx={{
-                            color: "var(--material-theme-sys-dark-on-primary)", 
-                            backgroundColor: "var(--material-theme-sys-dark-primary)",
+                            color: "var(--material-theme-sys-dark-on-primary)",
+                            backgroundColor:
+                              "var(--material-theme-sys-dark-primary)",
                             borderRadius: "10px",
                           }}
                           onClick={() => handleLogOpen(data)}
