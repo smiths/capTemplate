@@ -4,7 +4,10 @@ import * as dotenv from "dotenv";
 import bodyParser from "body-parser";
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV || "local"}`,
+  path: `.env.${
+    (process.env.NODE_ENV === "development" ? "local" : process.env.NODE_ENV) ||
+    "local"
+  }`,
   override: true,
 });
 
@@ -19,9 +22,11 @@ const logRoute = require("./routes/log");
 const pingRoute = require("./routes/ping");
 
 const corsOptions = {
-  origin: "*",
+  origin: [
+    "https://lower-earth-orbiters.netlify.app/",
+    ...(process.env.FRONTEND_END_URL ? [process.env.FRONTEND_END_URL] : []),
+  ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type"],
 };
 
 app.use(cors(corsOptions));
