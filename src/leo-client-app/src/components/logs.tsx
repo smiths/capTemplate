@@ -18,6 +18,10 @@ import "./styles/logs.css";
 import moment from "moment";
 import { BACKEND_URL } from "@/constants/api";
 
+type Props = {
+  satelliteId: string;
+};
+
 const Logs: React.FC = () => {
   // TODO: Dynamicall get satelliteId from somewhere
   const satelliteId = "655acd63d122507055d3d2ea";
@@ -47,14 +51,6 @@ const Logs: React.FC = () => {
 
   useEffect(() => {
     fetchLogs(satelliteId);
-  
-    const intervalId = setInterval(() => {
-      fetchLogs(satelliteId);
-    }, 30000); // fetches logs after every 30 sec
-  
-    return () => {
-      clearInterval(intervalId);
-    };
   }, [satelliteId]);
 
   return (
