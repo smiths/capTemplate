@@ -1,165 +1,241 @@
-"use client";
-
-import { sendCommandSchedule } from "@/constants/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import ViewScheduleCard from "./ViewScheduleCard";
+import { useRouter } from "next/router";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Stack,
+  Button,
+  Typography,
+} from "@mui/material";
+import "../styles.css";
+import SatelliteName from "./SatelliteName";
+import "./styles/component.css";
+import "./styles/Scheduler.css";
+import { BACKEND_URL } from "@/constants/api";
 
-const Scheduler: React.FC = () => {
-  const queryClient = useQueryClient();
+interface Command {
+  name: string;
+}
+interface Schedule {
+  id: string;
+  startDate: string;
+  endDate: string;
+  satelliteId: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+type Props = {
+  noradId: string;
+};
 
-  // TODO: Dynamicall get satelliteId from somewhere
+function formatDate(dateString: string) {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, options);
+}
+
+function formatTimeRange(startTime: string, endTime: string) {
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+
+  const startHours = startDate.getHours();
+  const startMinutes = startDate.getMinutes().toString().padStart(2, "0");
+  const endHours = endDate.getHours();
+  const endMinutes = endDate.getMinutes().toString().padStart(2, "0");
+
+  const formattedStartTime = startHours + ":" + startMinutes;
+  const formattedEndTime = endHours + ":" + endMinutes;
+
+  return `${formattedStartTime} - ${formattedEndTime}`;
+}
+const Scheduler = ({ noradId }: Props) => {
   const satelliteId = "655acd63d122507055d3d2ea";
+  const [scheduleForCard, setSchedules] = useState<Schedule[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [scheduleCommands, setScheduleCommands] = useState<{
+    [scheduleId: string]: string[];
+  }>({});
 
-  const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
-
-  // admin
-  // const userId: string = "65a5e11fe0d601e0e8c4a385";
-
-  // operator
-  const userId: string = "65a8181f36ea10b4366e1dd9";
-
-  const scheduleId = "65a8182036ea10b4366e1de6";
-  const isAdmin = adminUserId === userId;
-
-  const [validCommands, setValidCommands] = useState([]);
-  const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
-
-  const fetchValidCommands = (satelliteId: string) => {
-    if (isAdmin) {
-      fetch(
-        `http://localhost:3001/satellite/getSatellite?satelliteId=${satelliteId}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setValidCommands(data.satellite.validCommands);
-        })
-        .catch((error) => {
-          console.error("Error fetching valid commands:", error);
-        });
-    } else {
-      fetch(
-        `http://localhost:3001/satelliteUser/getCommandsBySatelliteAndUser?satelliteId=${satelliteId}&userId=${userId}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setValidCommands(data.record[0].validCommands);
-        })
-        .catch((error) => {
-          console.error("Error fetching valid commands:", error);
-        });
-    }
+  const fetchSchedules = (satelliteId: string) => {
+    setIsLoading(true);
+    fetch(
+      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.schedules) {
+          // Map through each schedule and create a new schedule object
+          const transformedSchedules = data.schedules.map((schedule: any) => ({
+            id: schedule._id,
+            startDate: schedule.startDate,
+            endDate: schedule.endDate,
+            satelliteId: schedule.satelliteId,
+            status: schedule.status,
+            createdAt: schedule.createdAt,
+            updatedAt: schedule.updatedAt,
+          }));
+          setSchedules(transformedSchedules);
+          transformedSchedules.forEach((schedule: Schedule) => {
+            fetchCommandsPerScheduleAndUpdateState(schedule.id);
+          });
+        } else {
+          setSchedules([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching satellite schedules:", error);
+      })
+      .finally(() => setIsLoading(false));
   };
 
-  const addCommand = (command: string) => {
-    setCurrentSchedule((prevCommands) => [...prevCommands, command]);
-  };
-
-  const removeCommand = (index: number) => {
-    setCurrentSchedule((currentSchedule) =>
-      currentSchedule.filter((_, i) => i !== index)
-    );
+  const fetchCommandsPerScheduleAndUpdateState = (scheduleId: string) => {
+    fetch(
+      `${BACKEND_URL}/schedule/getCommandsBySchedule?scheduleId=${scheduleId}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setScheduleCommands((prevCommands) => ({
+          ...prevCommands,
+          [scheduleId]: data.commands ?? [],
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching schedule commands:", error);
+      });
   };
 
   useEffect(() => {
-    fetchValidCommands(satelliteId);
+    fetchSchedules(satelliteId);
   }, [satelliteId]);
 
-  // Mutation function
-  const { mutate } = useMutation({
-    mutationFn: () =>
-      sendCommandSchedule(userId, scheduleId, satelliteId, currentSchedule),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
-      setCurrentSchedule([]);
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["useGetCommandsBySchedule"] });
-      setCurrentSchedule([]);
-    },
-  });
-
-  // Function will load schedule somewhere, currently console log for POC demo
-  const sendSchedule = async () => {
-    mutate();
-  };
+  const router = useRouter();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        gap: "4rem",
-      }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "flex-start",
-        }}>
-        <div
-          style={{
-            minWidth: "200px",
-            border: "2px solid white",
-            borderRadius: "16px",
-            padding: "10px",
-          }}>
-          <h2>Valid Commands</h2>
-          <div>
-            {validCommands &&
-              validCommands.length > 0 &&
-              validCommands.map((command, index) => (
-                <button
-                  key={index}
-                  className="scheduleButton"
-                  onClick={() => addCommand(command)}>
-                  {command}
-                </button>
-              ))}
-          </div>
-        </div>
-
-        <div style={{ width: "50px" }}></div>
-
-        <div
-          style={{
-            border: "2px solid white",
-            borderRadius: "16px",
-            padding: "10px",
-            overflow: "auto",
-          }}>
-          <h2>Current Schedule</h2>
-          {currentSchedule &&
-            currentSchedule.length > 0 &&
-            currentSchedule.map((command, index) => (
-              <button
-                key={index}
-                className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}>
-                <span className="buttonText">{command}</span>
-                <span className="closeButton">X</span>
-              </button>
-            ))}
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <button
-              onClick={() => setCurrentSchedule([])}
-              style={{ display: "block", margin: "5px 0" }}>
-              Clear Schedule
-            </button>
-            <button
-              onClick={() => sendSchedule()}
-              style={{ display: "block", margin: "5px 0" }}>
-              Send Schedule
-            </button>
-          </div>
-        </div>
-      </div>
-      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-    </div>
+    <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
+      <Box px={"200px"}>
+        <SatelliteName noradId={noradId} />
+        <Typography variant="h5" className="headerBox2">
+          All Schedules
+        </Typography>
+        <Typography variant="h5" className="headerBox3">
+          Schedule Queue
+        </Typography>
+      </Box>
+      <Box className="main-schedule">
+        <Stack alignItems="flex-start" spacing={1}>
+          {isLoading ? (
+            <Box className="loadingBox">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid
+              className="futureSchedulesBox"
+              container
+              spacing={2}
+              sx={{
+                display: "flex",
+                boxSizing: "border-box",
+                "& .MuiGrid-item": {
+                  flex: "0 0 auto",
+                },
+                border: 3,
+                borderRadius: "24px",
+                borderColor: "var(--material-theme-white)",
+                width: "85%",
+                mx: -2,
+              }}>
+              {scheduleForCard &&
+                scheduleForCard.map((schedule, index) => (
+                  <Grid item key={index} sx={{ width: "98%" }}>
+                    <Card
+                      sx={{
+                        width: "99%",
+                        minHeight: 100,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-primary-container)",
+                        cursor: "pointer",
+                        borderRadius: 4,
+                      }}>
+                      <CardContent>
+                        <Stack spacing={1}>
+                          <Typography className="cardTitle">
+                            {formatDate(schedule.startDate)}
+                          </Typography>
+                          <Typography className="cardSubtitle">
+                            {formatTimeRange(
+                              schedule.startDate,
+                              schedule.endDate
+                            )}
+                          </Typography>
+                          <>
+                            {scheduleCommands[schedule.id] &&
+                            scheduleCommands[schedule.id].length > 0 ? (
+                              <>
+                                {scheduleCommands[schedule.id]
+                                  .slice(0, 3)
+                                  .map((commandObj: any, cmdIndex) => (
+                                    <Typography
+                                      key={cmdIndex}
+                                      className="cardSubtitle">
+                                      {commandObj.command}
+                                    </Typography>
+                                  ))}
+                                {scheduleCommands[schedule.id].length > 3 && (
+                                  <Typography className="cardSubtitle">
+                                    {" "}
+                                    ...{" "}
+                                  </Typography>
+                                )}
+                              </>
+                            ) : (
+                              <Typography
+                                className="cardSubtitle"
+                                sx={{
+                                  padding: "0px",
+                                  fontSize: "15px",
+                                  color: "var(--material-theme-black)",
+                                }}>
+                                No commands
+                              </Typography>
+                            )}
+                          </>
+                        </Stack>
+                        {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
+                        <Button
+                          className="edit-button"
+                          onClick={() => {
+                            router.push({
+                              pathname: "/edit-schedules",
+                              query: { satelliteId },
+                            });
+                          }}
+                          sx={{
+                            color: "var(--material-theme-black)",
+                            fontFamily: "Roboto",
+                            marginTop: "10px",
+                          }}>
+                          {" "}
+                          Edit Schedules{" "}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+          <Box />
+        </Stack>
+      </Box>
+    </Box>
   );
 };
-
 export default Scheduler;

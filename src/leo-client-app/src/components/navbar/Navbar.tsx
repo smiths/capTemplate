@@ -5,7 +5,7 @@ import "../styles/navbar.css";
 const navbarItems = [
   {
     heading: "Satellites",
-    path: "/satellite-passes",
+    path: "/satellites-of-interest",
   },
   {
     heading: "Scheduler",
@@ -20,6 +20,7 @@ const navbarItems = [
     path: "/satellite-logs",
   },
   {
+    // heading: "Account",
     heading: "Log Out",
     path: "/api/auth/logout",
   },

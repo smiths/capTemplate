@@ -13,6 +13,7 @@ import axios from "axios";
 import "../styles.css";
 import "./styles/component.css";
 import "./styles/futurePasses.css";
+import { BACKEND_URL } from "@/constants/api";
 
 interface Pass {
   type: string;
@@ -63,12 +64,9 @@ const FuturePasses = ({ noradId }: Props) => {
 
   const fetchPasses = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/satellite/getNextPasses",
-        {
-          params: { noradId: noradId },
-        }
-      );
+      const res = await axios.get(`${BACKEND_URL}/satellite/getNextPasses`, {
+        params: { noradId: noradId },
+      });
       setPasses(res.data?.nextPasses ?? []);
     } catch (error) {
       console.error("Error fetching passes:", error);
@@ -104,8 +102,7 @@ const FuturePasses = ({ noradId }: Props) => {
             className="futurePassesBox"
             container
             spacing={1}
-            justifyContent="center"
-          >
+            justifyContent="center">
             {" "}
             {passes &&
               passes.map((passPair, index) => (
@@ -117,8 +114,7 @@ const FuturePasses = ({ noradId }: Props) => {
                     )}/${encodeURIComponent(
                       formatDateToISO(passPair[1].time)
                     )}`}
-                    passHref
-                  >
+                    passHref>
                     <Card
                       sx={{
                         minWidth: 150,
@@ -127,8 +123,7 @@ const FuturePasses = ({ noradId }: Props) => {
                           "var(--material-theme-sys-light-inverse-on-surface)",
                         cursor: "pointer",
                         borderRadius: 3,
-                      }}
-                    >
+                      }}>
                       <CardContent>
                         <Stack spacing={0}>
                           <p className="cardTitle">

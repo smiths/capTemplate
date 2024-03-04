@@ -5,7 +5,7 @@ export default function Index() {
   const { pathname, replace } = useRouter();
 
   useEffect(() => {
-    replace("/satellite-passes");
+    replace("/satellites-of-interest");
   }, [pathname, replace]);
   return null;
 }

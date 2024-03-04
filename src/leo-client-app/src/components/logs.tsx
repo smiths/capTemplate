@@ -14,6 +14,7 @@ import {
 import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
 import moment from "moment";
+import { BACKEND_URL } from "@/constants/api";
 
 const Logs: React.FC = () => {
   // TODO: Dynamicall get satelliteId from somewhere
@@ -32,9 +33,7 @@ const Logs: React.FC = () => {
   };
 
   const fetchLogs = (satelliteId: string) => {
-    fetch(
-      `http://localhost:3001/log/getLogsBySatellite?satelliteId=${satelliteId}`
-    )
+    fetch(`${BACKEND_URL}/log/getLogsBySatellite?satelliteId=${satelliteId}`)
       .then((response) => response.json())
       .then((data) => {
         setLogs(data?.logs ?? []);
@@ -56,8 +55,7 @@ const Logs: React.FC = () => {
         sx={{
           maxWidth: 800,
           background: "#40403fb0",
-        }}
-      >
+        }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -79,14 +77,12 @@ const Logs: React.FC = () => {
                   key={data._id + index}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                  }}>
                   <TableCell
                     sx={{ color: "white !important" }}
                     align="left"
                     component="th"
-                    scope="row"
-                  >
+                    scope="row">
                     {moment
                       .utc(data.createdAt)
                       .local()
@@ -102,8 +98,7 @@ const Logs: React.FC = () => {
                     <Button
                       variant="text"
                       sx={{ color: "#6cb6ff" }}
-                      onClick={() => handleLogOpen(data)}
-                    >
+                      onClick={() => handleLogOpen(data)}>
                       Show Logs
                     </Button>
                   </TableCell>
