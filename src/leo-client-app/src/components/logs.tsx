@@ -13,8 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import LogDialog from "./logModal";
+import LogDialog from "./LogModal";
 import "./styles/logs.css";
+import "../styles.css";
 import moment from "moment";
 import { BACKEND_URL } from "@/constants/api";
 

@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React from "react";
+import "../styles.css";
 
 type Props = {
   open: boolean;
