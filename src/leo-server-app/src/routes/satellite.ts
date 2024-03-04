@@ -300,6 +300,8 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   res.status(201).json({ message: "Satellite system added", satellite });
 });
 
+
+
 router.patch("/updateSatelliteTargetCommands", async (req: any, res: any) => {
   const { query, body } = req;
 
