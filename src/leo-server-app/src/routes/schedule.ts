@@ -140,38 +140,39 @@ const isAdminCheck = async (userId: string) => {
 // ---- API Routes ----
 router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   const { body } = req;
-// validate commands
-const isCommandsValid = await verifyUserCommands(
-  body.satelliteId,
-  body.userId,
-  body.commands
-);
 
-let resObj = {};
+  // validate commands
+  const isCommandsValid = await verifyUserCommands(
+    body.satelliteId,
+    body.userId,
+    body.commands
+  );
 
-const adm = await isAdminCheck(body.userId);
-if (!isCommandsValid && !adm) {
-  resObj = {
-    message: "Invalid Command Sequence or user permissions",
-    schedule: undefined,
-  };
-} else {
-  const newSchedule = {
-    user: body.userId,
-    satellite: body.satelliteId,
-    commands: body.commands,
-    executionTimestamp: new Date(body.executionTimestamp),
-    status: false,
-  };
+  let resObj = {};
 
-  const schedule = await Schedule.create(newSchedule);
-  resObj = {
-    message: "Created schdule",
-    schedule,
-  };
-}
+  const adm = await isAdminCheck(body.userId);
+  if (!isCommandsValid && !adm) {
+    resObj = {
+      message: "Invalid Command Sequence or user permissions",
+      schedule: undefined,
+    };
+  } else {
+    const newSchedule = {
+      user: body.userId,
+      satellite: body.satelliteId,
+      commands: body.commands,
+      executionTimestamp: new Date(body.executionTimestamp),
+      status: false,
+    };
 
-res.status(201).json(resObj);
+    const schedule = await Schedule.create(newSchedule);
+    resObj = {
+      message: "Created schdule",
+      schedule,
+    };
+  }
+
+  res.status(201).json(resObj);
 });
 
 router.post(
@@ -372,7 +373,7 @@ router.get(
     const skip = (page - 1) * limit;
 
     const schedules = await Schedule.find(filter)
-      .sort({ startDate: "asc" })
+    .sort({ startDate: "asc" })
       .limit(limit)
       .skip(skip)
       .exec();
