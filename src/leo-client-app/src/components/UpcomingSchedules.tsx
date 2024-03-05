@@ -11,6 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 import { BACKEND_URL } from "@/constants/api";
+import axios from "axios";
 
 interface Schedule {
   id: string;
@@ -52,13 +53,29 @@ function formatTimeRange(startTime: string, endTime: string) {
 }
 
 const UpcomingSchedules = ({ noradId }: Props) => {
-  // TODO: Dynamically get satelliteId from somewhere
-  const satelliteId = "655acd63d122507055d3d2ea";
+  const [satelliteId, setSatelliteId] = useState<string>(
+    "655acd63d122507055d3d2ea"
+  );
+
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scheduleCommands, setScheduleCommands] = useState<{
     [scheduleId: string]: string[];
   }>({});
+
+  const fetchSatelliteId = (noradId: string) => {
+    return axios
+      .get(`${BACKEND_URL}/satellite/getSatelliteIdByNorad`, {
+        params: { noradId: noradId },
+      })
+      .then((res) => {
+        setSatelliteId(res.data.satellite[0]._id);
+        fetchSchedules(res.data.satellite[0]._id);
+      })
+      .catch((error) => {
+        console.error("Error fetching satellite id:", error);
+      });
+  };
 
   const fetchSchedules = (satelliteId: string) => {
     setIsLoading(true); // Set loading state to true when starting to fetch
@@ -111,8 +128,12 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   };
 
   useEffect(() => {
-    fetchSchedules(satelliteId);
+    fetchSatelliteId(noradId);
   }, [satelliteId]);
+
+  useEffect(() => {
+    fetchSatelliteId(noradId);
+  }, [noradId]);
 
   return (
     <div className="upcomingSchedulesBox">
@@ -137,7 +158,8 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                 flex: "0 0 auto",
               },
               mx: -2,
-            }}>
+            }}
+          >
             {schedules &&
               schedules.map((schedule, index) => (
                 <Grid item key={index}>
@@ -154,7 +176,8 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                       maxHeight: 150,
                       display: "flex",
                       flexDirection: "column",
-                    }}>
+                    }}
+                  >
                     <CardContent>
                       <Stack spacing={0}>
                         <p className="cardTitle">

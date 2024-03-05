@@ -323,4 +323,13 @@ router.get("/getSatellite", async (req: any, res: any) => {
   res.status(201).json({ message: "Fetched satellite", satellite });
 });
 
+router.get("/getSatelliteIdByNorad", async (req: any, res: any) => {
+  const filter = {
+    noradId: req.query.noradId,
+  };
+
+  const satellite = await SatelliteModel.find(filter).limit(1).exec();
+  res.status(201).json({ message: "Fetched satellite", satellite });
+});
+
 module.exports = { router, getSatelliteInfo, setTleLines };
