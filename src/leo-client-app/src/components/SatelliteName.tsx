@@ -35,6 +35,11 @@ const SatelliteName = ({ noradId }: Props) => {
     setSelectedNoradId(noradId);
   }, [noradId]);
 
+  // Effect for on load
+  useEffect(() => {
+    fetchData(); // Fetch data initially
+  }, []);
+
   return (
     <Box
       className="material-themedisplaymedium"
@@ -43,7 +48,8 @@ const SatelliteName = ({ noradId }: Props) => {
         textAlign: "left",
         boxSizing: "border-box",
         marginTop: "50px",
-      }}>
+      }}
+    >
       {satelliteName}
     </Box>
   );
