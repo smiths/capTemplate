@@ -373,7 +373,7 @@ router.get(
     const skip = (page - 1) * limit;
 
     const schedules = await Schedule.find(filter)
-      .sort({ createdAt: "desc" })
+    .sort({ startDate: "asc" })
       .limit(limit)
       .skip(skip)
       .exec();
