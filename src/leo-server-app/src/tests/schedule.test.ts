@@ -249,7 +249,15 @@ describe("GET /getSchedulesBySatellite", () => {
     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
   });
 
-  // Fetch with invalid sate id
+  // Fetch with invalid satellite id
+  it("Reject update schedule request - invalid satellite Id", async () => {
+    const invalidSatelliteId = "invalid_satellite_id";
+    const res = await request.get(path).query({
+      satelliteId: invalidSatelliteId,
+    });
+
+    expect(res.status).toEqual(500);
+  });
 });
 
 // -------- GET Commands by Schedule Endpoint --------
@@ -323,6 +331,14 @@ describe("GET /getCommandsBySchedule", () => {
   });
 
   // Fetch with invalid schedule id
+  it("Reject update schedule request - invalid satellite Id", async () => {
+    const invalidScheduleId = "invalid_schedule_id";
+    const res = await request.get(path).query({
+      scheduleId: invalidScheduleId,
+    });
+
+    expect(res.status).toEqual(500);
+  });
 });
 
 // -------- Remove Scheduled Command Endpoint --------
