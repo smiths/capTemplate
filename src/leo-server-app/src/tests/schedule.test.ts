@@ -129,11 +129,11 @@ describe("PATCH /updateScheduledCommand", () => {
       command: newCommand,
     });
 
-    expect(res.body.updatedCommand?.command).not.toEqual(newCommand);
+    expect(res.body.updatedCommand?.command).toEqual(newCommand);
   });
 
   // Test 4 - update with invalid ids
-  it("User with ADMIN role successfully updates existing command record", async () => {
+  it("Reject update command request - invalid satellite Id", async () => {
     const newCommand = "start";
     const invalidSatelliteId = "invalidid123";
     const res = await request.patch(path).query({
