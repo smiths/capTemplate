@@ -12,7 +12,7 @@ import mongoose from "mongoose";
 import { ScheduleStatus } from "../types/schedule";
 import { CommandStatus } from "../types/command";
 import { cancelScheduleJob, executeScheduleJob } from "../jobs/schedule.job";
-import { addSchedulesForNext7Days, hasSchedulePassed, verifyUserCommands } from "../utils/schedule.utils";
+import { hasSchedulePassed, verifyUserCommands } from "../utils/schedule.utils";
 
 const router = express.Router();
 router.use(express.json());
@@ -44,10 +44,10 @@ type GetScheduleBySatelliteAndTimeProp = {
 
 type CreateScheduleProp = {
   body: {
-    // commands: any[];
+    commands: any[];
     satelliteId: string;
-    noradId: string;
-    // executionTimestamp: Date;
+    userId: string;
+    executionTimestamp: Date;
   };
 };
 
@@ -140,8 +140,38 @@ const isAdminCheck = async (userId: string) => {
 // ---- API Routes ----
 router.post("/createSchedule", async (req: CreateScheduleProp, res: any) => {
   const { body } = req;
+// validate commands
+const isCommandsValid = await verifyUserCommands(
+  body.satelliteId,
+  body.userId,
+  body.commands
+);
 
-  addSchedulesForNext7Days(body.satelliteId, body.noradId);
+let resObj = {};
+
+const adm = await isAdminCheck(body.userId);
+if (!isCommandsValid && !adm) {
+  resObj = {
+    message: "Invalid Command Sequence or user permissions",
+    schedule: undefined,
+  };
+} else {
+  const newSchedule = {
+    user: body.userId,
+    satellite: body.satelliteId,
+    commands: body.commands,
+    executionTimestamp: new Date(body.executionTimestamp),
+    status: false,
+  };
+
+  const schedule = await Schedule.create(newSchedule);
+  resObj = {
+    message: "Created schdule",
+    schedule,
+  };
+}
+
+res.status(201).json(resObj);
 });
 
 router.post(
