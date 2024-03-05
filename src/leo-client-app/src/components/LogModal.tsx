@@ -17,7 +17,7 @@ type Props = {
 
 export default function LogDialog({ open, logData, handleClose }: Props) {
   const downloadLogs = () => {
-    const file = new Blob([JSON.stringify(logData?.data?.message)], {
+    const file = new Blob([JSON.stringify(logData?.response)], {
       type: "text/plain",
     });
     const url = URL.createObjectURL(file);
@@ -47,7 +47,7 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
         sx={{ background: "var(--material-theme-sys-light-primary-fixed)" }}
       >
         <DialogContentText id="alert-dialog-description">
-          {logData?.data?.message}
+          {logData?.response}
         </DialogContentText>
       </DialogContent>
       <DialogActions
