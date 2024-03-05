@@ -118,17 +118,47 @@ describe("PATCH /updateScheduledCommand", () => {
 
     expect(res.body.updatedCommand?.command).not.toEqual(newCommand);
   });
+
+  // Test 3 - update as ADMIN
+  it("User with ADMIN role successfully updates existing command record", async () => {
+    const newCommand = "start";
+    const res = await request.patch(path).query({
+      userId: users[2].id,
+      commandId: commands[1].id,
+      satelliteId: satelliteId,
+      command: newCommand,
+    });
+
+    expect(res.body.updatedCommand?.command).not.toEqual(newCommand);
+  });
+
+  // Test 4 - update with invalid ids
+  it("User with ADMIN role successfully updates existing command record", async () => {
+    const newCommand = "start";
+    const invalidSatelliteId = "invalidid123";
+    const res = await request.patch(path).query({
+      userId: users[0].id,
+      commandId: invalidSatelliteId,
+      satelliteId: satelliteId,
+      command: newCommand,
+    });
+
+    expect(res.status).toEqual(500);
+  });
+
+  // Test 5 - Update with invalid command sequence
+  it("Reject invalid command sequence", async () => {
+    const newCommand = "command_not_in_criteria";
+    const res = await request.patch(path).query({
+      userId: users[0].id,
+      commandId: commands[1].id,
+      satelliteId: satelliteId,
+      command: newCommand,
+    });
+
+    expect(res.status).toEqual(500);
+  });
 });
-
-// Test 1 - update correctly
-
-// Test 2 - update with invalid user credentials
-
-// Test 3 - update as ADMIN
-
-// Test 4 - update with invalid ids
-
-// Test 5 - Update with invalid command sequence
 
 // -------- GET Schedules by Satellite Endpoint --------
 describe("GET /getSchedulesBySatellite", () => {
@@ -218,6 +248,8 @@ describe("GET /getSchedulesBySatellite", () => {
 
     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
   });
+
+  // Fetch with invalid sate id
 });
 
 // -------- GET Commands by Schedule Endpoint --------
@@ -289,6 +321,8 @@ describe("GET /getCommandsBySchedule", () => {
 
     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
   });
+
+  // Fetch with invalid schedule id
 });
 
 // -------- Remove Scheduled Command Endpoint --------
@@ -365,6 +399,33 @@ describe("DELETE /deleteScheduledCommand", () => {
 
     const cmd = await Command.findById(commands[1].id);
     expect(cmd).toBeNull();
+  });
+
+  // Delete command record as admin
+  it("User with ADMIN role successfully deletes existing command record", async () => {
+    // delete record
+    await request.delete(path).query({
+      userId: users[2].id,
+      commandId: commands[1].id,
+    });
+
+    const cmd = await Command.findById(commands[1].id);
+    expect(cmd).toBeNull();
+  });
+
+  // Delete command record as operator
+  /* Delete command record as second operator
+   * ie. user with OPERATOR role who is not creator of command
+   */
+  it("Reject delete request due to invalid role", async () => {
+    // delete record
+    await request.delete(path).query({
+      userId: users[1].id,
+      commandId: commands[1].id,
+    });
+
+    const cmd = await Command.findById(commands[1].id);
+    expect(cmd).toBeDefined();
   });
 });
 
