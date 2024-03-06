@@ -178,7 +178,8 @@ router.delete("/deleteByUser", async (req: DeleteUserProp, res: any) => {
   const { satelliteUserId, adminId } = req.query;
 
   // Validation
-  if (!mongoose.isValidObjectId(satelliteUserId)) {
+  const userRecord = await SatelliteUser.findById(satelliteUserId);
+  if (userRecord == null) {
     return res.status(500).json({ error: "Invalid IDs" });
   }
 
