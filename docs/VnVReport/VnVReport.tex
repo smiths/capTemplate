@@ -1,6 +1,7 @@
 \documentclass[12pt, titlepage]{article}
 
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{hyperref}
 \hypersetup{
@@ -11,6 +12,8 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+
+\usepackage{longtable}
 
 \input{../Comments}
 \input{../Common}
@@ -44,7 +47,10 @@ Date 2 & 1.1 & Notes\\
   \toprule		
   \textbf{symbol} & \textbf{description}\\
   \midrule 
-  T & Test\\
+  ObjectID & MongoDB Record/Document Id\\
+  DB & Database\\
+  Schedule & Model type for MongoDB Schedule Collection \\
+  Command & Model type for MongoDB Command Collection \\
   \bottomrule
 \end{tabular}\\
 
@@ -66,11 +72,227 @@ This document ...
 
 \section{Functional Requirements Evaluation}
 
+FR-3 (The MCT will present a graphical interface allowing users to enter, select, and execute satellite commands while receiving text output from each command)
+\begin{itemize}
+    \item The ability to enter satellite commands in the backend database has been tested with jest.
+    \item The ability to execute satellite commands for a schedule in the backend has been tested with jest.
+    \item The ability to enter satellite commands through the frontend has been tested manually.
+\end{itemize}
+
+FR-4 (The MCT will log all commands sent to and received from each target
+with timestamps.)
+\begin{itemize}
+    \item The logging of data in the backend database have been tested through unit testing by emulating the execution of satellite commands.
+\end{itemize}
+
+FR-5 (he MCT must present a graphical user interface to create, edit, and
+delete automated command sequences)
+\begin{itemize}
+    \item The addition, modification, and deletion of command sequences have been tested manually through the frontend.
+\end{itemize}
+
+FR-6 (The MCT must have an option to cancel an automated command se-
+quence during execution.)
+\begin{itemize}
+    \item Testing has not yet been implemented.
+\end{itemize}
+
+FR-11 (The MCT will be able to reject a user from executing a command
+unless that command matches the permission list criteria for the com-
+mand target.)
+\begin{itemize}
+    \item Unit tests have been implemented to schedule commands for users with both sufficient and insufficient permissions.
+\end{itemize}
+
+FR-12 (The MCT must be able to schedule commands and automated com-
+mand sequences for future execution.)
+\begin{itemize}
+    \item Unit tests have been implemented to schedule commands for an overpass date in the future.
+    \item The scheduling of commands have been tested manually through the frontend.
+\end{itemize}
+
+FR-13 (The MCT shall present a graphical user interface to create, edit, and delete scheduled commands and sequences.)
+\begin{itemize}    
+    \item The addition, modification, and deletion of commands to a schedule have been tested manually through the frontend.
+\end{itemize}
+
+
+
+FR-14 (The MCT shall present a graphical user interface to select and edit the
+satellites of interest)
+\begin{itemize}
+    \item Setting TLE data for users to choose have been tested with valid, invalid, and empty TLEs, to ensure the correct output is received.
+\end{itemize}
+FR-15 (The MCT shall display the current orbital state for satellites of interest,
+elevation, and solar illumination.)
+
+\begin{itemize}
+    \item New changes to FR-SLN14 have been made to test the fetching of the data from external libraries (instead of testing for correctness). These tests includes fetching the data based on the state of the TLE passed in, Valid TLE, Invalid TLE, Valid Start Date, Invalid State Date, and a combination of both.
+    \item For testing solar illumination of the satellite, testing includes fetching the data based off the validity of the date, and if the input units are valid (for the external library holder)
+    \item For polar plot data, testing includes fetching the data based off the validity of the start and end date.
+    \item Lastly, the return type of the backend api call is tested to ensure the data is returned in the proper format, with correct typing.
+\end{itemize}
+
+FR-16 (The MCT shall be able to schedule commands when a satellite enters a
+user-specified elevation threshold over the ground station coordinates.)
+\begin{itemize}
+    \item Removed as per stakeholder requests .
+\end{itemize}
+
+FR-17 (The MCT shall be able to schedule commands when a satellite enters
+or exits in the covered area.)
+\begin{itemize}    
+    \item Unit tests have been implemented to ensure scheduled commands are only executed on the date and time range specified for an overpass date.
+\end{itemize}
+
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
-		
+
+usability-1 - NFR 10.1
+\begin{itemize}
+    \item The feedback we gained for this test was combined with the second usability test which helps in testing NFR 10.3.
+\end{itemize}
+
+usability-2 - NFR 10.3
+\begin{itemize}
+    \item The initial testing involved users with no prior experience with the application, focusing on their ability to learn and navigate the system independently. The feedback highlights both strengths and areas for enhancement in the application's design and functionality.
+    \item Strengths Noted:
+    \begin{itemize}
+        \item The satellite and overpass functionality received positive remarks for its quick response when navigating to specific longitudes and latitudes, indicating efficient performance in these areas.
+        \item The command deletion process within the application was described as "pretty solid," suggesting it is user-friendly and reliable.
+    \end{itemize}
+    \item Areas for Improvement:
+    \begin{itemize}
+        \item Visibility and Clarity: There was confusion about the "valid commands box," suggesting a need for increased visibility and clearer indications of its purpose. It's essential to make it more obvious to users what the valid commands are.
+        \item Logs Page Functionality: Questions were raised about the purpose of the logs page, with suggestions to include filters for better usability, indicating a need for clearer presentation and functionality.
+        \item User Interface (UI) Considerations:
+        \begin{itemize}
+            \item The all-white interface led to suggestions for a light mode/dark mode feature, catering to different user preferences.
+            \item The addition of a feature to easily add satellites to the database directly from the first page was recommended.
+            \item Faster loading times for satellite changes were requested to enhance user experience.
+            \item Improvements in readability and presentation of information for upcoming satellite passes, possibly through a tabular format, were suggested to make the data more accessible.
+            \item A reevaluation of navigation within the schedule queue, seeking alternatives to horizontal scrolling, was advised.
+            \item The introduction of a filter for satellite passes, enabling searches by date or specific passes, was recommended to improve usability.
+            \item A call for a design that avoids the need for page scrolling, aiming to present all relevant information simultaneously.
+            \item The presentation of information in blocks or separated formats was suggested to improve visual hierarchy and readability, particularly for satellite information.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+usability-3 - NFR 10.5
+\begin{itemize}
+    \item After careful consideration, our team has decided not to proceed with the implementation of the accessibility-focused verification and validation (VnV) plan, as outlined under the Usability-3 category, NFR: 10.5. This decision reflects our current prioritization of resources and development efforts. 
+    \item While we recognize the importance of accessibility in software development, our decision to forego this specific aspect of testing at this time allows us to allocate our resources towards other critical areas of development. We remain committed to creating an inclusive and accessible application and plan to revisit and incorporate comprehensive accessibility features and testing in future development phases. 
+\end{itemize}
 \subsection{Performance}
+
+performance-3 - NFR 11.3
+\begin{itemize}
+\item Precision calculation will be tested by external library providers as the calculations are no longer in the scope of the application.
+\end{itemize}
+
+performance-4 - NFR 11.4
+\begin{itemize}
+\item Scenarios which cause internal exceptions have been identified and implemented in automatic test cases, and is handled appropriately, be it error messages or additional error handling functionality.
+\end{itemize}
+
+\subsection{Environmental}
+
+environmental-1 - NFR 12.2.1
+
+\begin{itemize}
+    \item The application is setup to be hosted on Netlify's free service at the current moment. This applies that the features are also limited and that there cannot be a lot of traffic sent which makes testing the load much challenging. However, JMeter was used to verify the capabilities and challenged the application with 20 virtual users for 20 mintutes. Here are the results:
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{new-chart-1-e13fd45c-e039-48c1-bb7f-3b555841f526.png}
+\caption{A simple caption for the image.}
+\label{fig:myimage}
+\end{figure}
+
+\newpage
+
+environmental-2 - NFR 12.2.2
+\begin{itemize}
+    \item To achieve this, we leveraged Netlify's powerful development platform. Netlify facilitated the creation of a self-contained and fully functional development environment, streamlining the workflow and significantly enhancing productivity. The developers were able to set up their local environments effortlessly, following the instructions provided, and could launch the development setup with confidence, knowing it would initialize and run without errors.
+\end{itemize}
+
+environmental-3 - 12.5
+\begin{itemize}
+    \item We are using GitHub issues to keep track of the dates and time for the project. Issues are created for the tasks that are remaining to be performed along with attaching the development branch that focuses on it. This way, we are able to ensure that the functional, non-functional and outside requirements are being fullfilled on-time.
+\end{itemize}
+\subsection{Maintenance}
+
+
+
+maintenance-2 - NFR 13.1.2
+\begin{itemize}
+\item GitHub Actions is correctly configured for the project, triggering automated build and test checks. The test checks are triggered every commit, and every PR, seamlessly integrated in the Github repository.
+\end{itemize}
+
+maintenance-3 - NFR 13.1.3
+\begin{itemize}
+\item The system identifies an outdated version automatically by utilizing node’s npm install command before the server is ran, and applies any changes (upgrades and downgrades). In addition, deliberate code formatting issues were introduced, and automatically corrected by esLint, the chosen code linter.
+\end{itemize}
+
+maintenance-4 - NFR 13.1.4
+\begin{itemize}
+\item The project directory structure is intuitive, code is divided into client and server folders (front-end and back-end), with components, styles, and pages being divided for logical ordering. Variable, function, and template names follow consistent naming schemes, and are grouped where needed. Lastly, rigorous code reviews are performed to maintain the quality of the repository.
+\end{itemize}
+
+maintenance-5 - NFR 13.1.5
+\begin{itemize}
+\item A code formatting tool, ESLint is integrated in the development environment through Visual Studio Code, and is enforced in code review. Since it is automatically integrated, random code files which are inspected match indentation, variable naming, and code structure.
+\end{itemize}
+
+\subsection{Integrity}
+
+integrity-1 - NFR 14.2.1
+\begin{itemize}
+\item Testing the Overpass Calculation will be tested by external library providers as the calculations are no longer in the scope of the application.
+\end{itemize}
+
+integrity-2 - NFR 14.2.2
+\begin{itemize}
+\item Testing the Minimum Elevation will be tested by external library providers as the calculations are no longer in the scope of the application.
+\end{itemize}
+
+integrity-5 - NFR 14.2.5
+\begin{itemize}
+\item Various simulated satellite failures have been implemented in test cases to test and monitor error messages which are consistent amongst other messages, and communicate the nature of missing data attributes.
+\end{itemize}
+
+integrity-6 - NFR 14.2.6
+\begin{itemize}
+\item The application performs essential functionalities on all browsers (Safari, Chrome, Firefox).
+\end{itemize}
+
+integrity-7 - NFR 14.2.7
+\begin{itemize}
+\item The typescript compiler verifies HTML and CSS validity, and has not identified any compatibility issues across devices. In addition, esLint is applied to apply HTML and CSS coding standards when it comes to formatting. The application user interface remains consistent and functional across different devices and browsers.
+\end{itemize}
+		
+\subsection{Privacy and Accessibility}
+
+access-1 - NFT 14.1.1
+\begin{itemize}
+    \item The application integrates with an external authentication service (Auth0) to manage user authentication and account management. New and existing users will be registered and logged in using this service The test cases for this requirement are AM2 and AM3 and it can be found below in section 8 of Regression Testing.
+\end{itemize}
+
+access-2 - NFR 14.1.2
+\begin{itemize}
+\item The application integrates with an external authentication service (Auth0) to manage user authentication and account management. This service allows an administrator to configure a rate limit of 10 login attempts per minute. As a result, the application enforces a 1 minute timeout period before the user can attempt to authenticate again. The test case for requirement is AM1 and it can be found below in section 8 of Regression Testing.
+
+\end{itemize}
+
+privacy-1 - NFR 14.3.1
+\begin{itemize}
+\item The test case for this requirement has not been implemented yet. Refer to test case REG-SAT1 in section 8 of Regression Testing.
+
+\end{itemize}
+
 
 \subsection{etc.}
 	
@@ -80,6 +302,615 @@ This section will not be appropriate for every project.
 
 \section{Unit Testing}
 
+\subsection{Scheduling Module}
+\subsubsection{API Endpoints}
+
+
+POST /schedule/createScheduledCommand
+
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM1 & FR-12, FR-13, FR-17, FR-16  & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & Pass
+\\
+\hline
+SM2 & FR-17, FR-16, FR-13 & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “commandNotInCriteria” }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+PATCH /schedule/updateScheduledCommand
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM3 & FR-3, FR-4, FR-5 & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “start” } & Pass
+\\
+\hline
+SM4 & FR-11 & { userId: ObjectID,
+satelliteId: ObjectID,
+commandId: ObjectID,
+command: “commandNotInCriteria” }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+GET /schedule/getSchedulesBySatellite
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM5 & FR-13 & { satelliteId: ObjectID } & { Message: “Fetched schedules”,
+schedules: Schedule[] } & { Message: “Fetched schedules”,
+schedules: Schedule[] } & Pass
+\\
+\hline
+SM6 & FR-13 & { satelliteId: ObjectID,
+status: “PASSED” } & { Message: “Fetched schedules”,
+schedules: Schedule[] } & { Message: “Fetched schedules”,
+schedules: Schedule[] } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+GET /schedule/getCommandsBySchedule
+
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM7 & FR-13 & { satelliteId: ObjectID } & { Message: “Fetched commands”,
+commands: Command[] } & { Message: “Fetched commands”,
+commands: Command[] } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+DELETE /schedule/deleteScheduledCommand
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM8 & FR-13 & { commandId: ObjectID,
+userId: ObjectID } & { Message: “Success. Deleted schedule” } & { Message: “Success. Deleted schedule” } & Pass
+\\
+\hline
+SM9 & FR-11 & { commandId: ObjectID,
+userId: ObjectID } & { status: 500,
+Error: “Insufficient permissions” } & { status: 500,
+Error: “Insufficient permissions” } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+GET /satellite/getSatelliteInfo
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM10 & FR-15 & {  } & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+\end{tabular}
+
+\end{center}
+
+GET /getPolarPlotData
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM11 & FR-15 & { startTime = 2024-01- 06T 10:15:00Z;
+    endTime = 2024-01- 06T 10:22:00Z;} & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+SM12 & FR-15 & { startTime = 2024-01- 06T 10:15:00Z;
+    endTime = "";} & { status: 500 } & { status: 500 } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+GET /maxElevation
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM13 & FR-16 & { startTime = 2024-01- 06T 10:15:00Z;
+    endTime = 2024-01- 06T 10:22:00Z;} & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+SM14 & FR-16 & { startTime = 2024-01- 06T 10:15:00Z;
+    endTime = "";} & { status: 500 } & { status: 500 } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+GET /getNextPasses
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM15 & FR-15 & { TLE = 59909 } & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+SM16 & FR-15 & { TLE = ""} & { status: 500 } & { status: 500 } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+GET /getSolarIllumination
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM16 & FR-15 & { TLE = 59909 } & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+SM17 & FR-15 & { TLE = ""} & { status: 500 } & { status: 500 } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+POST /changeTLE
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM18 & FR-14 & { TLE = 59909 } & { status: 200 } & { status: 200 } & Pass
+\\
+\hline
+SM19 & FR-14 & { TLE = ""} & { status: 500 } & { status: 500 } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsection{Satellite Users Module}
+\subsubsection{API Endpoints}
+
+
+POST /satelliteUser/createSatelliteUser
+
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{3cm} |p{2cm}| p{2cm} |p{2cm}|}
+\hline
+\textbf{Id}  & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SUM1 &  { userId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectID,
+validCommands: [“teardown”] } & { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+validCommands: ["teardown"],
+adminId: ObjectId } & { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectID,
+validCommands: [“teardown”] } & Pass
+\\
+\hline
+SUM2 &  { userId: ObjectID,
+satelliteId: ObjectID, adminId: "invalidAdminId",
+validCommands: [“teardown”] } 
+& { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+SUM3 &  { userId: ObjectID,
+satelliteId: "invalidSatelliteId",
+adminId: ObjectId,
+validCommands: [“teardown”] }
+ & { status: 500,
+Error: "Invalid Ids" }
+ & { status: 500,
+Error: "Invalid Ids" }
+ & Pass
+\\
+\hline
+SUM4 &  { userId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectId,
+validCommands: [“invalidCommand”] }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+SUM5 &  { userId: "invalidUserId",
+satelliteId: ObjectID,
+adminId: ObjectId,
+validCommands: [“teardown”] }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+PATCH /satelliteUser/updateByUser
+
+
+\begin{center}
+\begin{tabular}{|p{2cm} | p{3cm} |p{2cm}| p{2cm} |p{2cm}|}
+\hline
+\textbf{Id}  & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SUM6 &  { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectID,
+validCommands: [“teardown”] } & { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+validCommands: ["teardown"],
+adminId: ObjectId } & { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectID,
+validCommands: [“teardown”] } & Pass
+\\
+\hline
+SUM7 &  { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+adminId: "invalidAdminId",
+validCommands: [“teardown”] }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+SUM8 &   { satelliteUserId: ObjectID,
+satelliteId: "invalidSatelliteId",
+adminId: ObjectId,
+validCommands: [“teardown”] }
+ & { status: 500,
+Error: "Invalid Ids" }
+ & { status: 500,
+Error: "Invalid Ids" }
+ & Pass
+\\
+\hline
+SUM9 &   { satelliteUserId: ObjectID,
+satelliteId: ObjectID,
+adminId: ObjectId,
+validCommands: [“invalidCommand”] }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+SUM10 &   { satelliteUserId: "invalidSatelliteUserId",
+satelliteId: ObjectID,
+adminId: ObjectId,
+validCommands: [“teardown”] }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & { status: 500,
+Error: "Invalid command sequence or user permissions" }
+ & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+
+GET /satelliteUser/getUserBySatellite
+
+\begin{center}
+\begin{tabular}{|p{2cm} | p{3cm} |p{2cm}| p{2cm} |p{2cm}|}
+\hline
+\textbf{Id}  & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SUM11 &  { satelliteId: ObjectID } & { Message: “Fetched satellite users”,
+satelliteUsers: satelliteUsers[] } & { Message: “Fetched satellite users”,
+satelliteUsers: satelliteUsers[] } & Pass
+\\
+\hline
+SUM12  & { satelliteId: "invalidSatelliteId"} & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+
+GET /satelliteUser/getCommandsBySatelliteAndUser
+
+\begin{center}
+\begin{tabular}{|p{1.5cm} | p{3cm} |p{2cm}| p{2cm} |p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SUM13 &   { satelliteId: ObjectID, userId: ObjectId } & { Message: “Fetched satellite users”,
+satelliteUsers: satelliteUsers[] } & { Message: “Fetched satellite users”,
+satelliteUsers: satelliteUsers[] } & Pass
+\\
+\hline
+SUM14 &   { satelliteId: "invalidSatelliteId", userId: ObjectId} & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & Pass
+\\
+\hline
+SUM15 &   { satelliteId: ObjectId, userId: "InvalidUserId"} & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & { Message: “Fetched satellite Users”,
+satelliteUsers: [] } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+DELETE /satelliteUser/deleteByUser
+
+\begin{center}
+\begin{tabular}{|p{1.5cm} | p{3cm} |p{2cm}| p{2cm} |p{2cm}|}
+\hline
+\textbf{Id}  & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SUM16 &  { adminId: ObjectID, satelliteUserId: ObjectId } & { Message: "Removed User from satellite”} & { Message: "Removed User from satellite"} & Pass
+\\
+\hline
+SUM17 & { adminId: "invalidAdminId", satelliteUserId: ObjectId} & { Message: "Invalid Ids"} & { Message: "Invalid Ids" } & Pass
+\\
+\hline
+SUM18 & { satelliteUserId: "invalidId", adminId: ObjectId} & { Message: "Invalid Ids"} & { Message: "Invalid Ids" } & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsection{Helper Functions}
+
+executeScheduledCommands(satelliteId: ObjectID, scheduleId: ObjectID) $\Rightarrow$ void
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM20 & FR-10 & { satelliteId: ObjectID,
+scheduleId: ObjectID } & List of log records corresponding to the executed command records for the specified scheduleId & List of log records corresponding to the executed command records for the specified scheduleId & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+rescheduleLeftoverCommand(satelliteId: ObjectID, scheduleId: ObjectID) $\Rightarrow$ void
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM21 & FR-10, FR-11 & { satelliteId: ObjectID,
+scheduleId: ObjectID } & Schedule specified in the request has no commands with status:
+ {status: “QUEUED”}
+ & Schedule specified in the request has no commands with status:
+ {status: “QUEUED”} & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+addSchedulesForNext7Days(satelliteId: ObjectID, noradId: number) $\Rightarrow$ void
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM22 & FR-16, FR-17 & { satelliteId: ObjectID,
+noradId: number } & Satellite specified in the request has new schedules for the next seven days
+ & Satellite specified in the request has new schedules for the next seven days & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+getSatelliteInfo(date: Date, tleLine1: number, tleLine2: number) $\Rightarrow$ \{
+    positionEci: number,
+    velocityEci: number,
+    longitude: number,
+    latitude: number,
+    height: number,
+    azimuth: number,
+    elevation: number,
+    rangeSat: number
+  \}
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM23 & FR-15 & { new Date(), 1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991, 2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199 } & \{
+    positionEci: number,
+    velocityEci: number,
+    longitude: number,
+    latitude: number,
+    height: number,
+    azimuth: number,
+    elevation: number,
+    rangeSat: number
+  \}
+ & \{
+    positionEci: number,
+    velocityEci: number,
+    longitude: number,
+    latitude: number,
+    height: number,
+    azimuth: number,
+    elevation: number,
+    rangeSat: number
+  \} & Pass
+\\
+\hline
+SM24 & FR-15 & { "", 1 55098U 23001CT  23359.66872105  .00021921  00000-0  89042-3 0  9991, 2 55098  97.4576  58.0973 0014812  57.5063 302.7604 15.24489013 54199 } & Error: Invalid Date
+ & Error: Invalid Date & Pass
+ \\
+\hline
+SM25 & FR-15 & { new Date(), "", "" } & Error: Invalid TLE
+ & Invalid TLE & Pass
+ \\
+ \hline
+\end{tabular}
+
+\end{center}
+
+isSunLit(date: Date, lon: number,
+  lat: number,
+  height: number) $\Rightarrow$ boolean
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM26 & FR-15 & { new Date(), 0, 0, 0 } & isDefined
+ & isDefined & Pass
+\\
+\hline
+SM27 & FR-15 & { "", 0, 0, 0 } & isNotDefined
+ & isNotDefined & Pass
+ \\
+\hline
+SM28 & FR-15 & { new Date(), 0, 0, 20000} & Error: Height must be in km
+ & Error: Height must be in km & Pass
+ \\
+ \hline
+\end{tabular}
+
+\end{center}
+
+setTLE(tle: string) $\Rightarrow$ void
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+SM29 & FR-14 & { "55098" } & resolves
+ & resolves & Pass
+\\
+\hline
+SM30 & FR-14 & { "abcd" } & Error: Invalid TLE
+ & Error: Invalid TLE & Pass
+ \\
+\hline
+SM30 & FR-14 & { "" } & Error: Empty TLE
+ & Error: Empty TLE & Pass
+ \\
+ \hline
+\end{tabular}
+
+\end{center}
+
+
+
+
 \section{Changes Due to Testing}
 
 \wss{This section should highlight how feedback from the users and from 
@@ -87,13 +918,127 @@ the supervisor (when one exists) shaped the final product.  In particular
 the feedback from the Rev 0 demo to the supervisor (or to potential users) 
 should be highlighted.}
 
+FR-SLN15
+\begin{itemize}
+\item This test has been removed as the stakeholders no longer requested this requirement.
+\end{itemize}
+
+performance-3 (NFR 11.3)
+\begin{itemize}
+\item Precision calculation will be tested by external library providers as the calculations are no longer in the scope of the application.
+\end{itemize}
+
+access-1 (NFR 14.1.1)
+\begin{itemize}
+\item NFR 14.1.1 has been revised and the application will only require to support Single-Sign-On (SSO) authentication instead of Multi-Factor-Authentication (MFA).
+\end{itemize}
+
+\section{Regression Testing}
+
+\subsection{Authentication Module}
+
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+AM1 & NFR 14.1.2 & {email: “test1@ gmail.com”
+password: “correct” } Repeat 10 times
+ & Disable login functionality for one minute
+ & Disable login functionality for one minute & Pass
+\\
+\hline
+AM2 & NFR 14.1.1 & { email: "test1@ gmail.com"
+password: “correct” }
+ & Successfully log user into the application’s home page
+ & Successfully log user into the application’s home page & Pass
+\\
+\hline
+AM3 & NFR 14.1.1, NFR 14.1.2 & { email: “test1@ gmail.com”
+password: “correct” }
+ & Successfully register user into the application and directs them to the home page
+ & Successfully register user into the application and directs them to the home page & Pass
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
+\subsection{Satellite Module}
+\begin{center}
+\begin{tabular}{|p{1cm} | p{2cm} |p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline
+\textbf{Id} & \textbf{Reference Req. Id} & \textbf{Input} & \textbf{Expected Output} & \textbf{Actual Output} & \textbf{Result} \\
+\hline
+REG-SAT1 & NFR 14.3.1 & { port: number }
+ & Socket successfully connected with hash output
+ & Socket successfully connected with hash output & TBD
+\\
+\hline
+
+\end{tabular}
+
+\end{center}
+
 \section{Automated Testing}
 		
 \section{Trace to Requirements}
-		
-\section{Trace to Modules}		
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Req. ID} & \textbf{System Test ID} \\
+\hline
+FR-3 & SM3 \\
+\hline
+FR-4 & SM3 \\
+\hline
+FR-5 & SM3 \\
+\hline
+FR-10 & SM10 \\
+\hline
+FR-11 & SM4, SM9, SM11 \\
+\hline
+FR-12 & SM1 \\
+\hline
+FR-13 & SM5, SM6, SM7, SM8 \\
+\hline
+FR-16 & SM1, SM2, SM12 \\
+\hline
+FR-17 & SM1, SM2, SM12 \\
+\hline
+NFR-14.1.2 & AM1 \\
+\hline
+NFR-14.1.1 & AM2, AM3 \\
+\hline
+NFR-14.1.2 & AM3 \\
+\hline
+NFR-14.3.1 & REG-SAT1 \\
+\hline
+\end{longtable}
+
+
+\section{Trace to Modules}	
+
+\begin{longtable}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\hline
+\textbf{Module} & \textbf{System Test ID} \\
+\hline
+Authentication Module & AM1, AM2, AM3 \\
+\hline
+Schedule Module & SM1, SM2, SM3, SM4, SM5, SM6, SM7, SM8, SM9, SM10, SM11, SM12 \\
+\hline
+Satellite User Module & SUM1, SUM2, SUM3, SUM4, SUM5, SUM6, SUM7, SUM8, SUM9, SUM10, SUM11, SUM12, SUM13, SUM14, SUM15, SUM16, SUM17, SUM18
+\hline
+Satellite Module & REG-SAT1 \\
+\hline
+\end{longtable}
 
 \section{Code Coverage Metrics}
+
+\graphicspath{./BackendCodeCoverage/}
+\includegraphics[width=15cm, height=10cm]{BackendCodeCoverage.png}
+
+
 
 \bibliographystyle{plainnat}
 \bibliography{../../refs/References}
@@ -114,5 +1059,18 @@ graduate attribute of Reflection.  Please answer the following question:
   evidence that demonstrates the required quality?  (It is expected that most
   teams will have had to deviate from their original VnV Plan.)
 \end{enumerate}
+
+\begin{itemize}
+    \item Quinn - The biggest difference in the way that the VnV plan was different from what was conducted was for me, the satellite calculations. the initial plan was to develop the code to calculate, however upon future research, was determined to be more accurate to rely on scientists and utilize open-source libraries instead. As a result, the VnV plan was modified to instead validate the flow of data, specifically the data and types of the parameters. This could have been anticipated earlier with given research, and more effort will be given in the future by researching before establishing a plan for testing.
+    \item Umang - In terms of verifying and validating the functionality of the scheduling and authentication modules, we initially had wanted to automate both backend and frontend facing features using a unit-testing library. However, we instead decided to modularize the evaluation of the backend and frontend components. As a result, we opted for evaluating the backend API endpoints and helper functions using unit tests to measure the application's correctness. Then, we used acceptance testing with our stakeholders to assess the user interface of the application. Furthermore, this could have been anticipated by researching into common methods of testing server and client-side applications beforehand.
+    \item Diamond - Reflecting on our initial Verification and Validation (VnV) Plan, we realized the necessity to deviate from certain aspects, notably the Usability-3, NFR: 10.5, focused on assessing accessibility. This part of the plan, aimed at manually testing the application's accessibility for users with diverse needs, was ambitious in ensuring our system was universally accessible. However, due to constraints in resources, time, and the availability of a varied group of test participants with specific accessibility needs, we have decided not to proceed with this detailed testing approach. Instead, our efforts have pivoted towards leveraging best practices in accessibility design and relying on automated tools to assess some accessibility features. This decision underlines the often complex balance between ideal testing scenarios and the practical limitations of project environments. It also highlights the importance of flexibility in project management and the need to adapt plans based on available resources and evolving project dynamics. This experience reinforces the value of incorporating adaptability into our VnV strategies, allowing us to better anticipate and accommodate changes in future projects while still aiming to deliver high-quality, accessible software within our constraints.
+    \item Rishi - When we look back at our initial plan for Verification and Validation (VnV) and compare it to what we actually ended up doing, we noticed quite a few differences. These changes were necessary because we encountered unexpected requirements and had to make practical adjustments to fit the scope and methods of our project. For example, we had to tweak our strategies to fit new tools and technologies, adjust to changes in our team's skills, and cope with shifts in project deadlines.
+   
+
+These adjustments were all part of the unpredictable nature of software development. Plans that look good on paper often have to be adapted to deal with the real-world challenges we face, like technical hurdles, limited resources, and changes in project goals. Going through this process taught us the importance of being flexible and able to change direction when needed. While it's hard to predict every twist and turn, this project showed us that being adaptable is key to success.
+
+We learned that having a solid plan is essential, but so is being ready to adjust that plan as we go along and learn new things. This mindset will help us anticipate and handle changes better in future projects, making sure our VnV activities stay on track with what we're trying to achieve and the limitations we face.
+ \item Dhruv - The biggest difference in our initial plan and what ended up happening was the new changes and requirements that were added along the way. As a result, practical changes are a consequence especially if we want to fit it within our timeline and scope of our project. This is only natural in software development and was an important lesson to learn because no one can ever predict all incoming changes that will happen. This forced me to not get fixated on one solution and to keep thinking from different perspectives. Additionally, we were able to do user testing with our stakeholders which provided important and useful feedback. This motivated us to research more software testing methods, even the unconventional ones perhaps. As someone who was primarily working on the front-end, I never estimated that it would take as long as it did. It was an important lesson that every aspect of software development is vital. 
+\end{itemize}
 
 \end{document}
