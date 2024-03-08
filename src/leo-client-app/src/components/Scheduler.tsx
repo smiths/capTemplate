@@ -238,24 +238,6 @@ const Scheduler = () => {
                               )}
                             </>
                           </Stack>
-                          {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
-                          {/* <Button
-                            className="edit-button"
-                            onClick={() => {
-                              router.push({
-                                pathname: "/edit-schedules",
-                                query: { satelliteId },
-                              });
-                            }}
-                            sx={{
-                              color: "var(--material-theme-black)",
-                              fontFamily: "Roboto",
-                              marginTop: "10px",
-                            }}
-                          >
-                            {" "}
-                            Edit Schedules{" "}
-                          </Button> */}
                         </CardContent>
                       </Card>
                     </NextLink>
