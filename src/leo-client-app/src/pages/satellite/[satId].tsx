@@ -51,7 +51,7 @@ function SatelliteInfoPage() {
   return (
     <Stack
       alignItems="center"
-      justifyContent="center"
+      // justifyContent="center"
       spacing={1}
       sx={{ height: "100vh", margin: "0 auto", width: "100%" }}
     >
