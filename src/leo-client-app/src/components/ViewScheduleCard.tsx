@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import '../styles.css';
+import "../styles.css";
 
 type Props = {
   scheduleId: string;
@@ -55,34 +55,83 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
   }, [commandsData.data]);
 
   return (
-    <Stack
-      sx={{ width: "100%" }} alignItems="center" spacing={4} py={10}>
-      <Typography align = "center" variant = "h3" style={{width: "100%", color: "var(--material-theme-sys-light-secondary-container", marginBottom: "1px"}}>Current Schedule</Typography>
-      {error && <Typography style={{ color: "var(--material-theme-sys-light-error)" }}>{error}</Typography>}
+    <Stack sx={{ width: "100%" }} alignItems="center" spacing={4} py={10}>
+      <Typography
+        align="center"
+        variant="h3"
+        style={{
+          width: "100%",
+          color: "var(--material-theme-sys-light-secondary-container",
+          marginBottom: "1px",
+        }}
+      >
+        Current Schedule
+      </Typography>
+      {error && (
+        <Typography style={{ color: "var(--material-theme-sys-light-error)" }}>
+          {error}
+        </Typography>
+      )}
       <br></br>
       <TableContainer
         component={Paper}
         sx={{
           maxWidth: 800,
           background: "var(--material-theme-sys-dark-primary-fixed)",
-          // marginLeft: "2px"
-        }}>
+        }}
+      >
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderLeft: 2, borderRight: 2}} align="left">
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderLeft: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
                 Command
               </TableCell>
-              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
                 Status
               </TableCell>
-              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
                 Operator
               </TableCell>
-              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2 }} align="left">
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
                 Created
               </TableCell>
-              <TableCell sx={{ color: "var(--material-theme-black)", borderTop: 2, borderRight: 2}} align="left">
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
                 Delete
               </TableCell>
             </TableRow>
@@ -93,23 +142,38 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
               commandsData.data.commands.map((item: any, index: number) => (
                 <TableRow
                   key={item._id + index}
-                  sx={{ borderBottom: 2, borderTop: 2, borderLeft: 2,borderRight: 2
+                  sx={{
+                    borderBottom: 2,
+                    borderTop: 2,
+                    borderLeft: 2,
+                    borderRight: 2,
                     // "&:last-child td, &:last-child th": { border: 1 },
-                  }}>
+                  }}
+                >
                   <TableCell
                     sx={{ color: "black !important", borderRight: 2 }}
                     align="left"
                     component="th"
-                    scope="row">
+                    scope="row"
+                  >
                     {item.command}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important", borderRight: 2}} align="left">
+                  <TableCell
+                    sx={{ color: "black !important", borderRight: 2 }}
+                    align="left"
+                  >
                     {item.status}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
+                  <TableCell
+                    sx={{ color: "black !important", borderRight: 2 }}
+                    align="left"
+                  >
                     {item.userId.email}
                   </TableCell>
-                  <TableCell sx={{ color: "black !important", borderRight: 2 }} align="left">
+                  <TableCell
+                    sx={{ color: "black !important", borderRight: 2 }}
+                    align="left"
+                  >
                     {new Date(item.createdAt.toString()).toLocaleDateString(
                       "en-US",
                       {
@@ -127,7 +191,8 @@ const ViewScheduleCard: React.FC<Props> = ({ scheduleId, userId }) => {
                       variant="text"
                       sx={{ color: "var(--material-theme-sys-light-error)" }}
                       disabled={item.status === "EXECUTED"}
-                      onClick={() => removeCommand(item._id)}>
+                      onClick={() => removeCommand(item._id)}
+                    >
                       Delete
                     </Button>
                   </TableCell>

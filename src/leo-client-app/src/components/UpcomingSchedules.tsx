@@ -10,8 +10,10 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+import NextLink from "next/link";
 import { BACKEND_URL } from "@/constants/api";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface Schedule {
   id: string;
@@ -53,15 +55,20 @@ function formatTimeRange(startTime: string, endTime: string) {
 }
 
 const UpcomingSchedules = ({ noradId }: Props) => {
-  const [satelliteId, setSatelliteId] = useState<string>(
-    "655acd63d122507055d3d2ea"
-  );
+  const router = useRouter();
+  const { satId } = router.query;
+  const [satelliteId, setSatelliteId] = useState<string>(satId as string);
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scheduleCommands, setScheduleCommands] = useState<{
     [scheduleId: string]: string[];
   }>({});
+
+  function formatDateToISO(dateString: string) {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 19) + "Z";
+  }
 
   const fetchSatelliteId = (noradId: string) => {
     return axios
@@ -128,11 +135,11 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   };
 
   useEffect(() => {
-    fetchSatelliteId(noradId);
+    fetchSchedules(satelliteId);
   }, [satelliteId]);
 
   useEffect(() => {
-    fetchSatelliteId(noradId);
+    fetchSchedules(satelliteId);
   }, [noradId]);
 
   return (
@@ -163,57 +170,62 @@ const UpcomingSchedules = ({ noradId }: Props) => {
             {schedules &&
               schedules.map((schedule, index) => (
                 <Grid item key={index}>
-                  <Card
-                    sx={{
-                      minWidth: 150,
-                      maxWidth: 150,
-                      margin: 0.5,
-                      backgroundColor:
-                        "var(--material-theme-sys-light-inverse-on-surface)",
-                      cursor: "pointer",
-                      borderRadius: 3,
-                      minHeight: 150,
-                      maxHeight: 150,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
+                  <NextLink
+                    href={`/edit-schedule/${satId}/${schedule.id}`}
+                    passHref
                   >
-                    <CardContent>
-                      <Stack spacing={0}>
-                        <p className="cardTitle">
-                          {formatDate(schedule.startDate)}
-                        </p>
+                    <Card
+                      sx={{
+                        minWidth: 150,
+                        maxWidth: 150,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-inverse-on-surface)",
+                        cursor: "pointer",
+                        borderRadius: 3,
+                        minHeight: 150,
+                        maxHeight: 150,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardContent>
+                        <Stack spacing={0}>
+                          <p className="cardTitle">
+                            {formatDate(schedule.startDate)}
+                          </p>
 
-                        <p className="cardSubtitle">
-                          {formatTimeRange(
-                            schedule.startDate,
-                            schedule.endDate
-                          )}
-                        </p>
+                          <p className="cardSubtitle">
+                            {formatTimeRange(
+                              schedule.startDate,
+                              schedule.endDate
+                            )}
+                          </p>
 
-                        <>
-                          {scheduleCommands[schedule.id] &&
-                          scheduleCommands[schedule.id].length > 0 ? (
-                            <>
-                              {scheduleCommands[schedule.id]
-                                .slice(0, 3)
-                                .map((commandObj: any, cmdIndex) => (
-                                  // Render each command in a separate <p> tag
-                                  <p key={cmdIndex} className="cardSubtitle">
-                                    {commandObj.command}
-                                  </p>
-                                ))}
-                              {scheduleCommands[schedule.id].length > 3 && (
-                                <p className="cardSubtitle">...</p>
-                              )}
-                            </>
-                          ) : (
-                            <p className="cardSubtitle">No commands</p>
-                          )}
-                        </>
-                      </Stack>
-                    </CardContent>
-                  </Card>
+                          <>
+                            {scheduleCommands[schedule.id] &&
+                            scheduleCommands[schedule.id].length > 0 ? (
+                              <>
+                                {scheduleCommands[schedule.id]
+                                  .slice(0, 3)
+                                  .map((commandObj: any, cmdIndex) => (
+                                    // Render each command in a separate <p> tag
+                                    <p key={cmdIndex} className="cardSubtitle">
+                                      {commandObj.command}
+                                    </p>
+                                  ))}
+                                {scheduleCommands[schedule.id].length > 3 && (
+                                  <p className="cardSubtitle">...</p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="cardSubtitle">No commands</p>
+                            )}
+                          </>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </NextLink>
                 </Grid>
               ))}
           </Grid>

@@ -15,6 +15,8 @@ import SatelliteName from "./SatelliteName";
 import "./styles/component.css";
 import "./styles/Scheduler.css";
 import { BACKEND_URL } from "@/constants/api";
+import axios from "axios";
+import NextLink from "next/link";
 
 interface Command {
   name: string;
@@ -56,13 +58,30 @@ function formatTimeRange(startTime: string, endTime: string) {
 
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
-const Scheduler = ({ noradId }: Props) => {
-  const satelliteId = "655acd63d122507055d3d2ea";
+const Scheduler = () => {
+  const router = useRouter();
+  let { satId } = router.query as {
+    satId: string;
+  };
+
+  const satelliteId = satId;
   const [scheduleForCard, setSchedules] = useState<Schedule[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scheduleCommands, setScheduleCommands] = useState<{
     [scheduleId: string]: string[];
   }>({});
+  const [satelliteName, setSatelliteName] = useState<string>("BDSAT-2");
+
+  const fetchName = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatellite`, {
+        params: { satelliteId: satId },
+      });
+      setSatelliteName(res.data.satellite.name);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const fetchSchedules = (satelliteId: string) => {
     setIsLoading(true);
@@ -113,15 +132,17 @@ const Scheduler = ({ noradId }: Props) => {
   };
 
   useEffect(() => {
+    fetchName();
     fetchSchedules(satelliteId);
   }, [satelliteId]);
-
-  const router = useRouter();
+  useEffect(() => {
+    fetchName();
+  });
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
       <Box px={"200px"}>
-        <SatelliteName noradId={noradId} />
+        <SatelliteName name={satelliteName} />
         <Typography variant="h5" className="headerBox2">
           All Schedules
         </Typography>
@@ -151,83 +172,93 @@ const Scheduler = ({ noradId }: Props) => {
                 borderColor: "var(--material-theme-white)",
                 width: "85%",
                 mx: -2,
-              }}>
+              }}
+            >
               {scheduleForCard &&
                 scheduleForCard.map((schedule, index) => (
                   <Grid item key={index} sx={{ width: "98%" }}>
-                    <Card
-                      sx={{
-                        width: "99%",
-                        minHeight: 100,
-                        margin: 0.5,
-                        backgroundColor:
-                          "var(--material-theme-sys-light-primary-container)",
-                        cursor: "pointer",
-                        borderRadius: 4,
-                      }}>
-                      <CardContent>
-                        <Stack spacing={1}>
-                          <Typography className="cardTitle">
-                            {formatDate(schedule.startDate)}
-                          </Typography>
-                          <Typography className="cardSubtitle">
-                            {formatTimeRange(
-                              schedule.startDate,
-                              schedule.endDate
-                            )}
-                          </Typography>
-                          <>
-                            {scheduleCommands[schedule.id] &&
-                            scheduleCommands[schedule.id].length > 0 ? (
-                              <>
-                                {scheduleCommands[schedule.id]
-                                  .slice(0, 3)
-                                  .map((commandObj: any, cmdIndex) => (
-                                    <Typography
-                                      key={cmdIndex}
-                                      className="cardSubtitle">
-                                      {commandObj.command}
+                    <NextLink
+                      href={`/edit-schedule/${satId}/${schedule.id}`}
+                      passHref
+                    >
+                      <Card
+                        sx={{
+                          width: "99%",
+                          minHeight: 100,
+                          margin: 0.5,
+                          backgroundColor:
+                            "var(--material-theme-sys-light-primary-container)",
+                          cursor: "pointer",
+                          borderRadius: 4,
+                        }}
+                      >
+                        <CardContent>
+                          <Stack spacing={1}>
+                            <Typography className="cardTitle">
+                              {formatDate(schedule.startDate)}
+                            </Typography>
+                            <Typography className="cardSubtitle">
+                              {formatTimeRange(
+                                schedule.startDate,
+                                schedule.endDate
+                              )}
+                            </Typography>
+                            <>
+                              {scheduleCommands[schedule.id] &&
+                              scheduleCommands[schedule.id].length > 0 ? (
+                                <>
+                                  {scheduleCommands[schedule.id]
+                                    .slice(0, 3)
+                                    .map((commandObj: any, cmdIndex) => (
+                                      <Typography
+                                        key={cmdIndex}
+                                        className="cardSubtitle"
+                                      >
+                                        {commandObj.command}
+                                      </Typography>
+                                    ))}
+                                  {scheduleCommands[schedule.id].length > 3 && (
+                                    <Typography className="cardSubtitle">
+                                      {" "}
+                                      ...{" "}
                                     </Typography>
-                                  ))}
-                                {scheduleCommands[schedule.id].length > 3 && (
-                                  <Typography className="cardSubtitle">
-                                    {" "}
-                                    ...{" "}
-                                  </Typography>
-                                )}
-                              </>
-                            ) : (
-                              <Typography
-                                className="cardSubtitle"
-                                sx={{
-                                  padding: "0px",
-                                  fontSize: "15px",
-                                  color: "var(--material-theme-black)",
-                                }}>
-                                No commands
-                              </Typography>
-                            )}
-                          </>
-                        </Stack>
-                        {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
-                        <Button
-                          className="edit-button"
-                          onClick={() => {
-                            router.push({
-                              pathname: "/edit-schedules",
-                              query: { satelliteId },
-                            });
-                          }}
-                          sx={{
-                            color: "var(--material-theme-black)",
-                            fontFamily: "Roboto",
-                            marginTop: "10px",
-                          }}>
-                          {" "}
-                          Edit Schedules{" "}
-                        </Button>
-                      </CardContent>
-                    </Card>
+                                  )}
+                                </>
+                              ) : (
+                                <Typography
+                                  className="cardSubtitle"
+                                  sx={{
+                                    padding: "0px",
+                                    fontSize: "15px",
+                                    color: "var(--material-theme-black)",
+                                  }}
+                                >
+                                  No commands
+                                </Typography>
+                              )}
+                            </>
+                          </Stack>
+                          {/* the router.push navigates the user to said pathname and the satelliteID is the prop for edit schedules page  */}
+                          {/* <Button
+                            className="edit-button"
+                            onClick={() => {
+                              router.push({
+                                pathname: "/edit-schedules",
+                                query: { satelliteId },
+                              });
+                            }}
+                            sx={{
+                              color: "var(--material-theme-black)",
+                              fontFamily: "Roboto",
+                              marginTop: "10px",
+                            }}
+                          >
+                            {" "}
+                            Edit Schedules{" "}
+                          </Button> */}
+                        </CardContent>
+                      </Card>
+                    </NextLink>
                   </Grid>
                 ))}
             </Grid>

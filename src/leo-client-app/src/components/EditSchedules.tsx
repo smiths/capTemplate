@@ -8,14 +8,15 @@ import "../styles.css";
 import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
+import axios from "axios";
 
-type Props = {
-  noradId: string;
-};
-
-const EditScheduler = ({ noradId }: Props) => {
+const EditScheduler = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { satId, scheduleId } = router.query as {
+    satId: string;
+    scheduleId: string;
+  };
   // const satelliteId = "655acd63d122507055d3d2ea";
   const satelliteId = router.query?.satelliteId?.toString() ?? "";
   // console.log(typeof(satelliteId), "hi");
@@ -23,11 +24,23 @@ const EditScheduler = ({ noradId }: Props) => {
 
   // operator
   const userId: string = "65a8181f36ea10b4366e1dd9";
-  const scheduleId = "65a8182036ea10b4366e1de6";
+  // const scheduleId = "65a8182036ea10b4366e1de6";
   const isAdmin = adminUserId === userId;
 
   const [validCommands, setValidCommands] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
+  const [satelliteName, setSatelliteName] = useState<string>();
+
+  const fetchName = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatellite`, {
+        params: { satelliteId: satId },
+      });
+      setSatelliteName(res.data.satellite.name);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const fetchValidCommands = (satelliteId: string) => {
     if (isAdmin) {
@@ -64,7 +77,7 @@ const EditScheduler = ({ noradId }: Props) => {
   };
 
   useEffect(() => {
-    fetchValidCommands(satelliteId);
+    fetchValidCommands(satId);
   }, [satelliteId]);
 
   // Mutation function
@@ -100,7 +113,7 @@ const EditScheduler = ({ noradId }: Props) => {
       }}
     >
       <Box px={"4px"}>
-        <SatelliteName noradId={noradId} />
+        <SatelliteName name={satelliteName as string} />
       </Box>
       <Box
         style={{
