@@ -15,10 +15,20 @@ import React, { useEffect, useState } from "react";
 import LogDialog from "./logModal";
 import moment from "moment";
 import { BACKEND_URL } from "@/constants/api";
+import { useRouter } from "next/router";
 
 const Logs: React.FC = () => {
+  const router = useRouter();
+  let { satId } = router.query as {
+    satId: string;
+  };
+  if (!satId) {
+    satId = "655acd63d122507055d3d2ea";
+  }
+
   // TODO: Dynamicall get satelliteId from somewhere
-  const satelliteId = "655acd63d122507055d3d2ea";
+
+  const satelliteId = satId;
   const [logs, setLogs] = useState<any>([]);
   const [logData, setLogData] = useState<any>(null);
   const [openLog, setOpenLog] = useState<boolean>(false);
@@ -55,7 +65,8 @@ const Logs: React.FC = () => {
         sx={{
           maxWidth: 800,
           background: "#40403fb0",
-        }}>
+        }}
+      >
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -77,12 +88,14 @@ const Logs: React.FC = () => {
                   key={data._id + index}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
-                  }}>
+                  }}
+                >
                   <TableCell
                     sx={{ color: "white !important" }}
                     align="left"
                     component="th"
-                    scope="row">
+                    scope="row"
+                  >
                     {moment
                       .utc(data.createdAt)
                       .local()
@@ -98,7 +111,8 @@ const Logs: React.FC = () => {
                     <Button
                       variant="text"
                       sx={{ color: "#6cb6ff" }}
-                      onClick={() => handleLogOpen(data)}>
+                      onClick={() => handleLogOpen(data)}
+                    >
                       Show Logs
                     </Button>
                   </TableCell>

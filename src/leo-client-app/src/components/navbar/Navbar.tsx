@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
     },
     {
       heading: "Logs",
-      path: "/satellite-logs",
+      path: `/satellite-logs/${satId}`,
     },
     {
       // heading: "Account",
