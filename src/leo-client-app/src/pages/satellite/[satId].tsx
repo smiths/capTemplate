@@ -94,8 +94,6 @@ function SatelliteInfoPage() {
           </Grid>
         </Grid>
       </Grid>
-
-      <SatelliteTLE noradId={selectedNoradId} setNoradId={setSelectedNoradId} />
     </Stack>
   );
 }
