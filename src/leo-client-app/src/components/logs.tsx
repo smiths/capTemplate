@@ -20,10 +20,6 @@ import moment from "moment";
 import { BACKEND_URL } from "@/constants/api";
 import { useRouter } from "next/router";
 
-type Props = {
-  satelliteId: string;
-};
-
 const Logs: React.FC = () => {
   const router = useRouter();
   let { satId } = router.query as {
