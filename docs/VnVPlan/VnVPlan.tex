@@ -13,8 +13,8 @@
 \usepackage[round]{natbib}
 \usepackage{longtable}
 
-% \input{../Comments}
-% \input{../Common}
+\input{../Comments}
+\input{../Common}
 
 \begin{document}
 
@@ -34,6 +34,7 @@
 November 3, 2023 & 1.0 & Completed VnV Plan - Q.H, R.V, D.A, D.C, U.R\\
 
 November 3, 2023 & 1.0 & Updated NFRs - Q.H, R.V, D.A, D.C, U.R\\
+March 3, 2024 & 1.0.1 & Updated Elevation FR and precision NFR - Q.H\\
 
 \bottomrule
 \end{tabularx}
@@ -579,6 +580,8 @@ Input: User sets a specific elevation threshold for a satellite.
 					
 Output: The MCT should automatically schedule a command when the satellite's elevation reaches the user-specified threshold. The scheduled command should execute as per the defined parameters.
 
+\textbf{Note: this requirement is no longer being implemented due to stakeholder request.}
+
 Test Case Derivation:
 					
 How test will be performed:
@@ -678,20 +681,7 @@ Each test within this module is carefully crafted to target essential usability 
 
 \textbf{Initial State}: Application or system is operational and ready for assessment by users with various accessibility needs.
 
-\textbf{Input/Condition}: Users with differing accessibility needs engage with the application or system.
-
-\textbf{Output/Result}: Analysis of accessibility, encountered barriers, user testimonials, and identification of improvement points.
-
-\textbf{How test will be performed}:
-
-\begin{itemize}
-    \item Participants with diverse accessibility needs, such as visual, auditory, or motor impairments, will be given access to the application or system.
-    \item They will be tasked to navigate and complete certain operations within the system.
-    \item Challenges faced by users, the software's accessibility strengths and shortcomings will be observed and noted.
-    \item Assistive technologies may be employed by participants, and their effectiveness will be evaluated during the testing.
-    \item Post-test discussions will be convened to accumulate detailed feedback on the accessibility of the software.
-    \item Analyzed data will aid in determining the software's alignment with accessibility standards and required enhancements.
-\end{itemize}
+\textbf{This will not be tested for the current scope of the project}
 
 \end{enumerate}
 
@@ -760,6 +750,8 @@ This module is designed to ensure our software not only meets current performanc
 \textbf{NFR}: 11.3
 
 \textbf{Type}: Precision, Manual/Automated
+
+\textbf{Note: This NFR is no longer being tested due to outsourcing of astrological calculations    }
 
 \textbf{Initial State}: Application or system fully functional and ready for testing in a controlled environment.
 
