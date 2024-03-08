@@ -20,8 +20,8 @@ const argv = yargs(hideBin(process.argv))
   .options({
     host: { type: "string", default: "localhost" },
     port: { type: "number", default: 1459 },
-    key: { type: "string", default: "../../test_key.pem" },
-    cert: { type: "string", default: "../../test_cert.pem" },
+    key: { type: "string", default: "../../test_key.pem" }, // TODO: fix file location
+    cert: { type: "string", default: "../../test_cert.pem" }, //TODO: fix file location
   })
   .parseSync() as CommandArgs;
 
@@ -72,11 +72,13 @@ async function setupWebSocketServer({
 }
 
 router.get('/start-server', async (req: any, res: any) => {
-    setupWebSocketServer(argv).catch((err) => {
-        console.error(err);
-        process.exit(1);
-    });
+  try {
+    await setupWebSocketServer(argv);
     res.send('Server started');
+} catch (err) {
+    console.error(err);
+    res.status(500).send('Error starting server');
+}
 });
 
 module.exports = router;
