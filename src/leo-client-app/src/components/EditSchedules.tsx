@@ -97,16 +97,18 @@ const EditScheduler = ({ noradId }: Props) => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "2rem",
-      }}>
+      }}
+    >
       <Box px={"4px"}>
-        <SatelliteName noradId="55098" />
+        <SatelliteName noradId={noradId} />
       </Box>
       <Box
         style={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",
-        }}>
+        }}
+      >
         <Card
           sx={{
             minWidth: "200px",
@@ -114,13 +116,15 @@ const EditScheduler = ({ noradId }: Props) => {
             borderRadius: "16px",
             padding: "10px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}>
+          }}
+        >
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
-            }}>
+            }}
+          >
             Valid Commands
           </Typography>
           {validCommands &&
@@ -129,7 +133,8 @@ const EditScheduler = ({ noradId }: Props) => {
               <Button
                 key={index}
                 className="scheduleButton"
-                onClick={() => addCommand(command)}>
+                onClick={() => addCommand(command)}
+              >
                 {command}
               </Button>
             ))}
@@ -142,13 +147,15 @@ const EditScheduler = ({ noradId }: Props) => {
             overflow: "auto",
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}>
+          }}
+        >
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container)",
-            }}>
+            }}
+          >
             Current Schedules
           </Typography>
           {currentSchedule &&
@@ -157,7 +164,8 @@ const EditScheduler = ({ noradId }: Props) => {
               <Button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}>
+                onClick={() => removeCommand(index)}
+              >
                 <Box className="buttonText" style={{ textAlign: "center" }}>
                   {command}
                 </Box>
@@ -174,7 +182,8 @@ const EditScheduler = ({ noradId }: Props) => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}>
+              }}
+            >
               Clear Schedule
             </Button>
             <Button
@@ -184,7 +193,8 @@ const EditScheduler = ({ noradId }: Props) => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}>
+              }}
+            >
               Send Schedule
             </Button>
           </div>

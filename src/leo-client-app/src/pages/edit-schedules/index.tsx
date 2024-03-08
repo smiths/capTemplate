@@ -12,12 +12,13 @@ function EditSchedulePage({ noradId }: Props) {
   return (
     <main>
       <Stack
-      alignItems="center"
-      justifyContent="center"
-      spacing={1}
-      sx={{ width: "100%" }}> 
+        alignItems="center"
+        justifyContent="center"
+        spacing={1}
+        sx={{ width: "100%" }}
+      >
         <Navbar />
-      <EditScheduler noradId="55098"/>
+        <EditScheduler noradId={noradId} />
       </Stack>
     </main>
   );
