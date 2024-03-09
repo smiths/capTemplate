@@ -4,10 +4,8 @@ import React, { useEffect, useState } from "react";
 const defaultNoradId = "55098";
 
 type Props = {
-  name: string;
-};
 
-const SatelliteName = ({ name }: Props) => {
+const SatelliteName = ({ satelliteName }: Props) => {
   return (
     <Box
       className="material-themedisplaymedium"

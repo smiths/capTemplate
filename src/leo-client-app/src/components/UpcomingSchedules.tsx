@@ -139,94 +139,90 @@ const UpcomingSchedules = ({ noradId }: Props) => {
     <div className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Schedule Queue</p>
-        <div className="upcomingSchedulesBox">
-          {isLoading ? (
-            <Box className="loadingBox">
-              <CircularProgress />
-            </Box>
-          ) : (
-            <TableContainer
-              component={Paper}
-              style={{ width: "100%" }}
-              sx={{
-                maxWidth: "100%",
-                background: "var(--material-theme-sys-light-primary-fixed)",
-                "& .MuiTableCell-root": {
-                  borderBottom: "2px solid black",
-                  color: "var(--material-theme-black)",
-                  textAlign: "left",
-                  fontSize: "15px",
-                },
-              }}
-            >
-              <Table
-                sx={{
-                  border:
-                    "2px solid var(--material-theme-sys-light-on-primary)",
-                  borderRadius: "15px",
-                }}
-                stickyHeader
-                aria-label="simple table"
-              >
-                <TableHead>
-                  <TableRow
-                    sx={{
-                      backgroundColor:
-                        "var(--material-theme-sys-light-primary-fixed)",
-                      "& .MuiTableCell-head": {
-                        backgroundColor:
-                          "var(--material-theme-sys-light-primary-fixed) !important",
-                      },
-                    }}
+        {isLoading ? (
+          <Box className="loadingBox">
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Grid
+            className="futureSchedulesBox"
+            container
+            spacing={0}
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              overflowX: "auto",
+              maxWidth: "98vw", // Use 100vw to ensure it considers the full viewport width
+              boxSizing: "border-box",
+              "& .MuiGrid-item": {
+                flex: "0 0 auto",
+              },
+              mx: -2,
+            }}
+          >
+            {schedules &&
+              schedules.map((schedule, index) => (
+                <Grid item key={index}>
+                  <NextLink
+                    href={`/edit-schedule/${satId}/${schedule.id}`}
+                    passHref
                   >
-                    <TableCell>Date</TableCell>
-                    <TableCell>Time Range</TableCell>
-                    <TableCell>Commands</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {schedules &&
-                    schedules.map((schedule, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          "&:hover": { cursor: "pointer" },
-                        }}
-                        onClick={() =>
-                          router.push(`/edit-schedule/${satId}/${schedule.id}`)
-                        }
-                      >
-                        <TableCell align="left" component="th" scope="row">
-                          {formatDate(schedule.startDate)}
-                        </TableCell>
-                        <TableCell align="left">
-                          {formatTimeRange(
-                            schedule.startDate,
-                            schedule.endDate
-                          )}
-                        </TableCell>
-                        <TableCell align="left" component="th" scope="row">
-                          {scheduleCommands[schedule.id] &&
-                          scheduleCommands[schedule.id].length > 0
-                            ? scheduleCommands[schedule.id]
-                                .slice(0, 3)
-                                .map((commandObj: any, cmdIndex) => (
-                                  <div key={cmdIndex}>{commandObj.command}</div>
-                                ))
-                            : "No commands"}
-                          {scheduleCommands[schedule.id] &&
-                            scheduleCommands[schedule.id].length > 3 && (
-                              <div>...</div>
+                    <Card
+                      sx={{
+                        minWidth: 150,
+                        maxWidth: 150,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-inverse-on-surface)",
+                        cursor: "pointer",
+                        borderRadius: 3,
+                        minHeight: 150,
+                        maxHeight: 150,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardContent>
+                        <Stack spacing={0}>
+                          <p className="cardTitle">
+                            {formatDate(schedule.startDate)}
+                          </p>
+
+                          <p className="cardSubtitle">
+                            {formatTimeRange(
+                              schedule.startDate,
+                              schedule.endDate
                             )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </div>
+                          </p>
+
+                          <>
+                            {scheduleCommands[schedule.id] &&
+                            scheduleCommands[schedule.id].length > 0 ? (
+                              <>
+                                {scheduleCommands[schedule.id]
+                                  .slice(0, 3)
+                                  .map((commandObj: any, cmdIndex) => (
+                                    // Render each command in a separate <p> tag
+                                    <p key={cmdIndex} className="cardSubtitle">
+                                      {commandObj.command}
+                                    </p>
+                                  ))}
+                                {scheduleCommands[schedule.id].length > 3 && (
+                                  <p className="cardSubtitle">...</p>
+                                )}
+                              </>
+                            ) : (
+                              <p className="cardSubtitle">No commands</p>
+                            )}
+                          </>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </NextLink>
+                </Grid>
+              ))}
+          </Grid>
+        )}
       </Stack>
     </div>
   );

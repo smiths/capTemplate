@@ -13,13 +13,9 @@ import axios from "axios";
 const EditScheduler = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { satId, scheduleId } = router.query as {
-    satId: string;
-    scheduleId: string;
-  };
-  // const satelliteId = "655acd63d122507055d3d2ea";
+  const satId = router.query?.satId?.toString() ?? "";
+  const scheduleId = router.query?.scheduleId?.toString() ?? "";
   const satelliteId = router.query?.satelliteId?.toString() ?? "";
-  // console.log(typeof(satelliteId), "hi");
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
 
   // operator
@@ -112,7 +108,8 @@ const EditScheduler = () => {
       }}
     >
       <Box px={"4px"}>
-        <SatelliteName name={satelliteName as string} />
+
+        <SatelliteName satelliteName={satelliteName as string} />
       </Box>
       <Box
         style={{

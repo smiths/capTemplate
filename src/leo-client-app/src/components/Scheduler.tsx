@@ -142,7 +142,7 @@ const Scheduler = () => {
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
       <Box px={"200px"}>
-        <SatelliteName name={satelliteName} />
+        <SatelliteName satelliteName={satelliteName} />
         <Typography variant="h5" className="headerBox2">
           All Schedules
         </Typography>

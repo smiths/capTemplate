@@ -51,7 +51,7 @@ function SatelliteInfoPage() {
   return (
     <Stack
       alignItems="center"
-      // justifyContent="center"
+      justifyContent="center"
       spacing={1}
       sx={{ height: "100vh", margin: "0 auto", width: "100%" }}
     >
@@ -67,7 +67,7 @@ function SatelliteInfoPage() {
           mx: "auto",
         }}
       >
-        <SatelliteName name={satelliteName as string} />
+        <SatelliteName satelliteName={satelliteName as string} />
         <Grid
           container
           spacing={3}
