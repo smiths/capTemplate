@@ -18,22 +18,14 @@ import "./styles/logs.css";
 import "../styles.css";
 import moment from "moment";
 import { BACKEND_URL } from "@/constants/api";
-import { useRouter } from "next/router";
 
 type Props = {
   satelliteId: string;
 };
 
 const Logs: React.FC = () => {
-  const router = useRouter();
-  let { satId } = router.query as {
-    satId: string;
-  };
-  if (!satId) {
-    satId = "655acd63d122507055d3d2ea";
-  }
-
-  const satelliteId = satId;
+  // TODO: Dynamicall get satelliteId from somewhere
+  const satelliteId = "655acd63d122507055d3d2ea";
   const [logs, setLogs] = useState<any>([]);
   const [logData, setLogData] = useState<any>(null);
   const [openLog, setOpenLog] = useState<boolean>(false);
