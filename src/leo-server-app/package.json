@@ -23,7 +23,8 @@
     "satellite.js": "^5.0.0",
     "spacetrack": "^2.1.3",
     "suncalc": "^1.9.0",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
