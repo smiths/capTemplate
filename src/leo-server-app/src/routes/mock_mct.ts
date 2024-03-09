@@ -20,8 +20,8 @@ const argv = yargs(hideBin(process.argv))
   .options({
     host: { type: "string", default: "localhost" },
     port: { type: "number", default: 1459 },
-    key: { type: "string", default: "../../test_key.pem" }, // TODO: fix file location
-    cert: { type: "string", default: "../../test_cert.pem" }, //TODO: fix file location
+    key: { type: "string", default: "./test_key.pem" }, 
+    cert: { type: "string", default: "./test_cert.pem" }, 
   })
   .parseSync() as CommandArgs;
 
