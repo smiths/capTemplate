@@ -67,7 +67,7 @@ function SatelliteInfoPage() {
           mx: "auto",
         }}
       >
-        <SatelliteName name={satelliteName as string} />
+        <SatelliteName satelliteName={satelliteName as string} />
         <Grid
           container
           spacing={3}

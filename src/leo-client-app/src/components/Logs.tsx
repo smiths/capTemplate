@@ -26,12 +26,7 @@ type Props = {
 
 const Logs: React.FC = () => {
   const router = useRouter();
-  let { satId } = router.query as {
-    satId: string;
-  };
-  if (!satId) {
-    satId = "655acd63d122507055d3d2ea";
-  }
+  const satId = router.query?.satId?.toString() ?? "655acd63d122507055d3d2ea";
 
   const satelliteId = satId;
   const [logs, setLogs] = useState<any>([]);
