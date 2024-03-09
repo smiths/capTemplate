@@ -57,6 +57,11 @@ const isValidUserCheck = async (userId: string) => {
   return Boolean(userRecord);
 };
 
+const isValidSatUserCheck = async (satUserId: string) => {
+  const userRecord = await SatelliteUser.findById(satUserId);
+  return Boolean(userRecord);
+};
+
 async function validateCommands(satelliteId: string, commands: string[]) {
   // Get satellite data
   const satellite = await Satellite.findById(satelliteId).exec();
@@ -142,6 +147,11 @@ router.patch("/updateByUser", async (req: UpdateUserProp, res: any) => {
   const { satelliteUserId, validCommands, adminId, satelliteId } = req.body;
 
   // Check if user has permission
+  const isSatUser = await isValidSatUserCheck(satelliteUserId);
+  if (!isSatUser) {
+    return res.status(500).json({ error: "Invalid SatelliteUserId" });
+  }
+
   const isAdmin = await isAdminCheck(adminId);
   if (!isAdmin) {
     return res.status(500).json({ error: "Invalid Admin" });
@@ -168,7 +178,8 @@ router.delete("/deleteByUser", async (req: DeleteUserProp, res: any) => {
   const { satelliteUserId, adminId } = req.query;
 
   // Validation
-  if (!mongoose.isValidObjectId(satelliteUserId)) {
+  const userRecord = await SatelliteUser.findById(satelliteUserId);
+  if (userRecord == null) {
     return res.status(500).json({ error: "Invalid IDs" });
   }
 

@@ -365,6 +365,10 @@ router.get(
       limit = 10,
     } = req.query;
 
+    if (!mongoose.isValidObjectId(satelliteId)) {
+      return res.status(500).json({ error: "Invalid ID" });
+    }
+
     const filter = {
       satelliteId: satelliteId,
       status: status,
@@ -373,7 +377,7 @@ router.get(
     const skip = (page - 1) * limit;
 
     const schedules = await Schedule.find(filter)
-      .sort({ createdAt: "desc" })
+      .sort({ startDate: "asc" })
       .limit(limit)
       .skip(skip)
       .exec();
@@ -411,6 +415,10 @@ router.get(
   "/getCommandsBySchedule",
   async (req: GetCommandsByScheduleProp, res: any) => {
     const { scheduleId, page = 1, limit = 10 } = req.query;
+
+    if (!mongoose.isValidObjectId(scheduleId)) {
+      return res.status(500).json({ error: "Invalid ID" });
+    }
 
     const filter = {
       scheduleId: scheduleId,
