@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 const defaultNoradId = "55098";
 
 type Props = {
+  satelliteName: string;
+};
 
 const SatelliteName = ({ satelliteName }: Props) => {
   return (
@@ -16,7 +18,7 @@ const SatelliteName = ({ satelliteName }: Props) => {
         marginTop: "50px",
       }}
     >
-      {name}
+      {satelliteName}
     </Box>
   );
 };
