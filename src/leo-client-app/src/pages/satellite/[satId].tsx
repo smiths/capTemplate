@@ -19,7 +19,7 @@ const defaultNoradId = "55098";
 
 function SatelliteInfoPage() {
   const router = useRouter();
-  const { noradId } = router.query;
+  const { satId } = router.query;
 
   const [selectedNoradId, setSelectedNoradId] =
     useState<string>(defaultNoradId);
@@ -27,10 +27,11 @@ function SatelliteInfoPage() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/satellite/getSatelliteName`, {
-        params: { noradId: selectedNoradId },
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatellite`, {
+        params: { satelliteId: satId },
       });
-      setSatelliteName(res.data);
+      setSatelliteName(res.data.satellite.name);
+      setSelectedNoradId(res.data.satellite.noradId);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -44,7 +45,7 @@ function SatelliteInfoPage() {
   }, [selectedNoradId]);
 
   useEffect(() => {
-    setSelectedNoradId(noradId as string);
+    fetchData();
   }, []);
 
   return (
@@ -52,7 +53,8 @@ function SatelliteInfoPage() {
       alignItems="center"
       justifyContent="center"
       spacing={1}
-      sx={{ height: "100vh", margin: "0 auto", width: "100%" }}>
+      sx={{ height: "100vh", margin: "0 auto", width: "100%" }}
+    >
       <Navbar />
       <Grid
         container
@@ -63,8 +65,9 @@ function SatelliteInfoPage() {
           boxSizing: "border-box",
           justifyContent: "center",
           mx: "auto",
-        }}>
-        <SatelliteName noradId={selectedNoradId} />
+        }}
+      >
+        <SatelliteName satelliteName={satelliteName as string} />
         <Grid
           container
           spacing={3}
@@ -74,7 +77,8 @@ function SatelliteInfoPage() {
             height: "auto",
             maxWidth: "1280px",
             boxSizing: "border-box",
-          }}>
+          }}
+        >
           <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
             <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
               <Box>

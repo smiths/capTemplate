@@ -1,32 +1,42 @@
 import { Link, Stack } from "@mui/material";
 import NextLink from "next/link";
 import "../styles/navbar.css";
-
-const navbarItems = [
-  {
-    heading: "Satellites",
-    path: "/satellites-of-interest",
-  },
-  {
-    heading: "Scheduler",
-    path: "/schedule-commands",
-  },
-  {
-    heading: "Manage Operators",
-    path: "/manage-operators",
-  },
-  {
-    heading: "Logs",
-    path: "/satellite-logs",
-  },
-  {
-    // heading: "Account",
-    heading: "Log Out",
-    path: "/api/auth/logout",
-  },
-];
+import { useRouter } from "next/router";
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
+  let { satId } = router.query as {
+    satId: string;
+  };
+
+  if (!satId) {
+    satId = "655acd63d122507055d3d2ea";
+  }
+
+  const navbarItems = [
+    {
+      heading: "Satellites",
+      path: "/satellites-of-interest",
+    },
+    {
+      heading: "Scheduler",
+      path: `/schedule-commands/${satId}`,
+    },
+    {
+      heading: "Manage Operators",
+      path: "/manage-operators",
+    },
+    {
+      heading: "Logs",
+      path: `/satellite-logs/${satId}`,
+    },
+    {
+      // heading: "Account",
+      heading: "Log Out",
+      path: "/api/auth/logout",
+    },
+  ];
+
   return (
     <Stack
       direction="row"

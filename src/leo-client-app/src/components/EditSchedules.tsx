@@ -8,26 +8,34 @@ import "../styles.css";
 import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
+import axios from "axios";
 
-type Props = {
-  noradId: string;
-};
-
-const EditScheduler = ({ noradId }: Props) => {
+const EditScheduler = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  // const satelliteId = "655acd63d122507055d3d2ea";
+  const satId = router.query?.satId?.toString() ?? "";
+  const scheduleId = router.query?.scheduleId?.toString() ?? "";
   const satelliteId = router.query?.satelliteId?.toString() ?? "";
-  // console.log(typeof(satelliteId), "hi");
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
 
   // operator
   const userId: string = "65a8181f36ea10b4366e1dd9";
-  const scheduleId = "65a8182036ea10b4366e1de6";
   const isAdmin = adminUserId === userId;
 
   const [validCommands, setValidCommands] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState<string[]>([]);
+  const [satelliteName, setSatelliteName] = useState<string>();
+
+  const fetchName = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/satellite/getSatellite`, {
+        params: { satelliteId: satId },
+      });
+      setSatelliteName(res.data.satellite.name);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const fetchValidCommands = (satelliteId: string) => {
     if (isAdmin) {
@@ -64,7 +72,7 @@ const EditScheduler = ({ noradId }: Props) => {
   };
 
   useEffect(() => {
-    fetchValidCommands(satelliteId);
+    fetchValidCommands(satId);
   }, [satelliteId]);
 
   // Mutation function
@@ -97,16 +105,18 @@ const EditScheduler = ({ noradId }: Props) => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "2rem",
-      }}>
+      }}
+    >
       <Box px={"4px"}>
-        <SatelliteName noradId="55098" />
+        <SatelliteName satelliteName={satelliteName as string} />
       </Box>
       <Box
         style={{
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",
-        }}>
+        }}
+      >
         <Card
           sx={{
             minWidth: "200px",
@@ -114,13 +124,15 @@ const EditScheduler = ({ noradId }: Props) => {
             borderRadius: "16px",
             padding: "10px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}>
+          }}
+        >
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
-            }}>
+            }}
+          >
             Valid Commands
           </Typography>
           {validCommands &&
@@ -129,7 +141,8 @@ const EditScheduler = ({ noradId }: Props) => {
               <Button
                 key={index}
                 className="scheduleButton"
-                onClick={() => addCommand(command)}>
+                onClick={() => addCommand(command)}
+              >
                 {command}
               </Button>
             ))}
@@ -142,13 +155,15 @@ const EditScheduler = ({ noradId }: Props) => {
             overflow: "auto",
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}>
+          }}
+        >
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container)",
-            }}>
+            }}
+          >
             Current Schedules
           </Typography>
           {currentSchedule &&
@@ -157,7 +172,8 @@ const EditScheduler = ({ noradId }: Props) => {
               <Button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}>
+                onClick={() => removeCommand(index)}
+              >
                 <Box className="buttonText" style={{ textAlign: "center" }}>
                   {command}
                 </Box>
@@ -174,7 +190,8 @@ const EditScheduler = ({ noradId }: Props) => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}>
+              }}
+            >
               Clear Schedule
             </Button>
             <Button
@@ -184,7 +201,8 @@ const EditScheduler = ({ noradId }: Props) => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}>
+              }}
+            >
               Send Schedule
             </Button>
           </div>

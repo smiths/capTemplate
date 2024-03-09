@@ -17,6 +17,7 @@ type Props = {
 type SatelliteDetails = {
   name: string;
   noradId: string;
+  satId: string;
 };
 
 const SatellitesOfInterest = ({ userId }: Props) => {
@@ -34,6 +35,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
       return {
         name: response.data.satellite.name,
         noradId: response.data.satellite.noradId,
+        satId: response.data.satellite._id,
       };
     } catch (error) {
       console.error("Error fetching satellite name:", error);
@@ -70,10 +72,11 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           className="satellitesOfInterestBox"
           alignItems="flex-start"
           direction="row"
-          spacing={5}>
+          spacing={5}
+        >
           {satellites.map((satellite, index) => (
             <Grid item key={index} spacing={1}>
-              <Link href={`/satellite/${satellite.noradId}`} passHref>
+              <Link href={`/satellite/${satellite.satId}`} passHref>
                 <Card
                   sx={{
                     minWidth: 150,
@@ -91,7 +94,8 @@ const SatellitesOfInterest = ({ userId }: Props) => {
                     alignItems: "center",
                     marginLeft: 2,
                     marginRight: 2,
-                  }}>
+                  }}
+                >
                   <CardContent>
                     <p className="cardTitle">{satellite.name}</p>
                     <p className="cardSubtitle">{satellite.noradId}</p>
