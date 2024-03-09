@@ -5,7 +5,14 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Paper,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NextLink from "next/link";
@@ -93,56 +100,82 @@ const FuturePasses = ({ noradId }: Props) => {
     <div className="futurePasses">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Next Week&apos;s Passes</p>
-        {isLoading ? (
-          <Box className="loadingBox">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Grid
-            className="futurePassesBox"
-            container
-            spacing={1}
-            justifyContent="center">
-            {" "}
-            {passes &&
-              passes.map((passPair, index) => (
-                <Grid item key={index}>
-                  {" "}
-                  <NextLink
-                    href={`/detailed-display/${noradId}/${encodeURIComponent(
-                      formatDateToISO(passPair[0].time)
-                    )}/${encodeURIComponent(
-                      formatDateToISO(passPair[1].time)
-                    )}`}
-                    passHref>
-                    <Card
-                      sx={{
-                        minWidth: 150,
-                        margin: 0.5,
+        <div className="futurePassesBox">
+          {isLoading ? (
+            <Box className="loadingBox">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <TableContainer
+              component={Paper}
+              style={{ width: "100%" }}
+              sx={{
+                maxWidth: "100%",
+                background: "var(--material-theme-sys-light-primary-fixed)",
+                "& .MuiTableCell-root": {
+                  borderBottom: "2px solid black",
+                  color: "var(--material-theme-black)",
+                  textAlign: "left",
+                  fontSize: "15px",
+                },
+              }}
+            >
+              <Table
+                sx={{
+                  border:
+                    "2px solid var(--material-theme-sys-light-on-primary)",
+                  borderRadius: "15px",
+                }}
+                stickyHeader
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      backgroundColor:
+                        "var(--material-theme-sys-light-primary-fixed)",
+                      "& .MuiTableCell-head": {
                         backgroundColor:
-                          "var(--material-theme-sys-light-inverse-on-surface)",
-                        cursor: "pointer",
-                        borderRadius: 3,
-                      }}>
-                      <CardContent>
-                        <Stack spacing={0}>
-                          <p className="cardTitle">
-                            {formatDate(passPair[0].time)}
-                          </p>
-                          <p className="cardSubtitle">
-                            {formatTimeRange(
-                              passPair[0].time,
-                              passPair[1].time
-                            )}
-                          </p>
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  </NextLink>
-                </Grid>
-              ))}
-          </Grid>
-        )}
+                          "var(--material-theme-sys-light-primary-fixed) !important",
+                      },
+                    }}
+                  >
+                    <TableCell>Date</TableCell>
+                    <TableCell>Time Range</TableCell>
+                    <TableCell>Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {passes &&
+                    passes.map((passPair, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          cursor: "pointer",
+                        }}
+                        onClick={() =>
+                          (window.location.href = `/detailed-display/${noradId}/${encodeURIComponent(
+                            formatDateToISO(passPair[0].time)
+                          )}/${encodeURIComponent(
+                            formatDateToISO(passPair[1].time)
+                          )}`)
+                        }
+                      >
+                        <TableCell component="th" scope="row">
+                          {formatDate(passPair[0].time)}
+                        </TableCell>
+                        <TableCell>
+                          {formatTimeRange(passPair[0].time, passPair[1].time)}
+                        </TableCell>
+                        <TableCell>View Details</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
       </Stack>
     </div>
   );

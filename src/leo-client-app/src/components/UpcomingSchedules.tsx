@@ -8,7 +8,14 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Paper,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import NextLink from "next/link";
 import { BACKEND_URL } from "@/constants/api";
@@ -70,20 +77,6 @@ const UpcomingSchedules = ({ noradId }: Props) => {
     return date.toISOString().slice(0, 19) + "Z";
   }
 
-  const fetchSatelliteId = (noradId: string) => {
-    return axios
-      .get(`${BACKEND_URL}/satellite/getSatelliteIdByNorad`, {
-        params: { noradId: noradId },
-      })
-      .then((res) => {
-        setSatelliteId(res.data.satellite[0]._id);
-        fetchSchedules(res.data.satellite[0]._id);
-      })
-      .catch((error) => {
-        console.error("Error fetching satellite id:", error);
-      });
-  };
-
   const fetchSchedules = (satelliteId: string) => {
     setIsLoading(true); // Set loading state to true when starting to fetch
     fetch(
@@ -143,7 +136,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   }, [noradId]);
 
   return (
-    <div className="upcomingSchedulesBox">
+    <div className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Schedule Queue</p>
         {isLoading ? (

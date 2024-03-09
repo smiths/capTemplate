@@ -108,6 +108,7 @@ const EditScheduler = () => {
       }}
     >
       <Box px={"4px"}>
+
         <SatelliteName satelliteName={satelliteName as string} />
       </Box>
       <Box
