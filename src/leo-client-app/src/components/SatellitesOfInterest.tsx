@@ -1,6 +1,10 @@
 "use client";
 
-import { Card, CardContent, Grid, Stack } from "@mui/material";
+import { Card, CardContent, Grid, Stack,TextField, Button, IconButton, Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle, } from "@mui/material";
 import Link from "next/link";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -8,7 +12,7 @@ import "../styles.css";
 import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
-import { BACKEND_URL } from "@/constants/api";
+import {addNewSatellite, BACKEND_URL } from "@/constants/api";
 
 type Props = {
   userId: string;
@@ -22,7 +26,20 @@ type SatelliteDetails = {
 
 const SatellitesOfInterest = ({ userId }: Props) => {
   const [satellites, setSatellites] = useState<SatelliteDetails[]>([]);
+  // const [showForm, setShowForm] = useState(false); // State to toggle form visibility
+  // const [satelliteName, setSatelliteName] = useState(''); // State for the input field value
+  const [open, setOpen] = useState(false);
+  const [satelliteName, setSatelliteName] = useState('');
+  const [noradId, setNoradId] = useState('');
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   const fetchSatellites = async (satelliteId: string) => {
     try {
       const response = await axios.get(
@@ -62,6 +79,21 @@ const SatellitesOfInterest = ({ userId }: Props) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  const addSatellite = async (e) => {
+    e.preventDefault();
+    console.log('Satellite Name:', satelliteName, 'NORAD ID:', noradId);
+    const newSatellite = {
+      name: satelliteName,
+      noradId,
+      satId: "newId",
+    };
+    setSatellites([...satellites, newSatellite]);
+    await addNewSatellite(satelliteName, noradId);
+    handleClose(); 
+  };
+
 
   return (
     <div className="satellitesOfInterest">
@@ -105,9 +137,107 @@ const SatellitesOfInterest = ({ userId }: Props) => {
             </Grid>
           ))}
         </Stack>
+      <IconButton variant="contained" onClick={handleClickOpen} sx={{size: 'medium', backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-black)", borderRadius: 20}}> 
+      Add Custom Satellite + </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Satellite</DialogTitle>
+        <form onSubmit={addSatellite}>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Satellite Name"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={satelliteName}
+              onChange={(e) => setSatelliteName(e.target.value)}
+              required
+            />
+            <TextField
+              margin="dense"
+              id="noradId"
+              label="NORAD ID"
+              type="number"
+              fullWidth
+              variant="standard"
+              value={noradId}
+              onChange={(e) => setNoradId(e.target.value)}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" onClick={addSatellite}>Submit</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+      
       </Stack>
     </div>
   );
 };
 
 export default SatellitesOfInterest;
+
+
+
+  // const handleInputChange = (e) => {
+  //   setSatelliteName(e.target.value);
+  // };
+
+  // // Handler for form submission
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Process the input (e.g., call an API or update state)
+  //   console.log('Satellite Name:', satelliteName);
+  //   // Optionally hide the form again
+  //   setShowForm(false);
+  //   // Reset the input field
+  //   setSatelliteName('');
+  // };
+
+  // const addSatellite = async () => {
+  //   const newSatellite = {
+  //     name: "New Satellite",
+  //     noradId: "00000",
+  //     satId: "newId",
+  //   };
+  //   setSatellites([...satellites, newSatellite]);
+  //   // await addNewSatellite(name, noradId);
+  // };
+
+
+
+   {/* <IconButton variant="contained" onClick={addSatellite} sx={{size: 'medium', backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-black)", borderRadius: 20}}> Add Custom Satellite + </IconButton> */}
+        {/* <Button sx ={{backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-white)"}} variant="contained" onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Cancel' : 'Add New Custom Satellite'}
+      </Button>
+      {showForm && (
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2} marginTop={2}>
+            <TextField
+            sx={{
+              '& label.Mui-focused': {
+                color: 'white',
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: 'white',
+              },
+              '& .MuiInputBase-input': {
+                color: 'white', // Change input text color
+              },
+            }}
+              label="Satellite Name"
+              value={satelliteName}
+              onChange={handleInputChange}
+              required
+            />
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      )} */}

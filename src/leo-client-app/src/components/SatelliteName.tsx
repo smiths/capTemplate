@@ -12,6 +12,7 @@ const SatelliteName = ({ satelliteName }: Props) => {
     <Box
       className="material-themedisplaymedium"
       sx={{
+        color: "white",
         width: "100%",
         textAlign: "left",
         boxSizing: "border-box",
