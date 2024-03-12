@@ -1,6 +1,7 @@
 .headerBox {
   font-family: var(--material-themetitlemedium);
   margin-bottom: 0;
+  color: var(--material-theme-white);
 }
 
 .contentBox {

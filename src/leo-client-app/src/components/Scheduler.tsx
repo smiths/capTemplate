@@ -141,12 +141,12 @@ const Scheduler = () => {
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
-      <Box px={"200px"}>
+      <Box sx = {{bgcolor: "var(--material-theme-black)"}}px={"200px"}>
         <SatelliteName satelliteName={satelliteName} />
-        <Typography variant="h5" className="headerBox2">
+        <Typography className="headerBox2" style={{fontSize: '2em', color: "var(--material-theme-white)"}}>
           All Schedules
         </Typography>
-        <Typography variant="h5" className="headerBox3">
+        <Typography className="headerBox3" style={{fontSize: '2em', color: "var(--material-theme-white)"}}>
           Schedule Queue
         </Typography>
       </Box>
