@@ -22,7 +22,7 @@ function EditSchedulePage() {
         alignItems="center"
         justifyContent="center"
         spacing={1}
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", backgroundColor: "var(--material-theme-black)"}}
       >
         <Navbar />
         <EditScheduler />
