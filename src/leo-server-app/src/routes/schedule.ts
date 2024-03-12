@@ -38,7 +38,8 @@ type GetScheduleBySatelliteAndTimeProp = {
   query: {
     satelliteId: string;
     status?: ScheduleStatus;
-    time: Date;
+    startTime: Date;
+    endTime: Date;
   };
 };
 
@@ -388,21 +389,31 @@ router.get(
 router.get(
   "/getScheduleBySatelliteAndTime",
   async (req: GetScheduleBySatelliteAndTimeProp, res: any) => {
-    const { satelliteId, status = ScheduleStatus.FUTURE, time } = req.query;
+    const {
+      satelliteId,
+      status = ScheduleStatus.FUTURE,
+      startTime = new Date().setDate(new Date().getDate()),
+      endTime = new Date().setDate(new Date().getDate() + 14),
+    } = req.query;
 
-    const convertedTime = new Date(time);
+    if (!mongoose.isValidObjectId(satelliteId)) {
+      return res.status(500).json({ error: "Invalid ID" });
+    }
+
+    const convertedStartTime = new Date(startTime);
+    const convertedEndTime = new Date(endTime);
 
     const filter = {
       satelliteId: satelliteId,
       status: status,
       $and: [
-        { startDate: { $lte: convertedTime } },
-        { endDate: { $gte: convertedTime } },
+        { startDate: { $gte: convertedStartTime } },
+        { endDate: { $lte: convertedEndTime } },
       ],
     };
 
     const schedules = await Schedule.find(filter)
-      .sort({ createdAt: "desc" })
+      .sort({ startDate: "asc" })
       .exec();
     res.status(201).json({
       message: "Fetched schedules by satelliteId and Time",
