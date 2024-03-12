@@ -3,7 +3,6 @@ import axios from "axios";
 import { stringify } from "querystring";
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACK_END_URL;
-
 export const getAllOperators = async () => {
   const operators = await axios.get(`${BACKEND_URL}/users/getAllOperators`);
   return operators.data;
@@ -34,9 +33,8 @@ export const addNewSatellite = async (satelliteName: string, noradID: string) =>
         },
       }
     );
-    // return res.data;
-    return console.log(res.data);
-}
+    return res.data;
+};
 
 export const sendCommandSchedule = async (
   userId: string,
@@ -61,9 +59,6 @@ export const sendCommandSchedule = async (
   );
   return res.data;
 };
-
-
-
 
 export const removeCommandFromSchedule = async (
   commandId: string,
