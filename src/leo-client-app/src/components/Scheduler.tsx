@@ -165,30 +165,36 @@ const Scheduler = () => {
         <Typography variant="h5" className="headerBox3">
           Schedule Queue
         </Typography>
-        <Button variant="outlined" onClick={handleOpenFilter}>
-          Filter
-        </Button>
-        {isFilterOpen && (
-          <Box>
-            <TextField
-              type="date"
-              label="Start Time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              type="date"
-              label="End Time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-            />
-            <Button variant="contained" onClick={handleSubmitFilter}>
-              Submit
-            </Button>
-          </Box>
-        )}
+        <Box>
+          <Button
+            sx={{
+              color: "var(--material-theme-sys-dark-on-primary)",
+              backgroundColor: "var(--material-theme-sys-dark-primary)",
+              borderRadius: "10px",
+            }}
+            onClick={handleOpenFilter}
+          >
+            Filter
+          </Button>
+          {isFilterOpen && (
+            <Box>
+              <Typography variant="h6">Start Date</Typography>
+              <TextField
+                type="date"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+              />
+              <Typography variant="h6">End Date</Typography>
+              <TextField
+                type="date"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Box>
+          )}
+        </Box>
       </Box>
       <Box className="main-schedule">
         <Stack alignItems="flex-start" spacing={1}>
