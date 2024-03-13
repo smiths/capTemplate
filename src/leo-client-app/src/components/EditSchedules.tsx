@@ -7,7 +7,7 @@ import "./styles/component.css";
 import "../styles.css";
 import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
-import { Box, Card, Typography, Stack, Button, Table } from "@mui/material";
+import { Box, Card, Typography, Stack, Button, Table, Grid} from "@mui/material";
 import axios from "axios";
 
 const EditScheduler = () => {
@@ -100,20 +100,38 @@ const EditScheduler = () => {
 
   return (
     <Stack
+      direction="row"
+      spacing={10}
       style={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
         gap: "2rem",
+        width: "100%", 
+
       }}>
-      <Box px={"4px"}>
+        <Box // This Box contains the SatelliteName and the ViewScheduleCard
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      gap: "2rem",
+
+    }}
+  >
+
+      <Box px={"4px"} >
         <SatelliteName satelliteName={satelliteName as string} />
       </Box>
+      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
+      </Box>
+
       <Box
         style={{
           display: "flex",
           justifyContent: "space-around",
+          flexDirection: "column",
           alignItems: "flex-start",
+          gap: "2rem",
+
         }}
       >
         <Table
@@ -130,6 +148,7 @@ const EditScheduler = () => {
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
+              padding: "25px"
             }}
           >
             Valid Commands to Add
@@ -137,14 +156,19 @@ const EditScheduler = () => {
           {validCommands &&
             validCommands.length > 0 &&
             validCommands.map((command, index) => (
+              <ul style={{color: "white", paddingBottom: '20px', textAlign: 'center'}}> 
+
+              {command} 
+              </ul>
+
               // <Button
               //   key={index}
               //   className="scheduleButton"
               //   onClick={() => addCommand(command)}
               // >
-                <ul style={{color: "white"}}>{command} </ul>
               // </Button>
             ))}
+
         </Table>
         {/* <Table
           sx={{
@@ -203,7 +227,6 @@ const EditScheduler = () => {
           </div>
         </Table> */}
       </Box>
-      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
     </Stack>
   );
 };
