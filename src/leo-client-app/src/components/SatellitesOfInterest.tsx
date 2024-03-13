@@ -138,7 +138,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
             </Grid>
           ))}
         </Stack>
-      <IconButton variant="contained" onClick={handleClickOpen} sx={{size: 'medium', backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-black)", borderRadius: 20}}> 
+      <IconButton onClick={handleClickOpen} sx={{size: 'medium', backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-black)", borderRadius: 20}}> 
       Add Custom Satellite + </IconButton>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add New Satellite</DialogTitle>
@@ -170,7 +170,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" onClick={addSatellite}>Submit</Button>
+            <Button type="submit">Submit</Button>
           </DialogActions>
         </form>
       </Dialog>
