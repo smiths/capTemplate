@@ -174,7 +174,10 @@ const Scheduler = () => {
           </Button>
           {isFilterOpen && (
             <Box sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-              <Typography variant="h6" sx={{ paddingTop: "17px", fontSize: "16px" }}>
+              <Typography
+                variant="h6"
+                sx={{ paddingTop: "17px", fontSize: "16px" }}
+              >
                 Start Date
               </Typography>
               <TextField
@@ -183,9 +186,17 @@ const Scheduler = () => {
                 onChange={(e) => setStartTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 inputProps={{ style: { color: "var(--material-theme-white)" } }}
-                sx={{ '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { borderColor: "var(--material-theme-white)" , borderRadius: "15px"} }}
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--material-theme-white)",
+                    borderRadius: "15px",
+                  },
+                }}
               />
-              <Typography variant="h6" sx={{ paddingTop: "17px", fontSize: "16px" }}>
+              <Typography
+                variant="h6"
+                sx={{ paddingTop: "17px", fontSize: "16px" }}
+              >
                 End Date
               </Typography>
               <TextField
@@ -193,8 +204,18 @@ const Scheduler = () => {
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
-                inputProps={{ style: { color: "var(--material-theme-white)", borderColor: "var(--material-theme-white)" } }}
-                sx={{ '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { borderColor: "var(--material-theme-white)" , borderRadius: "15px"} }}
+                inputProps={{
+                  style: {
+                    color: "var(--material-theme-white)",
+                    borderColor: "var(--material-theme-white)",
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--material-theme-white)",
+                    borderRadius: "15px",
+                  },
+                }}
               />
             </Box>
           )}
