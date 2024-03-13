@@ -12,8 +12,9 @@
     margin-bottom: 40px;
   }
   .main-schedule{
-    margin-left: 200px;
-    margin-top: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
   }
   .scheduleButton{
     color: var(--material-theme-sys-light-secondary-container) !important;
@@ -21,11 +22,38 @@
   }
   .removeButton scheduleButton{
     color: "var(--material-theme-sys-light-secondary-container)";
-    fontFamily: "Roboto";
+    font-family: "Roboto";
   }
   .ClearScheduleButton{
     display: "block";
     margin: "5px 0";
     color: "var(--material-theme-sys-light-secondary-container)";
-    fontFamily: "Roboto";
+    font-family: "Roboto";
   }
+  .futureSchedulesBox {
+    border: 2px solid var(--material-theme-sys-light-on-primary);
+    border-radius: 15px;
+    padding: 18px;
+    margin-top: -10px;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    height: auto;
+    min-height: 150px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.schedulesPageContainer {
+  width: 100%;
+}
