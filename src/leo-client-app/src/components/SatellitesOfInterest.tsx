@@ -174,8 +174,6 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           </DialogActions>
         </form>
       </Dialog>
-
-      
       </Stack>
     </div>
   );
