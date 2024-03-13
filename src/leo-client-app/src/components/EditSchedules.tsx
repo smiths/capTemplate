@@ -7,7 +7,7 @@ import "./styles/component.css";
 import "../styles.css";
 import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
-import { Box, Card, Typography, Stack, Button } from "@mui/material";
+import { Box, Card, Typography, Stack, Button, Table } from "@mui/material";
 import axios from "axios";
 
 const EditScheduler = () => {
@@ -116,7 +116,7 @@ const EditScheduler = () => {
           alignItems: "flex-start",
         }}
       >
-        <Card
+        <Table
           sx={{
             minWidth: "200px",
             border: "2px solid white",
@@ -137,16 +137,16 @@ const EditScheduler = () => {
           {validCommands &&
             validCommands.length > 0 &&
             validCommands.map((command, index) => (
-              <Button
-                key={index}
-                className="scheduleButton"
-                onClick={() => addCommand(command)}
-              >
-                {command}
-              </Button>
+              // <Button
+              //   key={index}
+              //   className="scheduleButton"
+              //   onClick={() => addCommand(command)}
+              // >
+                <ul style={{color: "white"}}>{command} </ul>
+              // </Button>
             ))}
-        </Card>
-        <Card
+        </Table>
+        {/* <Table
           sx={{
             border: "2px solid var(--material-theme-white)",
             borderRadius: "16px",
@@ -178,7 +178,6 @@ const EditScheduler = () => {
                 <Box className="closeButton">X</Box>
               </Button>
             ))}
-          {/* need this div for clear formatting within the cards */}
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <Button
               className="ClearScheduleButton"
@@ -202,7 +201,7 @@ const EditScheduler = () => {
               Send Schedule
             </Button>
           </div>
-        </Card>
+        </Table> */}
       </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
     </Stack>
