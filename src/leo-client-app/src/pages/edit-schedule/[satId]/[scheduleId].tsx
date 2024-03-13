@@ -18,12 +18,7 @@ function EditSchedulePage() {
   };
   return (
     <main>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        spacing={1}
-        sx={{ width: "100%" }}
-      >
+      <Stack sx={{ width: "100%" }} alignItems="center" p={2}>
         <Navbar />
         <EditScheduler />
       </Stack>
