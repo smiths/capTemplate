@@ -85,7 +85,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
     fetchData();
   }, []);
 
-  const addSatellite = async (e) => {
+  const addSatellite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Satellite Name:', satelliteName, 'NORAD ID:', noradId);
     const newSatellite = {
@@ -153,7 +153,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
               fullWidth
               variant="standard"
               value={satelliteName}
-              onChange={(e) => setSatelliteName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatelliteName(e.target.value)}
               required
             />
             <TextField
@@ -164,7 +164,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
               fullWidth
               variant="standard"
               value={noradId}
-              onChange={(e) => setNoradId(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNoradId(e.target.value)}
               required
             />
           </DialogContent>
