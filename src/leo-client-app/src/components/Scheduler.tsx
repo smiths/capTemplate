@@ -151,8 +151,8 @@ const Scheduler = () => {
   const handleOpenFilter = () => setIsFilterOpen(!isFilterOpen);
 
   return (
-    <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
-      <Box px={"200px"}>
+    <Box className="schedulesPageContainer" sx={{ padding: "2%" }}>
+      <Box px={"10%"}>
         <SatelliteName satelliteName={satelliteName} />
         <Typography variant="h5" className="headerBox2">
           All Schedules
@@ -166,26 +166,35 @@ const Scheduler = () => {
               color: "var(--material-theme-sys-dark-on-primary)",
               backgroundColor: "var(--material-theme-sys-dark-primary)",
               borderRadius: "10px",
+              marginTop: "20px",
             }}
             onClick={handleOpenFilter}
           >
             Filter
           </Button>
           {isFilterOpen && (
-            <Box>
-              <Typography variant="h6">Start Date</Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+              <Typography variant="h6" sx={{ paddingTop: "17px", fontSize: "16px" }}>
+                Start Date
+              </Typography>
               <TextField
                 type="date"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                inputProps={{ style: { color: "var(--material-theme-white)" } }}
+                sx={{ '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { borderColor: "var(--material-theme-white)" , borderRadius: "15px"} }}
               />
-              <Typography variant="h6">End Date</Typography>
+              <Typography variant="h6" sx={{ paddingTop: "17px", fontSize: "16px" }}>
+                End Date
+              </Typography>
               <TextField
                 type="date"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                inputProps={{ style: { color: "var(--material-theme-white)", borderColor: "var(--material-theme-white)" } }}
+                sx={{ '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': { borderColor: "var(--material-theme-white)" , borderRadius: "15px"} }}
               />
             </Box>
           )}
@@ -198,35 +207,18 @@ const Scheduler = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <Grid
-              className="futureSchedulesBox"
-              container
-              spacing={2}
-              sx={{
-                display: "flex",
-                boxSizing: "border-box",
-                "& .MuiGrid-item": {
-                  flex: "0 0 auto",
-                },
-                border: 3,
-                borderRadius: "24px",
-                borderColor: "var(--material-theme-white)",
-                width: "85%",
-                mx: -2,
-              }}
-            >
+            <Grid className="futureSchedulesBox" container spacing={2}>
               {scheduleForCard &&
                 scheduleForCard.map((schedule, index) => (
-                  <Grid item key={index} sx={{ width: "98%" }}>
+                  <Grid item key={index} sx={{ width: "100%" }}>
                     <NextLink
                       href={`/edit-schedule/${satId}/${schedule.id}`}
                       passHref
                     >
                       <Card
                         sx={{
-                          width: "99%",
+                          width: "98%",
                           minHeight: 100,
-                          margin: 0.5,
                           backgroundColor:
                             "var(--material-theme-sys-light-primary-container)",
                           cursor: "pointer",
