@@ -89,15 +89,26 @@ const Scheduler = () => {
   ) => {
     setIsLoading(true);
 
-    const queryParams = new URLSearchParams({
-      satelliteId,
-      ...(startTime && { startTime: startTime }),
-      ...(endTime && { endTime: endTime }),
-    });
+    let endpoint = `${BACKEND_URL}/schedule/getSchedulesBySatellite`;
 
-    fetch(
-      `${BACKEND_URL}/schedule/getScheduleBySatelliteAndTime?${queryParams}`
-    )
+    const defaultParams: any = {
+      satelliteId,
+      page: 1,
+      limit: 100
+    };
+
+    let queryParams = new URLSearchParams(defaultParams);
+
+    if (startTime) {
+      endpoint = `${BACKEND_URL}/schedule/getScheduleBySatelliteAndTime`;
+      queryParams = new URLSearchParams({
+        ...defaultParams,
+        ...(startTime && { startTime: startTime }),
+        ...(endTime && { endTime: endTime }) 
+      });
+    }
+
+    fetch(`${endpoint}?${queryParams}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.schedules) {

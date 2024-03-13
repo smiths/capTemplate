@@ -392,7 +392,7 @@ router.get(
     const {
       satelliteId,
       status = ScheduleStatus.FUTURE,
-      startTime = new Date().setDate(new Date().getDate()),
+      startTime,
       endTime = ((startTime: Date) => {
         let endDate = new Date(startTime);
         endDate.setDate(endDate.getDate() + 14);
