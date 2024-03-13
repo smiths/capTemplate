@@ -53,6 +53,7 @@ function formatTimeRange(startTime: string, endTime: string) {
 
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
+
 const Scheduler = () => {
   const router = useRouter();
   let { satId } = router.query as {
@@ -148,12 +149,6 @@ const Scheduler = () => {
   }, [satelliteId, startTime, endTime]);
 
   const handleOpenFilter = () => setIsFilterOpen(!isFilterOpen);
-  const handleSubmitFilter = () => {
-    if (satelliteId) {
-      fetchSchedules(satelliteId, startTime, endTime);
-      setIsFilterOpen(false);
-    }
-  };
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
