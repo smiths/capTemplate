@@ -9,6 +9,7 @@ import {
   Stack,
   Button,
   Typography,
+  TextField,
 } from "@mui/material";
 import "../styles.css";
 import SatelliteName from "./SatelliteName";
@@ -18,9 +19,6 @@ import { BACKEND_URL } from "@/constants/api";
 import axios from "axios";
 import NextLink from "next/link";
 
-interface Command {
-  name: string;
-}
 interface Schedule {
   id: string;
   startDate: string;
@@ -30,9 +28,6 @@ interface Schedule {
   createdAt: string;
   updatedAt: string;
 }
-type Props = {
-  noradId: string;
-};
 
 function formatDate(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
@@ -71,6 +66,9 @@ const Scheduler = () => {
     [scheduleId: string]: string[];
   }>({});
   const [satelliteName, setSatelliteName] = useState<string>("BDSAT-2");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchName = async () => {
     try {
@@ -83,10 +81,21 @@ const Scheduler = () => {
     }
   };
 
-  const fetchSchedules = (satelliteId: string) => {
+  const fetchSchedules = (
+    satelliteId: string,
+    startTime: string = "",
+    endTime: string = ""
+  ) => {
     setIsLoading(true);
+
+    const queryParams = new URLSearchParams({
+      satelliteId,
+      ...(startTime && { startTime: startTime }),
+      ...(endTime && { endTime: endTime }),
+    });
+
     fetch(
-      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
+      `${BACKEND_URL}/schedule/getScheduleBySatelliteAndTime?${queryParams}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -132,12 +141,19 @@ const Scheduler = () => {
   };
 
   useEffect(() => {
-    fetchName();
-    fetchSchedules(satelliteId);
-  }, [satelliteId]);
-  useEffect(() => {
-    fetchName();
-  });
+    if (satId) {
+      fetchSchedules(satelliteId, startTime, endTime);
+      fetchName();
+    }
+  }, [satelliteId, startTime, endTime]);
+
+  const handleOpenFilter = () => setIsFilterOpen(!isFilterOpen);
+  const handleSubmitFilter = () => {
+    if (satelliteId) {
+      fetchSchedules(satelliteId, startTime, endTime);
+      setIsFilterOpen(false);
+    }
+  };
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
@@ -149,6 +165,30 @@ const Scheduler = () => {
         <Typography variant="h5" className="headerBox3">
           Schedule Queue
         </Typography>
+        <Button variant="outlined" onClick={handleOpenFilter}>
+          Filter
+        </Button>
+        {isFilterOpen && (
+          <Box>
+            <TextField
+              type="date"
+              label="Start Time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              type="date"
+              label="End Time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+            />
+            <Button variant="contained" onClick={handleSubmitFilter}>
+              Submit
+            </Button>
+          </Box>
+        )}
       </Box>
       <Box className="main-schedule">
         <Stack alignItems="flex-start" spacing={1}>
