@@ -393,7 +393,11 @@ router.get(
       satelliteId,
       status = ScheduleStatus.FUTURE,
       startTime = new Date().setDate(new Date().getDate()),
-      endTime = new Date().setDate(new Date().getDate() + 14),
+      endTime = ((startTime: Date) => {
+        let endDate = new Date(startTime);
+        endDate.setDate(endDate.getDate() + 14);
+        return endDate;
+      })(new Date(startTime)),
     } = req.query;
 
     if (!mongoose.isValidObjectId(satelliteId)) {
@@ -402,7 +406,6 @@ router.get(
 
     const convertedStartTime = new Date(startTime);
     const convertedEndTime = new Date(endTime);
-
     const filter = {
       satelliteId: satelliteId,
       status: status,
