@@ -225,6 +225,64 @@ export const getNextPasses = async (noradId: string) => {
   return nextPasses;
 };
 
+export const getNextPassesByTime = async (noradId: string, startTime: Date, endTime: Date) => {
+  const [tleLine1, tleLine2] = await getTleLines(noradId);
+
+  const WINDOWMILLIS = 60 * 1000;
+  const timeDiff = (endTime.getTime() - startTime.getTime())/60000;
+
+  let nextPasses = [];
+  let enterElevation = null;
+  let enterInfo;
+  let exitInfo;
+
+  // Gets overpasses for the next week
+  for (let i = 0; i < timeDiff; i++) {
+    // Calculate the next pass
+    let nextPassTime = new Date(startTime.getTime() + i * WINDOWMILLIS);
+
+    // Get satellite information for the next pass
+    let satelliteInfo = getSatelliteInfo(nextPassTime, tleLine1, tleLine2);
+
+    // Format Time
+    const formattedTime = nextPassTime
+      .toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+      .replace(/\u202f/g, " ");
+
+    if (satelliteInfo.elevation > 0) {
+      if (!enterElevation) {
+        enterInfo = {
+          type: "Enter",
+          time: formattedTime,
+          azimuth: satelliteInfo.azimuth,
+          elevation: satelliteInfo.elevation,
+        };
+        enterElevation = satelliteInfo.elevation;
+      }
+    } else {
+      if (enterElevation) {
+        exitInfo = {
+          type: "Exit",
+          time: formattedTime,
+          azimuth: satelliteInfo.azimuth,
+          elevation: satelliteInfo.elevation,
+        };
+        nextPasses.push([enterInfo, exitInfo]);
+        enterElevation = null;
+      }
+    }
+  }
+
+  return nextPasses;
+};
+
 /* Edge Case:
  * If server restarts, reschedules overpass jobs for all satellites
  */
