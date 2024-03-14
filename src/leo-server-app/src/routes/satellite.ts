@@ -10,6 +10,7 @@ import {
   getNextPassesByTime,
 } from "../utils/satellite.utils";
 import { SatelliteEventEmitter } from "../event/satellite.event";
+import { query } from "express";
 
 dotenv.config({
   path: `.env.${
@@ -173,28 +174,48 @@ router.get("/getNextPasses", async (req: any, res: any) => {
   }
 });
 
-router.get("/getNextPassesByTime", async (req: any, res: any) => {
+type GetNextPassesByNoradAndTimeProp = {
+  query: {
+    noradId: string;
+    startTime: Date;
+    endTime: Date;
+  };
+};
+
+router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
   const today = new Date();
-  const noradId = getNoradId(req.query.noradId);
-  const startTime =new Date(req.query.startTime) ??  new Date();
-  const endT = (() => {
-    let endDate = new Date();
-    endDate.setDate(endDate.getDate() + 7);
-    return endDate;
-  });
-  const endTime = new Date(req.query.endTime) ?? endT;
+  // const noradId = getNoradId(req.query.noradId);
+  // const startTime =new Date(req.query.startTime) ??  today;
+  const endT = new Date(today.getTime() + (7*1000 * 60 * 60 * 24));
+  // endT.setDate(today.getDate() + 7);
+// (() => {
+//     let endDate = new Date();
+//     endDate.setDate(endDate.getDate() + 7);
+//     return endDate;
+//   });
+  // const endTime = new Date(req.query.endTime) ?? endT;
+  let startTime = today;
+  if (req.query.startTime){
+    startTime = new Date(req.query.startTime);
+  } 
+  let endTime = endT;
+  if (req.query.endTime){
+    endTime = new Date(req.query.endTime)
+  };
+  const {noradId} = req.query;
   const maxTime = new Date(today.getTime()+7*60000*60*24);
+  console.log(startTime, endTime)
   if (startTime < today || startTime > maxTime || startTime > endTime || endTime > maxTime){
-    res.status(500).json({error: "Wrong time slots provided"});
+    return res.status(500).json({error: "Wrong time slots provided"});
   };
   
 
   try {
     const nextPasses = await getNextPassesByTime(noradId, startTime, endTime);
-    res.json({ nextPasses });
+    return res.json({ nextPasses });
   } catch (error) {
     console.error("Error in getNextPasses:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
