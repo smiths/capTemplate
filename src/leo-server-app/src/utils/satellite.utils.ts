@@ -227,8 +227,6 @@ export const getNextPasses = async (noradId: string) => {
 
 export const getNextPassesByTime = async (noradId: string, startTime: Date, endTime: Date) => {
   const [tleLine1, tleLine2] = await getTleLines(noradId);
-  console.log(startTime, endTime);
-  // const [tleLine1, tleLine2] = globals.tleLines[noradId];
 
   const WINDOWMILLIS = 60 * 1000;
   const timeDiff = (endTime.getTime() - startTime.getTime())/60000;

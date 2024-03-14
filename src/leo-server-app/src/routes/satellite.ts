@@ -184,16 +184,9 @@ type GetNextPassesByNoradAndTimeProp = {
 
 router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
   const today = new Date();
-  // const noradId = getNoradId(req.query.noradId);
-  // const startTime =new Date(req.query.startTime) ??  today;
+
   const endT = new Date(today.getTime() + (7*1000 * 60 * 60 * 24));
-  // endT.setDate(today.getDate() + 7);
-// (() => {
-//     let endDate = new Date();
-//     endDate.setDate(endDate.getDate() + 7);
-//     return endDate;
-//   });
-  // const endTime = new Date(req.query.endTime) ?? endT;
+
   let startTime = today;
   if (req.query.startTime){
     startTime = new Date(req.query.startTime);
@@ -203,8 +196,7 @@ router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, 
     endTime = new Date(req.query.endTime)
   };
   const {noradId} = req.query;
-  const maxTime = new Date(today.getTime()+7*60000*60*24);
-  console.log(startTime, endTime)
+  const maxTime = new Date(today.getTime()+(7*1000 * 60 * 60 * 24));
   if (startTime < today || startTime > maxTime || startTime > endTime || endTime > maxTime){
     return res.status(500).json({error: "Wrong time slots provided"});
   };
