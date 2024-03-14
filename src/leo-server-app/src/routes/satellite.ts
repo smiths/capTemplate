@@ -184,14 +184,11 @@ type GetNextPassesByNoradAndTimeProp = {
 
 router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
   const today = new Date();
-
-  const endT = new Date(today.getTime() + (7*1000 * 60 * 60 * 24));
-
+  let endTime = new Date(today.getTime() + (7*1000 * 60 * 60 * 24));
   let startTime = today;
   if (req.query.startTime){
     startTime = new Date(req.query.startTime);
   } 
-  let endTime = endT;
   if (req.query.endTime){
     endTime = new Date(req.query.endTime)
   };
