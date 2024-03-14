@@ -300,65 +300,7 @@ const Scheduler = () => {
     </TableBody>
   </Table>
 </TableContainer>
-                      {/* <Card
-                        sx={{
-                          width: "99%",
-                          minHeight: 100,
-                          margin: 0.5,
-                          backgroundColor:
-                            "var(--material-theme-sys-light-primary-container)",
-                          cursor: "pointer",
-                          borderRadius: 4,
-                        }}
-                      >
-                        <CardContent>
-                          <Stack spacing={1}>
-                            <Typography className="cardTitle">
-                              {formatDate(schedule.startDate)}
-                            </Typography>
-                            <Typography className="cardSubtitle">
-                              {formatTimeRange(
-                                schedule.startDate,
-                                schedule.endDate
-                              )}
-                            </Typography>
-                            <>
-                              {scheduleCommands[schedule.id] &&
-                              scheduleCommands[schedule.id].length > 0 ? (
-                                <>
-                                  {scheduleCommands[schedule.id]
-                                    .slice(0, 3)
-                                    .map((commandObj: any, cmdIndex) => (
-                                      <Typography
-                                        key={cmdIndex}
-                                        className="cardSubtitle"
-                                      >
-                                        {commandObj.command}
-                                      </Typography>
-                                    ))}
-                                  {scheduleCommands[schedule.id].length > 3 && (
-                                    <Typography className="cardSubtitle">
-                                      {" "}
-                                      ...{" "}
-                                    </Typography>
-                                  )}
-                                </>
-                              ) : (
-                                <Typography
-                                  className="cardSubtitle"
-                                  sx={{
-                                    padding: "0px",
-                                    fontSize: "15px",
-                                    color: "var(--material-theme-black)",
-                                  }}
-                                >
-                                  No commands
-                                </Typography>
-                              )}
-                            </>
-                          </Stack>
-                        </CardContent>
-                      </Card> */}
+                    
                     </NextLink>
                   </Grid>
                 ))}
