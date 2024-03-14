@@ -164,53 +164,6 @@ const Scheduler = () => {
               <CircularProgress />
             </Box>
           ) : (
-          //   <TableContainer component={Paper} sx={{ maxWidth: 650, margin: 'auto', backgroundColor: "var(--material-theme-sys-dark-background)" }}>
-          // <Table aria-label="simple table">
-          //   <TableHead>
-          //     <TableRow>
-          //       <TableCell>Date</TableCell>
-          //       <TableCell>Time Range</TableCell>
-          //       <TableCell>Commands</TableCell>
-          //     </TableRow>
-          //   </TableHead>
-          //   <TableBody>
-          //     {scheduleForCard.map((schedule, index) => (
-          //       <TableRow 
-          //         key={index} 
-          //         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          //         hover
-          //         onClick={() => router.push(`/edit-schedule/${satId}/${schedule.id}`)}
-          //         style={{ cursor: 'pointer' }}
-          //       >
-          //         <TableCell component="th" scope="row">
-          //           {formatDate(schedule.startDate)}
-          //         </TableCell>
-          //         <TableCell>
-          //           {formatTimeRange(schedule.startDate, schedule.endDate)}
-          //         </TableCell>
-          //         <TableCell>
-          //           {scheduleCommands[schedule.id] &&
-          //             scheduleCommands[schedule.id].length > 0 ? (
-          //               scheduleCommands[schedule.id]
-          //                 .slice(0, 3)
-          //                 .map((commandObj, cmdIndex) => (
-          //                   <Typography key={cmdIndex}>
-          //                     {commandObj}
-          //                   </Typography>
-          //                 ))
-          //             ) : (
-          //               "No commands"
-          //               )}
-          //             {scheduleCommands[schedule.id] &&
-          //               scheduleCommands[schedule.id].length > 3 && (
-          //                 <Typography>...</Typography>
-          //               )}
-          //           </TableCell>
-          //         </TableRow>
-          //       ))}
-          //     </TableBody>
-          //   </Table>
-          // </TableContainer>
             <Grid
               className="futureSchedulesBox"
               container
@@ -236,15 +189,73 @@ const Scheduler = () => {
                       passHref
                     >
 
-                      <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '20px' }}>
+                      <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
   <Table sx={{ minWidth: 650 }}>
-    <TableBody>
+  <TableHead>
+            <TableRow>
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderLeft: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
+                <Typography variant = "h6"> Date </Typography> 
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
+                <Typography variant = "h6"> Time </Typography> 
+              </TableCell>
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left"
+              >
+                <Typography variant = "h6"> Commands Scheduled </Typography> 
+              </TableCell>
+            
+            </TableRow>
+          </TableHead>
+    <TableBody>    
       {scheduleForCard.map((schedule) => (
-        <TableRow key={schedule.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-          <TableCell component="th" scope="row">
-            <Typography variant="h6">{formatDate(schedule.startDate)}</Typography>
-            <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+        <TableRow key={schedule.id} 
+        // sx={{ '&:last-child td, &:last-child th': { border: 0 }
+        
+        
+        
+        // }}
+        
+        sx={{
+          borderBottom: 2,
+          borderTop: 2,
+          borderLeft: 2,
+          borderRight: 2,
+          // "&:last-child td, &:last-child th": { border: 1 },
+        }}
+        
+        >
+          
+
+          <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                    align="left">
+            <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
           </TableCell>
+          <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                    align="left">
+            <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+            </TableCell>
+
           <TableCell>
           <>
                               {scheduleCommands[schedule.id] &&
@@ -253,11 +264,12 @@ const Scheduler = () => {
                                   {scheduleCommands[schedule.id]
                                     .slice(0, 3)
                                     .map((commandObj: any, cmdIndex) => (
+                                       
                                       <Typography
                                         key={cmdIndex}
                                         className="cardSubtitle"
                                       >
-                                        {commandObj.command}
+                                        <li> {commandObj.command}</li>
                                       </Typography>
                                     ))}
                                   {scheduleCommands[schedule.id].length > 3 && (
@@ -283,6 +295,7 @@ const Scheduler = () => {
             
           </TableCell>
         </TableRow>
+
       ))}
     </TableBody>
   </Table>
