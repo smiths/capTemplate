@@ -7,8 +7,11 @@ import {
   CircularProgress,
   Grid,
   Stack,
-  Button,
   Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import "../styles.css";
 import SatelliteName from "./SatelliteName";
@@ -18,9 +21,6 @@ import { BACKEND_URL } from "@/constants/api";
 import axios from "axios";
 import NextLink from "next/link";
 
-interface Command {
-  name: string;
-}
 interface Schedule {
   id: string;
   startDate: string;
@@ -30,9 +30,6 @@ interface Schedule {
   createdAt: string;
   updatedAt: string;
 }
-type Props = {
-  noradId: string;
-};
 
 function formatDate(dateString: string) {
   const options: Intl.DateTimeFormatOptions = {
@@ -58,6 +55,7 @@ function formatTimeRange(startTime: string, endTime: string) {
 
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
+
 const Scheduler = () => {
   const router = useRouter();
   let { satId } = router.query as {
@@ -71,6 +69,9 @@ const Scheduler = () => {
     [scheduleId: string]: string[];
   }>({});
   const [satelliteName, setSatelliteName] = useState<string>("BDSAT-2");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchName = async () => {
     try {
@@ -83,11 +84,33 @@ const Scheduler = () => {
     }
   };
 
-  const fetchSchedules = (satelliteId: string) => {
+  const fetchSchedules = (
+    satelliteId: string,
+    startTime: string = "",
+    endTime: string = ""
+  ) => {
     setIsLoading(true);
-    fetch(
-      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
-    )
+
+    let endpoint = `${BACKEND_URL}/schedule/getSchedulesBySatellite`;
+
+    const defaultParams: any = {
+      satelliteId,
+      page: 1,
+      limit: 100,
+    };
+
+    let queryParams = new URLSearchParams(defaultParams);
+
+    if (startTime) {
+      endpoint = `${BACKEND_URL}/schedule/getScheduleBySatelliteAndTime`;
+      queryParams = new URLSearchParams({
+        ...defaultParams,
+        ...(startTime && { startTime: startTime }),
+        ...(endTime && { endTime: endTime }),
+      });
+    }
+
+    fetch(`${endpoint}?${queryParams}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.schedules) {
@@ -132,23 +155,143 @@ const Scheduler = () => {
   };
 
   useEffect(() => {
-    fetchName();
-    fetchSchedules(satelliteId);
+    if (satId) {
+      fetchSchedules(satelliteId);
+      fetchName();
+    }
   }, [satelliteId]);
-  useEffect(() => {
-    fetchName();
-  });
+
+  function clearFilter(
+    event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    setStartTime("");
+    setEndTime("");
+    fetchSchedules(satelliteId);
+  }
+
+  const [filter, setFilter] = useState("Show All Schedules");
+  const handleFilterChange = (event: any) => {
+    setFilter(event.target.value);
+    if (event.target.value === "Show All Schedules") {
+      clearFilter(event);
+    }
+  };
 
   return (
-    <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
-      <Box px={"200px"}>
+    <Box className="schedulesPageContainer" sx={{ padding: "2%" }}>
+      <Box px={"10%"}>
         <SatelliteName satelliteName={satelliteName} />
-        <Typography variant="h5" className="headerBox2">
-          All Schedules
-        </Typography>
+
         <Typography variant="h5" className="headerBox3">
           Schedule Queue
         </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          justifyContent: "right",
+          paddingRight: "10%",
+        }}
+      >
+        {filter === "Custom Date" && (
+          <>
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px" }}
+            >
+              Start Date
+            </Typography>
+            <TextField
+              type="date"
+              value={startTime}
+              onChange={(e) => {
+                setStartTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, e.target.value, endTime);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ style: { color: "var(--material-theme-white)" } }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px" }}
+            >
+              End Date
+            </Typography>
+            <TextField
+              type="date"
+              value={endTime}
+              onChange={(e) => {
+                setEndTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, startTime, e.target.value);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{
+                style: {
+                  color: "var(--material-theme-white)",
+                  borderColor: "var(--material-theme-white)",
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+          </>
+        )}
+        <FormControl variant="outlined" sx={{ width: "230px" }}>
+          <Select
+            value={filter}
+            onChange={handleFilterChange}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "transparent",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              textTransform: "none",
+              fontSize: "1rem",
+              "& .MuiSelect-select": {
+                paddingLeft: "30px",
+              },
+              backgroundColor: "var(--material-theme-sys-dark-primary)",
+              color: "var(--material-theme-sys-dark-on-primary)",
+              borderRadius: "15px",
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: "var(--material-theme-sys-dark-primary)",
+                  color: "var(--material-theme-sys-dark-on-primary)",
+                  borderRadius: "15px",
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
+                  },
+                },
+              },
+            }}
+          >
+            <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
+            <MenuItem value="Custom Date">Custom Date</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Box className="main-schedule">
         <Stack alignItems="flex-start" spacing={1}>
@@ -157,35 +300,18 @@ const Scheduler = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <Grid
-              className="futureSchedulesBox"
-              container
-              spacing={2}
-              sx={{
-                display: "flex",
-                boxSizing: "border-box",
-                "& .MuiGrid-item": {
-                  flex: "0 0 auto",
-                },
-                border: 3,
-                borderRadius: "24px",
-                borderColor: "var(--material-theme-white)",
-                width: "85%",
-                mx: -2,
-              }}
-            >
+            <Grid className="futureSchedulesBox" container spacing={2}>
               {scheduleForCard &&
                 scheduleForCard.map((schedule, index) => (
-                  <Grid item key={index} sx={{ width: "98%" }}>
+                  <Grid item key={index} sx={{ width: "100%" }}>
                     <NextLink
                       href={`/edit-schedule/${satId}/${schedule.id}`}
                       passHref
                     >
                       <Card
                         sx={{
-                          width: "99%",
+                          width: "98%",
                           minHeight: 100,
-                          margin: 0.5,
                           backgroundColor:
                             "var(--material-theme-sys-light-primary-container)",
                           cursor: "pointer",
