@@ -7,7 +7,7 @@ import "./styles/component.css";
 import "../styles.css";
 import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
-import { Box, Card, Typography, Stack, Button, Table, Grid} from "@mui/material";
+import { Box, Card, Typography, Stack, Button } from "@mui/material";
 import axios from "axios";
 
 const EditScheduler = () => {
@@ -100,41 +100,23 @@ const EditScheduler = () => {
 
   return (
     <Stack
-      direction="row"
-      spacing={10}
       style={{
         display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
         gap: "2rem",
-        width: "100%", 
-
       }}>
-        <Box // This Box contains the SatelliteName and the ViewScheduleCard
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: "2rem",
-
-    }}
-  >
-
-      <Box px={"4px"} >
+      <Box px={"4px"}>
         <SatelliteName satelliteName={satelliteName as string} />
       </Box>
-      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-      </Box>
-
       <Box
         style={{
           display: "flex",
           justifyContent: "space-around",
-          flexDirection: "column",
           alignItems: "flex-start",
-          gap: "2rem",
-
         }}
       >
-        <Table
+        <Card
           sx={{
             minWidth: "200px",
             border: "2px solid white",
@@ -148,7 +130,6 @@ const EditScheduler = () => {
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
-              padding: "25px"
             }}
           >
             Valid Commands to Add
@@ -156,21 +137,29 @@ const EditScheduler = () => {
           {validCommands &&
             validCommands.length > 0 &&
             validCommands.map((command, index) => (
-              <ul style={{color: "white", paddingBottom: '20px', textAlign: 'center'}}> 
+              <Button
+                key={index}
+                className="scheduleButton"
+                onClick={() => addCommand(command)}
+                sx = {{
+                   // Use the theme's primary color as background
+    color: '#fff', // Set the text color to white
+    border: '2px solid', // Apply a solid border with 2px width
+    mb: '10px',
+    borderColor: 'var(--material-theme-sys-light-surface-variant)', // Use the theme's secondary color for the border
+    '&:hover': {
+      backgroundColor: 'var(--material-theme-sys-light-primary-container)', // Darken the background on hover
+      borderColor: 'var(--material-theme-white)',
+    }
 
-              {command} 
-              </ul>
 
-              // <Button
-              //   key={index}
-              //   className="scheduleButton"
-              //   onClick={() => addCommand(command)}
-              // >
-              // </Button>
+
+                }}>
+                {command}
+              </Button>
             ))}
-
-        </Table>
-        {/* <Table
+        </Card>
+        <Card
           sx={{
             border: "2px solid var(--material-theme-white)",
             borderRadius: "16px",
@@ -202,6 +191,7 @@ const EditScheduler = () => {
                 <Box className="closeButton">X</Box>
               </Button>
             ))}
+          {/* need this div for clear formatting within the cards */}
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <Button
               className="ClearScheduleButton"
@@ -225,8 +215,9 @@ const EditScheduler = () => {
               Send Schedule
             </Button>
           </div>
-        </Table> */}
+        </Card>
       </Box>
+      <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
     </Stack>
   );
 };

@@ -9,6 +9,13 @@ import {
   Stack,
   Button,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import "../styles.css";
 import SatelliteName from "./SatelliteName";
@@ -140,7 +147,7 @@ const Scheduler = () => {
   });
 
   return (
-    <Box className="schedulesPageContainer" sx={{ padding: "20px" }}>
+    <Box  sx={{ padding: "20px" }}>
       <Box sx = {{bgcolor: "var(--material-theme-black)"}}px={"200px"}>
         <SatelliteName satelliteName={satelliteName} />
         <Typography className="headerBox2" style={{fontSize: '2em', color: "var(--material-theme-white)"}}>
@@ -157,6 +164,53 @@ const Scheduler = () => {
               <CircularProgress />
             </Box>
           ) : (
+          //   <TableContainer component={Paper} sx={{ maxWidth: 650, margin: 'auto', backgroundColor: "var(--material-theme-sys-dark-background)" }}>
+          // <Table aria-label="simple table">
+          //   <TableHead>
+          //     <TableRow>
+          //       <TableCell>Date</TableCell>
+          //       <TableCell>Time Range</TableCell>
+          //       <TableCell>Commands</TableCell>
+          //     </TableRow>
+          //   </TableHead>
+          //   <TableBody>
+          //     {scheduleForCard.map((schedule, index) => (
+          //       <TableRow 
+          //         key={index} 
+          //         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          //         hover
+          //         onClick={() => router.push(`/edit-schedule/${satId}/${schedule.id}`)}
+          //         style={{ cursor: 'pointer' }}
+          //       >
+          //         <TableCell component="th" scope="row">
+          //           {formatDate(schedule.startDate)}
+          //         </TableCell>
+          //         <TableCell>
+          //           {formatTimeRange(schedule.startDate, schedule.endDate)}
+          //         </TableCell>
+          //         <TableCell>
+          //           {scheduleCommands[schedule.id] &&
+          //             scheduleCommands[schedule.id].length > 0 ? (
+          //               scheduleCommands[schedule.id]
+          //                 .slice(0, 3)
+          //                 .map((commandObj, cmdIndex) => (
+          //                   <Typography key={cmdIndex}>
+          //                     {commandObj}
+          //                   </Typography>
+          //                 ))
+          //             ) : (
+          //               "No commands"
+          //               )}
+          //             {scheduleCommands[schedule.id] &&
+          //               scheduleCommands[schedule.id].length > 3 && (
+          //                 <Typography>...</Typography>
+          //               )}
+          //           </TableCell>
+          //         </TableRow>
+          //       ))}
+          //     </TableBody>
+          //   </Table>
+          // </TableContainer>
             <Grid
               className="futureSchedulesBox"
               container
@@ -181,7 +235,59 @@ const Scheduler = () => {
                       href={`/edit-schedule/${satId}/${schedule.id}`}
                       passHref
                     >
-                      <Card
+
+                      <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '20px' }}>
+  <Table sx={{ minWidth: 650 }}>
+    <TableBody>
+      {scheduleForCard.map((schedule) => (
+        <TableRow key={schedule.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+          <TableCell component="th" scope="row">
+            <Typography variant="h6">{formatDate(schedule.startDate)}</Typography>
+            <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+          </TableCell>
+          <TableCell>
+          <>
+                              {scheduleCommands[schedule.id] &&
+                              scheduleCommands[schedule.id].length > 0 ? (
+                                <>
+                                  {scheduleCommands[schedule.id]
+                                    .slice(0, 3)
+                                    .map((commandObj: any, cmdIndex) => (
+                                      <Typography
+                                        key={cmdIndex}
+                                        className="cardSubtitle"
+                                      >
+                                        {commandObj.command}
+                                      </Typography>
+                                    ))}
+                                  {scheduleCommands[schedule.id].length > 3 && (
+                                    <Typography className="cardSubtitle">
+                                      {" "}
+                                      ...{" "}
+                                    </Typography>
+                                  )}
+                                </>
+                              ) : (
+                                <Typography
+                                  className="cardSubtitle"
+                                  sx={{
+                                    padding: "0px",
+                                    fontSize: "15px",
+                                    color: "var(--material-theme-black)",
+                                  }}
+                                >
+                                  No commands
+                                </Typography>
+                              )}
+                            </>
+            
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+                      {/* <Card
                         sx={{
                           width: "99%",
                           minHeight: 100,
@@ -239,11 +345,12 @@ const Scheduler = () => {
                             </>
                           </Stack>
                         </CardContent>
-                      </Card>
+                      </Card> */}
                     </NextLink>
                   </Grid>
                 ))}
             </Grid>
+            
           )}
           <Box />
         </Stack>
