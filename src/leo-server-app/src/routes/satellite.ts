@@ -7,8 +7,10 @@ import {
   getTLE,
   getSatelliteName,
   isSunlit,
+  getNextPassesByTime,
 } from "../utils/satellite.utils";
 import { SatelliteEventEmitter } from "../event/satellite.event";
+import { query } from "express";
 
 dotenv.config({
   path: `.env.${
@@ -169,6 +171,40 @@ router.get("/getNextPasses", async (req: any, res: any) => {
   } catch (error) {
     console.error("Error in getNextPasses:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+type GetNextPassesByNoradAndTimeProp = {
+  query: {
+    noradId: string;
+    startTime: Date;
+    endTime: Date;
+  };
+};
+
+router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
+  const today = new Date();
+  let endTime = new Date(today.getTime() + (7*1000 * 60 * 60 * 24));
+  let startTime = today;
+  if (req.query.startTime){
+    startTime = new Date(req.query.startTime);
+  } 
+  if (req.query.endTime){
+    endTime = new Date(req.query.endTime)
+  };
+  const {noradId} = req.query;
+  const maxTime = new Date(today.getTime()+(7*1000 * 60 * 60 * 24));
+  if (startTime < today || startTime > maxTime || startTime > endTime || endTime > maxTime){
+    return res.status(500).json({error: "Wrong time slots provided"});
+  };
+  
+
+  try {
+    const nextPasses = await getNextPassesByTime(noradId, startTime, endTime);
+    return res.json({ nextPasses });
+  } catch (error) {
+    console.error("Error in getNextPasses:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
