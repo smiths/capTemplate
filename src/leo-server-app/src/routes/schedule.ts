@@ -405,9 +405,9 @@ router.get(
     }
 
     const convertedStartTime = new Date(startTime);
-    convertedStartTime.setHours(convertedStartTime.getHours() + 5);
+    convertedStartTime.setHours(convertedStartTime.getHours());
     const convertedEndTime = new Date(endTime);
-    convertedEndTime.setHours(convertedEndTime.getHours() + 29);
+    convertedEndTime.setHours(convertedEndTime.getHours() + 24);
     const filter = {
       satelliteId: satelliteId,
       status: status,
