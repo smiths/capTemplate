@@ -212,7 +212,7 @@ const Scheduler = () => {
               <>
                 <Typography
                   variant="h6"
-                  sx={{ paddingTop: "17px", fontSize: "16px" }}
+                  sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
                 >
                   Start Date
                 </Typography>
@@ -236,7 +236,7 @@ const Scheduler = () => {
                 />
                 <Typography
                   variant="h6"
-                  sx={{ paddingTop: "17px", fontSize: "16px" }}
+                  sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)"}}
                 >
                   End Date
                 </Typography>
