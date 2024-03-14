@@ -7,9 +7,11 @@ import {
   CircularProgress,
   Grid,
   Stack,
-  Button,
   Typography,
   TextField,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import "../styles.css";
 import SatelliteName from "./SatelliteName";
@@ -94,7 +96,7 @@ const Scheduler = () => {
     const defaultParams: any = {
       satelliteId,
       page: 1,
-      limit: 100
+      limit: 100,
     };
 
     let queryParams = new URLSearchParams(defaultParams);
@@ -104,7 +106,7 @@ const Scheduler = () => {
       queryParams = new URLSearchParams({
         ...defaultParams,
         ...(startTime && { startTime: startTime }),
-        ...(endTime && { endTime: endTime }) 
+        ...(endTime && { endTime: endTime }),
       });
     }
 
@@ -154,83 +156,142 @@ const Scheduler = () => {
 
   useEffect(() => {
     if (satId) {
-      fetchSchedules(satelliteId, startTime, endTime);
+      fetchSchedules(satelliteId);
       fetchName();
     }
-  }, [satelliteId, startTime, endTime]);
+  }, [satelliteId]);
 
-  const handleOpenFilter = () => setIsFilterOpen(!isFilterOpen);
+  function clearFilter(
+    event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    setStartTime("");
+    setEndTime("");
+    fetchSchedules(satelliteId);
+  }
+
+  const [filter, setFilter] = useState("Show All Schedules");
+  const handleFilterChange = (event: any) => {
+    setFilter(event.target.value);
+    if (event.target.value === "Show All Schedules") {
+      clearFilter(event);
+    }
+  };
 
   return (
     <Box className="schedulesPageContainer" sx={{ padding: "2%" }}>
       <Box px={"10%"}>
         <SatelliteName satelliteName={satelliteName} />
-        <Typography variant="h5" className="headerBox2">
-          All Schedules
-        </Typography>
+
         <Typography variant="h5" className="headerBox3">
           Schedule Queue
         </Typography>
-        <Box>
-          <Button
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          justifyContent: "right",
+          paddingRight: "10%",
+        }}
+      >
+        {filter === "Custom Date" && (
+          <>
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px" }}
+            >
+              Start Date
+            </Typography>
+            <TextField
+              type="date"
+              value={startTime}
+              onChange={(e) => {
+                setStartTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, e.target.value, endTime);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ style: { color: "var(--material-theme-white)" } }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px" }}
+            >
+              End Date
+            </Typography>
+            <TextField
+              type="date"
+              value={endTime}
+              onChange={(e) => {
+                setEndTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, startTime, e.target.value);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{
+                style: {
+                  color: "var(--material-theme-white)",
+                  borderColor: "var(--material-theme-white)",
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+          </>
+        )}
+        <FormControl variant="outlined" sx={{ width: "230px" }}>
+          <Select
+            value={filter}
+            onChange={handleFilterChange}
             sx={{
-              color: "var(--material-theme-sys-dark-on-primary)",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "transparent",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              textTransform: "none",
+              fontSize: "1rem",
+              "& .MuiSelect-select": {
+                paddingLeft: "30px",
+              },
               backgroundColor: "var(--material-theme-sys-dark-primary)",
-              borderRadius: "10px",
-              marginTop: "20px",
+              color: "var(--material-theme-sys-dark-on-primary)",
+              borderRadius: "15px",
             }}
-            onClick={handleOpenFilter}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: "var(--material-theme-sys-dark-primary)",
+                  color: "var(--material-theme-sys-dark-on-primary)",
+                  borderRadius: "15px",
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
+                  },
+                },
+              },
+            }}
           >
-            Filter
-          </Button>
-          {isFilterOpen && (
-            <Box sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-              <Typography
-                variant="h6"
-                sx={{ paddingTop: "17px", fontSize: "16px" }}
-              >
-                Start Date
-              </Typography>
-              <TextField
-                type="date"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ style: { color: "var(--material-theme-white)" } }}
-                sx={{
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--material-theme-white)",
-                    borderRadius: "15px",
-                  },
-                }}
-              />
-              <Typography
-                variant="h6"
-                sx={{ paddingTop: "17px", fontSize: "16px" }}
-              >
-                End Date
-              </Typography>
-              <TextField
-                type="date"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                inputProps={{
-                  style: {
-                    color: "var(--material-theme-white)",
-                    borderColor: "var(--material-theme-white)",
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--material-theme-white)",
-                    borderRadius: "15px",
-                  },
-                }}
-              />
-            </Box>
-          )}
-        </Box>
+            <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
+            <MenuItem value="Custom Date">Custom Date</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Box className="main-schedule">
         <Stack alignItems="flex-start" spacing={1}>
