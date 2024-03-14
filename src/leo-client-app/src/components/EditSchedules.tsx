@@ -9,6 +9,7 @@ import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
 import axios from "axios";
+import { ReactTerminal } from "react-terminal";
 
 const EditScheduler = () => {
   const queryClient = useQueryClient();
@@ -98,6 +99,18 @@ const EditScheduler = () => {
     mutate();
   };
 
+  const commands = {
+    help: (
+      <Stack flexWrap={"wrap"} direction={"row"} spacing={4}>
+        {validCommands.map((cmd, index) => (
+          <Typography key={cmd + index}>{cmd}</Typography>
+        ))}
+      </Stack>
+    ),
+  };
+
+  const delay = (ms: any) => new Promise((res) => setTimeout(res, ms));
+
   return (
     <Stack
       style={{
@@ -105,10 +118,8 @@ const EditScheduler = () => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "2rem",
-      }}
-    >
+      }}>
       <Box px={"4px"}>
-
         <SatelliteName satelliteName={satelliteName as string} />
       </Box>
       <Box
@@ -116,8 +127,7 @@ const EditScheduler = () => {
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",
-        }}
-      >
+        }}>
         <Card
           sx={{
             minWidth: "200px",
@@ -125,15 +135,13 @@ const EditScheduler = () => {
             borderRadius: "16px",
             padding: "10px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}
-        >
+          }}>
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
-            }}
-          >
+            }}>
             Valid Commands
           </Typography>
           {validCommands &&
@@ -142,8 +150,7 @@ const EditScheduler = () => {
               <Button
                 key={index}
                 className="scheduleButton"
-                onClick={() => addCommand(command)}
-              >
+                onClick={() => addCommand(command)}>
                 {command}
               </Button>
             ))}
@@ -156,15 +163,13 @@ const EditScheduler = () => {
             overflow: "auto",
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}
-        >
+          }}>
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container)",
-            }}
-          >
+            }}>
             Current Schedules
           </Typography>
           {currentSchedule &&
@@ -173,8 +178,7 @@ const EditScheduler = () => {
               <Button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}
-              >
+                onClick={() => removeCommand(index)}>
                 <Box className="buttonText" style={{ textAlign: "center" }}>
                   {command}
                 </Box>
@@ -191,8 +195,7 @@ const EditScheduler = () => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}
-            >
+              }}>
               Clear Schedule
             </Button>
             <Button
@@ -202,14 +205,37 @@ const EditScheduler = () => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}
-            >
+              }}>
               Send Schedule
             </Button>
           </div>
         </Card>
       </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
+
+      <Box sx={{ width: "100%", height: 300 }}>
+        <ReactTerminal
+          commands={commands}
+          // showControlBar={false}
+          themes={{
+            "my-custom-theme": {
+              themeBGColor: "#272B36",
+              themeToolbarColor: "#DBDBDB",
+              themeColor: "#FFFEFC",
+              themePromptColor: "#a917a8",
+            },
+          }}
+          theme="my-custom-theme"
+          defaultHandler={async (request: any) => {
+            const isValid = validCommands.some((cmd) => cmd === request);
+            if (!isValid) {
+              return "Invalid command sequence";
+            }
+            await delay(5000);
+            return "Command sent";
+          }}
+        />
+      </Box>
     </Stack>
   );
 };

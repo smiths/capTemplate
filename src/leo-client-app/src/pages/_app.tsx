@@ -5,6 +5,7 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { TerminalContextProvider } from "react-terminal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <TerminalContextProvider>
+          <Component {...pageProps} />
+        </TerminalContextProvider>
       </QueryClientProvider>
     </UserProvider>
   );
