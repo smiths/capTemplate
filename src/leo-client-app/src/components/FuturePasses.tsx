@@ -1,10 +1,7 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Box,
-  Card,
-  CardContent,
   CircularProgress,
-  Grid,
   Paper,
   Stack,
   Table,
@@ -15,7 +12,6 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import NextLink from "next/link";
 import axios from "axios";
 import "../styles.css";
 import "./styles/component.css";
@@ -63,38 +59,56 @@ const FuturePasses = ({ noradId }: Props) => {
   const [passes, setPasses] = useState<Pass[][]>([]);
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   function formatDateToISO(dateString: string) {
     const date = new Date(dateString);
     return date.toISOString().slice(0, 19) + "Z";
   }
 
-  const fetchPasses = async () => {
-    try {
-      const res = await axios.get(`${BACKEND_URL}/satellite/getNextPasses`, {
-        params: { noradId: noradId },
+  const fetchPasses = async (
+    noradId: string,
+    startTime: string = "",
+    endTime: string = ""
+  ) => {
+    setIsLoading(true);
+
+    let endpoint = `${BACKEND_URL}/satellite/getNextPasses`;
+
+    const defaultParams: any = {
+      noradId,
+    };
+
+    let queryParams = new URLSearchParams(defaultParams);
+
+    if (startTime) {
+      endpoint = `${BACKEND_URL}/satellite/getNextPassesByTime`;
+      queryParams = new URLSearchParams({
+        ...defaultParams,
+        ...(startTime && { startTime: startTime }),
+        ...(endTime && { endTime: endTime }),
       });
+    }
+
+    try {
+      const res = await axios.get(`${endpoint}?${queryParams}`);
       setPasses(res.data?.nextPasses ?? []);
     } catch (error) {
       console.error("Error fetching passes:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     const runFetch = async () => {
       setIsLoading(true);
-      await fetchPasses(); // Fetch data initially
+      await fetchPasses(noradId, startTime, endTime); // Fetch data initially
       setIsLoading(false);
     };
     void runFetch();
-    // Update passes every 1000ms (1s)
-    // TODO: Change to a week for refreshes
-    const passesFetchInterval = setInterval(fetchPasses, 1000);
-
-    return () => {
-      clearInterval(passesFetchInterval); // Clear the interval when unmounting
-    };
-  }, [noradId]);
+  }, [noradId, startTime, endTime]);
 
   return (
     <div className="futurePasses">
