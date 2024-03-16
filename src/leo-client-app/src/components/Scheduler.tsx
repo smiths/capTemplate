@@ -71,7 +71,6 @@ const Scheduler = () => {
   const [satelliteName, setSatelliteName] = useState<string>("BDSAT-2");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchName = async () => {
     try {
@@ -282,7 +281,8 @@ const Scheduler = () => {
                   color: "var(--material-theme-sys-dark-on-primary)",
                   borderRadius: "15px",
                   "& .MuiMenuItem-root:hover": {
-                    backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
+                    backgroundColor:
+                      "var(--material-theme-sys-dark-on-primary-container)",
                   },
                 },
               },
