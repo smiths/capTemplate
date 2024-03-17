@@ -10,6 +10,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
+  MenuItem,
+  Select,
+  FormControl,
+  TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -110,10 +115,130 @@ const FuturePasses = ({ noradId }: Props) => {
     void runFetch();
   }, [noradId, startTime, endTime]);
 
+  const [filter, setFilter] = useState("Show All Passes");
+  const handleFilterChange = (event: any) => {
+    const newFilter = event.target.value as string;
+    setFilter(newFilter);
+
+    if (newFilter === "Show All Passes") {
+      fetchPasses(noradId);
+    } else if (newFilter === "Custom Date") {
+      fetchPasses(noradId, startTime, endTime);
+    }
+  };
+
   return (
     <div className="futurePasses">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Next Week&apos;s Passes</p>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "20px",
+            justifyContent: "right",
+            paddingRight: "10%",
+          }}
+        >
+          {filter === "Custom Date" && (
+            <>
+              <Typography
+                variant="h6"
+                sx={{ paddingTop: "17px", fontSize: "16px" }}
+              >
+                Start Date
+              </Typography>
+              <TextField
+                type="date"
+                value={startTime}
+                onChange={(e) => {
+                  setStartTime(e.target.value);
+                  if (filter === "Custom Date") {
+                    fetchPasses(noradId, e.target.value, endTime);
+                  }
+                }}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ style: { color: "var(--material-theme-white)" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--material-theme-white)",
+                    borderRadius: "15px",
+                  },
+                }}
+              />
+              <Typography
+                variant="h6"
+                sx={{ paddingTop: "17px", fontSize: "16px" }}
+              >
+                End Date
+              </Typography>
+              <TextField
+                type="date"
+                value={endTime}
+                onChange={(e) => {
+                  setEndTime(e.target.value);
+                  if (filter === "Custom Date") {
+                    fetchPasses(noradId, startTime, e.target.value);
+                  }
+                }}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{
+                  style: {
+                    color: "var(--material-theme-white)",
+                    borderColor: "var(--material-theme-white)",
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--material-theme-white)",
+                    borderRadius: "15px",
+                  },
+                }}
+              />
+            </>
+          )}
+          <FormControl variant="outlined" sx={{ width: "230px" }}>
+            <Select
+              value={filter}
+              onChange={handleFilterChange}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "transparent",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-sys-dark-on-primary)",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-sys-dark-on-primary)",
+                },
+                textTransform: "none",
+                fontSize: "1rem",
+                "& .MuiSelect-select": {
+                  paddingLeft: "30px",
+                },
+                backgroundColor: "var(--material-theme-sys-dark-primary)",
+                color: "var(--material-theme-sys-dark-on-primary)",
+                borderRadius: "15px",
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: "var(--material-theme-sys-dark-primary)",
+                    color: "var(--material-theme-sys-dark-on-primary)",
+                    borderRadius: "15px",
+                    "& .MuiMenuItem-root:hover": {
+                      backgroundColor:
+                        "var(--material-theme-sys-dark-on-primary-container)",
+                    },
+                  },
+                },
+              }}
+            >
+              <MenuItem value="Show All Passes">Show All Passes</MenuItem>
+              <MenuItem value="Custom Date">Custom Date</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <div className="futurePassesBox">
           {isLoading ? (
             <Box className="loadingBox">
