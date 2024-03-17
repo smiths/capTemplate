@@ -123,6 +123,9 @@ const FuturePasses = ({ noradId }: Props) => {
     if (newFilter === "Show All Passes") {
       fetchPasses(noradId);
     } else if (newFilter === "Custom Date") {
+      setStartTime("");
+      setEndTime("");
+      fetchPasses(noradId, "", "");
       fetchPasses(noradId, startTime, endTime);
     }
   };
