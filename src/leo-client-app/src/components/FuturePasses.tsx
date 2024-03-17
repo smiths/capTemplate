@@ -61,8 +61,7 @@ function formatTimeRange(startTime: string, endTime: string) {
 
 function parseLocalDate(dateString: string) {
   const [year, month, day] = dateString.split("-");
-  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-  return date.toISOString();
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
 }
 
 const FuturePasses = ({ noradId }: Props) => {
@@ -159,9 +158,9 @@ const FuturePasses = ({ noradId }: Props) => {
                 value={startTime}
                 onChange={(e) => {
                   const localDate = parseLocalDate(e.target.value);
-                  setStartTime(localDate);
+                  setStartTime(localDate.toISOString());
                   if (filter === "Custom Date") {
-                    fetchPasses(noradId, localDate, endTime);
+                    fetchPasses(noradId, localDate.toISOString(), endTime);
                   }
                 }}
                 InputLabelProps={{ shrink: true }}
@@ -184,9 +183,9 @@ const FuturePasses = ({ noradId }: Props) => {
                 value={endTime}
                 onChange={(e) => {
                   const localDate = parseLocalDate(e.target.value);
-                  setEndTime(localDate);
+                  setEndTime(localDate.toISOString());
                   if (filter === "Custom Date") {
-                    fetchPasses(noradId, startTime, localDate);
+                    fetchPasses(noradId, startTime, localDate.toISOString());
                   }
                 }}
                 InputLabelProps={{ shrink: true }}
