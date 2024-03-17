@@ -1,4 +1,3 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Box,
   CircularProgress,
@@ -60,9 +59,14 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
+function parseLocalDate(dateString: string) {
+  const [year, month, day] = dateString.split("-");
+  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  return date.toISOString();
+}
+
 const FuturePasses = ({ noradId }: Props) => {
   const [passes, setPasses] = useState<Pass[][]>([]);
-  const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -126,7 +130,6 @@ const FuturePasses = ({ noradId }: Props) => {
       setStartTime("");
       setEndTime("");
       fetchPasses(noradId, "", "");
-      fetchPasses(noradId, startTime, endTime);
     }
   };
 
@@ -155,9 +158,10 @@ const FuturePasses = ({ noradId }: Props) => {
                 type="date"
                 value={startTime}
                 onChange={(e) => {
-                  setStartTime(e.target.value);
+                  const localDate = parseLocalDate(e.target.value);
+                  setStartTime(localDate);
                   if (filter === "Custom Date") {
-                    fetchPasses(noradId, e.target.value, endTime);
+                    fetchPasses(noradId, localDate, endTime);
                   }
                 }}
                 InputLabelProps={{ shrink: true }}
@@ -179,9 +183,10 @@ const FuturePasses = ({ noradId }: Props) => {
                 type="date"
                 value={endTime}
                 onChange={(e) => {
-                  setEndTime(e.target.value);
+                  const localDate = parseLocalDate(e.target.value);
+                  setEndTime(localDate);
                   if (filter === "Custom Date") {
-                    fetchPasses(noradId, startTime, e.target.value);
+                    fetchPasses(noradId, startTime, localDate);
                   }
                 }}
                 InputLabelProps={{ shrink: true }}
