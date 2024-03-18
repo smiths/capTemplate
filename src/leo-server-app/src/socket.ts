@@ -1,28 +1,20 @@
-import * as readline from "readline";
 import * as https from "https";
 import * as WebSocket from "ws";
 
-const app = require("./app");
+const messageHandler = require("./messageHandler"); // Import the module
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-const server = https.createServer({
+const SocketServer = https.createServer({
   cert: process.env.SOCKET_CERT,
   key: process.env.SOCKET_KEY,
 });
 
-const wss = new WebSocket.Server({ server });
-
-// Also mount the app here
-server.on("request", app);
+const wss = new WebSocket.Server({ server: SocketServer });
 
 wss.on("connection", function connection(ws: any) {
   console.log("----------------------------------------");
   console.log(`Client connected`);
   console.log("----------------------------------------");
+  messageHandler.setClientSocket(ws);
 
   ws.on("message", function message(data: any) {
     console.log(`${data}`);
@@ -31,15 +23,6 @@ wss.on("connection", function connection(ws: any) {
   ws.on("close", function close() {
     console.log("Client disconnected");
   });
-
-  rl.on("line", (input) => {
-    const commandToSend = input.trim() + "\n";
-    ws.send(commandToSend);
-    if (input.trim().toLowerCase() === "exit") {
-      rl.close();
-      ws.close();
-    }
-  });
 });
 
-module.exports = server;
+module.exports = SocketServer;
