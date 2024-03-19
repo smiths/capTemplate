@@ -7,7 +7,7 @@ const appPort = process.env.PORT || 8080;
 const socketPort = process.env.SOCKET_PORT || 1549;
 
 SocketServer.listen(socketPort, () => {
-  console.log("Listening on port: 1549");
+  console.log(`Listening on port: ${socketPort}`);
 });
 
 connectDB()
