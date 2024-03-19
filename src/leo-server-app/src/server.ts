@@ -13,7 +13,7 @@ SocketServer.listen(socketPort, () => {
 connectDB()
   .then((res: any) => {
     app.listen(appPort, () => {
-      console.log(`[Server]: I am running at https://localhost:${port}`);
+      console.log(`[Server]: I am running at https://localhost:${appPort}`);
     });
     console.log("Connected to db.");
     scheduleJobsForSatellitesOnBoot();
