@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import {
   Box,
   Card,
-  CardContent,
   CircularProgress,
   Grid,
   Stack,
@@ -14,7 +13,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   TextField,
   Select,
   MenuItem,
@@ -307,129 +305,109 @@ const Scheduler = () => {
             </Box>
           ) : (
             <Grid className="futureSchedulesBox" container spacing={2}>
-              {/* {scheduleForCard &&
-                scheduleForCard.map((schedule, index) => (
-                  <Grid item key={index} sx={{ width: "100%" }}>
-                    <NextLink
-                      href={`/edit-schedule/${satId}/${schedule.id}`}
-                      passHref
-                    > */}
-                      <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
-                        <Table sx={{ minWidth: 1050 }}>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell
-                                sx={{
-                                  color: "var(--material-theme-black)",
-                                  borderTop: 2,
-                                  borderLeft: 2,
-                                  borderRight: 2,
-                                }}
-                                align="left"
-                              >
-                                <Typography variant="h6"> Date </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{
-                                  color: "var(--material-theme-black)",
-                                  borderTop: 2,
-                                  borderRight: 2,
-                                }}
-                                align="left"
-                              >
-                                <Typography variant="h6"> Time </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{
-                                  color: "var(--material-theme-black)",
-                                  borderTop: 2,
-                                  borderRight: 2,
-                                }}
-                                align="left"
-                              >
-                                <Typography variant="h6"> Commands Scheduled </Typography>
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {/* {scheduleForCard && scheduleForCard.map((schedule, index) => ( */}
-                            {scheduleForCard.map((schedule, index) => (
-                              <TableRow
-                              sx={{
-                                borderBottom: 2,
-                                borderTop: 2,
-                                borderLeft: 2,
-                                borderRight: 2,
-                              }}
-                            >
-                              
-                            {/* {scheduleForCard.map((schedule) => ( */}
-                              {/* <TableRow key={schedule.id} */}
-                              
-                                <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                                  align="left">
-                                  <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
-                                </TableCell>
-                                <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                                  align="left">
-                                  <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
-                                </TableCell>
-                                <TableCell>
-                                <NextLink
-                                  href={`/edit-schedule/${satId}/${schedule.id}`}
-                                  passHref
-                                  >
-                                  <>
-                                    {scheduleCommands[schedule.id] &&
-                                      scheduleCommands[schedule.id].length > 0 ? (
-                                      <>
-                                        {scheduleCommands[schedule.id]
-                                          .slice(0, 3)
-                                          .map((commandObj: any, cmdIndex) => (
+              <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
+                <Table sx={{ minWidth: 1050 }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderLeft: 2,
+                          borderRight: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Date </Typography>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderRight: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Time </Typography>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderRight: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Commands Scheduled </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {scheduleForCard.map((schedule, index) => (
+                      <TableRow
+                        sx={{
+                          borderBottom: 2,
+                          borderTop: 2,
+                          borderLeft: 2,
+                          borderRight: 2,
+                        }}
+                      >
+                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                          align="left">
+                          <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
+                        </TableCell>
+                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                          align="left">
+                          <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <NextLink
+                            href={`/edit-schedule/${satId}/${schedule.id}`}
+                            passHref
+                          >
+                            <>
+                              {scheduleCommands[schedule.id] &&
+                                scheduleCommands[schedule.id].length > 0 ? (
+                                <>
+                                  {scheduleCommands[schedule.id]
+                                    .slice(0, 3)
+                                    .map((commandObj: any, cmdIndex) => (
 
-                                            <Typography
-                                              key={cmdIndex}
-                                              className="cardSubtitle"
-                                            >
-                                              <li> {commandObj.command}</li>
-                                            </Typography>
-                                          ))}
-                                        {scheduleCommands[schedule.id].length > 3 && (
-                                          <Typography className="cardSubtitle">
-                                            {" "}
-                                            ...{" "}
-                                          </Typography>
-                                        )}
-                                      </>
-                                    ) : (
                                       <Typography
+                                        key={cmdIndex}
                                         className="cardSubtitle"
-                                        sx={{
-                                          padding: "0px",
-                                          fontSize: "15px",
-                                          color: "var(--material-theme-black)",
-                                        }}
                                       >
-                                        No commands
+                                        <li> {commandObj.command}</li>
                                       </Typography>
-                                    )}
-                                  </>
-                                  </NextLink>
-
-                                </TableCell>
-
-                              </TableRow>
-                              
-                ))}
-
-                            
-                            </TableBody>
-                        </Table>
-                      </TableContainer>
-
-                  // </Grid>
-            // </Grid>
-          )}
+                                    ))}
+                                  {scheduleCommands[schedule.id].length > 3 && (
+                                    <Typography className="cardSubtitle">
+                                      {" "}
+                                      ...{" "}
+                                    </Typography>
+                                  )}
+                                </>
+                              ) : (
+                                <Typography
+                                  className="cardSubtitle"
+                                  sx={{
+                                    padding: "0px",
+                                    fontSize: "15px",
+                                    color: "var(--material-theme-black)",
+                                  }}
+                                >
+                                  No commands
+                                </Typography>
+                              )}
+                            </>
+                          </NextLink>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+             </Grid>)}
           <Box />
         </Stack>
       </Box>
@@ -437,10 +415,3 @@ const Scheduler = () => {
   );
 };
 export default Scheduler;
-
-// {scheduleForCard &&
-//   scheduleForCard.map((schedule, index) => (
-//     <NextLink
-//         href={`/edit-schedule/${satId}/${schedule.id}`}
-//         passHref
-//         >
