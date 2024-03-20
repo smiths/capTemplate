@@ -191,259 +191,256 @@ const Scheduler = () => {
         <Typography variant="h5" className="headerBox3" style={{ fontSize: '2em', color: "var(--material-theme-white)" }}>
           Schedule Queue
         </Typography>
-      </Box> 
-
-        {/* <Typography className="headerBox3" style={{ fontSize: '2em', color: "var(--material-theme-white)" }}> */}
-          {/* <Box className="schedulesPageContainer" sx={{ padding: "2%" }}> */}
-          {/* <Box px={"10%"}>
-        <SatelliteName satelliteName={satelliteName} />
-
-        */}
-          <Box
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          justifyContent: "right",
+          paddingRight: "10%",
+        }}
+      >
+        {filter === "Custom Date" && (
+          <>
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
+            >
+              Start Date
+            </Typography>
+            <TextField
+              type="date"
+              value={startTime}
+              onChange={(e) => {
+                setStartTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, e.target.value, endTime);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ style: { color: "var(--material-theme-white)" } }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
+            >
+              End Date
+            </Typography>
+            <TextField
+              type="date"
+              value={endTime}
+              onChange={(e) => {
+                setEndTime(e.target.value);
+                if (filter === "Custom Date") {
+                  fetchSchedules(satelliteId, startTime, e.target.value);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{
+                style: {
+                  color: "var(--material-theme-white)",
+                  borderColor: "var(--material-theme-white)",
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+          </>
+        )}
+        <FormControl variant="outlined" sx={{ width: "230px" }}>
+          <Select
+            value={filter}
+            onChange={handleFilterChange}
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "20px",
-              justifyContent: "right",
-              paddingRight: "10%",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "transparent",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              textTransform: "none",
+              fontSize: "1rem",
+              "& .MuiSelect-select": {
+                paddingLeft: "30px",
+              },
+              backgroundColor: "var(--material-theme-sys-dark-primary)",
+              color: "var(--material-theme-sys-dark-on-primary)",
+              borderRadius: "15px",
             }}
-          >
-            {filter === "Custom Date" && (
-              <>
-                <Typography
-                  variant="h6"
-                  sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
-                >
-                  Start Date
-                </Typography>
-                <TextField
-                  type="date"
-                  value={startTime}
-                  onChange={(e) => {
-                    setStartTime(e.target.value);
-                    if (filter === "Custom Date") {
-                      fetchSchedules(satelliteId, e.target.value, endTime);
-                    }
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  inputProps={{ style: { color: "var(--material-theme-white)" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "var(--material-theme-white)",
-                      borderRadius: "15px",
-                    },
-                  }}
-                />
-                <Typography
-                  variant="h6"
-                  sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)"}}
-                >
-                  End Date
-                </Typography>
-                <TextField
-                  type="date"
-                  value={endTime}
-                  onChange={(e) => {
-                    setEndTime(e.target.value);
-                    if (filter === "Custom Date") {
-                      fetchSchedules(satelliteId, startTime, e.target.value);
-                    }
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  inputProps={{
-                    style: {
-                      color: "var(--material-theme-white)",
-                      borderColor: "var(--material-theme-white)",
-                    },
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "var(--material-theme-white)",
-                      borderRadius: "15px",
-                    },
-                  }}
-                />
-              </>
-            )}
-            <FormControl variant="outlined" sx={{ width: "230px" }}>
-              <Select
-                value={filter}
-                onChange={handleFilterChange}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "transparent",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--material-theme-sys-dark-on-primary)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--material-theme-sys-dark-on-primary)",
-                  },
-                  textTransform: "none",
-                  fontSize: "1rem",
-                  "& .MuiSelect-select": {
-                    paddingLeft: "30px",
-                  },
+            MenuProps={{
+              PaperProps: {
+                sx: {
                   backgroundColor: "var(--material-theme-sys-dark-primary)",
                   color: "var(--material-theme-sys-dark-on-primary)",
                   borderRadius: "15px",
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    sx: {
-                      backgroundColor: "var(--material-theme-sys-dark-primary)",
-                      color: "var(--material-theme-sys-dark-on-primary)",
-                      borderRadius: "15px",
-                      "& .MuiMenuItem-root:hover": {
-                        backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
-                      },
-                    },
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
                   },
-                }}
-              >
-                <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
-                <MenuItem value="Custom Date">Custom Date</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box className="main-schedule">
-            <Stack alignItems="flex-start" spacing={1}>
-              {isLoading ? (
-                <Box className="loadingBox">
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <Grid className="futureSchedulesBox" container spacing={2}>
-                  {scheduleForCard &&
-                    scheduleForCard.map((schedule, index) => (
-                      <Grid item key={index} sx={{ width: "100%" }}>
-                        <NextLink
-                          href={`/edit-schedule/${satId}/${schedule.id}`}
-                          passHref
-                        >
-
-                          <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
-                            <Table sx={{ minWidth: 650 }}>
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell
-                                    sx={{
-                                      color: "var(--material-theme-black)",
-                                      borderTop: 2,
-                                      borderLeft: 2,
-                                      borderRight: 2,
-                                    }}
-                                    align="left"
+                },
+              },
+            }}
+          >
+            <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
+            <MenuItem value="Custom Date">Custom Date</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box className="main-schedule">
+        <Stack alignItems="flex-start" spacing={1}>
+          {isLoading ? (
+            <Box className="loadingBox">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Grid className="futureSchedulesBox" container spacing={2}>
+              {/* {scheduleForCard &&
+                scheduleForCard.map((schedule, index) => (
+                  <Grid item key={index} sx={{ width: "100%" }}>
+                    <NextLink
+                      href={`/edit-schedule/${satId}/${schedule.id}`}
+                      passHref
+                    > */}
+                      <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
+                        <Table sx={{ minWidth: 1050 }}>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell
+                                sx={{
+                                  color: "var(--material-theme-black)",
+                                  borderTop: 2,
+                                  borderLeft: 2,
+                                  borderRight: 2,
+                                }}
+                                align="left"
+                              >
+                                <Typography variant="h6"> Date </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  color: "var(--material-theme-black)",
+                                  borderTop: 2,
+                                  borderRight: 2,
+                                }}
+                                align="left"
+                              >
+                                <Typography variant="h6"> Time </Typography>
+                              </TableCell>
+                              <TableCell
+                                sx={{
+                                  color: "var(--material-theme-black)",
+                                  borderTop: 2,
+                                  borderRight: 2,
+                                }}
+                                align="left"
+                              >
+                                <Typography variant="h6"> Commands Scheduled </Typography>
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {/* {scheduleForCard && scheduleForCard.map((schedule, index) => ( */}
+                            {scheduleForCard.map((schedule, index) => (
+                              <TableRow
+                              sx={{
+                                borderBottom: 2,
+                                borderTop: 2,
+                                borderLeft: 2,
+                                borderRight: 2,
+                              }}
+                            >
+                              
+                            {/* {scheduleForCard.map((schedule) => ( */}
+                              {/* <TableRow key={schedule.id} */}
+                              
+                                <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                                  align="left">
+                                  <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
+                                </TableCell>
+                                <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                                  align="left">
+                                  <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+                                </TableCell>
+                                <TableCell>
+                                <NextLink
+                                  href={`/edit-schedule/${satId}/${schedule.id}`}
+                                  passHref
                                   >
-                                    <Typography variant="h6"> Date </Typography>
-                                  </TableCell>
-                                  <TableCell
-                                    sx={{
-                                      color: "var(--material-theme-black)",
-                                      borderTop: 2,
-                                      borderRight: 2,
-                                    }}
-                                    align="left"
-                                  >
-                                    <Typography variant="h6"> Time </Typography>
-                                  </TableCell>
-                                  <TableCell
-                                    sx={{
-                                      color: "var(--material-theme-black)",
-                                      borderTop: 2,
-                                      borderRight: 2,
-                                    }}
-                                    align="left"
-                                  >
-                                    <Typography variant="h6"> Commands Scheduled </Typography>
-                                  </TableCell>
-
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {scheduleForCard.map((schedule) => (
-                                  <TableRow key={schedule.id}
-                                    // sx={{ '&:last-child td, &:last-child th': { border: 0 }
-
-
-
-                                    // }}
-
-                                    sx={{
-                                      borderBottom: 2,
-                                      borderTop: 2,
-                                      borderLeft: 2,
-                                      borderRight: 2,
-                                      // "&:last-child td, &:last-child th": { border: 1 },
-                                    }}
-
-                                  >
-
-
-                                    <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                                      align="left">
-                                      <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
-                                    </TableCell>
-                                    <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                                      align="left">
-                                      <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
-                                    </TableCell>
-
-                                    <TableCell>
+                                  <>
+                                    {scheduleCommands[schedule.id] &&
+                                      scheduleCommands[schedule.id].length > 0 ? (
                                       <>
-                                        {scheduleCommands[schedule.id] &&
-                                          scheduleCommands[schedule.id].length > 0 ? (
-                                          <>
-                                            {scheduleCommands[schedule.id]
-                                              .slice(0, 3)
-                                              .map((commandObj: any, cmdIndex) => (
+                                        {scheduleCommands[schedule.id]
+                                          .slice(0, 3)
+                                          .map((commandObj: any, cmdIndex) => (
 
-                                                <Typography
-                                                  key={cmdIndex}
-                                                  className="cardSubtitle"
-                                                >
-                                                  <li> {commandObj.command}</li>
-                                                </Typography>
-                                              ))}
-                                            {scheduleCommands[schedule.id].length > 3 && (
-                                              <Typography className="cardSubtitle">
-                                                {" "}
-                                                ...{" "}
-                                              </Typography>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <Typography
-                                            className="cardSubtitle"
-                                            sx={{
-                                              padding: "0px",
-                                              fontSize: "15px",
-                                              color: "var(--material-theme-black)",
-                                            }}
-                                          >
-                                            No commands
+                                            <Typography
+                                              key={cmdIndex}
+                                              className="cardSubtitle"
+                                            >
+                                              <li> {commandObj.command}</li>
+                                            </Typography>
+                                          ))}
+                                        {scheduleCommands[schedule.id].length > 3 && (
+                                          <Typography className="cardSubtitle">
+                                            {" "}
+                                            ...{" "}
                                           </Typography>
                                         )}
                                       </>
+                                    ) : (
+                                      <Typography
+                                        className="cardSubtitle"
+                                        sx={{
+                                          padding: "0px",
+                                          fontSize: "15px",
+                                          color: "var(--material-theme-black)",
+                                        }}
+                                      >
+                                        No commands
+                                      </Typography>
+                                    )}
+                                  </>
+                                  </NextLink>
 
-                                    </TableCell>
-                                  </TableRow>
+                                </TableCell>
 
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
+                              </TableRow>
+                              
+                ))}
 
-                        </NextLink>
-                      </Grid>
-                    ))}
-                </Grid>
+                            
+                            </TableBody>
+                        </Table>
+                      </TableContainer>
 
-              )}
-              <Box />
-            </Stack>
-          </Box>
+                  // </Grid>
+            // </Grid>
+          )}
+          <Box />
+        </Stack>
       </Box>
-      );
+    </Box>
+  );
 };
-      export default Scheduler;
+export default Scheduler;
+
+// {scheduleForCard &&
+//   scheduleForCard.map((schedule, index) => (
+//     <NextLink
+//         href={`/edit-schedule/${satId}/${schedule.id}`}
+//         passHref
+//         >

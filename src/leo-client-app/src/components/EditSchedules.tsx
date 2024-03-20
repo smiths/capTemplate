@@ -141,19 +141,15 @@ const EditScheduler = () => {
                 key={index}
                 className="scheduleButton"
                 onClick={() => addCommand(command)}
-                sx = {{
-                   // Use the theme's primary color as background
-    color: '#fff', // Set the text color to white
-    border: '2px solid', // Apply a solid border with 2px width
-    mb: '10px',
-    borderColor: 'var(--material-theme-sys-light-surface-variant)', // Use the theme's secondary color for the border
-    '&:hover': {
-      backgroundColor: 'var(--material-theme-sys-light-primary-container)', // Darken the background on hover
-      borderColor: 'var(--material-theme-white)',
-    }
-
-
-
+                sx={{
+                  color: 'var(--material-theme-white)',
+                  border: '2px solid',
+                  mb: '10px',
+                  borderColor: 'var(--material-theme-sys-light-surface-variant)',
+                  '&:hover': {
+                    backgroundColor: 'var(--material-theme-sys-light-primary-container)',
+                    borderColor: 'var(--material-theme-white)',
+                  }
                 }}>
                 {command}
               </Button>
