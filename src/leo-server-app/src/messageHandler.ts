@@ -41,7 +41,7 @@ function sendDataToClientAndAwaitResponse(dataToSend: any, timeout: number) {
     });
 
     // Send data to the client
-    clientSocket.send(dataToSend);
+    clientSocket.send(dataToSend + "\n");
   });
 }
 
