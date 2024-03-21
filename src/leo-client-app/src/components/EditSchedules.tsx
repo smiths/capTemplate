@@ -10,13 +10,14 @@ import SatelliteName from "./SatelliteName";
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
 import axios from "axios";
 import { ReactTerminal } from "react-terminal";
+import SchedulerTerminal from "./SchedulerTerminal";
 
 const EditScheduler = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const satId = router.query?.satId?.toString() ?? "";
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
-  const satelliteId = router.query?.satelliteId?.toString() ?? "";
+  const satelliteId = router.query?.satId?.toString() ?? "";
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
 
   // operator
@@ -108,8 +109,6 @@ const EditScheduler = () => {
       </Stack>
     ),
   };
-
-  const delay = (ms: any) => new Promise((res) => setTimeout(res, ms));
 
   return (
     <Stack
@@ -212,30 +211,6 @@ const EditScheduler = () => {
         </Card>
       </Box>
       <ViewScheduleCard scheduleId={scheduleId} userId={userId} />
-
-      <Box sx={{ width: "100%", height: 300 }}>
-        <ReactTerminal
-          commands={commands}
-          // showControlBar={false}
-          themes={{
-            "my-custom-theme": {
-              themeBGColor: "#272B36",
-              themeToolbarColor: "#DBDBDB",
-              themeColor: "#FFFEFC",
-              themePromptColor: "#a917a8",
-            },
-          }}
-          theme="my-custom-theme"
-          defaultHandler={async (request: any) => {
-            const isValid = validCommands.some((cmd) => cmd === request);
-            if (!isValid) {
-              return "Invalid command sequence";
-            }
-            await delay(5000);
-            return "Command sent";
-          }}
-        />
-      </Box>
     </Stack>
   );
 };
