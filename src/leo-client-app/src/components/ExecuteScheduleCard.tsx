@@ -1,4 +1,8 @@
-import { removeCommandFromSchedule } from "@/constants/api";
+import {
+  executeSchedule,
+  removeCommandFromSchedule,
+  stopSchedule,
+} from "@/constants/api";
 import { useGetCommandsBySchedule } from "@/constants/hooks";
 import {
   Button,
@@ -15,20 +19,68 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3001/logs_connect");
 
 const ExecuteScheduleCard = () => {
   const router = useRouter();
 
   const userId: string = "65a8181f36ea10b4366e1dd9";
+  const satelliteId = router.query?.satId?.toString() ?? "";
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
 
   const commandsData = useGetCommandsBySchedule(scheduleId);
   const queryClient = useQueryClient();
   const [error, setError] = useState("");
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
+  const [commandToLogMap, setCommandToLogMap] = useState<any>({});
 
-  const executeSchedule = () => {
-    setIsExecuting(!isExecuting);
+  const retrigger = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ["useGetCommandsBySchedule"],
+    });
+  };
+
+  useEffect(() => {
+    socket.on("logUpdate", async (update) => {
+      const id = update?.fullDocument?.commandId ?? "";
+      if (id) {
+        setCommandToLogMap((prevCommands: any) => ({
+          ...prevCommands,
+          [id]: update.fullDocument.response,
+        }));
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ["useGetCommandsBySchedule"],
+      });
+    });
+
+    return () => {
+      if (socket.active.valueOf()) {
+        socket.off("logUpdate");
+      }
+    };
+  }, []);
+
+  const executeScheduleQueue = async () => {
+    try {
+      setIsExecuting(true);
+      await executeSchedule(scheduleId, satelliteId);
+    } catch (error) {
+      setIsExecuting(false);
+      console.error(error);
+    }
+  };
+
+  const stopScheduleQueue = async () => {
+    try {
+      setIsExecuting(false);
+      await stopSchedule(scheduleId, satelliteId);
+    } catch (error) {
+      setIsExecuting(true);
+      console.error(error);
+    }
   };
 
   // Mutation function
@@ -56,11 +108,19 @@ const ExecuteScheduleCard = () => {
   };
 
   useEffect(() => {
+    if (commandsData.data?.commands?.length) {
+      let tempMap: any = {};
+      for (const cmd of commandsData.data.commands) {
+        tempMap[cmd._id] = null;
+      }
+      setCommandToLogMap(tempMap);
+    }
     setError("");
   }, [commandsData.data]);
 
   return (
     <Stack sx={{ width: "100%" }} alignItems="center" spacing={4} py={10}>
+      <button onClick={retrigger}>Refetch</button>
       <Typography
         align="center"
         variant="h3"
@@ -82,7 +142,9 @@ const ExecuteScheduleCard = () => {
       <Stack direction={"row"} width={800} justifyContent={"flex-end"}>
         <Button
           color={isExecuting ? "error" : "success"}
-          onClick={executeSchedule}
+          onClick={() =>
+            isExecuting ? stopScheduleQueue() : executeScheduleQueue()
+          }
           variant="contained">
           {isExecuting ? "Stop" : "Execute"}
         </Button>
@@ -167,7 +229,12 @@ const ExecuteScheduleCard = () => {
                   <TableCell
                     sx={{ color: "black !important", borderRight: 2 }}
                     align="left">
-                    {item.status}
+                    {item.status === "EXECUTED"
+                      ? item.status
+                      : commandToLogMap[item._id]
+                      ? "EXECUTED"
+                      : "QUEUED"}
+                    {/* {item.status} */}
                   </TableCell>
                   <TableCell
                     sx={{ color: "black !important", borderRight: 2 }}
