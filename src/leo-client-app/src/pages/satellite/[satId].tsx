@@ -79,7 +79,7 @@ function SatelliteInfoPage() {
             boxSizing: "border-box",
           }}
         >
-          <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
+          <Grid item xs={14} lg={10} sx={{boxSizing: "border-box" }}>
             <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
               <Box>
                 <UpcomingSchedules noradId={selectedNoradId} />
