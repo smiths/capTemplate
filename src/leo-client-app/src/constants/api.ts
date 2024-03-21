@@ -58,11 +58,16 @@ export const removeCommandFromSchedule = async (
   return res.data;
 };
 
-export const getCommandsBySchedule = async (scheduleId: string) => {
+export const getCommandsBySchedule = async (
+  scheduleId: string,
+  limit?: number
+) => {
+  const configLimit = limit ?? 100;
+
   const res = await axios.get(`${BACKEND_URL}/schedule/getCommandsBySchedule`, {
     params: {
       scheduleId,
-      limit: 100,
+      limit: configLimit,
     },
   });
   return res.data;
@@ -75,6 +80,26 @@ export const getValidCommands = async (satelliteId: string, userId: string) => {
       params: {
         satelliteId,
         userId,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const getSchedulesBySatellite = async (
+  satelliteId: string,
+  limit?: number,
+  status?: string,
+  page?: number
+) => {
+  const res = await axios.get(
+    `${BACKEND_URL}/schedule/getSchedulesBySatellite`,
+    {
+      params: {
+        satelliteId,
+        ...(limit && { limit }),
+        ...(status && { status }),
+        ...(page && { page }),
       },
     }
   );
