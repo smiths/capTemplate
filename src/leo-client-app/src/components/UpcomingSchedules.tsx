@@ -145,50 +145,45 @@ const UpcomingSchedules = ({ noradId }: Props) => {
             <CircularProgress />
           </Box>
         ) : (
-                  <TableContainer
-                  component={Card}
-                    sx={{
-                      maxWidth: "100%",
-                      maxHeight: "200px",
-                      overflow: 'auto',
-                      background: "var(--material-theme-sys-light-primary-fixed)",
-                      "& .MuiTableCell-root": {
-                        borderBottom: "2px solid black",
-                        color: "var(--material-theme-black)",
-                        textAlign: "left",
-                        fontSize: "15px",
-                      },
-                    }}>
+          <TableContainer
+          component={Paper}
+            sx={{
+              maxWidth: "100%",
+              maxHeight: "200px",
+              overflow: 'auto',
+              background: "var(--material-theme-sys-light-primary-fixed)",
+              "& .MuiTableCell-root": {
+                borderBottom: "2px solid black",
+                color: "var(--material-theme-black)",
+                textAlign: "left",
+                fontSize: "15px",
+              },
+            }}>
                   <Table
                     sx={{
-                        border:
-                          "2px solid var(--material-theme-sys-light-primary-fixed)",
+                        // border:
+                        //   "2px solid var(--material-theme-sys-light-primary-fixed)",
                         borderRadius: "15px",
-                        minWidth: 650
+                        border: "10px",
+                      borderColor: "red",
                       }}
                     stickyHeader
                     aria-label="simple table"
                   >
                     <TableHead> 
                       <TableRow 
-                      sx={{
-                        backgroundColor:
-                          "var(--material-theme-sys-light-primary-fixed)",
-                        "& .MuiTableCell-head": {
+                        sx={{
                           backgroundColor:
-                            "var(--material-theme-sys-light-primary-fixed) !important",
+                            "var(--material-theme-sys-light-primary-fixed)",
+                          "& .MuiTableCell-head": {
+                            backgroundColor:
+                              "var(--material-theme-sys-light-primary-fixed) !important",
                           },
                         }}
                         >
-                        <TableCell>
-                          Date 
-                        </TableCell>
-                        <TableCell>
-                           Time 
-                        </TableCell>
-                        <TableCell>
-                          Details 
-                        </TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Time</TableCell>
+                        <TableCell>Details</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
