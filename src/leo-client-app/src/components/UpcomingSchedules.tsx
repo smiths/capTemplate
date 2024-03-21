@@ -164,10 +164,6 @@ const UpcomingSchedules = ({ noradId }: Props) => {
               },
             }}>
                   <Table
-                    sx={{
-                        // border:
-                        //   "2px solid var(--material-theme-sys-light-primary-fixed)",
-                      }}
                     stickyHeader
                     aria-label="simple table"
                   >
