@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles.css";
 import "./styles/component.css";
 import "./styles/upcomingSchedules.css";
+import "./styles/futurePasses.css";
 import {
   Box,
   Card,
@@ -140,6 +141,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
     <Box className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Schedule Queue</p>
+        <div className="futurePassesBox">
         {isLoading ? (
           <Box className="loadingBox">
             <CircularProgress />
@@ -149,7 +151,9 @@ const UpcomingSchedules = ({ noradId }: Props) => {
           component={Paper}
             sx={{
               maxWidth: "100%",
-              maxHeight: "200px",
+              maxHeight: "400px",
+              borderRadius: "15px",
+              border: "2px solid white",
               overflow: 'auto',
               background: "var(--material-theme-sys-light-primary-fixed)",
               "& .MuiTableCell-root": {
@@ -163,9 +167,6 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                     sx={{
                         // border:
                         //   "2px solid var(--material-theme-sys-light-primary-fixed)",
-                        borderRadius: "15px",
-                        border: "10px",
-                      borderColor: "red",
                       }}
                     stickyHeader
                     aria-label="simple table"
@@ -182,8 +183,8 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                         }}
                         >
                         <TableCell>Date</TableCell>
-                        <TableCell>Time</TableCell>
-                        <TableCell>Details</TableCell>
+                        <TableCell>Time Range</TableCell>
+                        <TableCell>Schedule</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -214,8 +215,9 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                     ))}
                     </TableBody>
                   </Table>
-                </TableContainer>
+          </TableContainer>
         )}
+        </div>
       </Stack>
     </Box>
   );
