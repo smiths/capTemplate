@@ -126,3 +126,32 @@ export const sendCommandToForwarder = async (
   );
   return res.data;
 };
+
+export const executeSchedule = async (
+  scheduleId: string,
+  satelliteId: string
+) => {
+  const config = {
+    params: { scheduleId, satelliteId },
+  };
+
+  const res = await axios.post(
+    `${BACKEND_URL}/schedule/executeSchedule`,
+    null,
+    config
+  );
+  return res.data;
+};
+
+export const stopSchedule = async (scheduleId: string, satelliteId: string) => {
+  const config = {
+    params: { scheduleId, satelliteId },
+  };
+
+  const res = await axios.post(
+    `${BACKEND_URL}/schedule/cancelSchedule`,
+    null,
+    config
+  );
+  return res.data;
+};
