@@ -1,7 +1,7 @@
 import { scheduleJobsForSatellitesOnBoot } from "./utils/satellite.utils";
 
 const { connectDB } = require("./database/database");
-const AppServer = require("./app");
+const { AppServer } = require("./app");
 
 const appPort = process.env.PORT || 8080;
 

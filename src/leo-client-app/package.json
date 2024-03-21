@@ -24,7 +24,8 @@
     "next": "^13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-terminal": "^1.4.4"
+    "react-terminal": "^1.4.4",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@types/node": "^20",
