@@ -184,7 +184,7 @@ const Scheduler = () => {
 
   return (
     <Box sx={{ padding: "20px" }}>
-      <Box sx={{ bgcolor: "var(--material-theme-black)" }} px={"200px"}>
+      <Box sx={{ bgcolor: "var(--material-theme-black)" }} px={"110px"}>
         <SatelliteName satelliteName={satelliteName} />
         <Typography variant="h5" className="headerBox3" style={{ fontSize: '2em', color: "var(--material-theme-white)" }}>
           Schedule Queue
@@ -305,7 +305,7 @@ const Scheduler = () => {
             </Box>
           ) : (
             <Grid className="futureSchedulesBox" container spacing={2}>
-              <TableContainer component={Card} sx={{ backgroundColor: 'pink', borderRadius: '16px', margin: '0px' }}>
+              <TableContainer sx={{ backgroundColor: 'var(--material-theme-sys-light-primary-fixed)', borderRadius: '16px', margin: '0px' }}>
                 <Table sx={{ minWidth: 1050 }}>
                   <TableHead>
                     <TableRow>
