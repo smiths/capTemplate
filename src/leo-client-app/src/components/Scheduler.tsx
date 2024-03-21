@@ -315,6 +315,7 @@ const Scheduler = () => {
                           borderTop: 2,
                           borderLeft: 2,
                           borderRight: 2,
+                          borderBottom: 2,
                         }}
                         align="left"
                       >
@@ -325,6 +326,7 @@ const Scheduler = () => {
                           color: "var(--material-theme-black)",
                           borderTop: 2,
                           borderRight: 2,
+                          borderBottom: 2,
                         }}
                         align="left"
                       >
@@ -335,6 +337,7 @@ const Scheduler = () => {
                           color: "var(--material-theme-black)",
                           borderTop: 2,
                           borderRight: 2,
+                          borderBottom: 2,
                         }}
                         align="left"
                       >
@@ -344,8 +347,9 @@ const Scheduler = () => {
                   </TableHead>
                   <TableBody>
                     {scheduleForCard.map((schedule, index) => (
-                      <TableRow
+                      <TableRow key={index}
                         sx={{
+                          color: "var(--material-theme-black)",
                           borderBottom: 2,
                           borderTop: 2,
                           borderLeft: 2,
@@ -408,7 +412,7 @@ const Scheduler = () => {
                 </Table>
               </TableContainer>
              </Grid>)}
-          <Box />
+          <Box/>
         </Stack>
       </Box>
     </Box>

@@ -153,7 +153,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
               maxWidth: "100%",
               maxHeight: "400px",
               borderRadius: "15px",
-              border: "2px solid white",
+              border: "2px solid black",
               overflow: 'auto',
               background: "var(--material-theme-sys-light-primary-fixed)",
               "& .MuiTableCell-root": {
@@ -185,7 +185,7 @@ const UpcomingSchedules = ({ noradId }: Props) => {
                     </TableHead>
                     <TableBody>
                     {schedules.map((schedule, index) => (
-                      <TableRow
+                      <TableRow key={index}
                         sx={{
                           borderBottom: 2,
                           borderTop: 2,
