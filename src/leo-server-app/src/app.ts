@@ -12,6 +12,7 @@ dotenv.config({
 });
 
 const app: Express = express();
+
 const cors = require("cors");
 
 const usersRoute = require("./routes/user");
@@ -27,7 +28,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connect routes to app
