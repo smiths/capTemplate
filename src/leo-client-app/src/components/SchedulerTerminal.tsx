@@ -28,7 +28,11 @@ const SchedulerTerminal = () => {
   };
 
   return (
-    <Stack maxWidth={1000}>
+    <Stack
+      sx={{ width: "100%", maxWidth: 1000 }}
+      alignItems="center"
+      spacing={4}
+      py={10}>
       <Box sx={{ width: "100%", height: 300 }}>
         <ReactTerminal
           commands={validCommands.data?.record[0].validCommands}

@@ -70,7 +70,9 @@ const NextSchedule = () => {
         ) : (
           <Box sx={{ width: "100%" }}>
             <NextLink
-              href={`/edit-schedule/${satelliteId}/${firstSchedule?._id ?? ""}`}
+              href={`/execute-schedule/${satelliteId}/${
+                firstSchedule?._id ?? ""
+              }`}
               passHref>
               <Card
                 sx={{
