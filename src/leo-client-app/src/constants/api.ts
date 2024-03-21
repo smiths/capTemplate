@@ -67,3 +67,37 @@ export const getCommandsBySchedule = async (scheduleId: string) => {
   });
   return res.data;
 };
+
+export const getValidCommands = async (satelliteId: string, userId: string) => {
+  const res = await axios.get(
+    `${BACKEND_URL}/satelliteUser/getCommandsBySatelliteAndUser`,
+    {
+      params: {
+        satelliteId,
+        userId,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const sendCommandToForwarder = async (
+  userId: string,
+  scheduleId: string,
+  satelliteId: string,
+  command: string
+) => {
+  const config = {
+    params: { userId, scheduleId, satelliteId },
+  };
+
+  const body = {
+    command,
+  };
+  const res = await axios.post(
+    `${BACKEND_URL}/forwarder/sendCommand`,
+    body,
+    config
+  );
+  return res.data;
+};

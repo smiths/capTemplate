@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllOperators, getCommandsBySchedule } from "./api";
+import {
+  getAllOperators,
+  getCommandsBySchedule,
+  getValidCommands,
+} from "./api";
 
 export const useGetAllOperators = () => {
   return useQuery({
@@ -13,5 +17,13 @@ export const useGetCommandsBySchedule = (scheduleId: string) => {
     queryKey: ["useGetCommandsBySchedule"],
     queryFn: () => getCommandsBySchedule(scheduleId),
     enabled: !!scheduleId,
+  });
+};
+
+export const useGetValidCommands = (satelliteId: string, userId: string) => {
+  return useQuery({
+    queryKey: ["useGetValidCommands"],
+    queryFn: () => getValidCommands(satelliteId, userId),
+    enabled: !!satelliteId && !!userId,
   });
 };
