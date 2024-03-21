@@ -5,6 +5,7 @@ import EditScheduler from "@/components/EditSchedules";
 import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 import SchedulerTerminal from "@/components/SchedulerTerminal";
+import ExecuteScheduleCard from "@/components/ExecuteScheduleCard";
 
 type Props = {
   noradId: string;
@@ -21,6 +22,7 @@ function EditSchedulePage() {
     <main>
       <Stack sx={{ width: "100%" }} alignItems="center" p={2}>
         <Navbar />
+        <ExecuteScheduleCard />
         <SchedulerTerminal />
       </Stack>
     </main>
