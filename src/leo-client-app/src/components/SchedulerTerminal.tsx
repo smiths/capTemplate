@@ -4,7 +4,11 @@ import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactTerminal } from "react-terminal";
 
-const SchedulerTerminal = () => {
+type Props = {
+  disabled?: boolean;
+};
+
+const SchedulerTerminal = ({ disabled = false }: Props) => {
   const router = useRouter();
 
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
@@ -37,6 +41,7 @@ const SchedulerTerminal = () => {
         <ReactTerminal
           commands={validCommands.data?.record[0].validCommands}
           // showControlBar={false}
+          enableInput={!disabled}
           themes={{
             "my-custom-theme": {
               themeBGColor: "#272B36",
@@ -55,7 +60,6 @@ const SchedulerTerminal = () => {
             }
 
             const res = await sendCommand(request);
-            console.log(res);
             return res?.output ?? "Error";
           }}
         />
