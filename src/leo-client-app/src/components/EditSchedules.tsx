@@ -141,7 +141,7 @@ const EditScheduler = () => {
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
             }}>
-            Valid Commands
+            Valid Commands to Add
           </Typography>
           {validCommands &&
             validCommands.length > 0 &&
@@ -149,7 +149,19 @@ const EditScheduler = () => {
               <Button
                 key={index}
                 className="scheduleButton"
-                onClick={() => addCommand(command)}>
+                onClick={() => addCommand(command)}
+                sx={{
+                  color: "var(--material-theme-white)",
+                  border: "2px solid",
+                  mb: "10px",
+                  borderColor:
+                    "var(--material-theme-sys-light-surface-variant)",
+                  "&:hover": {
+                    backgroundColor:
+                      "var(--material-theme-sys-light-primary-container)",
+                    borderColor: "var(--material-theme-white)",
+                  },
+                }}>
                 {command}
               </Button>
             ))}

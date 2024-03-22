@@ -1,7 +1,8 @@
+import SatelliteName from "@/components/SatelliteName";
 import axios from "axios";
+import { stringify } from "querystring";
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACK_END_URL;
-
 export const getAllOperators = async () => {
   const operators = await axios.get(`${BACKEND_URL}/users/getAllOperators`);
   return operators.data;
@@ -16,6 +17,23 @@ export const updateOperatorRole = async (userId: string, data: any) => {
     }
   );
   return operator.data;
+};
+
+export const addNewSatellite = async (satelliteName: string, noradID: string) => {
+  const body = {
+    name: satelliteName,
+    noradId: noradID
+    };
+    const res = await axios.post(
+      `${BACKEND_URL}/satellite/addSatelliteTarget`,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
 };
 
 export const sendCommandSchedule = async (

@@ -11,7 +11,7 @@ function SatellitesOfInterestPage() {
         alignItems="center"
         justifyContent="center"
         spacing={1}
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", backgroundColor: "var(--material-theme-black)"}}
       >
         <Navbar />
         <SatellitesOfInterest userId="65a5e14ee0d601e0e8c4a387" />

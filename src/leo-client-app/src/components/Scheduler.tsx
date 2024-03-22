@@ -3,11 +3,16 @@ import { useRouter } from "next/router";
 import {
   Box,
   Card,
-  CardContent,
   CircularProgress,
   Grid,
   Stack,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Select,
   MenuItem,
@@ -178,11 +183,10 @@ const Scheduler = () => {
   };
 
   return (
-    <Box className="schedulesPageContainer" sx={{ padding: "2%" }}>
-      <Box px={"10%"}>
+    <Box sx={{ padding: "20px" }}>
+      <Box sx={{ bgcolor: "var(--material-theme-black)" }} px={"110px"}>
         <SatelliteName satelliteName={satelliteName} />
-
-        <Typography variant="h5" className="headerBox3">
+        <Typography variant="h5" className="headerBox3" style={{ fontSize: '2em', color: "var(--material-theme-white)" }}>
           Schedule Queue
         </Typography>
       </Box>
@@ -199,7 +203,7 @@ const Scheduler = () => {
           <>
             <Typography
               variant="h6"
-              sx={{ paddingTop: "17px", fontSize: "16px" }}
+              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
             >
               Start Date
             </Typography>
@@ -223,7 +227,7 @@ const Scheduler = () => {
             />
             <Typography
               variant="h6"
-              sx={{ paddingTop: "17px", fontSize: "16px" }}
+              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
             >
               End Date
             </Typography>
@@ -301,46 +305,83 @@ const Scheduler = () => {
             </Box>
           ) : (
             <Grid className="futureSchedulesBox" container spacing={2}>
-              {scheduleForCard &&
-                scheduleForCard.map((schedule, index) => (
-                  <Grid item key={index} sx={{ width: "100%" }}>
-                    <NextLink
-                      href={`/edit-schedule/${satId}/${schedule.id}`}
-                      passHref
-                    >
-                      <Card
+              <TableContainer sx={{ backgroundColor: 'var(--material-theme-sys-light-primary-fixed)', borderRadius: '16px', margin: '0px' }}>
+                <Table sx={{ minWidth: 1050 }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell
                         sx={{
-                          width: "98%",
-                          minHeight: 100,
-                          backgroundColor:
-                            "var(--material-theme-sys-light-primary-container)",
-                          cursor: "pointer",
-                          borderRadius: 4,
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderLeft: 2,
+                          borderRight: 2,
+                          borderBottom: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Date </Typography>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderRight: 2,
+                          borderBottom: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Time </Typography>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderTop: 2,
+                          borderRight: 2,
+                          borderBottom: 2,
+                        }}
+                        align="left"
+                      >
+                        <Typography variant="h6"> Commands Scheduled </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {scheduleForCard.map((schedule, index) => (
+                      <TableRow key={index}
+                        sx={{
+                          color: "var(--material-theme-black)",
+                          borderBottom: 2,
+                          borderTop: 2,
+                          borderLeft: 2,
+                          borderRight: 2,
                         }}
                       >
-                        <CardContent>
-                          <Stack spacing={1}>
-                            <Typography className="cardTitle">
-                              {formatDate(schedule.startDate)}
-                            </Typography>
-                            <Typography className="cardSubtitle">
-                              {formatTimeRange(
-                                schedule.startDate,
-                                schedule.endDate
-                              )}
-                            </Typography>
+                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                          align="left">
+                          <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
+                        </TableCell>
+                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
+                          align="left">
+                          <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <NextLink
+                            href={`/edit-schedule/${satId}/${schedule.id}`}
+                            passHref
+                          >
                             <>
                               {scheduleCommands[schedule.id] &&
-                              scheduleCommands[schedule.id].length > 0 ? (
+                                scheduleCommands[schedule.id].length > 0 ? (
                                 <>
                                   {scheduleCommands[schedule.id]
                                     .slice(0, 3)
                                     .map((commandObj: any, cmdIndex) => (
+
                                       <Typography
                                         key={cmdIndex}
                                         className="cardSubtitle"
                                       >
-                                        {commandObj.command}
+                                        <li> {commandObj.command}</li>
                                       </Typography>
                                     ))}
                                   {scheduleCommands[schedule.id].length > 3 && (
@@ -363,15 +404,15 @@ const Scheduler = () => {
                                 </Typography>
                               )}
                             </>
-                          </Stack>
-                        </CardContent>
-                      </Card>
-                    </NextLink>
-                  </Grid>
-                ))}
-            </Grid>
-          )}
-          <Box />
+                          </NextLink>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+             </Grid>)}
+          <Box/>
         </Stack>
       </Box>
     </Box>
