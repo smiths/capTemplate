@@ -30,12 +30,14 @@ const disconnectDB = async () => {
   }
 };
 
-connection.once("open", function () {
-  const changeStream = connection.collection("logs").watch();
+if (process.env.NODE_ENV !== "test") {
+  connection.once("open", function () {
+    const changeStream = connection.collection("logs").watch();
 
-  changeStream.on("change", (change: any) => {
-    io.of("/logs_connect").emit("logUpdate", change); // Emitting change to all connected clients
+    changeStream.on("change", (change: any) => {
+      io.of("/logs_connect").emit("logUpdate", change); // Emitting change to all connected clients
+    });
   });
-});
+}
 
 module.exports = { connectDB, disconnectDB };
