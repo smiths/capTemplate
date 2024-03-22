@@ -42,30 +42,6 @@ const ExecuteScheduleCard = () => {
 
   const [isQueueEmpty, setIsQueueEmpty] = useState<boolean>(false);
 
-  useEffect(() => {
-    socket.on("logUpdate", async (update) => {
-      const id = update?.fullDocument?.commandId ?? "";
-      if (id) {
-        setCommandToLogMap((prevCommands: any) => ({
-          ...prevCommands,
-          [id]: update.fullDocument.response,
-        }));
-      }
-      await queryClient.invalidateQueries({
-        queryKey: ["useGetCommandsBySchedule"],
-      });
-      //   await queryClient.invalidateQueries({
-      //     queryKey: ["useGetIsScheduleExecuting"],
-      //   });
-    });
-
-    return () => {
-      if (socket.active.valueOf()) {
-        socket.off("logUpdate");
-      }
-    };
-  }, []);
-
   const executeScheduleQueue = async () => {
     try {
       setIsExecuting(true);
@@ -110,6 +86,27 @@ const ExecuteScheduleCard = () => {
   };
 
   useEffect(() => {
+    socket.on("logUpdate", async (update) => {
+      const id = update?.fullDocument?.commandId ?? "";
+      if (id) {
+        setCommandToLogMap((prevCommands: any) => ({
+          ...prevCommands,
+          [id]: update.fullDocument.response,
+        }));
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ["useGetCommandsBySchedule"],
+      });
+    });
+
+    return () => {
+      if (socket.active.valueOf()) {
+        socket.off("logUpdate");
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (commandsData.data?.commands?.length) {
       let tempMap: any = {};
       for (const cmd of commandsData.data.commands) {
@@ -119,6 +116,9 @@ const ExecuteScheduleCard = () => {
         (cmd: any) => cmd.status === "QUEUED"
       );
       setCommandToLogMap(tempMap);
+      if (!hasOneQueuedCommand) {
+        setIsExecuting(false);
+      }
       setIsQueueEmpty(!hasOneQueuedCommand);
     }
     setError("");
@@ -299,7 +299,7 @@ const ExecuteScheduleCard = () => {
           schedule.
         </Typography>
 
-        <SchedulerTerminal disabled={isExecuting} />
+        <SchedulerTerminal disabled={isExecuting && !isQueueEmpty} />
       </Stack>
     </Stack>
   );
