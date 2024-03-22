@@ -1,5 +1,6 @@
 import nodeSchedule from "node-schedule";
 import { executeScheduledCommands } from "../utils/schedule.utils";
+import globals from "../globals/globals";
 
 // Schedules a job to run for the next overpass
 export const scheduleJobForNextOverpass = (
@@ -19,6 +20,7 @@ export const executeScheduleJob = (satelliteId: string, scheduleId: string) => {
   const startTime = new Date(Date.now() + 5000);
 
   const jobName = satelliteId + "_" + scheduleId;
+  globals.jobFlags[jobName] = true;
 
   const job = nodeSchedule.scheduleJob(jobName, startTime, () =>
     executeScheduledCommands(satelliteId, scheduleId)
@@ -31,6 +33,7 @@ export const executeScheduleJob = (satelliteId: string, scheduleId: string) => {
 export const cancelScheduleJob = (satelliteId: string, scheduleId: string) => {
   const jobName = satelliteId + "_" + scheduleId;
   const isCanceled = nodeSchedule.cancelJob(jobName);
+  delete globals.jobFlags[jobName];
 
   return isCanceled;
 };
