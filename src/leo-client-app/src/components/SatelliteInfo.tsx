@@ -103,8 +103,8 @@ const SatelliteInfo = ({ noradId }: Props) => {
           </Box>
         )}
         {!isLoading && (
-          <Stack className="contentBox" spacing={0}>
-            <div className="material-themebodylarge">
+          <Stack className="contentBox" spacing={0} sx={{color:"var(--material-theme-white)"}}>
+            <div className="material-themebodylarge" >
               Position ECI:
               <ul className="inner-list">
                 <li>X: {positionEci.x.toFixed(2)}</li>

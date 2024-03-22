@@ -60,7 +60,7 @@ const Logs: React.FC = () => {
   return (
     <div className="logs">
       <Stack className="stack" style={{ width: "100%" }} spacing={3} py={8}>
-        <Typography variant="h4">Logs</Typography>
+        <Typography variant="h4" style={{color: "var(--material-theme-white)"}}>Logs</Typography>
         <div className="logsBox">
           <TableContainer
             component={Paper}

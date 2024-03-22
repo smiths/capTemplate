@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
       justifyContent="space-between"
       spacing={5}
       className="navBar"
-      style={{ width: "100%", margin: 0, padding: 0, marginTop: "100px" }}
+      style={{ width: "100%", margin: 0, padding: 0, marginTop: "100px"}}
     >
       {navbarItems.map((item, index) => (
         <Link
@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
           component={NextLink}
           href={item.path}
           underline="none"
-          sx={{ color: "var(--material-theme-sys-light-inverse-on-surface)" }}
+          sx={{color: "var(--material-theme-white)"}}
         >
           {item.heading}
         </Link>

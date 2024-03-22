@@ -53,7 +53,7 @@ function SatelliteInfoPage() {
       alignItems="center"
       justifyContent="center"
       spacing={1}
-      sx={{ height: "100vh", margin: "0 auto", width: "100%" }}
+      sx={{ height: "100vh", margin: "0 auto", width: "100%", backgroundColor: "var(--material-theme-black)"}}
     >
       <Navbar />
       <Grid
@@ -79,7 +79,7 @@ function SatelliteInfoPage() {
             boxSizing: "border-box",
           }}
         >
-          <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
+          <Grid item xs={14} lg={10} sx={{boxSizing: "border-box" }}>
             <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
               <Box>
                 <UpcomingSchedules noradId={selectedNoradId} />

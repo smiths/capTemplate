@@ -105,10 +105,8 @@ const EditScheduler = () => {
         flexDirection: "column",
         alignItems: "flex-start",
         gap: "2rem",
-      }}
-    >
+      }}>
       <Box px={"4px"}>
-
         <SatelliteName satelliteName={satelliteName as string} />
       </Box>
       <Box
@@ -134,7 +132,7 @@ const EditScheduler = () => {
               color: "var(--material-theme-sys-light-secondary-container",
             }}
           >
-            Valid Commands
+            Valid Commands to Add
           </Typography>
           {validCommands &&
             validCommands.length > 0 &&
@@ -143,7 +141,16 @@ const EditScheduler = () => {
                 key={index}
                 className="scheduleButton"
                 onClick={() => addCommand(command)}
-              >
+                sx={{
+                  color: 'var(--material-theme-white)',
+                  border: '2px solid',
+                  mb: '10px',
+                  borderColor: 'var(--material-theme-sys-light-surface-variant)',
+                  '&:hover': {
+                    backgroundColor: 'var(--material-theme-sys-light-primary-container)',
+                    borderColor: 'var(--material-theme-white)',
+                  }
+                }}>
                 {command}
               </Button>
             ))}
@@ -173,8 +180,7 @@ const EditScheduler = () => {
               <Button
                 key={index}
                 className="removeButton scheduleButton"
-                onClick={() => removeCommand(index)}
-              >
+                onClick={() => removeCommand(index)}>
                 <Box className="buttonText" style={{ textAlign: "center" }}>
                   {command}
                 </Box>
@@ -191,8 +197,7 @@ const EditScheduler = () => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}
-            >
+              }}>
               Clear Schedule
             </Button>
             <Button
@@ -202,8 +207,7 @@ const EditScheduler = () => {
                 margin: "5px 0",
                 color: "var(--material-theme-sys-light-secondary-container)",
                 fontFamily: "Roboto",
-              }}
-            >
+              }}>
               Send Schedule
             </Button>
           </div>
