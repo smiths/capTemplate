@@ -4,7 +4,6 @@ import Navbar from "@/components/navbar/Navbar";
 import EditScheduler from "@/components/EditSchedules";
 import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
-import SchedulerTerminal from "@/components/SchedulerTerminal";
 import ExecuteScheduleCard from "@/components/ExecuteScheduleCard";
 
 type Props = {
@@ -23,7 +22,6 @@ function EditSchedulePage() {
       <Stack sx={{ width: "100%" }} alignItems="center" p={2}>
         <Navbar />
         <ExecuteScheduleCard />
-        <SchedulerTerminal />
       </Stack>
     </main>
   );
