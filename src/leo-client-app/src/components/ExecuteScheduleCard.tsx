@@ -17,7 +17,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -29,25 +28,37 @@ import SocketConnection from "./SocketConnection";
 const socket = io(`${BACKEND_URL}/logs_connect`);
 
 const ExecuteScheduleCard = () => {
+  //   Router
   const router = useRouter();
-
   const userId: string = "65a8181f36ea10b4366e1dd9";
   const satelliteId = router.query?.satId?.toString() ?? "";
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
 
+  //   React-query Fetching hooks
   const commandsData = useGetCommandsBySchedule(scheduleId);
   const pingSocket = useGetPingSocket();
-
   const queryClient = useQueryClient();
+
+  // -------- Constants --------
+  const isSocketActive =
+    pingSocket.data?.output &&
+    pingSocket.data.output !== "WEBSOCKET_NOT_CONNECT";
+
+  // -------- States --------
   const [error, setError] = useState("");
 
+  //   Executing schedule states
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [commandToLogMap, setCommandToLogMap] = useState<any>({});
   const [isQueueEmpty, setIsQueueEmpty] = useState<boolean>(false);
+
+  //   Modal states
   const [openLog, setOpenLog] = useState<boolean>(false);
   const [commandToView, setCommandToView] = useState<string>("");
 
-  //   Log Modal
+  // -------- Helpers --------
+
+  // Log Modal
   const handleLogOpen = (id: string) => {
     setCommandToView(id);
     setOpenLog(true);
@@ -58,6 +69,7 @@ const ExecuteScheduleCard = () => {
     setOpenLog(false);
   };
 
+  // Schedule Queue
   const executeScheduleQueue = async () => {
     try {
       setIsExecuting(true);
@@ -77,7 +89,7 @@ const ExecuteScheduleCard = () => {
     }
   };
 
-  // Mutation function
+  // Mutation function for deletion
   const { mutate } = useMutation({
     mutationFn: (values: any) =>
       removeCommandFromSchedule(values.commandId, values.userId),
@@ -101,6 +113,9 @@ const ExecuteScheduleCard = () => {
     mutate({ commandId, userId });
   };
 
+  //   -------- useEffect hooks --------
+
+  //   Manages socket connection (real-time communication)
   useEffect(() => {
     socket.on("logUpdate", async (update) => {
       const id = update?.fullDocument?.commandId ?? "";
@@ -120,8 +135,10 @@ const ExecuteScheduleCard = () => {
         socket.off("logUpdate");
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Updates every time commands updates
   useEffect(() => {
     if (commandsData.data?.commands?.length) {
       let tempMap: any = {};
@@ -139,10 +156,6 @@ const ExecuteScheduleCard = () => {
     }
     setError("");
   }, [commandsData.data]);
-
-  const isSocketActive =
-    pingSocket.data?.output &&
-    pingSocket.data.output !== "WEBSOCKET_NOT_CONNECT";
 
   return (
     <Stack
