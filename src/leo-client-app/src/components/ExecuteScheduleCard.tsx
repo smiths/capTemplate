@@ -4,7 +4,7 @@ import {
   removeCommandFromSchedule,
   stopSchedule,
 } from "@/constants/api";
-import { useGetCommandsBySchedule } from "@/constants/hooks";
+import { useGetCommandsBySchedule, useGetPingSocket } from "@/constants/hooks";
 import {
   Button,
   Paper,
@@ -17,12 +17,14 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import SchedulerTerminal from "./SchedulerTerminal";
 import LogByCommandModal from "./LogByCommandModal";
+import SocketConnection from "./SocketConnection";
 
 const socket = io(`${BACKEND_URL}/logs_connect`);
 
@@ -34,6 +36,7 @@ const ExecuteScheduleCard = () => {
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
 
   const commandsData = useGetCommandsBySchedule(scheduleId);
+  const pingSocket = useGetPingSocket();
 
   const queryClient = useQueryClient();
   const [error, setError] = useState("");
@@ -137,9 +140,16 @@ const ExecuteScheduleCard = () => {
     setError("");
   }, [commandsData.data]);
 
+  const isSocketActive =
+    pingSocket.data?.output &&
+    pingSocket.data.output !== "WEBSOCKET_NOT_CONNECT";
+
   return (
-    <Stack sx={{ width: "100%" }} alignItems="center" spacing={4} py={10}>
-      {" "}
+    <Stack
+      sx={{ width: "100%", maxWidth: 1000 }}
+      alignItems="center"
+      spacing={4}
+      py={10}>
       <Typography
         align="center"
         variant="h3"
@@ -155,10 +165,11 @@ const ExecuteScheduleCard = () => {
           {error}
         </Typography>
       )}
+      <SocketConnection isSocketActive={isSocketActive} />
       <br></br>
       <Stack direction={"row"} width={800} justifyContent={"flex-end"}>
         <Button
-          disabled={isQueueEmpty}
+          disabled={isQueueEmpty || !isSocketActive}
           sx={{
             "&.Mui-disabled": {
               opacity: 0.64,
@@ -331,7 +342,7 @@ const ExecuteScheduleCard = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack sx={{ width: "100%" }} spacing={2} alignItems="center">
+      <Stack sx={{ width: "100%" }} spacing={3} alignItems="center">
         <Typography variant="h3">Scheduler Terminal</Typography>
         <Typography variant="h6">
           You can also send commands through this integrated terminal instead by
@@ -339,7 +350,12 @@ const ExecuteScheduleCard = () => {
           Note: The terminal cannot be used during execution of the above
           schedule.
         </Typography>
-        <SchedulerTerminal disabled={isExecuting && !isQueueEmpty} />
+        <br></br>
+        <SocketConnection isSocketActive={isSocketActive} />
+
+        <SchedulerTerminal
+          disabled={(isExecuting && !isQueueEmpty) || !isSocketActive}
+        />
       </Stack>
       <LogByCommandModal
         open={openLog}
