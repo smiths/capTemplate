@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import SchedulerTerminal from "./SchedulerTerminal";
+import LogByCommandModal from "./LogByCommandModal";
 
 const socket = io(`${BACKEND_URL}/logs_connect`);
 
@@ -39,8 +40,20 @@ const ExecuteScheduleCard = () => {
 
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [commandToLogMap, setCommandToLogMap] = useState<any>({});
-
   const [isQueueEmpty, setIsQueueEmpty] = useState<boolean>(false);
+  const [openLog, setOpenLog] = useState<boolean>(false);
+  const [commandToView, setCommandToView] = useState<string>("");
+
+  //   Log Modal
+  const handleLogOpen = (id: string) => {
+    setCommandToView(id);
+    setOpenLog(true);
+  };
+
+  const handleLogClose = () => {
+    setCommandToView("");
+    setOpenLog(false);
+  };
 
   const executeScheduleQueue = async () => {
     try {
@@ -224,6 +237,15 @@ const ExecuteScheduleCard = () => {
                 align="left">
                 Delete
               </TableCell>
+              <TableCell
+                sx={{
+                  color: "var(--material-theme-black)",
+                  borderTop: 2,
+                  borderRight: 2,
+                }}
+                align="left">
+                Logs
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -276,7 +298,9 @@ const ExecuteScheduleCard = () => {
                       }
                     )}
                   </TableCell>
-                  <TableCell sx={{ color: "white !important" }} align="left">
+                  <TableCell
+                    sx={{ color: "black !important", borderRight: 2 }}
+                    align="left">
                     <Button
                       variant="text"
                       sx={{ color: "var(--material-theme-sys-light-error)" }}
@@ -284,6 +308,23 @@ const ExecuteScheduleCard = () => {
                       onClick={() => removeCommand(item._id)}>
                       Delete
                     </Button>
+                  </TableCell>
+                  <TableCell sx={{ color: "white !important" }} align="left">
+                    {item.status === "EXECUTED" || commandToLogMap[item._id] ? (
+                      <Button
+                        variant="text"
+                        sx={{
+                          color: "var(--material-theme-sys-dark-on-primary)",
+                          backgroundColor:
+                            "var(--material-theme-sys-dark-primary)",
+                          borderRadius: "10px",
+                        }}
+                        onClick={() => handleLogOpen(item._id)}>
+                        Show Logs
+                      </Button>
+                    ) : (
+                      "N/A"
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -298,9 +339,13 @@ const ExecuteScheduleCard = () => {
           Note: The terminal cannot be used during execution of the above
           schedule.
         </Typography>
-
         <SchedulerTerminal disabled={isExecuting && !isQueueEmpty} />
       </Stack>
+      <LogByCommandModal
+        open={openLog}
+        commandId={commandToView}
+        handleClose={handleLogClose}
+      />
     </Stack>
   );
 };
