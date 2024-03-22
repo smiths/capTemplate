@@ -28,10 +28,13 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
         scheduleId,
         satelliteId,
         // TODO: change
-        "credits"
+        command
       );
       return res;
     } catch (error) {}
+    await queryClient.invalidateQueries({
+      queryKey: ["useGetCommandsBySchedule"],
+    });
   };
 
   const commands = {
