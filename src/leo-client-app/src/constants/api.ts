@@ -164,3 +164,8 @@ export const getLogByCommand = async (commandId: string) => {
   });
   return res.data;
 };
+
+export const getPingSocket = async () => {
+  const res = await axios.get(`${BACKEND_URL}/ping`);
+  return res.data;
+};

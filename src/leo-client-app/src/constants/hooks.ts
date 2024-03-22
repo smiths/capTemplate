@@ -3,6 +3,7 @@ import {
   getAllOperators,
   getCommandsBySchedule,
   getLogByCommand,
+  getPingSocket,
   getSchedulesBySatellite,
   getValidCommands,
 } from "./api";
@@ -51,5 +52,14 @@ export const useGetLogByCommand = (commandId: string) => {
     queryKey: ["useGetLogByCommand"],
     queryFn: () => getLogByCommand(commandId),
     enabled: !!commandId,
+  });
+};
+
+export const useGetPingSocket = () => {
+  return useQuery({
+    queryKey: ["useGetPingSocket"],
+    queryFn: () => getPingSocket(),
+    // Refetch every 5 seconds
+    refetchInterval: 5000,
   });
 };
