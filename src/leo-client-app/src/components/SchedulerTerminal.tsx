@@ -1,6 +1,7 @@
 import { sendCommandToForwarder } from "@/constants/api";
 import { useGetValidCommands } from "@/constants/hooks";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactTerminal } from "react-terminal";
 
@@ -10,6 +11,8 @@ type Props = {
 
 const SchedulerTerminal = ({ disabled = false }: Props) => {
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
   const satelliteId = router.query?.satId?.toString() ?? "";
@@ -31,6 +34,19 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
     } catch (error) {}
   };
 
+  const commands = {
+    help: (
+      <Stack flexWrap={"wrap"} direction={"row"} spacing={4}>
+        {validCommands.data?.record?.length &&
+          validCommands.data?.record[0]?.validCommands.map(
+            (cmd: string, index: number) => (
+              <Typography key={cmd + index}>{cmd}</Typography>
+            )
+          )}
+      </Stack>
+    ),
+  };
+
   return (
     <Stack
       sx={{ width: "100%", maxWidth: 1000 }}
@@ -39,8 +55,8 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
       py={10}>
       <Box sx={{ width: "100%", height: 300 }}>
         <ReactTerminal
-          commands={validCommands.data?.record[0].validCommands}
-          // showControlBar={false}
+          commands={commands}
+          showControlBar={false}
           enableInput={!disabled}
           themes={{
             "my-custom-theme": {
@@ -60,6 +76,9 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
             }
 
             const res = await sendCommand(request);
+            await queryClient.invalidateQueries({
+              queryKey: ["useGetCommandsBySchedule"],
+            });
             return res?.output ?? "Error";
           }}
         />
