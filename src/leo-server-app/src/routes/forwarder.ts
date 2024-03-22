@@ -86,6 +86,6 @@ router.post("/sendCommand", async (req: SendCommandProp, res: any) => {
 
   await Log.create(newLog);
 
-  res.status(500).json({ output: response.toString() });
+  res.status(201).json({ output: response.toString() });
 });
 module.exports = router;
