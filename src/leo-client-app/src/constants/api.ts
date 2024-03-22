@@ -155,3 +155,12 @@ export const stopSchedule = async (scheduleId: string, satelliteId: string) => {
   );
   return res.data;
 };
+
+export const getLogByCommand = async (commandId: string) => {
+  const res = await axios.get(`${BACKEND_URL}/log/getLogByCommand`, {
+    params: {
+      commandId,
+    },
+  });
+  return res.data;
+};

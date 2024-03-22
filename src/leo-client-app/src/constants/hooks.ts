@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAllOperators,
   getCommandsBySchedule,
+  getLogByCommand,
   getSchedulesBySatellite,
   getValidCommands,
 } from "./api";
@@ -42,5 +43,13 @@ export const useGetSchedulesBySatellite = (
     queryKey: ["useGetSchedulesBySatellite"],
     queryFn: () => getSchedulesBySatellite(satelliteId, limit, status, page),
     enabled: !!satelliteId,
+  });
+};
+
+export const useGetLogByCommand = (commandId: string) => {
+  return useQuery({
+    queryKey: ["useGetLogByCommand"],
+    queryFn: () => getLogByCommand(commandId),
+    enabled: !!commandId,
   });
 };
