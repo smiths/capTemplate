@@ -1,6 +1,6 @@
 const supertest = require("supertest");
-const app = require("../app");
-const request = supertest(app);
+const { AppServer } = require("../app");
+const request = supertest(AppServer);
 const { connectDB, disconnectDB } = require("../database/database");
 
 import User from "../models/user";

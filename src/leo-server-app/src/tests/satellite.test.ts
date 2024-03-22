@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../app");
+const { AppServer } = require("../app");
 const {
   getSatelliteInfo,
   setTleLines,
@@ -72,7 +72,7 @@ describe("setTLE()", () => {
 describe("GET /getSatelliteInfo", () => {
   it("Responds with json", async () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .get("/satellite/getSatelliteInfo")
       .expect("Content-Type", /json/)
       .expect(200);
@@ -84,7 +84,7 @@ describe("GET /getPolarPlotData", () => {
     setTleLines(defaultTleLine1, defaultTleLine2);
     let startTime = "2024-01-06T10:15:00Z";
     let endTime = "2024-01-06T10:22:00Z";
-    await request(app)
+    await request(AppServer)
       .get(
         "/satellite/getPolarPlotData?START_DATE=" +
           startTime +
@@ -96,7 +96,7 @@ describe("GET /getPolarPlotData", () => {
   });
   it("Throws error if invalid Date", async () => {
     setTleLines(defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .get(
         "/satellite/getPolarPlotData?START_DATE=bad_string&END_DATE=bad_string"
       )
@@ -109,7 +109,7 @@ describe("GET /getMaxElevation", () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
     let startTime = "2024-01-06T10:15:00Z";
     let endTime = "2024-01-06T10:22:00Z";
-    await request(app)
+    await request(AppServer)
       .get(
         "/satellite/getMaxElevation?START_DATE=" +
           startTime +
@@ -121,7 +121,7 @@ describe("GET /getMaxElevation", () => {
   });
   it("Throws error if invalid Date", async () => {
     setTleLines(defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .get(
         "/satellite/getMaxElevation?START_DATE=bad_string&END_DATE=bad_string"
       )
@@ -132,13 +132,13 @@ describe("GET /getMaxElevation", () => {
 describe("GET /getNextPasses", () => {
   it("Responds with json", async () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .get("/satellite/getNextPasses")
       .expect("Content-Type", /json/)
       .expect(200);
   });
   it("Throws error if invalid TLE", async () => {
-    await request(app)
+    await request(AppServer)
       .get("/satellite/getNextPasses")
       .query({ noradId: "!!11" })
       .expect(500);
@@ -148,7 +148,7 @@ describe("GET /getNextPasses", () => {
 describe("GET /getSolarIlluminationCycle", () => {
   it("Responds with json", async () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .get("/satellite/getSolarIlluminationCycle")
       .query({
         noradId: defaultNoradId,
@@ -157,7 +157,7 @@ describe("GET /getSolarIlluminationCycle", () => {
       .expect(200);
   });
   it("Throws error if invalid TLE", async () => {
-    await request(app)
+    await request(AppServer)
       .get("/satellite/getNextPasses")
       .query({
         noradId: "!!11",
@@ -169,13 +169,13 @@ describe("GET /getSolarIlluminationCycle", () => {
 describe("POST /changeTLE", () => {
   it("Changes TLE Successfully", async () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
-    await request(app)
+    await request(AppServer)
       .post("/satellite/changeTLE")
       .send({ noradID: defaultNoradId })
       .expect(200);
   });
   it("Does Not Change TLE with Empty Body", async () => {
     setTleLines(defaultNoradId, defaultTleLine1, defaultTleLine2);
-    await request(app).post("/satellite/changeTLE").expect(400);
+    await request(AppServer).post("/satellite/changeTLE").expect(400);
   });
 });
