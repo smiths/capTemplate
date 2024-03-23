@@ -112,11 +112,11 @@ const FuturePasses = ({ noradId }: Props) => {
   useEffect(() => {
     const runFetch = async () => {
       setIsLoading(true);
-      await fetchPasses(noradId, startTime, endTime); // Fetch data initially
+      await fetchPasses(noradId); // Fetch data initially
       setIsLoading(false);
     };
     void runFetch();
-  }, [noradId, startTime, endTime]);
+  }, [noradId]);
 
   const [filter, setFilter] = useState("Show All Passes");
   const handleFilterChange = (event: any) => {
@@ -139,17 +139,21 @@ const FuturePasses = ({ noradId }: Props) => {
         <Box
           sx={{
             display: "flex",
+            width: "100%",
             flexDirection: "row",
             gap: "20px",
             justifyContent: "right",
-            paddingRight: "10%",
           }}
         >
           {filter === "Custom Date" && (
             <>
               <Typography
                 variant="h6"
-                sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
+                sx={{
+                  paddingTop: "17px",
+                  fontSize: "16px",
+                  color: "var(--material-theme-white)",
+                }}
               >
                 Start Date
               </Typography>
@@ -157,9 +161,9 @@ const FuturePasses = ({ noradId }: Props) => {
                 type="date"
                 value={startTime}
                 onChange={(e) => {
-                  const localDate = parseLocalDate(e.target.value);
-                  setStartTime(localDate.toISOString());
+                  setStartTime(e.target.value);
                   if (filter === "Custom Date") {
+                    const localDate = parseLocalDate(e.target.value);
                     fetchPasses(noradId, localDate.toISOString(), endTime);
                   }
                 }}
@@ -174,7 +178,11 @@ const FuturePasses = ({ noradId }: Props) => {
               />
               <Typography
                 variant="h6"
-                sx={{ paddingTop: "17px", fontSize: "16px" ,color: "var(--material-theme-white)"}}
+                sx={{
+                  paddingTop: "17px",
+                  fontSize: "16px",
+                  color: "var(--material-theme-white)",
+                }}
               >
                 End Date
               </Typography>
@@ -182,9 +190,9 @@ const FuturePasses = ({ noradId }: Props) => {
                 type="date"
                 value={endTime}
                 onChange={(e) => {
-                  const localDate = parseLocalDate(e.target.value);
-                  setEndTime(localDate.toISOString());
+                  setEndTime(e.target.value);
                   if (filter === "Custom Date") {
+                    const localDate = parseLocalDate(e.target.value);
                     fetchPasses(noradId, startTime, localDate.toISOString());
                   }
                 }}
@@ -204,7 +212,7 @@ const FuturePasses = ({ noradId }: Props) => {
               />
             </>
           )}
-          <FormControl variant="outlined" sx={{ width: "230px" }}>
+          <FormControl variant="outlined" sx={{ width: "200px" }}>
             <Select
               value={filter}
               onChange={handleFilterChange}
