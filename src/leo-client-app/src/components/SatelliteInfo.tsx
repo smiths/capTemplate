@@ -95,7 +95,7 @@ const SatelliteInfo = ({ noradId }: Props) => {
 
   return (
     <div className="satelliteInfo">
-      <Stack alignItems="flex-start" spacing={1}>
+      <Stack alignItems="flex-start" sx={{ marginBot: "15px" }} spacing={1}>
         <p className="headerBox">Satellite Information</p>
         {isLoading && (
           <Box className="loadingBox">
@@ -103,8 +103,12 @@ const SatelliteInfo = ({ noradId }: Props) => {
           </Box>
         )}
         {!isLoading && (
-          <Stack className="contentBox" spacing={0} sx={{color:"var(--material-theme-white)"}}>
-            <div className="material-themebodylarge" >
+          <Stack
+            className="contentBox"
+            spacing={0}
+            sx={{ color: "var(--material-theme-white)" }}
+          >
+            <div className="material-themebodylarge">
               Position ECI:
               <ul className="inner-list">
                 <li>X: {positionEci.x.toFixed(2)}</li>

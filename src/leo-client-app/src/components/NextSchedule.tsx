@@ -61,7 +61,7 @@ const NextSchedule = () => {
   return (
     <div className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
-        <p className="headerBox">Upcoming Schedule Queue</p>
+        <p className="headerBox">Next Schedule</p>
 
         {!firstSchedule ? (
           <Box className="loadingBox">
@@ -73,7 +73,8 @@ const NextSchedule = () => {
               href={`/execute-schedule/${satelliteId}/${
                 firstSchedule?._id ?? ""
               }`}
-              passHref>
+              passHref
+            >
               <Card
                 sx={{
                   //   minWidth: 150,
@@ -83,12 +84,13 @@ const NextSchedule = () => {
                     "var(--material-theme-sys-light-inverse-on-surface)",
                   cursor: "pointer",
                   borderRadius: 3,
-                  minHeight: 150,
+                  minHeight: 50,
                   maxHeight: 150,
                   display: "flex",
                   flexDirection: "column",
                   //   width: "100%",
-                }}>
+                }}
+              >
                 <CardContent>
                   <Stack spacing={0}>
                     <p className="cardTitle">
@@ -101,24 +103,6 @@ const NextSchedule = () => {
                         firstSchedule.endDate
                       )}
                     </p>
-
-                    <>
-                      {commands.data?.commands?.length ? (
-                        <>
-                          {commands.data.commands.map(
-                            (commandObj: any, index: number) => (
-                              // Render each command in a separate <p> tag
-                              <p key={index} className="cardSubtitle">
-                                {commandObj.command}
-                              </p>
-                            )
-                          )}
-                          <p className="cardSubtitle">...</p>
-                        </>
-                      ) : (
-                        <p className="cardSubtitle">No commands</p>
-                      )}
-                    </>
                   </Stack>
                 </CardContent>
               </Card>
