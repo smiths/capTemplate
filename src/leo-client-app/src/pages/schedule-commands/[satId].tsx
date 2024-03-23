@@ -15,9 +15,8 @@ function SchedulerPage() {
     <main>
       <Stack
         alignItems="center"
-        justifyContent="center"
         spacing={1}
-        sx={{ width: "100%", backgroundColor: "var(--material-theme-black)"}}
+        sx={{ width: "100%", minHeight: "100vh", backgroundColor: "var(--material-theme-black)"}}
       >
         <Navbar />
         <Scheduler />
