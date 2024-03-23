@@ -7,8 +7,9 @@ import { useRouter } from "next/router";
 
 function SchedulerPage() {
   const router = useRouter();
-  let { satId } = router.query as {
+  let { satId, scheduleId } = router.query as {
     satId: string;
+    scheduleId: string;
   };
   return (
     <main>
@@ -16,7 +17,7 @@ function SchedulerPage() {
         alignItems="center"
         justifyContent="center"
         spacing={1}
-        sx={{ width: "100%" }}
+        sx={{ width: "100%", backgroundColor: "var(--material-theme-black)"}}
       >
         <Navbar />
         <Scheduler />

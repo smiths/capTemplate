@@ -16,6 +16,7 @@ const UserName = ({ userName }: Props) => {
         textAlign: "left",
         boxSizing: "border-box",
         position: "relative",
+        color: "var(--material-theme-white)",
       }}
     >
       <span>{userName}&apos;s</span>
