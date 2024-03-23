@@ -100,6 +100,8 @@ export const getUserSatellites = async (userId: string) => {
   const res = await axios.get(`${BACKEND_URL}/users/getUserSatellites`, {
     params: { userId: userId },
   });
+
+  return res.data;
 };
 
 export const getValidCommands = async (satelliteId: string, userId: string) => {

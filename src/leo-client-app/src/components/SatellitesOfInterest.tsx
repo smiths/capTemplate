@@ -14,12 +14,13 @@ import {
   DialogTitle,
 } from "@mui/material";
 import Link from "next/link";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "../styles.css";
 import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
-import { addNewSatellite } from "@/constants/api";
+import { addNewSatellite, BACKEND_URL } from "@/constants/api";
 import { useGetUserSatellites } from "@/constants/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -34,13 +35,12 @@ type SatelliteDetails = {
 };
 
 const SatellitesOfInterest = ({ userId }: Props) => {
+  const satellites = useGetUserSatellites(userId);
+  const queryClient = useQueryClient();
+
   const [open, setOpen] = useState(false);
   const [satelliteName, setSatelliteName] = useState("");
   const [noradId, setNoradId] = useState("");
-
-  const satellites = useGetUserSatellites(userId);
-
-  const queryClient = useQueryClient();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -52,12 +52,11 @@ const SatellitesOfInterest = ({ userId }: Props) => {
 
   const addSatellite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
       await addNewSatellite(satelliteName, noradId, userId);
     } catch (error) {}
-
     await queryClient.invalidateQueries({ queryKey: ["useGetUserSatellites"] });
-
     handleClose();
   };
 
@@ -71,8 +70,8 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           alignItems="flex-start"
           direction="row"
           spacing={5}>
-          {satellites.data?.satellitesOfInterest?.satellites?.length &&
-            satellites.data?.satellitesOfInterest.satellites.map(
+          {satellites.data?.satellitesOfInterest?.satellites.length &&
+            satellites.data?.satellitesOfInterest?.satellites?.map(
               (satellite: any, index: number) => (
                 <Grid item key={index} spacing={1}>
                   <Link href={`/satellite/${satellite._id}`} passHref>
