@@ -15,7 +15,7 @@ const userSchema = new Schema(
     satellites: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Satellites",
+        ref: "Satellite",
       },
     ],
   },

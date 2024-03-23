@@ -1,5 +1,7 @@
 import * as dotenv from "dotenv";
+import UserModel from "../models/user";
 import SatelliteModel from "../models/satellite";
+
 import globals from "../globals/globals";
 import {
   getNextPasses,
@@ -182,32 +184,39 @@ type GetNextPassesByNoradAndTimeProp = {
   };
 };
 
-router.get("/getNextPassesByTime", async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
-  const num_days = 7;
-  const today = new Date();
-  let endTime = new Date(today.getTime() + (num_days*1000 * 60 * 60 * 24));
-  let startTime = today;
-  if (req.query.startTime){
-    startTime = new Date(req.query.startTime);
-  } 
-  if (req.query.endTime){
-    endTime = new Date(req.query.endTime);
-  };
-  const {noradId} = req.query;
-  const maxTime = new Date(today.getTime()+(num_days*1000 * 60 * 60 * 24));
-  if (startTime < today || startTime > maxTime || startTime > endTime || endTime > maxTime){
-    return res.status(500).json({error: "Wrong time slots provided"});
-  };
-  
+router.get(
+  "/getNextPassesByTime",
+  async (req: GetNextPassesByNoradAndTimeProp, res: any) => {
+    const num_days = 7;
+    const today = new Date();
+    let endTime = new Date(today.getTime() + num_days * 1000 * 60 * 60 * 24);
+    let startTime = today;
+    if (req.query.startTime) {
+      startTime = new Date(req.query.startTime);
+    }
+    if (req.query.endTime) {
+      endTime = new Date(req.query.endTime);
+    }
+    const { noradId } = req.query;
+    const maxTime = new Date(today.getTime() + num_days * 1000 * 60 * 60 * 24);
+    if (
+      startTime < today ||
+      startTime > maxTime ||
+      startTime > endTime ||
+      endTime > maxTime
+    ) {
+      return res.status(500).json({ error: "Wrong time slots provided" });
+    }
 
-  try {
-    const nextPasses = await getNextPassesByTime(noradId, startTime, endTime);
-    return res.json({ nextPasses });
-  } catch (error) {
-    console.error("Error in getNextPasses:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    try {
+      const nextPasses = await getNextPassesByTime(noradId, startTime, endTime);
+      return res.json({ nextPasses });
+    } catch (error) {
+      console.error("Error in getNextPasses:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   }
-});
+);
 
 router.get("/getSolarIlluminationCycle", async (req: any, res: any) => {
   const noradId = getNoradId(req.query.noradId);
@@ -316,6 +325,7 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
   const tleLines = await getTLE(body.noradId);
+
   setTleLines(body.noradId, tleLines[0], tleLines[1]);
 
   const newSatellite = new SatelliteModel({
@@ -326,6 +336,9 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   });
 
   const satellite = await SatelliteModel.create(newSatellite);
+  await UserModel.findByIdAndUpdate(body.userId, {
+    $addToSet: { satellites: satellite.id },
+  });
 
   // Emit event to create schedules for next 7 days
   SatelliteEventEmitter.emit(

@@ -41,7 +41,9 @@ router.patch("/updateOperatorRole/:userId", async (req: any, res: any) => {
 router.get("/getUserSatellites", async (req: any, res: any) => {
   const userId = req.query.userId;
 
-  const satellitesOfInterest = (await User.findById(userId))?.satellites;
+  const satellitesOfInterest = await User.findById(userId).populate(
+    "satellites"
+  );
   res
     .status(200)
     .json({ message: "Fetched satellites of interest", satellitesOfInterest });
