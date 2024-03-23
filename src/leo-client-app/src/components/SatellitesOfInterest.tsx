@@ -1,17 +1,18 @@
 "use client";
 
-import { 
-  Card, 
-  CardContent, 
-  Grid, 
+import {
+  Card,
+  CardContent,
+  Grid,
   Stack,
-  TextField, 
-  Button, 
-  IconButton, 
+  TextField,
+  Button,
+  IconButton,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, } from "@mui/material";
+  DialogTitle,
+} from "@mui/material";
 import Link from "next/link";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -19,7 +20,7 @@ import "../styles.css";
 import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
-import {addNewSatellite, BACKEND_URL } from "@/constants/api";
+import { addNewSatellite, BACKEND_URL } from "@/constants/api";
 
 type Props = {
   userId: string;
@@ -34,8 +35,8 @@ type SatelliteDetails = {
 const SatellitesOfInterest = ({ userId }: Props) => {
   const [satellites, setSatellites] = useState<SatelliteDetails[]>([]);
   const [open, setOpen] = useState(false);
-  const [satelliteName, setSatelliteName] = useState('');
-  const [noradId, setNoradId] = useState('');
+  const [satelliteName, setSatelliteName] = useState("");
+  const [noradId, setNoradId] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,7 +45,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   const fetchSatellites = async (satelliteId: string) => {
     try {
       const response = await axios.get(
@@ -87,7 +88,7 @@ const SatellitesOfInterest = ({ userId }: Props) => {
 
   const addSatellite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Satellite Name:', satelliteName, 'NORAD ID:', noradId);
+    console.log("Satellite Name:", satelliteName, "NORAD ID:", noradId);
     const newSatellite = {
       name: satelliteName,
       noradId,
@@ -95,19 +96,20 @@ const SatellitesOfInterest = ({ userId }: Props) => {
     };
     setSatellites([...satellites, newSatellite]);
     await addNewSatellite(satelliteName, noradId);
-    handleClose(); 
+    handleClose();
   };
 
   return (
     <div className="satellitesOfInterest">
       <Stack alignItems="flex-start" spacing={1}>
-        <UserName userName="65a5e14ee0d601e0e8c4a387" />
-        <p className="headerBox">Saved Satellites</p>
+        <UserName userName="leo" />
+        <p className="headerBox"></p>
         <Stack
           className="satellitesOfInterestBox"
           alignItems="flex-start"
           direction="row"
-          spacing={5}>
+          spacing={5}
+        >
           {satellites.map((satellite, index) => (
             <Grid item key={index} spacing={1}>
               <Link href={`/satellite/${satellite.satId}`} passHref>
@@ -128,7 +130,8 @@ const SatellitesOfInterest = ({ userId }: Props) => {
                     alignItems: "center",
                     marginLeft: 2,
                     marginRight: 2,
-                  }}>
+                  }}
+                >
                   <CardContent>
                     <p className="cardTitle">{satellite.name}</p>
                     <p className="cardSubtitle">{satellite.noradId}</p>
@@ -138,42 +141,56 @@ const SatellitesOfInterest = ({ userId }: Props) => {
             </Grid>
           ))}
         </Stack>
-      <IconButton onClick={handleClickOpen} sx={{size: 'medium', backgroundColor: "var(--material-theme-sys-light-inverse-on-surface)", color: "var(--material-theme-black)", borderRadius: 20}}> 
-      Add Custom Satellite + </IconButton>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Satellite</DialogTitle>
-        <form onSubmit={addSatellite}>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Satellite Name"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={satelliteName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatelliteName(e.target.value)}
-              required
-            />
-            <TextField
-              margin="dense"
-              id="noradId"
-              label="NORAD ID"
-              type="number"
-              fullWidth
-              variant="standard"
-              value={noradId}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNoradId(e.target.value)}
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Submit</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
+        <IconButton
+          onClick={handleClickOpen}
+          sx={{
+            size: "medium",
+            backgroundColor:
+              "var(--material-theme-sys-light-inverse-on-surface)",
+            color: "var(--material-theme-black)",
+            borderRadius: 20,
+          }}
+        >
+          Add Custom Satellite +{" "}
+        </IconButton>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Add New Satellite</DialogTitle>
+          <form onSubmit={addSatellite}>
+            <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Satellite Name"
+                type="text"
+                fullWidth
+                variant="standard"
+                value={satelliteName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSatelliteName(e.target.value)
+                }
+                required
+              />
+              <TextField
+                margin="dense"
+                id="noradId"
+                label="NORAD ID"
+                type="number"
+                fullWidth
+                variant="standard"
+                value={noradId}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setNoradId(e.target.value)
+                }
+                required
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button type="submit">Submit</Button>
+            </DialogActions>
+          </form>
+        </Dialog>
       </Stack>
     </div>
   );
