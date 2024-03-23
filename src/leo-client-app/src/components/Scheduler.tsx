@@ -61,6 +61,11 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
+function parseLocalDate(dateString: string) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}
+
 const Scheduler = () => {
   const router = useRouter();
   let { satId } = router.query as {
@@ -212,7 +217,8 @@ const Scheduler = () => {
               onChange={(e) => {
                 setStartTime(e.target.value);
                 if (filter === "Custom Date") {
-                  fetchSchedules(satelliteId, e.target.value, endTime);
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(satelliteId, localDate.toISOString(), endTime);
                 }
               }}
               InputLabelProps={{ shrink: true }}
@@ -236,7 +242,8 @@ const Scheduler = () => {
               onChange={(e) => {
                 setEndTime(e.target.value);
                 if (filter === "Custom Date") {
-                  fetchSchedules(satelliteId, startTime, e.target.value);
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(satelliteId, startTime, localDate.toISOString());
                 }
               }}
               InputLabelProps={{ shrink: true }}
