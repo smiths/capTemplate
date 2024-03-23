@@ -1,6 +1,7 @@
 export interface MyGlobals {
   tleLines: { [id: string]: string[] };
   satelliteName: string;
+  jobFlags: { [id: string]: boolean };
 }
 
 const globals: MyGlobals = {
@@ -15,6 +16,7 @@ const globals: MyGlobals = {
     ],
   },
   satelliteName: "BDSAT-2",
+  jobFlags: {},
 };
 
 export default globals;

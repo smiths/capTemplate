@@ -14,6 +14,7 @@ import axios from "axios";
 import "../../styles.css";
 import { useRouter } from "next/router";
 import { BACKEND_URL } from "@/constants/api";
+import NextSchedule from "@/components/NextSchedule";
 
 const defaultNoradId = "55098";
 
@@ -53,7 +54,12 @@ function SatelliteInfoPage() {
       alignItems="center"
       justifyContent="center"
       spacing={1}
-      sx={{ height: "100vh", margin: "0 auto", width: "100%", backgroundColor: "var(--material-theme-black)"}}
+      sx={{
+        minHeight: "100vh",
+        margin: "0 auto",
+        width: "100%",
+        backgroundColor: "var(--material-theme-black)",
+      }}
     >
       <Navbar />
       <Grid
@@ -79,7 +85,7 @@ function SatelliteInfoPage() {
             boxSizing: "border-box",
           }}
         >
-          <Grid item xs={14} lg={10} sx={{boxSizing: "border-box" }}>
+          <Grid item xs={14} lg={10} sx={{ boxSizing: "border-box" }}>
             <Stack spacing={3} sx={{ boxSizing: "border-box" }}>
               <Box>
                 <UpcomingSchedules noradId={selectedNoradId} />
@@ -90,6 +96,9 @@ function SatelliteInfoPage() {
             </Stack>
           </Grid>
           <Grid item xs={12} lg={2} sx={{ boxSizing: "border-box" }}>
+            <Box>
+              <NextSchedule />
+            </Box>
             <SatelliteInfo noradId={selectedNoradId} />
           </Grid>
         </Grid>

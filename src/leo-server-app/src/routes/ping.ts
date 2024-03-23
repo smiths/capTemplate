@@ -6,9 +6,9 @@ router.use(express.json());
 
 router.get("", async (req: any, res: any) => {
   const sendMsg = await messageHandler.sendDataToClientAndAwaitResponse(
-    "credits\n",
+    "ping\n",
     5000
   );
-  res.status(500).json({ output: sendMsg.toString() });
+  res.status(201).json({ output: sendMsg.toString() });
 });
 module.exports = router;

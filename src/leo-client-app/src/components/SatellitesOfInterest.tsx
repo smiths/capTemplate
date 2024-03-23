@@ -14,13 +14,12 @@ import {
   DialogTitle,
 } from "@mui/material";
 import Link from "next/link";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles.css";
 import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
-import { addNewSatellite, BACKEND_URL } from "@/constants/api";
+import { addNewSatellite } from "@/constants/api";
 import { useGetUserSatellites } from "@/constants/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -62,13 +61,11 @@ const SatellitesOfInterest = ({ userId }: Props) => {
     handleClose();
   };
 
-  console.log(satellites.data);
-
   return (
     <div className="satellitesOfInterest">
       <Stack alignItems="flex-start" spacing={1}>
-        <UserName userName="65a5e14ee0d601e0e8c4a387" />
-        <p className="headerBox">Saved Satellites</p>
+        <UserName userName="leo" />
+        <p className="headerBox"></p>
         <Stack
           className="satellitesOfInterestBox"
           alignItems="flex-start"

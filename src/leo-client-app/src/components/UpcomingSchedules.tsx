@@ -142,77 +142,91 @@ const UpcomingSchedules = ({ noradId }: Props) => {
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Schedule Queue</p>
         <div className="futurePassesBox">
-        {isLoading ? (
-          <Box className="loadingBox">
-            <CircularProgress />
-          </Box>
-        ) : (
-          <TableContainer
-          component={Paper}
-            sx={{
-              maxWidth: "100%",
-              maxHeight: "400px",
-              borderRadius: "15px",
-              border: "2px solid black",
-              overflow: 'auto',
-              background: "var(--material-theme-sys-light-primary-fixed)",
-              "& .MuiTableCell-root": {
-                borderBottom: "2px solid black",
-                color: "var(--material-theme-black)",
-                textAlign: "left",
-                fontSize: "15px",
-              },
-            }}>
-                  <Table
-                    stickyHeader
-                    aria-label="simple table"
+          {isLoading ? (
+            <Box className="loadingBox">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <TableContainer
+              component={Paper}
+              sx={{
+                maxWidth: "100%",
+                maxHeight: "400px",
+                borderRadius: "15px",
+                border: "2px solid black",
+                overflow: "auto",
+                background: "var(--material-theme-sys-light-primary-fixed)",
+                "& .MuiTableCell-root": {
+                  borderBottom: "2px solid black",
+                  color: "var(--material-theme-black)",
+                  textAlign: "left",
+                  fontSize: "15px",
+                },
+              }}
+            >
+              <Table stickyHeader aria-label="simple table">
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      backgroundColor:
+                        "var(--material-theme-sys-light-primary-fixed)",
+                      "& .MuiTableCell-head": {
+                        backgroundColor:
+                          "var(--material-theme-sys-light-primary-fixed) !important",
+                      },
+                    }}
                   >
-                    <TableHead> 
-                      <TableRow 
-                        sx={{
-                          backgroundColor:
-                            "var(--material-theme-sys-light-primary-fixed)",
-                          "& .MuiTableCell-head": {
-                            backgroundColor:
-                              "var(--material-theme-sys-light-primary-fixed) !important",
-                          },
-                        }}
-                        >
-                        <TableCell>Date</TableCell>
-                        <TableCell>Time Range</TableCell>
-                        <TableCell>Schedule</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {schedules.map((schedule, index) => (
-                      <TableRow key={index}
-                        sx={{
-                          borderBottom: 2,
-                          borderTop: 2,
-                        }}
+                    <TableCell>Date</TableCell>
+                    <TableCell>Time Range</TableCell>
+                    <TableCell>Schedule</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {schedules.map((schedule, index) => (
+                    <TableRow
+                      key={index}
+                      sx={{
+                        borderBottom: 2,
+                        borderTop: 2,
+                      }}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ color: "black !important" }}
+                        align="left"
                       >
-                        <TableCell component="th" scope="row" sx={{ color: "black !important"}}
-                          align="left">
-                          <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
-                        </TableCell>
-                        <TableCell component="th" scope="row" sx={{ color: "black !important"}}
-                          align="left">
-                          <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <NextLink
-                              href={`/schedule-commands/${satId}/`}
-                              passHref
-                            >
+                        <Typography variant="subtitle1">
+                          {formatDate(schedule.startDate)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ color: "black !important" }}
+                        align="left"
+                      >
+                        <Typography variant="subtitle1">
+                          {formatTimeRange(
+                            schedule.startDate,
+                            schedule.endDate
+                          )}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <NextLink
+                          href={`/edit-schedule/${satId}/${schedule.id}`}
+                          passHref
+                        >
                           View Details
-                          </NextLink>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    </TableBody>
-                  </Table>
-          </TableContainer>
-        )}
+                        </NextLink>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </div>
       </Stack>
     </Box>

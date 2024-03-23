@@ -61,6 +61,11 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
+function parseLocalDate(dateString: string) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}
+
 const Scheduler = () => {
   const router = useRouter();
   let { satId } = router.query as {
@@ -76,7 +81,6 @@ const Scheduler = () => {
   const [satelliteName, setSatelliteName] = useState<string>("BDSAT-2");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const fetchName = async () => {
     try {
@@ -213,7 +217,8 @@ const Scheduler = () => {
               onChange={(e) => {
                 setStartTime(e.target.value);
                 if (filter === "Custom Date") {
-                  fetchSchedules(satelliteId, e.target.value, endTime);
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(satelliteId, localDate.toISOString(), endTime);
                 }
               }}
               InputLabelProps={{ shrink: true }}
@@ -237,7 +242,8 @@ const Scheduler = () => {
               onChange={(e) => {
                 setEndTime(e.target.value);
                 if (filter === "Custom Date") {
-                  fetchSchedules(satelliteId, startTime, e.target.value);
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(satelliteId, startTime, localDate.toISOString());
                 }
               }}
               InputLabelProps={{ shrink: true }}
@@ -286,7 +292,8 @@ const Scheduler = () => {
                   color: "var(--material-theme-sys-dark-on-primary)",
                   borderRadius: "15px",
                   "& .MuiMenuItem-root:hover": {
-                    backgroundColor: "var(--material-theme-sys-dark-on-primary-container)",
+                    backgroundColor:
+                      "var(--material-theme-sys-dark-on-primary-container)",
                   },
                 },
               },

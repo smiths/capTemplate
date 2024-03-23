@@ -1,11 +1,8 @@
-import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Box,
-  Card,
-  CardContent,
   CircularProgress,
-  Grid,
   Paper,
+  Grid,
   Stack,
   Table,
   TableBody,
@@ -13,9 +10,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
+  MenuItem,
+  Select,
+  FormControl,
+  TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import NextLink from "next/link";
 import axios from "axios";
 import "../styles.css";
 import "./styles/component.css";
@@ -59,47 +60,217 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
+function parseLocalDate(dateString: string) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}
+
 const FuturePasses = ({ noradId }: Props) => {
   const [passes, setPasses] = useState<Pass[][]>([]);
-  const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   function formatDateToISO(dateString: string) {
     const date = new Date(dateString);
     return date.toISOString().slice(0, 19) + "Z";
   }
 
-  const fetchPasses = async () => {
-    try {
-      const res = await axios.get(`${BACKEND_URL}/satellite/getNextPasses`, {
-        params: { noradId: noradId },
+  const fetchPasses = async (
+    noradId: string,
+    startTime: string = "",
+    endTime: string = ""
+  ) => {
+    setIsLoading(true);
+
+    let endpoint = `${BACKEND_URL}/satellite/getNextPasses`;
+
+    const defaultParams: any = {
+      noradId,
+    };
+
+    let queryParams = new URLSearchParams(defaultParams);
+
+    if (startTime) {
+      endpoint = `${BACKEND_URL}/satellite/getNextPassesByTime`;
+      queryParams = new URLSearchParams({
+        ...defaultParams,
+        ...(startTime && { startTime: startTime }),
+        ...(endTime && { endTime: endTime }),
       });
+    }
+
+    try {
+      const res = await axios.get(`${endpoint}?${queryParams}`);
       setPasses(res.data?.nextPasses ?? []);
     } catch (error) {
       console.error("Error fetching passes:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     const runFetch = async () => {
       setIsLoading(true);
-      await fetchPasses(); // Fetch data initially
+      await fetchPasses(noradId); // Fetch data initially
       setIsLoading(false);
     };
     void runFetch();
-    // Update passes every 1000ms (1s)
-    // TODO: Change to a week for refreshes
-    const passesFetchInterval = setInterval(fetchPasses, 1000);
-
-    return () => {
-      clearInterval(passesFetchInterval); // Clear the interval when unmounting
-    };
   }, [noradId]);
+
+  const [filter, setFilter] = useState("Show All Passes");
+  const handleFilterChange = (event: any) => {
+    const newFilter = event.target.value as string;
+    setFilter(newFilter);
+
+    if (newFilter === "Show All Passes") {
+      fetchPasses(noradId);
+    } else if (newFilter === "Custom Date") {
+      setStartTime("");
+      setEndTime("");
+      fetchPasses(noradId, "", "");
+    }
+  };
 
   return (
     <div className="futurePasses">
       <Stack alignItems="flex-start" spacing={1}>
-        <p className="headerBox">Next Week&apos;s Passes</p>
+        <Grid container spacing={1}>
+          <Grid item xs={2} sx={{ marginTop: "30px" }}>
+            <p className="headerBox">Next Week&apos;s Passes</p>
+          </Grid>
+          <Grid item xs={10} alignSelf={"flex-end"}>
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                flexDirection: "row",
+                gap: "20px",
+                justifyContent: "right",
+              }}
+            >
+              {filter === "Custom Date" && (
+                <>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      paddingTop: "17px",
+                      fontSize: "16px",
+                      color: "var(--material-theme-white)",
+                    }}
+                  >
+                    Start Date
+                  </Typography>
+                  <TextField
+                    type="date"
+                    value={startTime}
+                    onChange={(e) => {
+                      setStartTime(e.target.value);
+                      if (filter === "Custom Date") {
+                        const localDate = parseLocalDate(e.target.value);
+                        fetchPasses(noradId, localDate.toISOString(), endTime);
+                      }
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{
+                      style: { color: "var(--material-theme-white)" },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "var(--material-theme-white)",
+                          borderRadius: "15px",
+                        },
+                    }}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      paddingTop: "17px",
+                      fontSize: "16px",
+                      color: "var(--material-theme-white)",
+                    }}
+                  >
+                    End Date
+                  </Typography>
+                  <TextField
+                    type="date"
+                    value={endTime}
+                    onChange={(e) => {
+                      setEndTime(e.target.value);
+                      if (filter === "Custom Date") {
+                        const localDate = parseLocalDate(e.target.value);
+                        fetchPasses(
+                          noradId,
+                          startTime,
+                          localDate.toISOString()
+                        );
+                      }
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{
+                      style: {
+                        color: "var(--material-theme-white)",
+                        borderColor: "var(--material-theme-white)",
+                      },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "var(--material-theme-white)",
+                          borderRadius: "15px",
+                        },
+                    }}
+                  />
+                </>
+              )}
+              <FormControl variant="outlined" sx={{ width: "200px" }}>
+                <Select
+                  value={filter}
+                  onChange={handleFilterChange}
+                  sx={{
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "transparent",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "var(--material-theme-sys-dark-on-primary)",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "var(--material-theme-sys-dark-on-primary)",
+                    },
+                    textTransform: "none",
+                    fontSize: "1rem",
+                    "& .MuiSelect-select": {
+                      paddingLeft: "30px",
+                    },
+                    backgroundColor: "var(--material-theme-sys-dark-primary)",
+                    color: "var(--material-theme-sys-dark-on-primary)",
+                    borderRadius: "15px",
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        backgroundColor:
+                          "var(--material-theme-sys-dark-primary)",
+                        color: "var(--material-theme-sys-dark-on-primary)",
+                        borderRadius: "15px",
+                        "& .MuiMenuItem-root:hover": {
+                          backgroundColor:
+                            "var(--material-theme-sys-dark-on-primary-container)",
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <MenuItem value="Show All Passes">Show All Passes</MenuItem>
+                  <MenuItem value="Custom Date">Custom Date</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+        </Grid>
+
         <div className="futurePassesBox">
           {isLoading ? (
             <Box className="loadingBox">

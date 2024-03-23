@@ -3,6 +3,10 @@ import {
   getAllOperators,
   getCommandsBySchedule,
   getUserSatellites,
+  getLogByCommand,
+  getPingSocket,
+  getSchedulesBySatellite,
+  getValidCommands,
 } from "./api";
 
 export const useGetAllOperators = () => {
@@ -12,10 +16,13 @@ export const useGetAllOperators = () => {
   });
 };
 
-export const useGetCommandsBySchedule = (scheduleId: string) => {
+export const useGetCommandsBySchedule = (
+  scheduleId: string,
+  limit?: number
+) => {
   return useQuery({
     queryKey: ["useGetCommandsBySchedule"],
-    queryFn: () => getCommandsBySchedule(scheduleId),
+    queryFn: () => getCommandsBySchedule(scheduleId, limit),
     enabled: !!scheduleId,
   });
 };
@@ -25,5 +32,43 @@ export const useGetUserSatellites = (userId: string) => {
     queryKey: ["useGetUserSatellites"],
     queryFn: () => getUserSatellites(userId),
     enabled: !!userId,
+  });
+};
+
+export const useGetValidCommands = (satelliteId: string, userId: string) => {
+  return useQuery({
+    queryKey: ["useGetValidCommands"],
+    queryFn: () => getValidCommands(satelliteId, userId),
+    enabled: !!satelliteId && !!userId,
+  });
+};
+
+export const useGetSchedulesBySatellite = (
+  satelliteId: string,
+  limit?: number,
+  status?: string,
+  page?: number
+) => {
+  return useQuery({
+    queryKey: ["useGetSchedulesBySatellite"],
+    queryFn: () => getSchedulesBySatellite(satelliteId, limit, status, page),
+    enabled: !!satelliteId,
+  });
+};
+
+export const useGetLogByCommand = (commandId: string) => {
+  return useQuery({
+    queryKey: ["useGetLogByCommand"],
+    queryFn: () => getLogByCommand(commandId),
+    enabled: !!commandId,
+  });
+};
+
+export const useGetPingSocket = () => {
+  return useQuery({
+    queryKey: ["useGetPingSocket"],
+    queryFn: () => getPingSocket(),
+    // Refetch every 5 seconds
+    refetchInterval: 5000,
   });
 };

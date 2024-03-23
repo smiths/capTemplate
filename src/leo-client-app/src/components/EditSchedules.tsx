@@ -9,13 +9,15 @@ import "./styles/Scheduler.css";
 import SatelliteName from "./SatelliteName";
 import { Box, Card, Typography, Stack, Button } from "@mui/material";
 import axios from "axios";
+import { ReactTerminal } from "react-terminal";
+import SchedulerTerminal from "./SchedulerTerminal";
 
 const EditScheduler = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const satId = router.query?.satId?.toString() ?? "";
   const scheduleId = router.query?.scheduleId?.toString() ?? "";
-  const satelliteId = router.query?.satelliteId?.toString() ?? "";
+  const satelliteId = router.query?.satId?.toString() ?? "";
   const adminUserId: string = "65a5e11fe0d601e0e8c4a385";
 
   // operator
@@ -98,6 +100,16 @@ const EditScheduler = () => {
     mutate();
   };
 
+  const commands = {
+    help: (
+      <Stack flexWrap={"wrap"} direction={"row"} spacing={4}>
+        {validCommands.map((cmd, index) => (
+          <Typography key={cmd + index}>{cmd}</Typography>
+        ))}
+      </Stack>
+    ),
+  };
+
   return (
     <Stack
       style={{
@@ -114,8 +126,7 @@ const EditScheduler = () => {
           display: "flex",
           justifyContent: "space-around",
           alignItems: "flex-start",
-        }}
-      >
+        }}>
         <Card
           sx={{
             minWidth: "200px",
@@ -123,15 +134,13 @@ const EditScheduler = () => {
             borderRadius: "16px",
             padding: "10px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}
-        >
+          }}>
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container",
-            }}
-          >
+            }}>
             Valid Commands to Add
           </Typography>
           {validCommands &&
@@ -142,14 +151,16 @@ const EditScheduler = () => {
                 className="scheduleButton"
                 onClick={() => addCommand(command)}
                 sx={{
-                  color: 'var(--material-theme-white)',
-                  border: '2px solid',
-                  mb: '10px',
-                  borderColor: 'var(--material-theme-sys-light-surface-variant)',
-                  '&:hover': {
-                    backgroundColor: 'var(--material-theme-sys-light-primary-container)',
-                    borderColor: 'var(--material-theme-white)',
-                  }
+                  color: "var(--material-theme-white)",
+                  border: "2px solid",
+                  mb: "10px",
+                  borderColor:
+                    "var(--material-theme-sys-light-surface-variant)",
+                  "&:hover": {
+                    backgroundColor:
+                      "var(--material-theme-sys-light-primary-container)",
+                    borderColor: "var(--material-theme-white)",
+                  },
                 }}>
                 {command}
               </Button>
@@ -163,15 +174,13 @@ const EditScheduler = () => {
             overflow: "auto",
             marginLeft: "220px",
             backgroundColor: "var(--material-theme-sys-dark-background)",
-          }}
-        >
+          }}>
           <Typography
             variant="h4"
             style={{
               width: "100%",
               color: "var(--material-theme-sys-light-secondary-container)",
-            }}
-          >
+            }}>
             Current Schedules
           </Typography>
           {currentSchedule &&

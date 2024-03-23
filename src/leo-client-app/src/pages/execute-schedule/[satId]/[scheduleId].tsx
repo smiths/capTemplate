@@ -2,8 +2,9 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import Navbar from "@/components/navbar/Navbar";
 import EditScheduler from "@/components/EditSchedules";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
+import ExecuteScheduleCard from "@/components/ExecuteScheduleCard";
 
 type Props = {
   noradId: string;
@@ -18,9 +19,9 @@ function EditSchedulePage() {
   };
   return (
     <main>
-      <Stack sx={{ width: "100%", minHeight: "100vh", backgroundColor: "var(--material-theme-black)" }} alignItems="center" p={2}>
+      <Stack sx={{ width: "100%" }} alignItems="center" p={2}>
         <Navbar />
-        <EditScheduler />
+        <ExecuteScheduleCard />
       </Stack>
     </main>
   );

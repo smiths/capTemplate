@@ -8,6 +8,11 @@ import { scheduleJobForNextOverpass } from "../jobs/schedule.job";
 import { ScheduleEventEmitter } from "../event/schedule.event";
 import { ScheduleStatus } from "../types/schedule";
 import SatelliteUser from "../models/satelliteUser";
+import globals from "../globals/globals";
+
+const { sendDataToClientAndAwaitResponse } = require("../messageHandler");
+
+const delay = (ms: any) => new Promise((res) => setTimeout(res, ms));
 
 // Executes command sequences for the specified schedule
 export const executeScheduledCommands = async (
@@ -20,9 +25,11 @@ export const executeScheduledCommands = async (
     status: CommandStatus.QUEUED,
   };
 
+  const jobName = satelliteId + "_" + scheduleId;
+
   // ---- Get commands ----
   const commands = await Command.find(filter)
-    .sort({ createdAt: "desc", priority: "asc" })
+    .sort({ createdAt: "asc", priority: "asc" })
     .exec();
 
   const length = commands.length;
@@ -33,7 +40,7 @@ export const executeScheduledCommands = async (
 
   // ---- Loop through commands and execute them ----
   while (schedule?.startDate && endTime && endTime > Date.now()) {
-    if (ind >= length) {
+    if (ind >= length || !globals.jobFlags[jobName]) {
       break;
     }
 
@@ -44,10 +51,13 @@ export const executeScheduledCommands = async (
     const respMsg = await Promise.race([
       // TODO: Replace with websocket call
       new Promise((resolve, reject) =>
-        setTimeout(() => resolve("Command successfully sent"), 500)
+        setTimeout(
+          () => sendDataToClientAndAwaitResponse(currCommand.command),
+          3000
+        )
       ),
       new Promise((resolve, reject) =>
-        setTimeout(() => reject("Command timeout"), currCommand.delay ?? 1000)
+        setTimeout(() => reject("Command timeout"), 4000)
       ),
     ])
       .then((res) => res)
@@ -55,15 +65,13 @@ export const executeScheduledCommands = async (
 
     const response = { message: respMsg };
 
-    setTimeout(() => {}, currCommand.delay); // delay
-
     // update cmd
     await Command.findByIdAndUpdate(currCommand.id, {
       status: CommandStatus.EXECUTED,
     }).exec();
 
     const logObj = {
-      command: currCommand.id,
+      commandId: currCommand.id,
       user: currCommand.userId,
       satelliteId: satelliteId,
       scheduleId: scheduleId,
@@ -73,6 +81,7 @@ export const executeScheduledCommands = async (
     await Log.create(logObj);
 
     ind += 1;
+    delay(5000); // delay
     currTime = Date.now();
   }
 
@@ -85,6 +94,7 @@ export const executeScheduledCommands = async (
   //   Emit event to create new schedule
   ScheduleEventEmitter.emit(
     "overpassFinished",
+    scheduleId,
     satelliteId,
     nextSchedule?.id,
     nextSchedule?.startDate

@@ -81,11 +81,16 @@ export const removeCommandFromSchedule = async (
   return res.data;
 };
 
-export const getCommandsBySchedule = async (scheduleId: string) => {
+export const getCommandsBySchedule = async (
+  scheduleId: string,
+  limit?: number
+) => {
+  const configLimit = limit ?? 100;
+
   const res = await axios.get(`${BACKEND_URL}/schedule/getCommandsBySchedule`, {
     params: {
       scheduleId,
-      limit: 100,
+      limit: configLimit,
     },
   });
   return res.data;
@@ -95,6 +100,101 @@ export const getUserSatellites = async (userId: string) => {
   const res = await axios.get(`${BACKEND_URL}/users/getUserSatellites`, {
     params: { userId: userId },
   });
+};
 
+export const getValidCommands = async (satelliteId: string, userId: string) => {
+  const res = await axios.get(
+    `${BACKEND_URL}/satelliteUser/getCommandsBySatelliteAndUser`,
+    {
+      params: {
+        satelliteId,
+        userId,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const getSchedulesBySatellite = async (
+  satelliteId: string,
+  limit?: number,
+  status?: string,
+  page?: number
+) => {
+  const res = await axios.get(
+    `${BACKEND_URL}/schedule/getSchedulesBySatellite`,
+    {
+      params: {
+        satelliteId,
+        ...(limit && { limit }),
+        ...(status && { status }),
+        ...(page && { page }),
+      },
+    }
+  );
+  return res.data;
+};
+
+export const sendCommandToForwarder = async (
+  userId: string,
+  scheduleId: string,
+  satelliteId: string,
+  command: string
+) => {
+  const config = {
+    params: { userId, scheduleId, satelliteId },
+  };
+
+  const body = {
+    command,
+  };
+  const res = await axios.post(
+    `${BACKEND_URL}/forwarder/sendCommand`,
+    body,
+    config
+  );
+  return res.data;
+};
+
+export const executeSchedule = async (
+  scheduleId: string,
+  satelliteId: string
+) => {
+  const config = {
+    params: { scheduleId, satelliteId },
+  };
+
+  const res = await axios.post(
+    `${BACKEND_URL}/schedule/executeSchedule`,
+    null,
+    config
+  );
+  return res.data;
+};
+
+export const stopSchedule = async (scheduleId: string, satelliteId: string) => {
+  const config = {
+    params: { scheduleId, satelliteId },
+  };
+
+  const res = await axios.post(
+    `${BACKEND_URL}/schedule/cancelSchedule`,
+    null,
+    config
+  );
+  return res.data;
+};
+
+export const getLogByCommand = async (commandId: string) => {
+  const res = await axios.get(`${BACKEND_URL}/log/getLogByCommand`, {
+    params: {
+      commandId,
+    },
+  });
+  return res.data;
+};
+
+export const getPingSocket = async () => {
+  const res = await axios.get(`${BACKEND_URL}/ping`);
   return res.data;
 };
