@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import "../styles.css";
@@ -28,6 +29,8 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
     handleClose();
   };
 
+  console.log(logData)
+
   return (
     <Dialog
       open={open}
@@ -47,7 +50,11 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
         sx={{ background: "var(--material-theme-sys-light-primary-fixed)" }}
       >
         <DialogContentText id="alert-dialog-description">
-          {logData?.response}
+        <Typography variant={"body2"}>
+            <pre>
+        {logData?.response &&
+                JSON.stringify(logData.response, undefined, 2)}</pre>{" "}
+                </Typography>{" "}
         </DialogContentText>
       </DialogContent>
       <DialogActions
