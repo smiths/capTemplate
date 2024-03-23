@@ -1,6 +1,6 @@
 const supertest = require("supertest");
-const app = require("../app");
-const request = supertest(app);
+const { AppServer } = require("../app");
+const request = supertest(AppServer);
 const { connectDB, disconnectDB } = require("../database/database");
 
 import User from "../models/user";
@@ -36,7 +36,7 @@ describe("PATCH /updateSatelliteUser", () => {
       email: "test6@gmail.com",
       role: "ADMIN",
     });
-    
+
     users = await User.create([user_1, user_2, user_3]);
 
     const satellite = await Satellite.create({
@@ -55,7 +55,6 @@ describe("PATCH /updateSatelliteUser", () => {
     });
 
     satUser = await SatelliteUser.create(satUser1);
-
   });
 
   afterAll(async () => {
@@ -112,7 +111,6 @@ describe("PATCH /updateSatelliteUser", () => {
   });
 });
 
-
 // -------- Get SatelliteUser Endpoint --------
 describe("GET ", () => {
   let satelliteId: any;
@@ -136,7 +134,7 @@ describe("GET ", () => {
       email: "test6@gmail.com",
       role: "ADMIN",
     });
-    
+
     users = await User.create([user_1, user_2, user_3]);
 
     const satellite = await Satellite.create({
@@ -155,7 +153,6 @@ describe("GET ", () => {
     });
 
     satUser = await SatelliteUser.create(satUser1);
-
   });
 
   afterAll(async () => {
@@ -164,7 +161,6 @@ describe("GET ", () => {
   });
 
   it("Correctly gets satellite User from satelliteId", async () => {
-    
     let p = "/satelliteUser/getUserBySatellite";
     const res = await request.get(p).query({
       satelliteId: satelliteId,
@@ -180,7 +176,6 @@ describe("GET ", () => {
   });
 
   it("Wrong satelliteId", async () => {
-
     let p = "/satelliteUser/getUserBySatellite";
     const res = await request.get(p).query({
       satelliteId: users[0].id,
@@ -196,7 +191,6 @@ describe("GET ", () => {
   });
 
   it("Correctly gets satellite User from satelliteId and userId", async () => {
-    
     let p = "/satelliteUser/getCommandsBySatelliteAndUser";
     const res = await request.get(p).query({
       satelliteId: satelliteId,
@@ -213,7 +207,6 @@ describe("GET ", () => {
   });
 
   it("Wrong satelliteId from satelliteId and userId", async () => {
-    
     let p = "/satelliteUser/getCommandsBySatelliteAndUser";
     const res = await request.get(p).query({
       satelliteId: users[0].id,
@@ -230,7 +223,6 @@ describe("GET ", () => {
   });
 
   it("Wrong satelliteId from satelliteId and userId", async () => {
-    
     let p = "/satelliteUser/getCommandsBySatelliteAndUser";
     const res = await request.get(p).query({
       satelliteId: satelliteId,
@@ -245,7 +237,6 @@ describe("GET ", () => {
 
     expect(areIdsSame(actualIds, expectedIds)).not.toBe(true);
   });
-
 });
 
 // -------- Delete SatelliteUser Endpoint --------
@@ -271,7 +262,7 @@ describe("DELETE ", () => {
       email: "test6@gmail.com",
       role: "ADMIN",
     });
-    
+
     users = await User.create([user_1, user_2, user_3]);
 
     const satellite = await Satellite.create({
@@ -290,7 +281,6 @@ describe("DELETE ", () => {
     });
 
     satUser = await SatelliteUser.create(satUser1);
-
   });
 
   afterAll(async () => {
@@ -299,7 +289,6 @@ describe("DELETE ", () => {
   });
 
   it("Correctly deletes satellite User", async () => {
-    
     let p = "/satelliteUser/deleteByUser";
     const res = await request.delete(p).query({
       satelliteUserId: satUser.id,
@@ -308,11 +297,9 @@ describe("DELETE ", () => {
 
     const cmd = await SatelliteUser.findById(satUser.id);
     expect(cmd).toBeNull();
-
   });
 
   it("Wrong satelliteUserId deletes satellite User", async () => {
-    
     let p = "/satelliteUser/deleteByUser";
     const res = await request.delete(p).query({
       satelliteUserId: users[0].id,
@@ -320,11 +307,9 @@ describe("DELETE ", () => {
     });
 
     expect(res.status).toEqual(500);
-
   });
 
   it("NOT admin deletes satellite User", async () => {
-    
     let p = "/satelliteUser/deleteByUser";
     const res = await request.delete(p).query({
       satelliteUserId: satUser.id,
@@ -332,7 +317,5 @@ describe("DELETE ", () => {
     });
 
     expect(res.status).toEqual(500);
-
   });
-
 });

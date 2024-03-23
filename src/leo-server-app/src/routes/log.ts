@@ -19,7 +19,6 @@ type GetLogByScheduleProp = {
 
 type GetLogByCommandeProp = {
   query: {
-    satelliteId: string;
     commandId: string;
   };
 };
@@ -62,15 +61,15 @@ router.get(
   }
 );
 
-router.get("/getLogsByCommand", async (req: GetLogByCommandeProp, res: any) => {
-  const { satelliteId, commandId } = req.query;
+router.get("/getLogByCommand", async (req: GetLogByCommandeProp, res: any) => {
+  const { commandId } = req.query;
 
   const filter = {
     commandId: commandId,
   };
 
-  const logs = await Log.find(filter).exec();
-  res.status(201).json({ message: "Fetched logs by commandId", logs });
+  const log = await Log.findOne(filter).exec();
+  res.status(201).json({ message: "Fetched logs by commandId", log });
 });
 
 router.post("/createLog", async (req: CreateLogProp, res: any) => {

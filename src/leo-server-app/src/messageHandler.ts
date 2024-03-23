@@ -17,7 +17,7 @@ function sendDataToClientAndAwaitResponse(dataToSend: any, timeout: number) {
     const fragmentTimeoutDuration = 1000;
 
     if (!clientSocket || clientSocket.readyState !== WebSocket.OPEN) {
-      resolve("WebSocket connection is not open");
+      resolve("WEBSOCKET_NOT_CONNECT");
       return;
     }
 
@@ -41,7 +41,7 @@ function sendDataToClientAndAwaitResponse(dataToSend: any, timeout: number) {
     });
 
     // Send data to the client
-    clientSocket.send(dataToSend);
+    clientSocket.send(dataToSend + "\n");
   });
 }
 
