@@ -19,21 +19,26 @@ export const updateOperatorRole = async (userId: string, data: any) => {
   return operator.data;
 };
 
-export const addNewSatellite = async (satelliteName: string, noradID: string) => {
+export const addNewSatellite = async (
+  satelliteName: string,
+  noradID: string,
+  userId: string
+) => {
   const body = {
     name: satelliteName,
-    noradId: noradID
-    };
-    const res = await axios.post(
-      `${BACKEND_URL}/satellite/addSatelliteTarget`,
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return res.data;
+    noradId: noradID,
+    userId,
+  };
+  const res = await axios.post(
+    `${BACKEND_URL}/satellite/addSatelliteTarget`,
+    body,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return res.data;
 };
 
 export const sendCommandSchedule = async (
@@ -83,5 +88,13 @@ export const getCommandsBySchedule = async (scheduleId: string) => {
       limit: 100,
     },
   });
+  return res.data;
+};
+
+export const getUserSatellites = async (userId: string) => {
+  const res = await axios.get(`${BACKEND_URL}/users/getUserSatellites`, {
+    params: { userId: userId },
+  });
+
   return res.data;
 };
