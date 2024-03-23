@@ -55,7 +55,7 @@ function SatelliteInfoPage() {
       justifyContent="center"
       spacing={1}
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         margin: "0 auto",
         width: "100%",
         backgroundColor: "var(--material-theme-black)",

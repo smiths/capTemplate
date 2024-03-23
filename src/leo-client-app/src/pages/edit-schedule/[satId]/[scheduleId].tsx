@@ -18,7 +18,7 @@ function EditSchedulePage() {
   };
   return (
     <main>
-      <Stack sx={{ width: "100%", backgroundColor: "var(--material-theme-black)" }} alignItems="center" p={2}>
+      <Stack sx={{ width: "100%", minHeight: "100vh", backgroundColor: "var(--material-theme-black)" }} alignItems="center" p={2}>
         <Navbar />
         <EditScheduler />
       </Stack>
