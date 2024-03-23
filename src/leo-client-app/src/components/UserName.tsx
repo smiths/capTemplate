@@ -20,7 +20,6 @@ const UserName = ({ userName }: Props) => {
       }}
     >
       <span>{userName}&apos;s</span>
-      <br />
       <span> saved satellites</span>
     </Box>
   );
