@@ -103,17 +103,21 @@ const SatellitesOfInterest = ({ userId }: Props) => {
               )
             )}
         </Stack>
-        <IconButton
-          onClick={handleClickOpen}
+        <Button
+          variant="text"
           sx={{
-            size: "medium",
-            backgroundColor:
-              "var(--material-theme-sys-light-inverse-on-surface)",
-            color: "var(--material-theme-black)",
-            borderRadius: 20,
-          }}>
-          Add Custom Satellite +{" "}
-        </IconButton>
+            color: "var(--material-theme-sys-dark-on-primary)",
+            backgroundColor: "var(--material-theme-sys-dark-primary)",
+            borderRadius: "10px",
+            "&:hover": {
+              backgroundColor:
+                "var(--material-theme-sys-dark-on-secondary-container)",
+            },
+          }}
+          onClick={handleClickOpen}>
+          Add Custom Satellite +
+        </Button>
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Add New Satellite</DialogTitle>
           <form onSubmit={addSatellite}>
