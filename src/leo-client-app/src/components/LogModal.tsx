@@ -29,8 +29,6 @@ export default function LogDialog({ open, logData, handleClose }: Props) {
     handleClose();
   };
 
-  console.log(logData)
-
   return (
     <Dialog
       open={open}
