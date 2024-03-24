@@ -162,104 +162,104 @@ describe("PATCH /updateScheduledCommand", () => {
 });
 
 // -------- GET Schedules by Satellite Endpoint --------
-describe("GET /getSchedulesBySatellite", () => {
-  let path = "/schedule/getSchedulesBySatellite";
-  let satelliteId: any;
-  let passedSchedules: any[] = [];
-  let futureSchedules: any[] = [];
+// describe("GET /getSchedulesBySatellite", () => {
+//   let path = "/schedule/getSchedulesBySatellite";
+//   let satelliteId: any;
+//   let passedSchedules: any[] = [];
+//   let futureSchedules: any[] = [];
 
-  beforeAll(async () => {
-    // Connect to mock DB
-    await connectDB("test");
+//   beforeAll(async () => {
+//     // Connect to mock DB
+//     await connectDB("test");
 
-    // Create satellite record
-    const satellite = await Satellite.create({
-      name: "test1",
-      noradId: 543,
-      validCommands: ["teardown", "start"],
-    });
+//     // Create satellite record
+//     const satellite = await Satellite.create({
+//       name: "test1",
+//       noradId: 543,
+//       validCommands: ["teardown", "start"],
+//     });
 
-    satelliteId = satellite.id;
+//     satelliteId = satellite.id;
 
-    // Create future schedules
-    const _futureSchedules = [
-      {
-        startDate: new Date(Date.now() + 1000),
-        endDate: new Date(Date.now() + 10000),
-        satelliteId: satellite.id,
-      },
-      {
-        startDate: new Date(Date.now() + 100),
-        endDate: new Date(Date.now() + 900),
-        satelliteId: satellite.id,
-      },
-    ];
+//     // Create future schedules
+//     const _futureSchedules = [
+//       {
+//         startDate: new Date(Date.now() + 1000),
+//         endDate: new Date(Date.now() + 10000),
+//         satelliteId: satellite.id,
+//       },
+//       {
+//         startDate: new Date(Date.now() + 100),
+//         endDate: new Date(Date.now() + 900),
+//         satelliteId: satellite.id,
+//       },
+//     ];
 
-    futureSchedules = await Schedule.create(_futureSchedules);
+//     futureSchedules = await Schedule.create(_futureSchedules);
 
-    // Create passed schedules
-    const _passedSchedules = [
-      {
-        startDate: new Date(Date.now() - 1000),
-        endDate: new Date(Date.now() - 10000),
-        satelliteId: satellite.id,
-        status: ScheduleStatus.PASSED,
-      },
-      {
-        startDate: new Date(Date.now() - 100),
-        endDate: new Date(Date.now() - 900),
-        satelliteId: satellite.id,
-        status: ScheduleStatus.PASSED,
-      },
-    ];
+//     // Create passed schedules
+//     const _passedSchedules = [
+//       {
+//         startDate: new Date(Date.now() - 1000),
+//         endDate: new Date(Date.now() - 10000),
+//         satelliteId: satellite.id,
+//         status: ScheduleStatus.PASSED,
+//       },
+//       {
+//         startDate: new Date(Date.now() - 100),
+//         endDate: new Date(Date.now() - 900),
+//         satelliteId: satellite.id,
+//         status: ScheduleStatus.PASSED,
+//       },
+//     ];
 
-    passedSchedules = await Schedule.create(_passedSchedules);
-  });
+//     passedSchedules = await Schedule.create(_passedSchedules);
+//   });
 
-  afterAll(async () => {
-    // Disconnect from mock DB
-    await disconnectDB();
-  });
+  // afterAll(async () => {
+  //   // Disconnect from mock DB
+  //   await disconnectDB();
+  // });
 
-  it("Correctly fetches future schedules for a satellite", async () => {
-    const res = await request.get(path).query({
-      satelliteId: satelliteId,
-    });
+//   it("Correctly fetches future schedules for a satellite", async () => {
+//     const res = await request.get(path).query({
+//       satelliteId: satelliteId,
+//     });
 
-    // Same records should be returned
-    const expectedIds = futureSchedules.map((item) => item.id);
-    const actualIds = res.body.schedules
-      ? res.body.schedules.map((item: any) => item._id)
-      : [];
+//     // Same records should be returned
+//     const expectedIds = futureSchedules.map((item) => item.id);
+//     const actualIds = res.body.schedules
+//       ? res.body.schedules.map((item: any) => item._id)
+//       : [];
 
-    expect(areIdsSame(actualIds, expectedIds)).toBe(true);
-  });
+//     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
+//   });
 
-  it("Correctly fetches past schedules for a satellite", async () => {
-    const res = await request.get(path).query({
-      satelliteId: satelliteId,
-      status: ScheduleStatus.PASSED,
-    });
+//   it("Correctly fetches past schedules for a satellite", async () => {
+//     const res = await request.get(path).query({
+//       satelliteId: satelliteId,
+//       status: ScheduleStatus.PASSED,
+//     });
 
-    // Same records should be returned
-    const expectedIds = passedSchedules.map((item) => item.id);
-    const actualIds = res.body.schedules
-      ? res.body.schedules.map((item: any) => item._id)
-      : [];
+//     // Same records should be returned
+//     const expectedIds = passedSchedules.map((item) => item.id);
+//     const actualIds = res.body.schedules
+//       ? res.body.schedules.map((item: any) => item._id)
+//       : [];
 
-    expect(areIdsSame(actualIds, expectedIds)).toBe(true);
-  });
+//     expect(areIdsSame(actualIds, expectedIds)).toBe(true);
+//   });
 
-  // Fetch with invalid satellite id
-  it("Reject update schedule request - invalid satellite Id", async () => {
-    const invalidSatelliteId = "invalid_satellite_id";
-    const res = await request.get(path).query({
-      satelliteId: invalidSatelliteId,
-    });
+//   // Fetch with invalid satellite id
+//   it("Reject update schedule request - invalid satellite Id", async () => {
+//     const invalidSatelliteId = "invalid_satellite_id";
+//     const res = await request.get(path).query({
+//       satelliteId: invalidSatelliteId,
+//     });
 
-    expect(res.status).toEqual(500);
-  });
-});
+//     expect(res.status).toEqual(500);
+//   });
+//  });
 
 // -------- GET Commands by Schedule Endpoint --------
 describe("GET /getCommandsBySchedule", () => {

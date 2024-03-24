@@ -369,10 +369,12 @@ router.get(
     if (!mongoose.isValidObjectId(satelliteId)) {
       return res.status(500).json({ error: "Invalid ID" });
     }
-
+    const convertedStartTime = new Date();
+    convertedStartTime.setHours(convertedStartTime.getHours());
     const filter = {
       satelliteId: satelliteId,
       status: status,
+      endDate: {$gte: convertedStartTime},
     };
 
     const skip = (page - 1) * limit;
