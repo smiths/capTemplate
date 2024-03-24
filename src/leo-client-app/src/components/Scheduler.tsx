@@ -190,7 +190,11 @@ const Scheduler = () => {
     <Box sx={{ padding: "20px" }}>
       <Box sx={{ bgcolor: "var(--material-theme-black)" }} px={"110px"}>
         <SatelliteName satelliteName={satelliteName} />
-        <Typography variant="h5" className="headerBox3" style={{ fontSize: '2em', color: "var(--material-theme-white)" }}>
+        <Typography
+          variant="h5"
+          className="headerBox3"
+          style={{ fontSize: "2em", color: "var(--material-theme-white)" }}
+        >
           Schedule Queue
         </Typography>
       </Box>
@@ -207,7 +211,11 @@ const Scheduler = () => {
           <>
             <Typography
               variant="h6"
-              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
+              sx={{
+                paddingTop: "17px",
+                fontSize: "16px",
+                color: "var(--material-theme-white)",
+              }}
             >
               Start Date
             </Typography>
@@ -232,7 +240,11 @@ const Scheduler = () => {
             />
             <Typography
               variant="h6"
-              sx={{ paddingTop: "17px", fontSize: "16px", color: "var(--material-theme-white)" }}
+              sx={{
+                paddingTop: "17px",
+                fontSize: "16px",
+                color: "var(--material-theme-white)",
+              }}
             >
               End Date
             </Typography>
@@ -243,7 +255,11 @@ const Scheduler = () => {
                 setEndTime(e.target.value);
                 if (filter === "Custom Date") {
                   const localDate = parseLocalDate(e.target.value);
-                  fetchSchedules(satelliteId, startTime, localDate.toISOString());
+                  fetchSchedules(
+                    satelliteId,
+                    startTime,
+                    localDate.toISOString()
+                  );
                 }
               }}
               InputLabelProps={{ shrink: true }}
@@ -312,7 +328,14 @@ const Scheduler = () => {
             </Box>
           ) : (
             <Grid className="futureSchedulesBox" container spacing={2}>
-              <TableContainer sx={{ backgroundColor: 'var(--material-theme-sys-light-primary-fixed)', borderRadius: '16px', margin: '0px' }}>
+              <TableContainer
+                sx={{
+                  backgroundColor:
+                    "var(--material-theme-sys-light-primary-fixed)",
+                  borderRadius: "16px",
+                  margin: "0px",
+                }}
+              >
                 <Table sx={{ minWidth: 1050 }}>
                   <TableHead>
                     <TableRow>
@@ -348,13 +371,17 @@ const Scheduler = () => {
                         }}
                         align="left"
                       >
-                        <Typography variant="h6"> Commands Scheduled </Typography>
+                        <Typography variant="h6">
+                          {" "}
+                          Commands Scheduled{" "}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {scheduleForCard.map((schedule, index) => (
-                      <TableRow key={index}
+                      <TableRow
+                        key={index}
                         sx={{
                           color: "var(--material-theme-black)",
                           borderBottom: 2,
@@ -363,13 +390,28 @@ const Scheduler = () => {
                           borderRight: 2,
                         }}
                       >
-                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                          align="left">
-                          <Typography variant="subtitle1">{formatDate(schedule.startDate)}</Typography>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ color: "black !important", borderRight: 2 }}
+                          align="left"
+                        >
+                          <Typography variant="subtitle1">
+                            {formatDate(schedule.startDate)}
+                          </Typography>
                         </TableCell>
-                        <TableCell component="th" scope="row" sx={{ color: "black !important", borderRight: 2 }}
-                          align="left">
-                          <Typography variant="subtitle1">{formatTimeRange(schedule.startDate, schedule.endDate)}</Typography>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{ color: "black !important", borderRight: 2 }}
+                          align="left"
+                        >
+                          <Typography variant="subtitle1">
+                            {formatTimeRange(
+                              schedule.startDate,
+                              schedule.endDate
+                            )}
+                          </Typography>
                         </TableCell>
                         <TableCell>
                           <NextLink
@@ -378,12 +420,11 @@ const Scheduler = () => {
                           >
                             <>
                               {scheduleCommands[schedule.id] &&
-                                scheduleCommands[schedule.id].length > 0 ? (
+                              scheduleCommands[schedule.id].length > 0 ? (
                                 <>
                                   {scheduleCommands[schedule.id]
                                     .slice(0, 3)
                                     .map((commandObj: any, cmdIndex) => (
-
                                       <Typography
                                         key={cmdIndex}
                                         className="cardSubtitle"
@@ -418,8 +459,9 @@ const Scheduler = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
-             </Grid>)}
-          <Box/>
+            </Grid>
+          )}
+          <Box />
         </Stack>
       </Box>
     </Box>
