@@ -19,6 +19,7 @@ import {
   MenuItem,
   FormControl,
   Select,
+  Grid,
 } from "@mui/material";
 import NextLink from "next/link";
 import { BACKEND_URL } from "@/constants/api";
@@ -186,129 +187,145 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   return (
     <Box className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
-        <p className="headerBox">Schedule Queue</p>
-        <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-          justifyContent: "right",
-          paddingRight: "10%",
-        }}
-      >
-        {filter === "Custom Date" && (
-          <>
-            <Typography
-              variant="h6"
+        <Grid container spacing={1}>
+          <Grid item xs={2} sx={{ marginTop: "30px" }}>
+            <p className="headerBox">Schedule Queue</p>
+          </Grid>
+          <Grid item xs={10} alignSelf={"flex-end"}>
+            <Box
               sx={{
-                paddingTop: "17px",
-                fontSize: "16px",
-                color: "var(--material-theme-white)",
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+                justifyContent: "right",
               }}
             >
-              Start Date
-            </Typography>
-            <TextField
-              type="date"
-              value={startTime}
-              onChange={(e) => {
-                setStartTime(e.target.value);
-                if (filter === "Custom Date") {
-                  const localDate = parseLocalDate(e.target.value);
-                  fetchSchedules(satelliteId, localDate.toISOString(), endTime);
-                }
-              }}
-              InputLabelProps={{ shrink: true }}
-              inputProps={{ style: { color: "var(--material-theme-white)" } }}
-              sx={{
-                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--material-theme-white)",
-                  borderRadius: "15px",
-                },
-              }}
-            />
-            <Typography
-              variant="h6"
-              sx={{
-                paddingTop: "17px",
-                fontSize: "16px",
-                color: "var(--material-theme-white)",
-              }}
-            >
-              End Date
-            </Typography>
-            <TextField
-              type="date"
-              value={endTime}
-              onChange={(e) => {
-                setEndTime(e.target.value);
-                if (filter === "Custom Date") {
-                  const localDate = parseLocalDate(e.target.value);
-                  fetchSchedules(
-                    satelliteId,
-                    startTime,
-                    localDate.toISOString()
-                  );
-                }
-              }}
-              InputLabelProps={{ shrink: true }}
-              inputProps={{
-                style: {
-                  color: "var(--material-theme-white)",
-                  borderColor: "var(--material-theme-white)",
-                },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--material-theme-white)",
-                  borderRadius: "15px",
-                },
-              }}
-            />
-          </>
-        )}
-        <FormControl variant="outlined" sx={{ width: "230px" }}>
-          <Select
-            value={filter}
-            onChange={handleFilterChange}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "transparent",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "var(--material-theme-sys-dark-on-primary)",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "var(--material-theme-sys-dark-on-primary)",
-              },
-              textTransform: "none",
-              fontSize: "1rem",
-              "& .MuiSelect-select": {
-                paddingLeft: "30px",
-              },
-              backgroundColor: "var(--material-theme-sys-dark-primary)",
-              color: "var(--material-theme-sys-dark-on-primary)",
-              borderRadius: "15px",
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: "var(--material-theme-sys-dark-primary)",
-                  color: "var(--material-theme-sys-dark-on-primary)",
-                  borderRadius: "15px",
-                  "& .MuiMenuItem-root:hover": {
-                    backgroundColor:
-                      "var(--material-theme-sys-dark-on-primary-container)",
-                  },
-                },
-              },
-            }}
-          >
-            <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
-            <MenuItem value="Custom Date">Custom Date</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+              {filter === "Custom Date" && (
+                <>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      paddingTop: "17px",
+                      fontSize: "16px",
+                      color: "var(--material-theme-white)",
+                    }}
+                  >
+                    Start Date
+                  </Typography>
+                  <TextField
+                    type="date"
+                    value={startTime}
+                    onChange={(e) => {
+                      setStartTime(e.target.value);
+                      if (filter === "Custom Date") {
+                        const localDate = parseLocalDate(e.target.value);
+                        fetchSchedules(
+                          satelliteId,
+                          localDate.toISOString(),
+                          endTime
+                        );
+                      }
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{
+                      style: { color: "var(--material-theme-white)" },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "var(--material-theme-white)",
+                          borderRadius: "15px",
+                        },
+                    }}
+                  />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      paddingTop: "17px",
+                      fontSize: "16px",
+                      color: "var(--material-theme-white)",
+                    }}
+                  >
+                    End Date
+                  </Typography>
+                  <TextField
+                    type="date"
+                    value={endTime}
+                    onChange={(e) => {
+                      setEndTime(e.target.value);
+                      if (filter === "Custom Date") {
+                        const localDate = parseLocalDate(e.target.value);
+                        fetchSchedules(
+                          satelliteId,
+                          startTime,
+                          localDate.toISOString()
+                        );
+                      }
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    inputProps={{
+                      style: {
+                        color: "var(--material-theme-white)",
+                        borderColor: "var(--material-theme-white)",
+                      },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                        {
+                          borderColor: "var(--material-theme-white)",
+                          borderRadius: "15px",
+                        },
+                    }}
+                  />
+                </>
+              )}
+              <FormControl variant="outlined" sx={{ width: "230px" }}>
+                <Select
+                  value={filter}
+                  onChange={handleFilterChange}
+                  sx={{
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "transparent",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "var(--material-theme-sys-dark-on-primary)",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "var(--material-theme-sys-dark-on-primary)",
+                    },
+                    textTransform: "none",
+                    fontSize: "1rem",
+                    "& .MuiSelect-select": {
+                      paddingLeft: "30px",
+                    },
+                    backgroundColor: "var(--material-theme-sys-dark-primary)",
+                    color: "var(--material-theme-sys-dark-on-primary)",
+                    borderRadius: "15px",
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        backgroundColor:
+                          "var(--material-theme-sys-dark-primary)",
+                        color: "var(--material-theme-sys-dark-on-primary)",
+                        borderRadius: "15px",
+                        "& .MuiMenuItem-root:hover": {
+                          backgroundColor:
+                            "var(--material-theme-sys-dark-on-primary-container)",
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <MenuItem value="Show All Schedules">
+                    Show All Schedules
+                  </MenuItem>
+                  <MenuItem value="Custom Date">Custom Date</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+        </Grid>
         <div className="futurePassesBox">
           {isLoading ? (
             <Box className="loadingBox">
