@@ -11,6 +11,6 @@ connectDB()
       console.log(`[Server]: I am running at https://localhost:${appPort}`);
     });
     console.log("Connected to db.");
-    scheduleJobsForSatellitesOnBoot();
+    // scheduleJobsForSatellitesOnBoot();
   })
   .catch((err: any) => console.log(err));

@@ -11,13 +11,13 @@ ScheduleEventEmitter.on(
   "overpassFinished",
   (
     prevScheduleId: string,
-    satelliteId: string,
-    scheduleId: string,
-    startTime: Date
+    satelliteId: string
+    // scheduleId: string,
+    // startTime: Date
   ) => {
     // destroy current job
     cancelScheduleJob(satelliteId, prevScheduleId);
 
-    scheduleJobForNextOverpass(satelliteId, scheduleId, startTime);
+    // scheduleJobForNextOverpass(satelliteId, scheduleId, startTime);
   }
 );
