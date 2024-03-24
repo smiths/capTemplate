@@ -46,22 +46,11 @@ export const executeScheduledCommands = async (
 
     const currCommand = commands[ind];
 
-    // Execute command
-    // Checks if it sending command times out
-    const respMsg = await Promise.race([
-      // TODO: Replace with websocket call
-      new Promise((resolve, reject) =>
-        setTimeout(
-          () => sendDataToClientAndAwaitResponse(currCommand.command),
-          3000
-        )
-      ),
-      new Promise((resolve, reject) =>
-        setTimeout(() => reject("Command timeout"), 4000)
-      ),
-    ])
-      .then((res) => res)
-      .catch((error) => error);
+    // Execute command - second parameter is timeout
+    const respMsg = await sendDataToClientAndAwaitResponse(
+      currCommand.command,
+      3000
+    );
 
     const response = { message: respMsg };
 
@@ -81,7 +70,7 @@ export const executeScheduledCommands = async (
     await Log.create(logObj);
 
     ind += 1;
-    delay(5000); // delay
+    delay(3000); // delay
     currTime = Date.now();
   }
 
