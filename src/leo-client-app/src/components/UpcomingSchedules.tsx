@@ -5,11 +5,8 @@ import "./styles/upcomingSchedules.css";
 import "./styles/futurePasses.css";
 import {
   Box,
-  Card,
   Typography,
-  CardContent,
   CircularProgress,
-  Grid,
   Paper,
   Stack,
   Table,
@@ -18,6 +15,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
+  MenuItem,
+  FormControl,
+  Select,
 } from "@mui/material";
 import NextLink from "next/link";
 import { BACKEND_URL } from "@/constants/api";
@@ -63,6 +64,11 @@ function formatTimeRange(startTime: string, endTime: string) {
   return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
+function parseLocalDate(dateString: string) {
+  const [year, month, day] = dateString.split("-");
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+}
+
 const UpcomingSchedules = ({ noradId }: Props) => {
   const router = useRouter();
   const { satId } = router.query;
@@ -73,17 +79,41 @@ const UpcomingSchedules = ({ noradId }: Props) => {
   const [scheduleCommands, setScheduleCommands] = useState<{
     [scheduleId: string]: string[];
   }>({});
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   function formatDateToISO(dateString: string) {
     const date = new Date(dateString);
     return date.toISOString().slice(0, 19) + "Z";
   }
 
-  const fetchSchedules = (satelliteId: string) => {
-    setIsLoading(true); // Set loading state to true when starting to fetch
-    fetch(
-      `${BACKEND_URL}/schedule/getSchedulesBySatellite?satelliteId=${satelliteId}&page=1&limit=100`
-    )
+  const fetchSchedules = (
+    satelliteId: string,
+    startTime: string = "",
+    endTime: string = ""
+  ) => {
+    setIsLoading(true);
+
+    let endpoint = `${BACKEND_URL}/schedule/getSchedulesBySatellite`;
+
+    const defaultParams: any = {
+      satelliteId,
+      page: 1,
+      limit: 100,
+    };
+
+    let queryParams = new URLSearchParams(defaultParams);
+
+    if (startTime) {
+      endpoint = `${BACKEND_URL}/schedule/getScheduleBySatelliteAndTime`;
+      queryParams = new URLSearchParams({
+        ...defaultParams,
+        ...(startTime && { startTime: startTime }),
+        ...(endTime && { endTime: endTime }),
+      });
+    }
+
+    fetch(`${endpoint}?${queryParams}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.schedules) {
@@ -137,10 +167,148 @@ const UpcomingSchedules = ({ noradId }: Props) => {
     fetchSchedules(satelliteId);
   }, [noradId]);
 
+  function clearFilter(
+    event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    setStartTime("");
+    setEndTime("");
+    fetchSchedules(satelliteId);
+  }
+
+  const [filter, setFilter] = useState("Show All Schedules");
+  const handleFilterChange = (event: any) => {
+    setFilter(event.target.value);
+    if (event.target.value === "Show All Schedules") {
+      clearFilter(event);
+    }
+  };
+
   return (
     <Box className="upcomingSchedules">
       <Stack alignItems="flex-start" spacing={1}>
         <p className="headerBox">Schedule Queue</p>
+        <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          justifyContent: "right",
+          paddingRight: "10%",
+        }}
+      >
+        {filter === "Custom Date" && (
+          <>
+            <Typography
+              variant="h6"
+              sx={{
+                paddingTop: "17px",
+                fontSize: "16px",
+                color: "var(--material-theme-white)",
+              }}
+            >
+              Start Date
+            </Typography>
+            <TextField
+              type="date"
+              value={startTime}
+              onChange={(e) => {
+                setStartTime(e.target.value);
+                if (filter === "Custom Date") {
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(satelliteId, localDate.toISOString(), endTime);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ style: { color: "var(--material-theme-white)" } }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{
+                paddingTop: "17px",
+                fontSize: "16px",
+                color: "var(--material-theme-white)",
+              }}
+            >
+              End Date
+            </Typography>
+            <TextField
+              type="date"
+              value={endTime}
+              onChange={(e) => {
+                setEndTime(e.target.value);
+                if (filter === "Custom Date") {
+                  const localDate = parseLocalDate(e.target.value);
+                  fetchSchedules(
+                    satelliteId,
+                    startTime,
+                    localDate.toISOString()
+                  );
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{
+                style: {
+                  color: "var(--material-theme-white)",
+                  borderColor: "var(--material-theme-white)",
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--material-theme-white)",
+                  borderRadius: "15px",
+                },
+              }}
+            />
+          </>
+        )}
+        <FormControl variant="outlined" sx={{ width: "230px" }}>
+          <Select
+            value={filter}
+            onChange={handleFilterChange}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "transparent",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "var(--material-theme-sys-dark-on-primary)",
+              },
+              textTransform: "none",
+              fontSize: "1rem",
+              "& .MuiSelect-select": {
+                paddingLeft: "30px",
+              },
+              backgroundColor: "var(--material-theme-sys-dark-primary)",
+              color: "var(--material-theme-sys-dark-on-primary)",
+              borderRadius: "15px",
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: "var(--material-theme-sys-dark-primary)",
+                  color: "var(--material-theme-sys-dark-on-primary)",
+                  borderRadius: "15px",
+                  "& .MuiMenuItem-root:hover": {
+                    backgroundColor:
+                      "var(--material-theme-sys-dark-on-primary-container)",
+                  },
+                },
+              },
+            }}
+          >
+            <MenuItem value="Show All Schedules">Show All Schedules</MenuItem>
+            <MenuItem value="Custom Date">Custom Date</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
         <div className="futurePassesBox">
           {isLoading ? (
             <Box className="loadingBox">
