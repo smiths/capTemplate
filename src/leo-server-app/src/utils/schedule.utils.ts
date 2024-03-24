@@ -75,19 +75,19 @@ export const executeScheduledCommands = async (
   }
 
   // ---- Reschedule any left over commands ----
-  const nextSchedule = await rescheduleLeftoverCommands(
-    satelliteId,
-    scheduleId
-  );
+  // const nextSchedule = await rescheduleLeftoverCommands(
+  //   satelliteId,
+  //   scheduleId
+  // );
 
   //   Emit event to create new schedule
-  ScheduleEventEmitter.emit(
-    "overpassFinished",
-    scheduleId,
-    satelliteId,
-    nextSchedule?.id,
-    nextSchedule?.startDate
-  );
+  // ScheduleEventEmitter.emit(
+  //   "overpassFinished",
+  //   scheduleId,
+  //   satelliteId,
+  //   nextSchedule?.id,
+  //   nextSchedule?.startDate
+  // );
 };
 
 // Reschedules remaining commands to a satellite's next overpass
