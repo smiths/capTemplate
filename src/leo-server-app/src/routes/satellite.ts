@@ -1,5 +1,7 @@
 import * as dotenv from "dotenv";
+import UserModel from "../models/user";
 import SatelliteModel from "../models/satellite";
+
 import globals from "../globals/globals";
 import {
   getNextPasses,
@@ -323,6 +325,7 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   const { body } = req;
 
   const tleLines = await getTLE(body.noradId);
+
   setTleLines(body.noradId, tleLines[0], tleLines[1]);
 
   const newSatellite = new SatelliteModel({
@@ -333,6 +336,9 @@ router.post("/addSatelliteTarget", async (req: any, res: any) => {
   });
 
   const satellite = await SatelliteModel.create(newSatellite);
+  await UserModel.findByIdAndUpdate(body.userId, {
+    $addToSet: { satellites: satellite.id },
+  });
 
   // Emit event to create schedules for next 7 days
   SatelliteEventEmitter.emit(

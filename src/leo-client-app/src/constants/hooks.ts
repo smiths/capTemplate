@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAllOperators,
   getCommandsBySchedule,
+  getUserSatellites,
   getLogByCommand,
   getPingSocket,
   getSchedulesBySatellite,
@@ -23,6 +24,14 @@ export const useGetCommandsBySchedule = (
     queryKey: ["useGetCommandsBySchedule"],
     queryFn: () => getCommandsBySchedule(scheduleId, limit),
     enabled: !!scheduleId,
+  });
+};
+
+export const useGetUserSatellites = (userId: string) => {
+  return useQuery({
+    queryKey: ["useGetUserSatellites"],
+    queryFn: () => getUserSatellites(userId),
+    enabled: !!userId,
   });
 };
 

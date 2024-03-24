@@ -21,6 +21,8 @@ import "./styles/satellitesOfInterest.css";
 import "./styles/component.css";
 import UserName from "./UserName";
 import { addNewSatellite, BACKEND_URL } from "@/constants/api";
+import { useGetUserSatellites } from "@/constants/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 type Props = {
   userId: string;
@@ -33,7 +35,9 @@ type SatelliteDetails = {
 };
 
 const SatellitesOfInterest = ({ userId }: Props) => {
-  const [satellites, setSatellites] = useState<SatelliteDetails[]>([]);
+  const satellites = useGetUserSatellites(userId);
+  const queryClient = useQueryClient();
+
   const [open, setOpen] = useState(false);
   const [satelliteName, setSatelliteName] = useState("");
   const [noradId, setNoradId] = useState("");
@@ -46,56 +50,13 @@ const SatellitesOfInterest = ({ userId }: Props) => {
     setOpen(false);
   };
 
-  const fetchSatellites = async (satelliteId: string) => {
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}/satellite/getSatellite`,
-        {
-          params: { satelliteId: satelliteId },
-        }
-      );
-
-      return {
-        name: response.data.satellite.name,
-        noradId: response.data.satellite.noradId,
-        satId: response.data.satellite._id,
-      };
-    } catch (error) {
-      console.error("Error fetching satellite name:", error);
-      return "";
-    }
-  };
-
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(`${BACKEND_URL}/users/getUserSatellites`, {
-        params: { userId: userId },
-      });
-      const satelliteIds = res.data.satellitesOfInterest;
-      const satelliteNamesPromises = satelliteIds.map((satelliteId: string) =>
-        fetchSatellites(satelliteId)
-      );
-      const satellites = await Promise.all(satelliteNamesPromises);
-      setSatellites(satellites);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const addSatellite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Satellite Name:", satelliteName, "NORAD ID:", noradId);
-    const newSatellite = {
-      name: satelliteName,
-      noradId,
-      satId: "newId",
-    };
-    setSatellites([...satellites, newSatellite]);
-    await addNewSatellite(satelliteName, noradId);
+
+    try {
+      await addNewSatellite(satelliteName, noradId, userId);
+    } catch (error) {}
+    await queryClient.invalidateQueries({ queryKey: ["useGetUserSatellites"] });
     handleClose();
   };
 
@@ -108,51 +69,55 @@ const SatellitesOfInterest = ({ userId }: Props) => {
           className="satellitesOfInterestBox"
           alignItems="flex-start"
           direction="row"
-          spacing={5}
-        >
-          {satellites.map((satellite, index) => (
-            <Grid item key={index} spacing={1}>
-              <Link href={`/satellite/${satellite.satId}`} passHref>
-                <Card
-                  sx={{
-                    minWidth: 150,
-                    maxWidth: 150,
-                    margin: 0.5,
-                    backgroundColor:
-                      "var(--material-theme-sys-light-inverse-on-surface)",
-                    cursor: "pointer",
-                    borderRadius: 3,
-                    minHeight: 150,
-                    maxHeight: 150,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginLeft: 2,
-                    marginRight: 2,
-                  }}
-                >
-                  <CardContent>
-                    <p className="cardTitle">{satellite.name}</p>
-                    <p className="cardSubtitle">{satellite.noradId}</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
+          spacing={5}>
+          {satellites.data?.satellitesOfInterest?.satellites.length &&
+            satellites.data?.satellitesOfInterest?.satellites?.map(
+              (satellite: any, index: number) => (
+                <Grid item key={index} spacing={1}>
+                  <Link href={`/satellite/${satellite._id}`} passHref>
+                    <Card
+                      sx={{
+                        minWidth: 150,
+                        maxWidth: 150,
+                        margin: 0.5,
+                        backgroundColor:
+                          "var(--material-theme-sys-light-inverse-on-surface)",
+                        cursor: "pointer",
+                        borderRadius: 3,
+                        minHeight: 150,
+                        maxHeight: 150,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginLeft: 2,
+                        marginRight: 2,
+                      }}>
+                      <CardContent>
+                        <p className="cardTitle">{satellite.name}</p>
+                        <p className="cardSubtitle">{satellite.noradId}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </Grid>
+              )
+            )}
         </Stack>
-        <IconButton
-          onClick={handleClickOpen}
+        <Button
+          variant="text"
           sx={{
-            size: "medium",
-            backgroundColor:
-              "var(--material-theme-sys-light-inverse-on-surface)",
-            color: "var(--material-theme-black)",
-            borderRadius: 20,
+            color: "var(--material-theme-sys-dark-on-primary)",
+            backgroundColor: "var(--material-theme-sys-dark-primary)",
+            borderRadius: "10px",
+            "&:hover": {
+              backgroundColor:
+                "var(--material-theme-sys-dark-on-secondary-container)",
+            },
           }}
-        >
-          Add Custom Satellite +{" "}
-        </IconButton>
+          onClick={handleClickOpen}>
+          Add Custom Satellite +
+        </Button>
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Add New Satellite</DialogTitle>
           <form onSubmit={addSatellite}>
