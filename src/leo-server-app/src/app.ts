@@ -2,10 +2,8 @@ import express, { Express, Request, Response } from "express";
 import * as dotenv from "dotenv";
 import * as http from "http";
 import bodyParser from "body-parser";
-import { WebSocket } from "ws";
 
 // import routes
-const messageHandler = require("./messageHandler");
 const usersRoute = require("./routes/user");
 const sateliiteUserRoute = require("./routes/satelliteUser");
 const { router: satelliteRoute } = require("./routes/satellite");
@@ -67,38 +65,6 @@ logNamespace.on("connection", (socket: any) => {
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
-});
-
-// -------- Websocket connection --------
-// const wss = new WebSocket.Server({ server: AppServer });
-const wss = new WebSocket.Server({ noServer: true });
-
-wss.on("connection", function connection(ws: any) {
-  console.log("----------------------------------------");
-  console.log(`Client connected`);
-  console.log("----------------------------------------");
-  messageHandler.setClientSocket(ws);
-
-  ws.on("message", function message(data: any) {
-    console.log(`${data}`);
-  });
-
-  ws.on("close", function close() {
-    console.log("Client disconnected");
-  });
-});
-
-// Handle upgrade requests for WebSocket connections
-AppServer.on("upgrade", (request, socket, head) => {
-  // Use request.url to determine whether to handle this connection with ws or let Socket.io handle it
-  if (request.url === "/socket-forwarder") {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emit("connection", ws, request);
-    });
-  } else {
-    // This is important: Socket.io uses its own path for connections by default (/socket.io/)
-    socket.destroy();
-  }
 });
 
 module.exports = { AppServer, io };
