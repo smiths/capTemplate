@@ -88,4 +88,16 @@ router.post("/sendCommand", async (req: SendCommandProp, res: any) => {
 
   res.status(201).json({ output: response.toString() });
 });
+
+router.post("/sendTestCommand", async (req: SendCommandProp, res: any) => {
+  const { body } = req;
+
+  //   Forward through socket
+  const response = await messageHandler.sendDataToClientAndAwaitResponse(
+    body.command,
+    5000
+  );
+
+  res.status(201).json({ output: response.toString() });
+});
 module.exports = router;
