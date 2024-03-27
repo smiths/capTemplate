@@ -158,6 +158,17 @@ export const sendCommandToForwarder = async (
   return res.data;
 };
 
+export const sendCommandToTestForwarder = async (command: string) => {
+  const body = {
+    command,
+  };
+  const res = await axios.post(
+    `${BACKEND_URL}/forwarder/sendTestCommand`,
+    body
+  );
+  return res.data;
+};
+
 export const executeSchedule = async (
   scheduleId: string,
   satelliteId: string
