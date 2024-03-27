@@ -62,4 +62,17 @@ router.patch("/updateUserSatellites", async (req: any, res: any) => {
   });
 });
 
+router.get("/getUserByEmail", async (req: any, res: any) => {
+  const { query } = req;
+
+  const filter = { email: query.email };
+
+  const user = await User.findOne(filter).exec();
+
+  res.status(201).json({
+    message: "Fetched user information",
+    user,
+  });
+});
+
 module.exports = router;
