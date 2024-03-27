@@ -51,12 +51,16 @@ October 20, 2023 & Q.H, R.V, D.A, D.C, U.R & Completed HA documentation\\
 
 
 \section{Introduction}
-The primary objective of our project MCT (Mission Control Terminal) is to provide satellite operators with a platform to automatically schedule and send commands to satellites as they pass overhead. In addition, the system will keep logs of all commands sent, responses, with concurrent access available. This is a hazard analysis document for the MCT capstone project.
+The primary objective of our project MCT (Mission Control Terminal) is to provide satellite operators with a platform to automatically schedule and send commands to satellites as they pass overhead. In addition, the system will keep logs of all commands sent and responses. This is a hazard analysis document for the MCT capstone project.
 
 \section{Scope and Purpose of Hazard Analysis}
 Hazard Definition - Hazards can be defined as any situation within an application that can potentially lead to an unwanted or undesirable outcome which can include system failures, data loss, harm to users or any other consequences. These hazards can occur due to many factors such as design flaws, communication flaws, equipment failures and programming errors. 
-
+\\ \\
 The purpose of this document is to find cases of hazards that may be encountered in the project and find potential methods to mitigate those hazards.
+\\ \\
+The scope of this project includes: satellite command scheduling and verification, and displaying information about the satellite. Elements which are not in scope include: calculation of astronomical data (azimuth, elevation, etc), communication with the satellite, and command validation.
+\\ \\
+Calculations will be outsourced via the SGP-4 library, which was developed for the National Space Surveillance Control Center. The standards for which it is held by ensures accurate and precise calculations for our purposes. Communication with the satellite is handled by the McMaster Interdisciplinary Satellite Team (MIST), for which we will interface with it's terminal interface via socket connection.
 
 \section{System Components}
 \begin{itemize}
@@ -95,25 +99,47 @@ The application will not manage or control the ground station equipment.
 \end{itemize}
 
 \begin{landscape}
-    \begin{figure}[p]
-    \section{Failure Mode and Effect Analysis}
-        \centering
-        \includegraphics[width=1.16\linewidth]{FMEA.jpg}
-        \caption{FMEA process}
-        \label{fig:fmea_landscape}
-    \end{figure}
+ \begin{table}[ht]
+    \centering
+    \scalebox{0.7}{ 
+    \begin{tabular}{|p{1.75cm}|p{4cm}|p{5cm}|p{5cm}|p{3cm}|p{5cm}|p{2cm}|p{2cm}|}
+    \hline
+    \textbf{Design Function} & \textbf{Failure Modes} & \textbf{Effects of Failure} & \textbf{Causes of Failure} & \textbf{Detection} & \textbf{Recommended Actions} & \textbf{SR} & \textbf{Ref.} \\
+    \hline
+    Predict Satellite Overpasses & Invalid TLE & Inability to connect with Satellite & a. Extreme conditions \newline b. TLE variation & Error handling messages & a. Recalculate satellite overpasses \newline b. Fetch TLE periodically & a. SR-1 \newline b. SR-1 & H1-1 \\
+    \cline{2-8}
+     & Does not perform all commands & Incomplete Data & a. Satellite becomes out of range b. Prior command alters state of satellite & Error handling messages & a. Set minimum elevation food \newline b. Satellite operators must determine the validity of the commands being sent & a. SR-2 \newline b. SR-3 & H2-1 \\
+    \cline{2-8}
+     & Invalid command inputs & Scheduling Error & a. Incorrect commands are inputted & Error handling messages & a. Satellite operators to perform input validation & a. SR-3 & H2-2 \\
+    \hline
+    Logging & State of Database Altered & Incorrect Response Parsing & a. Various forms of responses returned & Error handling messages & a. Database structure verification a. Data validation & a. SR-4 & H3-1 \\
+    \cline{2-8}
+     & Incomplete Database & Missing Data & a. Scheduling command failure \newline b. Satellite failure \newline c. Network failure & Error handling messages & a. Assign relevant error messages in lieu of missing data \newline b. Assign standardized error messages \newline c. Assign standardized error messages & a. SR-5 \newline b. SR-5 \newline c. SR-5 & H3-2 \\
+    \hline
+    Web Interface & Browser compatibility issues & Visual Disparities & a. Missing browser specific features \newline b. HTML/CSS validation & Testing on multiple browsers & a. Testing the web interface on a variety of browsers and their different versions \newline b. Assign a HTML/CSS validation service so the code is standardized & a. SR-6 \newline b. SR-7 & H4-1 \\
+    \cline{2-8}
+     & Poor responsiveness & Inefficiency in scheduling operations & a. Unoptimized algorithms \newline b. Slower loading times & Analyzing average performance through Jest modules & a. Optimize speed by eliminating anti-patterns, and applying best React design principles \newline b. Use browser caching & a. SR-8 \newline b. SR-8 & H4-2 \\
+    \hline
+    User Account Handling & Unauthorized access & Compromising Security & a. Weak user authentication measures & Error handling messages & a. Implementing multi-factor authentication and limiting login attempts & a. SR-9 \newline b. SR-10 & H5-2 \\
+    \hline
+    \end{tabular}
+    } % End of \scalebox
+    \caption{Failure Mode and Effect Analysis}
+    \label{table:fmea}
+    \end{table}
+
 \end{landscape}
 
 \section{Safety and Security Requirements}
 
 \subsection*{SR-1:}
 The application shall periodically fetch TLE and calculate satellite overpasses to ensure the most recent data is being used to predict satellite overpasses. \\ \\
-\textbf{Rationale:} An issue with calculating satellite overpasses is the variation in TLE and other conditions. Periodically retrieving and recalculating this piece of information will ensure a more accurate prediction of overpasses.  \\ \\
+\textbf{Rationale:} An issue with calculating satellite overpasses is the variation in TLE due to conditions which happen in orbit. Periodically retrieving and recalculating this piece of information will ensure a more accurate prediction of overpasses, and other associated calculations.  \\ \\
 \textbf{Associated Hazards:}  H-1a, H-1b
 
 
 \subsection*{SR-2:}
-The application shall use a minimum elevation as a point of reference to evaluate whether a connection to the satellite can be made. \\ \\
+The application shall use a minimum elevation as a point of reference to evaluate whether a connection to the satellite will be made. \\ \\
 \textbf{Rationale:} In the case that a satellite is below the minimum elevation required to make a connection, the scheduled commands may not work and as a result, produce incomplete data. By having a minimum point of reference, the system can assess if a satellite is out of range. \\ \\
 \textbf{Associated Hazards:}  H-2a
 
@@ -143,7 +169,7 @@ The code base shall have HTML and CSS checks to ensure compatibility across diff
 \textbf{Associated Hazards:} H4-1b
 
 \subsection*{SR-8}
-All components which are required for scheduling operations shall be evaluated on their efficiency, where each component must complete within a minimum time frame. \\ \\
+All components which are required for scheduling operations shall be evaluated on their efficiency, by using Jest modules to evaluate performance and responsiveness. \\ \\
 \textbf{Rationale} By having a pipeline to test parts of the duration of a code, it can prevent situations where there may exist an inefficiency in scheduling operations. \\ \\
 \textbf{Associated Hazards:} H4-2a
 
