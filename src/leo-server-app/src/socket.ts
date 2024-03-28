@@ -15,7 +15,7 @@ dotenv.config({
 });
 
 const SocketServer = https.createServer({
-  cert: fs.readFileSync(process.env.CERT_PATH),
+  cert: fs.readFileSync(process.env.KEY_CERT),
   key: fs.readFileSync(process.env.KEY_PATH),
 });
 

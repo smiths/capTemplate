@@ -19,7 +19,7 @@ const UserName = ({ userName }: Props) => {
         color: "var(--material-theme-white)",
       }}
     >
-      <span>{userName}&apos;s</span>
+      <span>{userName}&apos;s</span> <br />
       <span> saved satellites</span>
     </Box>
   );
