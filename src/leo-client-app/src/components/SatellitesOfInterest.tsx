@@ -14,7 +14,6 @@ import {
   DialogTitle,
 } from "@mui/material";
 import Link from "next/link";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "../styles.css";
 import "./styles/satellitesOfInterest.css";
@@ -35,7 +34,10 @@ type SatelliteDetails = {
 };
 
 const SatellitesOfInterest = ({ userId }: Props) => {
-  const satellites = useGetUserSatellites(userId);
+  const satellites = useGetUserSatellites(
+    userId ? userId : "66059b2aa430445956d73120"
+  );
+
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -63,13 +65,14 @@ const SatellitesOfInterest = ({ userId }: Props) => {
   return (
     <div className="satellitesOfInterest">
       <Stack alignItems="flex-start" spacing={1}>
-        <UserName userName="leo" />
+        <UserName userName={userId} />
         <p className="headerBox"></p>
         <Stack
           className="satellitesOfInterestBox"
           alignItems="flex-start"
           direction="row"
-          spacing={5}>
+          spacing={5}
+        >
           {satellites.data?.satellitesOfInterest?.satellites.length &&
             satellites.data?.satellitesOfInterest?.satellites?.map(
               (satellite: any, index: number) => (
@@ -92,7 +95,8 @@ const SatellitesOfInterest = ({ userId }: Props) => {
                         alignItems: "center",
                         marginLeft: 2,
                         marginRight: 2,
-                      }}>
+                      }}
+                    >
                       <CardContent>
                         <p className="cardTitle">{satellite.name}</p>
                         <p className="cardSubtitle">{satellite.noradId}</p>
@@ -114,7 +118,8 @@ const SatellitesOfInterest = ({ userId }: Props) => {
                 "var(--material-theme-sys-dark-on-secondary-container)",
             },
           }}
-          onClick={handleClickOpen}>
+          onClick={handleClickOpen}
+        >
           Add Custom Satellite +
         </Button>
 
