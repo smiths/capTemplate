@@ -39,6 +39,22 @@ function TestPlayground() {
 
     return null;
   };
+
+  const commandSendingHandler = async (...args: string[]) => {
+    let commandReq = "";
+
+    // Iterate through each command separated by space
+    for (const message of args) {
+      commandReq += message + " ";
+    }
+
+    // Remove trailing white spaces
+    commandReq = commandReq.trim();
+
+    const res = await sendCommand(commandReq);
+    return res?.output ?? "Error";
+  };
+
   return (
     <main>
       <Stack
@@ -71,10 +87,7 @@ function TestPlayground() {
                 },
               }}
               theme="my-custom-theme"
-              defaultHandler={async (request: any) => {
-                const res = await sendCommand(request);
-                return res?.output ?? "Error";
-              }}
+              defaultHandler={commandSendingHandler}
             />
           </Box>
         </Stack>
