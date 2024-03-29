@@ -1,5 +1,3 @@
 # Design Documentation
 
-The folders and files for this folder are as follows:
-
-Describe ...
+The folders and files for this folder are as per name.
