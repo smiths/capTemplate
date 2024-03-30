@@ -27,6 +27,10 @@ const Navbar: React.FC = () => {
       path: "/manage-operators",
     },
     {
+      heading: "Commands",
+      path: `/satellite-commands/${satId}`,
+    },
+    {
       heading: "Logs",
       path: `/satellite-logs/${satId}`,
     },
