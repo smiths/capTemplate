@@ -11,8 +11,9 @@ const SatelliteCommands: React.FC = () => {
   const router = useRouter();
   const satId = router.query?.satId?.toString() ?? "655acd63d122507055d3d2ea";
   const [satelliteName, setSatelliteName] = useState<string>();
+  const [validCommands, setValidCommands] = useState([]);
 
-  const fetchData = async () => {
+  const fetchName= async () => {
     try {
       const res = await axios.get(`${BACKEND_URL}/satellite/getSatellite`, {
         params: { satelliteId: satId },
@@ -23,14 +24,30 @@ const SatelliteCommands: React.FC = () => {
     }
   };
 
+  const fetchValidCommands = async (satId: string) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/satellite/getSatellite?satelliteId=${satId}`);
+      const data = await response.json();
+      setValidCommands(data.satellite.validCommands);
+    } catch (error) {
+      console.error("Error fetching valid commands Admin:", error);
+    }
+  };
+
   useEffect(() => {
-    fetchData();
+    fetchName();
+    fetchValidCommands(satId);
   }, []);
 
   return (
     <div>
       <SatelliteName satelliteName={satelliteName as string} />
       <h1>Satellite Commands</h1>
+      <ul>
+        {validCommands.map((command, index) => (
+          <li key={index}>{command}</li>
+        ))}
+      </ul>
     </div>
   );
 };
