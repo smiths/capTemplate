@@ -21,8 +21,7 @@ const SatelliteCommands: React.FC = () => {
   const [satelliteName, setSatelliteName] = useState<string>();
   const [validCommands, setValidCommands] = useState<string[]>([]);
   const [editingCommand, setEditingCommand] = useState<string | null>(null);
-  const [updatedCommands, setUpdatedCommands] =
-    useState<string[]>(validCommands);
+  const [updatedCommands, setUpdatedCommands] = useState<string[] | null>(null);
 
   const fetchName = async () => {
     try {
@@ -42,17 +41,17 @@ const SatelliteCommands: React.FC = () => {
       );
       const data = await response.json();
       setValidCommands(data.satellite.validCommands);
-      setUpdatedCommands(data.satellite.validCommands); // Add this line
+      setUpdatedCommands(data.satellite.validCommands);
     } catch (error) {
       console.error("Error fetching valid commands Admin:", error);
     }
   };
 
-  const updateValidCommandsInDb = async () => {
+  const updateValidCommandsInDb = async (commandsToUpdate: any) => {
     try {
       await axios.patch(
         `${BACKEND_URL}/satellite/updateSatelliteTargetCommands`,
-        { validCommands: updatedCommands },
+        { validCommands: commandsToUpdate },
         { params: { id: satId } }
       );
     } catch (error) {
@@ -60,19 +59,32 @@ const SatelliteCommands: React.FC = () => {
     }
   };
 
+  const addCommands = (newCommands: string) => {
+    const commands = newCommands.split(",").map((command) => command.trim());
+    setUpdatedCommands((prevCommands) => {
+      const updated = [...(prevCommands || []), ...commands];
+      updateValidCommandsInDb(updated);
+      return updated;
+    });
+  };
+
   const updateCommand = (oldCommand: string, newCommand: string) => {
-    setUpdatedCommands(
-      updatedCommands.map((command) =>
+    setUpdatedCommands((prevCommands) => {
+      const updated = (prevCommands || []).map((command) =>
         command === oldCommand ? newCommand : command
-      )
-    );
-    setEditingCommand(null);
-    updateValidCommandsInDb();
+      );
+      setEditingCommand(null);
+      updateValidCommandsInDb(updated);
+      return updated;
+    });
   };
 
   const deleteCommand = (command: string) => {
-    setUpdatedCommands(updatedCommands.filter((c) => c !== command));
-    updateValidCommandsInDb();
+    setUpdatedCommands((prevCommands) => {
+      const updated = prevCommands?.filter((c) => c !== command) ?? null;
+      updateValidCommandsInDb(updated);
+      return updated;
+    });
   };
 
   useEffect(() => {
@@ -80,17 +92,31 @@ const SatelliteCommands: React.FC = () => {
     fetchValidCommands(satId);
   }, [satId]);
 
-  useEffect(() => {
-    updateValidCommandsInDb();
-  }, [updatedCommands]);
-
   return (
     <div>
       <SatelliteName satelliteName={satelliteName as string} />
       <h1>Satellite Commands</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const target = e.target as HTMLFormElement;
+          addCommands(
+            (target.elements.namedItem("newCommands") as HTMLInputElement).value
+          );
+        }}
+      >
+        <Input
+          name="newCommands"
+          placeholder="Enter new commands, separated by commas"
+          sx={{ color: "white" }}
+        />
+        <Button type="submit" sx={{ color: "white" }}>
+          Add Commands
+        </Button>
+      </form>
       <Table component="table">
         <TableBody>
-          {updatedCommands.map((command, index) => (
+          {updatedCommands?.map((command, index) => (
             <TableRow key={index}>
               <TableCell sx={{ color: "white" }}>{command}</TableCell>
               <TableCell sx={{ color: "white" }}>
