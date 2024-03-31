@@ -1,8 +1,15 @@
 .satelliteCommands {
     display: flex;
-  justify-content: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  width: 75%;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 75%;
 }
+
+.satName .material-themedisplaymedium {
+    color: var(--material-theme-white);
+    margin-top: 0%;
+    padding-left: 25%;
+    width: 70%;
+  }
