@@ -11,8 +11,14 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TableHead,
 } from "@mui/material";
-import "./styles/satelliteCommands.css"
+import "./styles/satelliteCommands.css";
 import axios from "axios";
 import SatelliteName from "./SatelliteName";
 
@@ -23,6 +29,8 @@ const SatelliteCommands: React.FC = () => {
   const [validCommands, setValidCommands] = useState<string[]>([]);
   const [editingCommand, setEditingCommand] = useState<string | null>(null);
   const [updatedCommands, setUpdatedCommands] = useState<string[] | null>(null);
+  const [open, setOpen] = useState(false);
+  const [currentCommand, setCurrentCommand] = useState("");
 
   const fetchName = async () => {
     try {
@@ -88,6 +96,15 @@ const SatelliteCommands: React.FC = () => {
     });
   };
 
+  const handleClickOpen = (command: string) => {
+    setCurrentCommand(command);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     fetchName();
     fetchValidCommands(satId);
@@ -95,71 +112,135 @@ const SatelliteCommands: React.FC = () => {
 
   return (
     <div className="satelliteCommands">
-      <SatelliteName satelliteName={satelliteName as string} />
-      <h1>Satellite Commands</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const target = e.target as HTMLFormElement;
-          addCommands(
-            (target.elements.namedItem("newCommands") as HTMLInputElement).value
-          );
-        }}
-      >
-        <Input
-          name="newCommands"
-          placeholder="Enter new commands, separated by commas"
-          sx={{ color: "white" }}
-        />
-        <Button type="submit" sx={{ color: "white" }}>
-          Add Commands
-        </Button>
-      </form>
-      <Table component="table">
-        <TableBody>
-          {updatedCommands?.map((command, index) => (
-            <TableRow key={index}>
-              <TableCell sx={{ color: "white" }}>{command}</TableCell>
-              <TableCell sx={{ color: "white" }}>
-                {editingCommand === command ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const target = e.target as HTMLFormElement;
-                      updateCommand(
-                        command,
-                        (
-                          target.elements.namedItem(
-                            "command"
-                          ) as HTMLInputElement
-                        ).value
-                      );
+      <Stack className="stack" style={{ width: "100%" }} spacing={3} py={8}>
+        <SatelliteName satelliteName={satelliteName as string} />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const target = e.target as HTMLFormElement;
+            addCommands(
+              (target.elements.namedItem("newCommands") as HTMLInputElement)
+                .value
+            );
+          }}
+        >
+          <Input
+            name="newCommands"
+            placeholder="Enter new commands, separated by commas"
+            sx={{ color: "white" }}
+          />
+          <Button type="submit" sx={{ color: "white" }}>
+            Add Commands
+          </Button>
+        </form>
+        <div
+          className="commandsBox"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <Table
+            component="table"
+            sx={{
+              maxWidth: "50%",
+              borderCollapse: "collapse",
+              backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+            }}
+          >
+            <TableHead>
+              <TableRow
+                sx={{ borderBottom: "2px solid var(--material-theme-black)" }}
+              >
+                <TableCell
+                  sx={{
+                    color: "var(--material-theme-black)",
+                    width: "auto",
+                  }}
+                >
+                  Command
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: "var(--material-theme-black)",
+                    width: "auto",
+                    textAlign: "right",
+                    paddingRight: "80px",
+                  }}
+                >
+                  Actions
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {updatedCommands?.map((command, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ borderBottom: "2px solid var(--material-theme-black)" }}
+                >
+                  <TableCell
+                    sx={{
+                      color: "var(--material-theme-black)",
+                      width: "auto",
                     }}
                   >
-                    <Input
-                      name="command"
-                      defaultValue={command}
-                      sx={{ color: "white" }}
-                    />
-                    <Button type="submit" sx={{ color: "white" }}>
-                      Save
-                    </Button>
-                  </form>
-                ) : (
-                  <>
-                    <Button onClick={() => setEditingCommand(command)}>
-                      Edit
-                    </Button>
-                    <Button onClick={() => deleteCommand(command)}>
-                      Delete
-                    </Button>
-                  </>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    {command}
+                  </TableCell>
+                  <TableCell>
+                    <div
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                    >
+                      <Button
+                        onClick={() => handleClickOpen(command)}
+                        style={{ marginRight: "40px" }}
+                      >
+                        Edit
+                      </Button>
+                      <Button onClick={() => deleteCommand(command)}>
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </Stack>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle
+          sx={{
+            backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+          }}
+        >
+          Edit Command
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+          }}
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const target = e.target as HTMLFormElement;
+              updateCommand(
+                currentCommand,
+                (target.elements.namedItem("command") as HTMLInputElement).value
+              );
+              handleClose();
+            }}
+          >
+            <Input
+              name="command"
+              defaultValue={currentCommand}
+              sx={{ color: "black" }}
+            />
+            <DialogActions>
+              <Button type="submit" sx={{ color: "black" }}>
+                Save
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
