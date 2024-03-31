@@ -31,6 +31,7 @@ const SatelliteCommands: React.FC = () => {
   const [updatedCommands, setUpdatedCommands] = useState<string[] | null>(null);
   const [open, setOpen] = useState(false);
   const [currentCommand, setCurrentCommand] = useState("");
+  const [openAdd, setOpenAdd] = useState(false);
 
   const fetchName = async () => {
     try {
@@ -75,6 +76,7 @@ const SatelliteCommands: React.FC = () => {
       updateValidCommandsInDb(updated);
       return updated;
     });
+    handleCloseAdd();
   };
 
   const updateCommand = (oldCommand: string, newCommand: string) => {
@@ -105,6 +107,14 @@ const SatelliteCommands: React.FC = () => {
     setOpen(false);
   };
 
+  const handleClickOpenAdd = () => {
+    setOpenAdd(true);
+  };
+
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
+  };
+
   useEffect(() => {
     fetchName();
     fetchValidCommands(satId);
@@ -113,26 +123,24 @@ const SatelliteCommands: React.FC = () => {
   return (
     <div className="satelliteCommands">
       <Stack className="stack" style={{ width: "100%" }} spacing={3} py={8}>
-        <SatelliteName satelliteName={satelliteName as string} />
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const target = e.target as HTMLFormElement;
-            addCommands(
-              (target.elements.namedItem("newCommands") as HTMLInputElement)
-                .value
-            );
+        <div className="satName">
+          <SatelliteName satelliteName={satelliteName as string} />
+        </div>
+        <Button
+          onClick={handleClickOpenAdd} // Open the add dialog when the button is clicked
+          sx={{
+            color: "var(--material-theme-sys-dark-on-primary)",
+            backgroundColor: "var(--material-theme-sys-dark-primary)",
+            borderRadius: "10px",
+            marginRight: "40px",
+            "&:hover": {
+              backgroundColor:
+                "var(--material-theme-sys-dark-on-secondary-container)",
+            },
           }}
         >
-          <Input
-            name="newCommands"
-            placeholder="Enter new commands, separated by commas"
-            sx={{ color: "white" }}
-          />
-          <Button type="submit" sx={{ color: "white" }}>
-            Add Commands
-          </Button>
-        </form>
+          Add Commands
+        </Button>
         <div
           className="commandsBox"
           style={{ display: "flex", justifyContent: "center" }}
@@ -143,6 +151,7 @@ const SatelliteCommands: React.FC = () => {
               maxWidth: "50%",
               borderCollapse: "collapse",
               backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+              borderRadius: "10px",
             }}
           >
             <TableHead>
@@ -162,7 +171,7 @@ const SatelliteCommands: React.FC = () => {
                     color: "var(--material-theme-black)",
                     width: "auto",
                     textAlign: "right",
-                    paddingRight: "80px",
+                    paddingRight: "100px",
                   }}
                 >
                   Actions
@@ -189,11 +198,26 @@ const SatelliteCommands: React.FC = () => {
                     >
                       <Button
                         onClick={() => handleClickOpen(command)}
-                        style={{ marginRight: "40px" }}
+                        sx={{
+                          color: "var(--material-theme-sys-dark-on-primary)",
+                          backgroundColor:
+                            "var(--material-theme-sys-dark-primary)",
+                          borderRadius: "10px",
+                          marginRight: "40px",
+                        }}
                       >
                         Edit
                       </Button>
-                      <Button onClick={() => deleteCommand(command)}>
+                      <Button
+                        onClick={() => deleteCommand(command)}
+                        sx={{
+                          color: "var(--material-theme-sys-dark-on-primary)",
+                          backgroundColor:
+                            "var(--material-theme-sys-dark-primary)",
+                          borderRadius: "10px",
+                          marginRight: "20px",
+                        }}
+                      >
                         Delete
                       </Button>
                     </div>
@@ -231,10 +255,52 @@ const SatelliteCommands: React.FC = () => {
             <Input
               name="command"
               defaultValue={currentCommand}
-              sx={{ color: "black" }}
+              sx={{ color: "var(--material-theme-black)" }}
             />
             <DialogActions>
-              <Button type="submit" sx={{ color: "black" }}>
+              <Button
+                type="submit"
+                sx={{ color: "var(--material-theme-black)" }}
+              >
+                Save
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={openAdd} onClose={handleCloseAdd}>
+        <DialogTitle
+          sx={{
+            backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+          }}
+        >
+          Add Command
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+          }}
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const target = e.target as HTMLFormElement;
+              addCommands(
+                (target.elements.namedItem("newCommands") as HTMLInputElement)
+                  .value
+              );
+            }}
+          >
+            <Input
+              name="newCommands"
+              placeholder="Enter new commands, separated by commas"
+              sx={{ color: "var(--material-theme-black)" }}
+            />
+            <DialogActions>
+              <Button
+                type="submit"
+                sx={{ color: "var(--material-theme-black)" }}
+              >
                 Save
               </Button>
             </DialogActions>
