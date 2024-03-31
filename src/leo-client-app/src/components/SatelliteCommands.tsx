@@ -12,6 +12,7 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
+import "./styles/satelliteCommands.css"
 import axios from "axios";
 import SatelliteName from "./SatelliteName";
 
@@ -93,7 +94,7 @@ const SatelliteCommands: React.FC = () => {
   }, [satId]);
 
   return (
-    <div>
+    <div className="satelliteCommands">
       <SatelliteName satelliteName={satelliteName as string} />
       <h1>Satellite Commands</h1>
       <form
