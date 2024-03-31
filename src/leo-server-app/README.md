@@ -1,30 +1,21 @@
 Server Application
 
-## Getting Started
+This directory deals with the backend of the project.
 
-First, build and transpile the code:
+The folders and files for this project are as follows:
 
-```bash
-npm -i
-npm run build
-```
+`src/database` - Database connection logic
 
-Then, start the following application using the below command:
+`src/event` - Overpassing events logic
 
-```bash
-npm run start:dev
-```
+`src/global` - Global variable definitions
 
-To start the client and server app concurrently, use:
+`src/models` - MongoDB database models
 
-```bash
-npm run all
-```
+`src/routes` - The majority of backend logic for API endpoints
 
-By default, the server will run on 3001 port.
+`src/tests` - Tests
 
-To run tests:
+`src/types` - Typescript types
 
-```bash
-npm run test
-```
+`src/utils` - Utility functions

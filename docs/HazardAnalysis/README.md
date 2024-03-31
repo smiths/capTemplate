@@ -1,5 +1,3 @@
 # Hazard Analysis
 
-The folders and files for this folder are as follows:
-
-Describe ...
+The folders and files for this folder are as per named.

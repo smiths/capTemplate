@@ -1,12 +1,15 @@
 Client Application
 
-## Getting Started
+This directory deals with the frontend of the project.
 
-First, run the development server:
+The folders and files for this project are as follows:
 
-```bash
-npm -i
-npm run dev
-```
+`src/app` - Auth0 connection logic
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`src/components` - Reusable react components, which render information such as schedules, detailed display, etc
+
+`src/components/styles` - Stylesheets for components
+
+`src/constants` - Utility functions
+
+`src/resources` - Custom fonts for the project
