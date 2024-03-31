@@ -122,29 +122,30 @@ const SatelliteCommands: React.FC = () => {
 
   return (
     <div className="satelliteCommands">
-      <Stack className="stack" style={{ width: "100%" }} spacing={3} py={8}>
+      <Stack className="stack" spacing={3} py={8}>
         <div className="satName">
           <SatelliteName satelliteName={satelliteName as string} />
         </div>
-        <Button
-          onClick={handleClickOpenAdd} // Open the add dialog when the button is clicked
-          sx={{
-            color: "var(--material-theme-sys-dark-on-primary)",
-            backgroundColor: "var(--material-theme-sys-dark-primary)",
-            borderRadius: "10px",
-            marginRight: "40px",
-            "&:hover": {
-              backgroundColor:
-                "var(--material-theme-sys-dark-on-secondary-container)",
-            },
-          }}
-        >
-          Add Commands
-        </Button>
-        <div
-          className="commandsBox"
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+
+        <div className="addCommandsBox">
+          <Button
+            onClick={handleClickOpenAdd}
+            sx={{
+              color: "var(--material-theme-sys-dark-on-primary)",
+              backgroundColor: "var(--material-theme-sys-dark-primary)",
+              borderRadius: "10px",
+              width: "150px",
+              "&:hover": {
+                backgroundColor:
+                  "var(--material-theme-sys-dark-on-secondary-container)",
+              },
+            }}
+          >
+            Add Commands
+          </Button>
+        </div>
+
+        <div className="commandsBox">
           <Table
             component="table"
             sx={{
@@ -162,6 +163,7 @@ const SatelliteCommands: React.FC = () => {
                   sx={{
                     color: "var(--material-theme-black)",
                     width: "auto",
+                    fontSize: "16px",
                   }}
                 >
                   Command
@@ -172,6 +174,7 @@ const SatelliteCommands: React.FC = () => {
                     width: "auto",
                     textAlign: "right",
                     paddingRight: "100px",
+                    fontSize: "16px",
                   }}
                 >
                   Actions
@@ -188,6 +191,7 @@ const SatelliteCommands: React.FC = () => {
                     sx={{
                       color: "var(--material-theme-black)",
                       width: "auto",
+                      fontSize: "16px",
                     }}
                   >
                     {command}
@@ -228,6 +232,7 @@ const SatelliteCommands: React.FC = () => {
           </Table>
         </div>
       </Stack>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
           sx={{
@@ -268,6 +273,7 @@ const SatelliteCommands: React.FC = () => {
           </form>
         </DialogContent>
       </Dialog>
+
       <Dialog open={openAdd} onClose={handleCloseAdd}>
         <DialogTitle
           sx={{
@@ -279,6 +285,7 @@ const SatelliteCommands: React.FC = () => {
         <DialogContent
           sx={{
             backgroundColor: "var(--material-theme-sys-light-primary-fixed)",
+            width: "400px",
           }}
         >
           <form
@@ -294,9 +301,15 @@ const SatelliteCommands: React.FC = () => {
             <Input
               name="newCommands"
               placeholder="Enter new commands, separated by commas"
-              sx={{ color: "var(--material-theme-black)" }}
+              sx={{ color: "var(--material-theme-black)", width: "350px" }}
             />
             <DialogActions>
+              <Button
+                onClick={handleCloseAdd}
+                sx={{ color: "var(--material-theme-black)" }}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 sx={{ color: "var(--material-theme-black)" }}
