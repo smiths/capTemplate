@@ -51,7 +51,7 @@ const SatelliteCommands: React.FC = () => {
   const updateValidCommandsInDb = async () => {
     try {
       await axios.patch(
-        `${BACKEND_URL}/updateSatelliteTargetCommands`,
+        `${BACKEND_URL}/satellite/updateSatelliteTargetCommands`,
         { validCommands: updatedCommands },
         { params: { id: satId } }
       );
@@ -79,6 +79,10 @@ const SatelliteCommands: React.FC = () => {
     fetchName();
     fetchValidCommands(satId);
   }, [satId]);
+
+  useEffect(() => {
+    updateValidCommandsInDb();
+  }, [updatedCommands]);
 
   return (
     <div>
