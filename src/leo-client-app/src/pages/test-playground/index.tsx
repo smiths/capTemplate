@@ -53,7 +53,7 @@ function TestPlayground() {
 
     const res = await sendCommand(commandReq);
 
-    const messages = res.output?.toString().split("\n") ?? "";
+    const messages = res?.output?.toString().split("\n") ?? "";
 
     return (
       <Stack gap={1}>

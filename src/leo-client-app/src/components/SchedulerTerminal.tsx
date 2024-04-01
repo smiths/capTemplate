@@ -65,7 +65,7 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
     });
 
     // Split string by lines
-    const messages = res.output?.toString().split("\n") ?? "";
+    const messages = res?.output?.toString().split("\n") ?? "";
 
     return (
       <Stack gap={1}>
