@@ -68,7 +68,5 @@ export const useGetPingSocket = () => {
   return useQuery({
     queryKey: ["useGetPingSocket"],
     queryFn: () => getPingSocket(),
-    // Refetch every 5 seconds
-    refetchInterval: 5000,
   });
 };

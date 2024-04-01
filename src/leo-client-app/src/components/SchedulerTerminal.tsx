@@ -37,6 +37,47 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
     });
   };
 
+  const commandSendingHandler = async (...args: string[]) => {
+    let commandReq = "";
+
+    // Iterate through each command separated by space
+    for (const message of args) {
+      commandReq += message + " ";
+    }
+
+    // Remove trailing white spaces
+    commandReq = commandReq.trim();
+
+    // Check if command is valid
+    const isValid = validCommands.data?.record[0]?.validCommands.some(
+      (cmd: string) => cmd === commandReq
+    );
+
+    if (!isValid) {
+      return "Invalid command sequence";
+    }
+
+    const res = await sendCommand(commandReq);
+
+    // Refetch commands scheduled
+    await queryClient.invalidateQueries({
+      queryKey: ["useGetCommandsBySchedule"],
+    });
+
+    // Split string by lines
+    const messages = res?.output?.toString().split("\n") ?? "";
+
+    return (
+      <Stack gap={1}>
+        {!messages?.length && <Typography>Error</Typography>}
+        {messages?.length &&
+          messages.map((msg: string, index: number) => (
+            <p key={"terminal-message " + index}>{msg}</p>
+          ))}
+      </Stack>
+    );
+  };
+
   const commands = {
     help: (
       <Stack flexWrap={"wrap"} direction={"row"} spacing={4}>
@@ -70,20 +111,7 @@ const SchedulerTerminal = ({ disabled = false }: Props) => {
             },
           }}
           theme="my-custom-theme"
-          defaultHandler={async (request: any) => {
-            const isValid = validCommands.data?.record[0]?.validCommands.some(
-              (cmd: string) => cmd === request
-            );
-            if (!isValid) {
-              return "Invalid command sequence";
-            }
-
-            const res = await sendCommand(request);
-            await queryClient.invalidateQueries({
-              queryKey: ["useGetCommandsBySchedule"],
-            });
-            return res?.output ?? "Error";
-          }}
+          defaultHandler={commandSendingHandler}
         />
       </Box>
     </Stack>

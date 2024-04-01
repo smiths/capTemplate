@@ -2,13 +2,13 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import Navbar from "@/components/navbar/Navbar";
 import EditScheduler from "@/components/EditSchedules";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import ExecuteScheduleCard from "@/components/ExecuteScheduleCard";
 import SchedulerTerminal from "@/components/SchedulerTerminal";
 import { ReactTerminal } from "react-terminal";
 import { sendCommandToTestForwarder } from "@/constants/api";
-import { useState } from "react";
+import { Key, useState } from "react";
 import SocketConnection from "@/components/SocketConnection";
 import { useGetPingSocket } from "@/constants/hooks";
 
@@ -52,7 +52,18 @@ function TestPlayground() {
     commandReq = commandReq.trim();
 
     const res = await sendCommand(commandReq);
-    return res?.output ?? "Error";
+
+    const messages = res?.output?.toString().split("\n") ?? "";
+
+    return (
+      <Stack gap={1}>
+        {!messages?.length && <Typography>Error</Typography>}
+        {messages?.length &&
+          messages.map((msg: string, index: number) => (
+            <p key={"terminal-message " + index}>{msg}</p>
+          ))}
+      </Stack>
+    );
   };
 
   return (
