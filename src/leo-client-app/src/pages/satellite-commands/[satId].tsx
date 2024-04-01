@@ -1,13 +1,12 @@
 "use client";
 
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import Navbar from "@/components/navbar/Navbar";
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import "../../styles.css";
 import { Stack } from "@mui/material";
-import Logs from "@/components/Logs";
+import SatelliteCommands from "@/components/SatelliteCommands";
 
-function LogsPage() {
-  const { user } = useUser();
-
+function SatelliteCommandsPage() {
   return (
     <main>
       <Stack
@@ -20,10 +19,10 @@ function LogsPage() {
         p={2}
       >
         <Navbar />
-        <Logs />
+        <SatelliteCommands />
       </Stack>
     </main>
   );
 }
 
-export default withPageAuthRequired(LogsPage);
+export default withPageAuthRequired(SatelliteCommandsPage);
