@@ -1,73 +1,34 @@
-# Makefile
-# TODO: Missing artifacts should be added to this file
-.PHONY:	SRS
+# Makefile for compiling .tex files
 
-all:	SRS MG MIS PS VnVP VnVR DevP HazA Refl UGde
+# Define the pdflatex command
+PDFLATEX_CMD = pdflatex -interaction=nonstopmode
 
-SRS:
-	cd SRS && make && cd ..
+# Define the compile step for pdflatex
+define COMPILE_TEX
+	cd $(dir $1) && $(PDFLATEX_CMD) $(notdir $1) || { echo "Error: pdflatex failed for $1"; exit 1; }
+endef
 
-MG:
-	cd Design/SoftArchitecture && make && cd ../..
+# Define the bibtex command
+BIBTEX_CMD = [ -f $(basename $(notdir $1)).aux ] && bibtex $(basename $(notdir $1)) || echo "No bibtex references found" || { echo "Error: bibtex failed for $1"; exit 1; }
 
-MIS:
-	cd Design/SoftDetailedDes && make && cd ../..
+# Define the compile step for bibtex
+define COMPILE_BIBTEX
+	cd $(dir $1) && $(BIBTEX_CMD)
+endef
 
-#SystDes:
-#	cd Design/SystDesign && make && cd ../..
+# Default target: Compile all .tex files if no specific target is given
+all: $(patsubst %.tex, %.pdf, $(wildcard **/*.tex))
 
-PS:
-	cd ProblemStatementAndGoals && make && cd ..
+# Rule for compiling .tex to .pdf
+%.pdf: %.tex
+	@echo "Compiling $< to $@"
+	$(call COMPILE_TEX,$<)
+	$(call COMPILE_BIBTEX,$<)
+	$(call COMPILE_TEX,$<)
+	$(call COMPILE_TEX,$<)
 
-VnVP:
-	cd VnVPlan && make && cd ../..
+# Clean generated files
+clean:
+	find . -name "*.aux" -o -name "*.log" -o -name "*.pdf" -o -name "*.toc" -o -name "*.out" -o -name "*.bbl" -o -name "*.blg" -exec rm -f {} +
 
-VnVR:
-	cd VnVReport && make && cd ../..
-	
-DevP:
-	cd DevelopmentPlan && make && cd ../..
-	
-HazA:
-	cd HazardAnalysis && make && cd ../..
-	
-Refl:
-	cd ReflectAndTrace && make && cd ../..
-	
-UGde:
-	cd UserGuide && make && cd ../..
-
-clean:	cleanSRS cleanMG cleanMIS cleanSystDes cleanPS cleanVnVP cleanVnVR cleanDevP cleanHazA cleanRefl cleanUGde
-
-cleanPS:
-	cd ProblemStatementAndGoals && make clean && cd ..
-
-cleanSRS:
-	cd SRS && make clean && cd ..
-
-cleanMG:
-	cd Design/SoftArchitecture && make clean && cd ..
-
-cleanMIS:
-	cd Design/SoftDetailedDes && make clean && cd ..
-
-cleanSystDes:
-	cd Design/SystDesign && make clean && cd ..
-
-cleanVnVP:
-	cd VnVPlan && make clean && cd ..
-
-cleanVnVR:
-	cd VnVReport && make clean && cd ..
-	
-cleanDevP:
-	cd DevelopmentPlan && make clean && cd ..
-	
-cleanHazA:
-	cd HazardAnalysis && make clean && cd ..
-	
-cleanRefl:
-	cd Reflection && make clean && cd ..
-	
-cleanUGde:
-	cd UserGuide && make clean && cd ..
+.PHONY: all clean
