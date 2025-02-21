@@ -27,8 +27,8 @@
 
 \maketitle
 
-% Show an item is done by   \item[\done] Frame the problem
-% Show an item will not be fixed by   \item[\wontfix] profit
+If a team adopts a documentation approach that does not use an MIS, then some of
+the items in this checklist will not apply.
 
 \begin{itemize}
  
@@ -39,6 +39,7 @@
   \item Spelling, grammar, attention to detail
   \item Avoid low information content phrases
   \item Writing style
+  \item Hyperlinks should be done properly (\texttt{\textbackslash ref})
   \end{todolist}
 
 \item MIS Module Classifications
@@ -83,6 +84,7 @@
     \href{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/-/blob/master/MISFormat/MISFormat.pdf}
     {modified Hoffmann and Strooper notation} is used, or any new notation is
     clearly defined.
+  \item Notation is consistent throughout the document.
   \end{todolist}
 
 \item MIS Semantics for each module
@@ -117,6 +119,8 @@
   \item Minimal
   \item High cohesion
   \item Opaque (information hiding)
+  \item Correct level of abstraction (mentioning JSON or using Python's init
+  syntax is too low-level)
   \end{todolist}
 
 \item MIS Completeness
