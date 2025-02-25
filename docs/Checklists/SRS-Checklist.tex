@@ -111,7 +111,7 @@ the points can be abstracted and applied to other templates.
 \item Introduction
   \begin{todolist}
   \item Introductory blurb focuses on the problem domain
-  \item Introductory blurb Includes a ``roadmap''
+  \item Introductory blurb includes a ``roadmap''
   \item ``Purpose of the Document'' discusses the documentation's purpose, not
     the program's purpose
   \item Scope of the requirements is an abstract version of the assumptions.
@@ -122,6 +122,8 @@ the points can be abstracted and applied to other templates.
   courses and their level)
   \item The software application or library is given a name
   \item The project is explicitly identified as either software app or library
+  \item There is a reference in the Organization of the Document section to the
+  template you are using.
   \end{todolist}
 
 \item General System Description
@@ -155,6 +157,7 @@ the points can be abstracted and applied to other templates.
   \item Each assumption is ``atomic'' (no explicit or implicit ``ands'')
   \item Assumptions are a refinement of the scope
   \item Each assumption is referenced (invoked) at least once in the document
+  \item When the assumptions are listed, traceability is given to where they are used
   \item If an assumption is listed as being referenced by another chunk (T, IM
     etc), that other chunk should explicitly invoke the assumption in the
     describing text or derivation
@@ -162,7 +165,8 @@ the points can be abstracted and applied to other templates.
   \item If the ``Ref.\ By'' field is filled in, the entities (model, definition,
     assumption) listed explicitly include a reference to the original entity
     (model, definition, assumption).
-  \item The rationale is given for assumptions that require justification
+  \item All GDs explicitly refine at least one TM.
+  \item All GDs invoke (use) at least one assumption.
   \item The derivation of all GDs as refinements from other models is clear
   \item The derivation of all IMs as refinements from other models is clear
   \item All DD are used (referenced) by at least one other model
@@ -173,6 +177,7 @@ the points can be abstracted and applied to other templates.
   \item Equations are balanced with respect to units of all terms
   \item All ``chunks'' (theories, definitions, models) are used (invoked,
   referred to) at least once
+  \item All symbols used in every equation are defined in the Description
   \end{todolist}
   
 \item Functional Requirements
@@ -190,6 +195,14 @@ the points can be abstracted and applied to other templates.
   \begin{todolist}
   \item NFRs are verifiable
   \item Usability used for users and understandability used for programmers
+  \item Specify what you want, not how to achieve it (for instance, don't say how you will make the software maintainable via modularization, say how you will measure maintainability and your target)
+  \item NFRs point to the VnV plan for details as appropriate
+  \end{todolist}
+
+\item Requirements
+  \begin{todolist}
+  \item Requirements should trace to IMs
+  \item Rationale is provided for assumptions, scope decisions and constraints
   \end{todolist}
 
 \item Likely and Unlikely changes
