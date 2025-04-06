@@ -40,6 +40,7 @@ the items in this checklist will not apply.
   \item Avoid low information content phrases
   \item Writing style
   \item Hyperlinks should be done properly (\texttt{\textbackslash ref})
+  \item Every module's specification starts on a new page
   \end{todolist}
 
 \item MIS Module Classifications
@@ -66,7 +67,7 @@ the items in this checklist will not apply.
     Module (Stack(T)) given in A3:
     \url{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/blob/master/Assignments/A3/A3Soln/A3P1_Spec.pdf}
   \item Abstract objects will have some kind of initialization method
-    \item Abstract objects will have an assumptions that programmers will
+  \item Abstract objects will have an assumptions that programmers will
       initialize first, or a state variable that is set from False to True when
       the Abstract object is initialized - this state variable then needs to be
       checked for each access program call
@@ -85,11 +86,17 @@ the items in this checklist will not apply.
     {modified Hoffmann and Strooper notation} is used, or any new notation is
     clearly defined.
   \item Notation is consistent throughout the document.
+  \item All arguments to a method are used in the specification of the method in
+  the semantics section
+  \item All local functions are used somewhere in the modules's specification.
+  \item The uses relation is for the modules that need to be referenced to
+  completely define the specification.  If parts of the exported interface from
+  those modules are not needed, then the modules aren't listed under Uses.
   \end{todolist}
 
 \item MIS Semantics for each module
   \begin{todolist}
-  \item Each access program does something - either an output, or a state
+  \item Each access program does something -- either an output, or a state
     transition
   \item Access programs either change the state of something, or have an output.
     Only rarely should an access program do both (as it does for the constructor
@@ -105,7 +112,7 @@ the items in this checklist will not apply.
   \item Local functions make the specification easier to read (there is no
     requirement that the local functions will actually be implemented in code)
   \item Modules that deal with files, the keyboard, or the screen, have
-    environment variables to represent these respective entitites
+    environment variables to represent these respective entities
   \item Symbols are from SRS - not yet translated to code names (that is use
     $\theta$, not \texttt{theta})
   \end{todolist}
