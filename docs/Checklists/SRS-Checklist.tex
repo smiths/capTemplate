@@ -22,7 +22,7 @@
 
 \begin{document}
 
-\title{SRS and CA Checklist}
+\title{SRS Checklist}
 \author{Spencer Smith}
 \date{\today}
 
@@ -31,9 +31,11 @@
 % Show an item is done by   \item[\done] Frame the problem
 % Show an item will not be fixed by   \item[\wontfix] profit
 
-This checklist is specific to the Smith et al template \citep{SmithAndLai2005,
-SmithEtAl2007} for documenting requirements for scientific software, but many of
-the points can be abstracted and applied to other templates.
+This checklist is intended to help with a high-quality SRS document. If you use
+the SRS template correctly, it will improve your project and make your life
+easier.  You shouldn't view the documentation as an unpleasant milestone, but as
+an opportunity to gain a deeper understanding of your project. This
+understanding will pay off throughout the project's duration.
 
 \begin{itemize}
 
@@ -42,13 +44,21 @@ the points can be abstracted and applied to other templates.
   \item \LaTeX{} points
   \item Structure
   \item Spelling, grammar, attention to detail
-  \item Avoid low information content phrases
+  \item Avoid
+  \href{https://www.brafton.com/blog/content-writing/anti-fluff-content-writing/}
+  {low information content phrases} (like replacing ``in order to'' with ``to'')
   \item Writing style
   \end{todolist}
 
 \item Follows the template, all parts present
   \begin{todolist}
-  \item Selected template is appropriate for the project
+  \item Have you selected the right template?  
+  \begin{itemize}
+  \item SRS, which is suited to scientific computing problems (rare choice
+  (suited to physical phenomena and numerical libraries))
+  \item SRS-Volere, which is a complex, comprehensive, general, template (long, repetitive)
+  \item SRS-Meyer, which is a simpler, general purpose template (reasonable scope, good generic choice)
+  \end{itemize}
   \item Unused template folders are deleted from your repo
   \item File name for the SRS matches the name in the template repo
   \item Table of contents
@@ -70,10 +80,6 @@ the points can be abstracted and applied to other templates.
   \item Someone that meets the characteristics of the intended reader could
     verify all of the statement made in the SRS.  That is, they do not have to
     trust the SRS authors on any information.
-  \item Terminology, definitions, symbols, TMs and DDs can be given without
-      derivation, except possibly for a source (citation), but all GDs and IMs
-      should be derived/justified.  At least check a representative sample for
-      this criteria.
   \item SRS is unambiguous.  At least check a representative sample.
   \item SRS is consistent.  At least check a representative sample.
   \item SRS is validatable.  At least check a representative sample.
@@ -88,103 +94,14 @@ the points can be abstracted and applied to other templates.
   \begin{todolist}
   \item All units introduced are listed (searching the document can help look
     for other units that may be present, but not listed)
-  \item Units listed are each used at least once (manually searching the
-    document is a quick way to check this)
-  \item All non-SI units should be checked to see if they are really what is
-  intended.  This also applies for unit modifiers, like m, k, c, etc.  That is,
-  should mm really be m?  Unit conversion problems can occur when mixing
-  different size units.
-  \item The units balance for all equations
-  \item The names of units named after people are in lower-case
-  \item All symbols used in the document are listed in the table of symbols
-  \item All symbols listed in the table of symbols are used in the document
-  \item All symbols have unique definitions; that is, no two symbols have the
-  same definition
-  \item All abbreviations/acronyms used in the document are listed in the table
-    of abbreviations/acronyms
-  \item All abbreviations/acronyms listed in the table of abbreviations/acronyms
-    are used in the document
-  \item If a domain specific notation will be used, it has been defined in the
-    mathematical notation section
-  \end{todolist}
-
-\item Introduction
-  \begin{todolist}
-  \item Introductory blurb focuses on the problem domain
-  \item Introductory blurb includes a ``roadmap''
-  \item ``Purpose of the Document'' discusses the documentation's purpose, not
-    the program's purpose
-  \item Scope of the requirements is an abstract version of the assumptions.
-    Every item of the scope should be reflected in at least one assumption.
-  \item Characteristics of the intended reader are not confused with the user
-    characteristics
-  \item Characteristics of the intended reader are unambiguous (typically list
-  courses and their level)
-  \item The software application or library is given a name
-  \item The project is explicitly identified as either software app or library
-  \item There is a reference in the Organization of the Document section to the
-  template you are using.
-  \end{todolist}
-
-\item General System Description
-  \begin{todolist}
-  \item System context includes a figure showing the relation between the
-    software system and external entities
-  \item If the software will depend on other software, such as other libraries,
-    this is part of the system context.  Try to keep the libraries generic,
-    unless specific libraries are needed, which will mean software constaints
-    are also specified.
-  \item User characteristics are unambiguous (for instance, don't just say the user will know
-    physics, say they will know Newtonian mechanics as typically covered in the
-    first year of an engineering or science degree)
-  \item User characteristics are specific
-  \item System constraints have an appropriate rationale (a constraint without a
-    reason for that constraint is likely making the SRS less abstract than it
-    should be)
-  \end{todolist}
-
-\item Problem Description
-  \begin{todolist}
-  \item Each item of the physical system is identified and labelled
-  \item Goal statements are functional
-  \item Goal statements are abstract
-  \item Goal statements use a minimal amount of technical language,
-    understandable by non-domain experts 
-  \end{todolist}
-
-\item Solution Characteristics Specification
-  \begin{todolist}
-  \item Each assumption is ``atomic'' (no explicit or implicit ``ands'')
-  \item Assumptions are a refinement of the scope
-  \item Each assumption is referenced (invoked) at least once in the document
-  \item When the assumptions are listed, traceability is given to where they are used
-  \item If an assumption is listed as being referenced by another chunk (T, IM
-    etc), that other chunk should explicitly invoke the assumption in the
-    describing text or derivation
-  \item A link exists between each chunk and anything that references it
-  \item If the ``Ref.\ By'' field is filled in, the entities (model, definition,
-    assumption) listed explicitly include a reference to the original entity
-    (model, definition, assumption).
-  \item All GDs explicitly refine at least one TM.
-  \item All GDs invoke (use) at least one assumption.
-  \item The derivation of all GDs as refinements from other models is clear
-  \item The derivation of all IMs as refinements from other models is clear
-  \item All DD are used (referenced) by at least one other model
-  \item The IMs remain abstract
-  \item All of the inputs for an IM are used in some way to define the output for the IM
-  \item Input data constraints are given, with a rationale where appropriate
-  \item Properties of a correct solution are given (or explicitly left blank)
-  \item Equations are balanced with respect to units of all terms
-  \item All ``chunks'' (theories, definitions, models) are used (invoked,
-  referred to) at least once
-  \item All symbols used in every equation are defined in the Description
+  \item All symbols used in the document are listed
+  \item All symbols listed are used in the document
+  \item All abbreviations/acronyms used in the document are listed
+  \item All abbreviations/acronyms listed are used in the document
   \end{todolist}
   
 \item Functional Requirements
   \begin{todolist}
-  \item IMs and (possibly) TMs and GMs are referenced as appropriate by the
-    requirements.  It is a sign that the IMs are not set correctly if there is
-    one or more IMs that are not referenced by any of the requirements.
   \item All requirements are validatable
   \item All requirements are abstract
   \item Requirements are traceable to where the required details are found in
@@ -210,9 +127,13 @@ the points can be abstracted and applied to other templates.
   \item Likely changes are feasible to hide in the design
   \end{todolist}
 
-\item Traceability Matrices
+\item Avenue Rubric
   \begin{todolist}
-  \item Traceability matrix is complete
+  \item You have checked your work against the grading rubric on Avenue
+  \item If the grading rubric requires something not in your template, have you
+  modified the template, and included a description of the modification in the
+  document's introduction?  (For instance, you will have to add a traceability
+  matrix to the Volere template.)
   \end{todolist}
 
 \end{itemize}
