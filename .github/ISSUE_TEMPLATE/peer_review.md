@@ -1,7 +1,7 @@
 ---
 name: Peer Review
 about: Someone outside of the team reviews one of the artifacts.
-title: 'Peer Review - clear name for issue'
+title: 'Peer Review by TXX - DOCNAME - clear name for issue'
 labels: 'review'
 assignees: ''
 
