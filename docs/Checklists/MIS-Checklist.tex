@@ -47,7 +47,7 @@ the items in this checklist will not apply.
   \begin{todolist}
   \item Types that only hold data (records) are modelled as exported types.  For
     instance, the StdntAllocTypes module in A2:
-    \url{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/blob/master/Assignments/A2/A2.pdf})
+    \url{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/blob/master/Assignments/A2/A2.pdf}
   \item Types that have data (state) and behaviour are modelled as ADTs.  The
     MIS should use the keyword \textbf{Template}.  An example is the BoardT ADT
     given at
@@ -92,6 +92,10 @@ the items in this checklist will not apply.
   \item The uses relation is for the modules that need to be referenced to
   completely define the specification.  If parts of the exported interface from
   those modules are not needed, then the modules aren't listed under Uses.
+  \item Syntax for the modules is as specific as it needs to be to implement the
+  requirements.  It can be tempting to gloss over details.  The details of
+  implementation can be glossed over, but the interface has to be unambiguously
+  defined.
   \end{todolist}
 
 \item MIS Semantics for each module
@@ -104,6 +108,7 @@ the items in this checklist will not apply.
   \item If there is an entry in the state transition, then the state of
     something changes.  The state change might be the local state variables, the
     state variables for another module, or an environment variable.
+  \item The type is given for all state and environment variables
   \item Outputs use $out := ...$
   \item Exceptions use $exc := ...$
   \item If the state invariant is satisfied before an access program call, it
