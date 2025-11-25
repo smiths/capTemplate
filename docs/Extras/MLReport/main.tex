@@ -1,0 +1,199 @@
+% This template was provided by Dr. Charles Welch
+% He uses it in his course
+%
+
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage[]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+
+% If the title and author information does not fit in the area allocated, uncomment the following
+%
+%\setlength\titlebox{<dim>}
+%
+% and set <dim> to something 5cm or larger.
+
+\title{ML Report:\\My Group's Project Name}
+
+
+\author{First Author, Second Author, Third Author \\
+  \texttt{\{macid1,macid2,macid3\}@mcmaster.ca} }
+
+%\author{
+%  \textbf{First Author\textsuperscript{1}},
+%  \textbf{Second Author\textsuperscript{1,2}},
+%  \textbf{Third T. Author\textsuperscript{1}},
+%  \textbf{Fourth Author\textsuperscript{1}},
+%\\
+%  \textbf{Fifth Author\textsuperscript{1,2}},
+%  \textbf{Sixth Author\textsuperscript{1}},
+%  \textbf{Seventh Author\textsuperscript{1}},
+%  \textbf{Eighth Author \textsuperscript{1,2,3,4}},
+%\\
+%  \textbf{Ninth Author\textsuperscript{1}},
+%  \textbf{Tenth Author\textsuperscript{1}},
+%  \textbf{Eleventh E. Author\textsuperscript{1,2,3,4,5}},
+%  \textbf{Twelfth Author\textsuperscript{1}},
+%\\
+%  \textbf{Thirteenth Author\textsuperscript{3}},
+%  \textbf{Fourteenth F. Author\textsuperscript{2,4}},
+%  \textbf{Fifteenth Author\textsuperscript{1}},
+%  \textbf{Sixteenth Author\textsuperscript{1}},
+%\\
+%  \textbf{Seventeenth S. Author\textsuperscript{4,5}},
+%  \textbf{Eighteenth Author\textsuperscript{3,4}},
+%  \textbf{Nineteenth N. Author\textsuperscript{2,5}},
+%  \textbf{Twentieth Author\textsuperscript{1}}
+%\\
+%\\
+%  \textsuperscript{1}Affiliation 1,
+%  \textsuperscript{2}Affiliation 2,
+%  \textsuperscript{3}Affiliation 3,
+%  \textsuperscript{4}Affiliation 4,
+%  \textsuperscript{5}Affiliation 5
+%\\
+%  \small{
+%    \textbf{Correspondence:} \href{mailto:email@domain}{email@domain}
+%  }
+%}
+
+\begin{document}
+\maketitle
+% \begin{abstract}
+% \end{abstract}
+
+\section{Introduction}
+
+Here, write a brief introduction to the problem you are solving. This can be adapted from your problem description and motivation from the original proposal. This should be around 0.25-0.5 pages.
+
+\section{Related Work}
+
+Here, talk about the related work you encountered for your approach. Cite at least 5 references. Refer to item 2. No one has done exactly your task? Write about the most similar thing you can find. This should be around 0.25-0.5 pages.
+
+\section{Dataset}
+
+You should write about your dataset here, following the guidelines regarding item 1. This section may be 0.5-1 pages. Depending on your specific dataset, you may want to include subsections for the preprocessing, annotation, etc.
+
+\section{Features}
+
+Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 3. This may range from 0.25 pages to 0.5 pages.
+
+\section{Implementation}
+
+Describe your model and implementation here. Refer to item 4. This may take around a page.
+
+\section{Results and Evaluation}
+
+How are you evaluating your model? What results do you have so far? What are your baselines? Refer to item 5. This may take around 0.5 pages.
+
+\section{Feedback and Plans}
+
+Write about your plans for the remainder of the project. This should include a discussion of the feedback you received from your TA, and how you plan to improve your approach. Reflect on your implementation and areas for improvement. Refer to item 6. This may be around 0.5 pages.
+
+\section{Template Notes}
+
+You can remove this section or comment it out, as it only contains instructions for how to use this template. You may use subsections in your document as you find appropriate.
+
+\subsection{Tables and figures}
+
+See Table~\ref{citation-guide} for an example of a table and its caption.
+See Figure~\ref{fig:experiments} for an example of a figure and its caption.
+
+
+\begin{figure}[t]
+  \includegraphics[width=\columnwidth]{example-image-golden}
+  \caption{A figure with a caption that runs for more than one line.
+    Example image is usually available through the \texttt{mwe} package
+    without even mentioning it in the preamble.}
+  \label{fig:experiments}
+\end{figure}
+
+\begin{figure*}[t]
+  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
+  \includegraphics[width=0.48\linewidth]{example-image-b}
+  \caption {A minimal working example to demonstrate how to place
+    two images side-by-side.}
+\end{figure*}
+
+
+\subsection{Citations}
+
+\begin{table*}
+  \centering
+  \begin{tabular}{lll}
+    \hline
+    \textbf{Output}           & \textbf{natbib command} & \textbf{ACL only command} \\
+    \hline
+    \citep{Gusfield:97}       & \verb|\citep|           &                           \\
+    \citealp{Gusfield:97}     & \verb|\citealp|         &                           \\
+    \citet{Gusfield:97}       & \verb|\citet|           &                           \\
+    \citeyearpar{Gusfield:97} & \verb|\citeyearpar|     &                           \\
+    \citeposs{Gusfield:97}    &                         & \verb|\citeposs|          \\
+    \hline
+  \end{tabular}
+  \caption{\label{citation-guide}
+    Citation commands supported by the style file.
+  }
+\end{table*}
+
+Table~\ref{citation-guide} shows the syntax supported by the style files.
+We encourage you to use the natbib styles.
+You can use the command \verb|\citet| (cite in text) to get ``author (year)'' citations, like this citation to a paper by \citet{Gusfield:97}.
+You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
+You can use the command \verb|\citealp| (alternative cite without parentheses) to get ``author, year'' citations, which is useful for using citations within parentheses (e.g. \citealp{Gusfield:97}).
+
+\subsection{References}
+
+\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
+
+Many websites where you can find academic papers also allow you to export a bib file for citation or bib formatted entry. Copy this into the \texttt{custom.bib} and you will be able to cite the paper in the \LaTeX{}. You can remove the example entries.
+
+\subsection{Equations}
+
+An example equation is shown below:
+\begin{equation}
+  \label{eq:example}
+  A = \pi r^2
+\end{equation}
+
+Labels for equation numbers, sections, subsections, figures and tables
+are all defined with the \verb|\label{label}| command and cross references
+to them are made with the \verb|\ref{label}| command.
+This an example cross-reference to Equation~\ref{eq:example}. You can also write equations inline, like this: $A=\pi r^2$.
+
+
+% \section*{Limitations}
+
+\section*{Team Contributions}
+
+Write in this section a few sentences describing the contributions of each team member. What did each member work on? Refer to item 7.
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
+
+% Custom bibliography entries only
+\bibliography{custom}
+
+% \appendix
+
+% \section{Example Appendix}
+% \label{sec:appendix}
+
+% This is an appendix.
+
+\end{document}
