@@ -39,7 +39,6 @@ jobs:
           echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
       - name: Compile LaTeX
         uses: xu-cheng/texlive-action@v2
-        name: Compile LaTeX Files
         with:
           scheme: full
           texlive_version: 2024
@@ -59,8 +58,8 @@ jobs:
         with:
           path: public
 
-deploy:
-   needs: build
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
