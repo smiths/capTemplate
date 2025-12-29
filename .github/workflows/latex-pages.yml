@@ -60,7 +60,11 @@ jobs:
           PDF_LIST=$(find . -name "*.pdf" | sort | sed 's|^\./||' | \
             awk '{ print "<li><a href=\"" $0 "\">" $0 "</a></li>" }')
 
-          sed "s|<!-- PDF_LIST -->|$PDF_LIST|" ../site/index.html > index.html
+          # Build index.html safely
+          awk -v list="$PDF_LIST" '
+            /<!-- PDF_LIST -->/ { print list; next }
+            { print }
+          ' site/index.html > public/index.html
 
           # Copy static assets
           cp ../site/style.css .          
