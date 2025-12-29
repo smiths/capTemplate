@@ -1,0 +1,8 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 900px;
+  margin: 2rem auto;
+}
+li {
+  margin: .5rem 0;
+}

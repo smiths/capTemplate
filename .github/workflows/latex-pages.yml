@@ -57,14 +57,13 @@ jobs:
           rsync -av --include='*/' --include='*.pdf' --exclude='*' docs/ public/
           # Generate index.html
           cd public
-          {
-            echo "<!doctype html>"
-            echo "<html><head><meta charset='utf-8'><title>PDFs</title></head><body>"
-            echo "<h1>Available PDFs</h1><ul>"
-            find . -name "*.pdf" | sort | sed 's|^\./||' | \
-            awk '{ print "<li><a href=\"" $0 "\">" $0 "</a></li>" }'
-            echo "</ul></body></html>"
-          } > index.html          
+          PDF_LIST=$(find . -name "*.pdf" | sort | sed 's|^\./||' | \
+            awk '{ print "<li><a href=\"" $0 "\">" $0 "</a></li>" }')
+
+          sed "s|<!-- PDF_LIST -->|$PDF_LIST|" ../site/index.html > index.html
+
+          # Copy static assets
+          cp ../site/style.css .          
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
