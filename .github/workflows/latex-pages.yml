@@ -47,7 +47,8 @@ jobs:
       - name: Install TeX Live
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full
+          #sudo apt-get install -y texlive-full
+          sudo apt-get install -y --fix-missing texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex
       - name: Compile LaTeX
         run: |
           PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
