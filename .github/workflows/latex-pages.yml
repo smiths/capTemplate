@@ -84,10 +84,6 @@ jobs:
           # Copy PDFs preserving structure
           rsync -av build-pdf/ public/
           
-          # Sanity check
-          echo "PDFs found:"
-          find public -name "*.pdf" || true
-
           # Generate PDF list (paths relative to site root)
           PDF_LIST=$(find public -name "*.pdf" | sort | sed 's|^public/||' | awk -F/ '
           {
