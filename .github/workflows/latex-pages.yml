@@ -18,6 +18,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Restore PDF cache
         uses: actions/cache@v4
         with:
@@ -25,10 +29,15 @@ jobs:
           key: pdf-cache-v5
           restore-keys: |
             pdf-cache-v5
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Debug cache contents
+        run: |
+          echo "After cache restore:"
+          ls -la build-pdf || true
+      - name: Cache TeX Live
+        uses: actions/cache@v4
         with:
-          fetch-depth: 0
+          path: /opt/texlive
+          key: texlive-2024-v1
       - name: Get changed LaTeX files
         id: latex-files
         run: |
@@ -44,10 +53,27 @@ jobs:
             PLURAL_S=''
           fi
           echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
-      - name: Install TeX Live
+      - name: Install TeX Live (if needed)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-full
+          if [ ! -d /opt/texlive/2024 ]; then
+            echo "Installing TeX Live 2024..."
+            sudo mkdir -p /opt/texlive
+            sudo chown -R $USER:$USER /opt/texlive
+
+            curl -L https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz | tar xz
+            cd install-tl-*
+            ./install-tl --profile=/dev/stdin <<EOF
+            selected_scheme scheme-full
+            TEXDIR /opt/texlive/2024
+            TEXMFCONFIG ~/.texlive2024/texmf-config
+            TEXMFVAR ~/.texlive2024/texmf-var
+            TEXMFHOME ~/texmf
+            option_doc 0
+            option_src 0
+            EOF
+          else
+            echo "Using cached TeX Live"
+          fi
       - name: Compile LaTeX
         run: |
           PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
