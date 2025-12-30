@@ -53,6 +53,9 @@ jobs:
             apk add make
             PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
             mkdir -p "$PDF_CACHE_DIR"
+            echo "PWD: $(pwd)"
+            echo "Cache dir contents:"
+            ls -la "$PDF_CACHE_DIR" || true
             # Bootstrap: full build if cache is empty
             if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
               echo "No cached PDFs found; building all documents"
