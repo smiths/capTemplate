@@ -18,7 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
+      - name: Restore PDF cache
+        uses: actions/cache@v4
+        with:
+          path: build-pdf
+          key: pdf-cache-${{ github.ref }}-${{ hashFiles('docs/**/*.sty', 'Makefile') }}
+          restore-keys: |
+            pdf-cache-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -45,10 +51,13 @@ jobs:
           texlive_version: 2024
           run: |
             apk add make
-            cd docs
-            for file in ${{ env.CHANGED_FILES }}; do 
-              dir=$(dirname "$file" | cut -d'/' -f2-)
-              make -B "$dir/$(basename "$file" .tex).pdf" 
+            mkdir -p build-pdf
+            for file in ${{ env.CHANGED_FILES }}; do
+              rel=$(dirname "$file" | cut -d'/' -f2-)
+              outdir="build-pdf/$rel"
+              mkdir -p "$outdir"
+
+              make -B "$outdir/$(basename "$file" .tex).pdf"
             done
       - name: Prepare site
         run: |
@@ -63,7 +72,7 @@ jobs:
           mkdir -p public          
           
           # Copy PDFs preserving structure
-          rsync -av --include='*/' --include='*.pdf' --exclude='*' docs/ public/
+          rsync -av build-pdf/ public/
           
           # Sanity check
           echo "PDFs found:"
