@@ -59,11 +59,13 @@ jobs:
             fi
 
             for file in $CHANGED_FILES; do
+              # Build using existing Makefile rules
+              make -B "${file%.tex}.pdf"
+              
+              # Copy result into build-pdf, preserving structure
               rel=$(dirname "$file" | cut -d'/' -f2-)
-              outdir="build-pdf/$rel"
-              mkdir -p "$outdir"
-
-              make -B "$outdir/$(basename "$file" .tex).pdf"
+              mkdir -p "build-pdf/$rel"
+              cp "${file%.tex}.pdf" "build-pdf/$rel/"
             done
       - name: Prepare site
         run: |
