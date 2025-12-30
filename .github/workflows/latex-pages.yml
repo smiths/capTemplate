@@ -22,9 +22,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build-pdf
-          key: pdf-cache-v1
+          key: pdf-cache-v5
           restore-keys: |
-            pdf-cache-v1
+            pdf-cache-v5
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -71,6 +71,9 @@ jobs:
               mkdir -p "build-pdf/$rel"
               cp "${file%.tex}.pdf" "build-pdf/$rel/"
             done
+
+            echo "PDFs before job end:"
+            find "$PDF_CACHE_DIR" -name "*.pdf" | wc -l
         continue-on-error: true # Job continues even if this step fails
       - name: Prepare site
         run: |
