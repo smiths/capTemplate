@@ -29,10 +29,6 @@ jobs:
           key: pdf-cache-v5
           restore-keys: |
             pdf-cache-v5
-      - name: Debug cache contents
-        run: |
-          echo "After cache restore:"
-          ls -la build-pdf || true
       - name: Get changed LaTeX files
         id: latex-files
         run: |
@@ -57,9 +53,6 @@ jobs:
             apk add make
             PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
             mkdir -p "$PDF_CACHE_DIR"
-            echo "PWD: $(pwd)"
-            echo "Cache dir contents:"
-            ls -la "$PDF_CACHE_DIR" || true
             # Bootstrap: full build if cache is empty
             if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
               echo "No cached PDFs found; building all documents"
@@ -75,9 +68,6 @@ jobs:
               mkdir -p "$PDF_CACHE_DIR/$rel"
               cp "${file%.tex}.pdf" "$PDF_CACHE_DIR/$rel/"
             done
-
-            echo "PDFs before job end:"
-            find "$PDF_CACHE_DIR" -name "*.pdf" | wc -l
         continue-on-error: true # Job continues even if this step fails
       - name: Prepare site
         run: |
