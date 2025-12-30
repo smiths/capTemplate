@@ -19,11 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/cache@v4
-        with:
-          path: /usr/local/texlive
-          key: texlive
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -74,7 +69,7 @@ jobs:
           echo "PDFs found:"
           find public -name "*.pdf" || true
 
-          # Generate PDF list (paths relative to public/)
+          # Generate PDF list (paths relative to site root)
           PDF_LIST=$(find public -name "*.pdf" | sort | sed 's|^public/||' | \
             awk '{ print "<li><a href=\"" $0 "\">" $0 "</a></li>" }')
 
@@ -89,7 +84,7 @@ jobs:
 
           # Copy static assets
           cp site/style.css public/
-                    
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
