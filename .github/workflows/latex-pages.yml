@@ -26,9 +26,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build-pdf
-          key: pdf-cache-v5
+          key: pdf-cache-${{ github.run_id }}
           restore-keys: |
-            pdf-cache-v5
+            pdf-cache-
       - name: Get changed LaTeX files
         id: latex-files
         run: |
