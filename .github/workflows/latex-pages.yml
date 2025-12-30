@@ -44,30 +44,32 @@ jobs:
             PLURAL_S=''
           fi
           echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full
       - name: Compile LaTeX
-        uses: xu-cheng/texlive-action@v2
-        with:
-          scheme: full
-          texlive_version: 2024
-          run: |
-            apk add make
-            PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
-            mkdir -p "$PDF_CACHE_DIR"
-            # Bootstrap: full build if cache is empty
-            if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
-              echo "No cached PDFs found; building all documents"
-              CHANGED_FILES=$(find docs -name "*.tex")
-            fi
+        run: |
+          PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
+          mkdir -p "$PDF_CACHE_DIR"
 
-            for file in $CHANGED_FILES; do
-              # Build using existing Makefile rules
-              make -B "${file%.tex}.pdf"
+          echo "CHANGED_FILES seen by compile step: $CHANGED_FILES"
+
+          # Bootstrap: full build if cache is empty
+          if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
+            echo "No cached PDFs found; building all documents"
+            CHANGED_FILES=$(find docs -name "*.tex")
+          fi
+
+          for file in $CHANGED_FILES; do
+            # Build using existing Makefile rules
+            make -B "${file%.tex}.pdf"
               
-              # Copy result into build-pdf, preserving structure
-              rel=$(dirname "$file" | cut -d'/' -f2-)
-              mkdir -p "$PDF_CACHE_DIR/$rel"
-              cp "${file%.tex}.pdf" "$PDF_CACHE_DIR/$rel/"
-            done
+            # Copy result into build-pdf, preserving structure
+            rel=$(dirname "$file" | cut -d'/' -f2-)
+            mkdir -p "$PDF_CACHE_DIR/$rel"
+            cp "${file%.tex}.pdf" "$PDF_CACHE_DIR/$rel/"
+          done
         continue-on-error: true # Job continues even if this step fails
       - name: Prepare site
         run: |
