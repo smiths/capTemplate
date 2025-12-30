@@ -22,9 +22,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build-pdf
-          key: pdf-cache-${{ github.ref }}-${{ hashFiles('docs/**/*.sty', 'Makefile') }}
+          key: pdf-cache-v1
           restore-keys: |
-            pdf-cache-
+            pdf-cache-v1
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
