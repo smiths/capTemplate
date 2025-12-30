@@ -51,9 +51,10 @@ jobs:
           texlive_version: 2024
           run: |
             apk add make
-            mkdir -p build-pdf
+            PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
+            mkdir -p "$PDF_CACHE_DIR"
             # Bootstrap: full build if cache is empty
-            if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A build-pdf 2>/dev/null)" ]; then
+            if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
               echo "No cached PDFs found; building all documents"
               CHANGED_FILES=$(find docs -name "*.tex")
             fi
