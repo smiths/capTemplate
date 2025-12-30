@@ -51,15 +51,30 @@ jobs:
             done
       - name: Prepare site
         run: |
+          set -euo pipefail
+
+          # Always start from repo root
+          pwd
+          ls
+
+          # Recreate public directory
           rm -rf public
-          mkdir -p public
+          mkdir -p public          
+          
           # Copy PDFs preserving structure
           rsync -av --include='*/' --include='*.pdf' --exclude='*' docs/ public/
-          # Generate index.html
-          cd public
+          
+          # Sanity check
+          echo "PDFs found:"
+          find public -name "*.pdf" || true
+
+          # Generate PDF list (paths relative to public/)
           PDF_LIST=$(find . -name "*.pdf" | sort | sed 's|^\./||' | \
             awk '{ print "<li><a href=\"" $0 "\">" $0 "</a></li>" }')
 
+          # Ensure site template exists
+          test -f site/index.html
+          
           # Build index.html safely
           awk -v list="$PDF_LIST" '
             /<!-- PDF_LIST -->/ { print list; next }
