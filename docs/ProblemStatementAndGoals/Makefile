@@ -1,20 +1,18 @@
 # Makefile
 # From https://danielkaes.wordpress.com/2009/03/14/compiling-latex-documents-using-makefiles/
 
-PROJECT=ProblemStatement
 TEX=pdflatex
 BIBTEX=bibtex
-BUILDTEX=$(TEX) $(PROJECT).tex
+BUILDTEX=$(TEX) $<
 
 # Default target: builds the PDF
-all: $(PROJECT).pdf
+all: ProblemStatement.pdf
 
-# Rule to create the PDF from the TeX file
-$(PROJECT).pdf: $(PROJECT).tex
-	$(BUILDTEX)
-#	$(BIBTEX) $(PROJECT)
-#	$(BUILDTEX)
-	$(BUILDTEX)
+%.pdf: %.tex
+	$(TEX) $<
+#	$(BIBTEX) $<
+#	BUILDTEX
+	$(TEX) $<
 
 clean-all:
 	rm -f *.dvi *.log *.bak *.aux *.bbl *.blg *.idx *.ps *.eps *.pdf *.toc *.out *~
