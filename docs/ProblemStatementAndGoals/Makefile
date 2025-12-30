@@ -6,7 +6,11 @@ TEX=pdflatex
 BIBTEX=bibtex
 BUILDTEX=$(TEX) $(PROJECT).tex
 
-all:
+# Default target: builds the PDF
+all: $(PROJECT).pdf
+
+# Rule to create the PDF from the TeX file
+$(PROJECT).pdf: $(PROJECT).tex
 	$(BUILDTEX)
 #	$(BIBTEX) $(PROJECT)
 #	$(BUILDTEX)
