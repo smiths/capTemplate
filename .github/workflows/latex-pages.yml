@@ -52,7 +52,13 @@ jobs:
           run: |
             apk add make
             mkdir -p build-pdf
-            for file in ${{ env.CHANGED_FILES }}; do
+            # Bootstrap: full build if cache is empty
+            if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A build-pdf 2>/dev/null)" ]; then
+              echo "No cached PDFs found; building all documents"
+              CHANGED_FILES=$(find docs -name "*.tex")
+            fi
+
+            for file in $CHANGED_FILES; do
               rel=$(dirname "$file" | cut -d'/' -f2-)
               outdir="build-pdf/$rel"
               mkdir -p "$outdir"
