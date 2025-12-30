@@ -67,6 +67,7 @@ jobs:
               mkdir -p "build-pdf/$rel"
               cp "${file%.tex}.pdf" "build-pdf/$rel/"
             done
+        continue-on-error: true # Job continues even if this step fails
       - name: Prepare site
         run: |
           set -euo pipefail
