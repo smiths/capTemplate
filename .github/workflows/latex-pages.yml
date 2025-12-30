@@ -74,7 +74,7 @@ jobs:
 
           # Ensure site template exists
           test -f site/index.html
-          
+
           # Build index.html safely
           awk -v list="$PDF_LIST" '
             /<!-- PDF_LIST -->/ { print list; next }
@@ -82,7 +82,7 @@ jobs:
           ' site/index.html > public/index.html
 
           # Copy static assets
-          cp ../site/style.css .          
+          cp site/style.css .          
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
