@@ -34,17 +34,17 @@ jobs:
         run: |
           BASE=${{ github.event.before }}
           [ -z "$BASE" ] && BASE=HEAD^
-          
-          CHANGED_FILES=$(git diff --name-only "$BASE" "${{ github.sha }}" -- (glob)docs/**/*.tex' | xargs)
+
+          CHANGED_FILES=$(git diff --name-only "$BASE" "${{ github.sha }}" -- ':(glob)docs/**/*.tex' | xargs)
 
           echo "Changed files: $CHANGED_FILES"
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
 
           CHANGED_FILENAMES=$(for file in $CHANGED_FILES; do basename "$file"; done | xargs)
           echo "CHANGED_FILENAMES=$CHANGED_FILENAMES" >> $GITHUB_ENV
-          
-          FILE_COUNT=$(echo $CHANGED_FILENAMES | wc -w)
-          if [ $FILE_COUNT -gt 1 ]; then
+
+          FILE_COUNT=$(echo "$CHANGED_FILENAMES" | wc -w)
+          if [ "$FILE_COUNT" -gt 1 ]; then
             PLURAL_S='s'
           else
             PLURAL_S=''
