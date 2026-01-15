@@ -1,16 +1,15 @@
 \documentclass{article}
+\newcommand{\authorname}{Yanyu Wu}
 
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Problem Statement and Goals\\\progname}
+\title{Problem Statement and Goals\\Integrating NCRF Into Pipeline}
 
-\author{\authname}
+\author{\authorname}
 
-\date{}
+\date{January 15th 2026}
 
-\input{../Comments.text}
-\input{../Common.text}
 
 \begin{document}
 
@@ -22,72 +21,46 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+January 15 2026 & Yanyu Wu & Initial Draft\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://smiths.github.io/capTemplate/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}}. 
-
-\wss{You can change the section headings, as long as you include the required
-information.}
+\wss{This project focuses on integrating Nonlinear Convolutional Response Functions(NCRFs) into the existing TRF pipeline to extend its capability for modeling nonlinear brain responses}. 
 
 \subsection{Problem}
+\wss{The project aims to integrate NCRFs into the pipeline, enabling more accurate analysis of EEG data.}
+
 
 \subsection{Inputs and Outputs}
+\wss{The input for the pipeline includes the original EEG data and speech features. \\The output data including the pre-processed data, statistical results and visualization results.}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
 
 \subsection{Stakeholders}
-
+\wss{Stakeholders involve the lab members, researcher and students who will use the pipeline for their EEG analyses.}
 \subsection{Environment}
 
-\wss{Hardware and Software Environment for the users.  The developer environment
-is summarized as part of the developer plan.}
+\wss{The project will be developed based on Python, Conda, Eelbrain on MacOS/Windows/Linux. }
 
 \section{Goals}
+\begin{enumerate}
+    \item Enable the analysis of nonlinear EEG responses by integrating NCRF modeling into the existing TRF pipeline.
+    \item Provide more complete neural response models by combining linear and nonlinear analyses.
+\end{enumerate}
+
 
 \section{Stretch Goals}
-
-\wss{Goals you hope to get to, but not necessary.  They are also helpful if the
-scope of the original project needs to be expanded.}
+\wss{Provide an interactive GUI for the usage of this pipeline and enable more flexible analysis methods.}
 
 \section{Extras}
 
-\wss{For CAS 741: State whether the project is a research project. This
-designation, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
-
-\wss{For SE Capstone: List your extras.  Potential extras include usability
-testing, code walkthroughs, user documentation, formal proof, GenderMag
-personas, Design Thinking, etc.  (The full list is on the course outline and in
-Lecture 02.) Normally the number of extras will be two.  Approval of the extras
-will be part of the discussion with the instructor for approving the project.
-The extras, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
-
-\newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741}
-
-\input{../Reflection.text}
+\wss{Although this project is not a research project, it still requires a certain level of knowledge in neuroscience and related data processing methods; otherwise, users might be confused about the pipeline's functionality.}
 
 \begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item How did you and your team adjust the scope of your goals to ensure
-    they are suitable for a Capstone project (not overly ambitious but also of
-    appropriate complexity for a senior design project)?
-\end{enumerate}  
+\item User documentation: Provide detailed instructions, including installation, preprocessing steps, NCRF analysis, and visualization.
+\item Pipeline demonstration: Include a working example with sample EEG and speech data to illustrate the pipeline's functions.
+\end{enumerate}
 
 \end{document}
