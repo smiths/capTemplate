@@ -2,6 +2,8 @@
 
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[letterpaper,left=0.8in,top=1.0in,right=1.0in,bottom=1.0in]{geometry}
 
 \title{Reflection and Traceability Report on \progname}
 
@@ -15,6 +17,14 @@
 \begin{document}
 
 \maketitle
+
+\newpage
+
+\tableofcontents
+
+\listoftables %if appropriate
+
+\newpage
 
 \plt{Reflection is an important component of getting the full benefits from a
 learning experience.  Besides the intrinsic benefits of reflection, this
@@ -61,22 +71,206 @@ be able to grade your response to feedback.  In that case your grade on this
 document, and likely the Revision 1 versions of the other documents will be
 low.} 
 
+\subsection{Problem Statement, Goals, and Development Plan} %------------------------------------------------------------------------
+
+Table~\ref{Tbl-ProbState} summarizes the feedback received from our peers, the TA, the instructor and other sources.  The table includes links to the related issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for Problem Statement, Goals, Development Plan}
+\label{Tbl-ProbState}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
+
 \subsection{SRS and Hazard Analysis}
+
+The SRS and Hazard Analysis deliverables are closely related, so we will
+summarize the feedback received for these two deliverables together in the
+sections that follow.
+
+\subsubsection{SRS}
+
+Table~\ref{Tbl-SRS} summarizes the feedback received from our peers, the TA, the
+instructor and other sources.  The table includes links to the related issues
+and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for SRS}
+\label{Tbl-SRS}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
+
+\subsubsection{Hazard Analysis}
+
+Table~\ref{Tbl-Hazard} summarizes the feedback received from our peers, the TA,
+the instructor and other sources.  The table includes links to the related
+issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for Hazard Analysis}
+\label{Tbl-Hazard}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#},
+\href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#},
+\href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#},
+\href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#},
+\href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
 
 \subsection{Design and Design Documentation}
 
+The design and design documentation deliverables include the software
+architecture and detailed design.  We will summarize the feedback received for
+each of these deliverables separately in the sections that follow.
+
 \subsubsection{Software Architecture}
+
+Table~\ref{Tbl-Architecture} summarizes the feedback received from our peers,
+the TA, the instructor and other sources.  The table includes links to the
+related issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for Software Architecture}
+\label{Tbl-Architecture}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
 
 \subsubsection{Detailed Design}
 
+Table~\ref{Tbl-DetailedDesign} summarizes the feedback received from our peers,
+the TA, the instructor and other sources.  The table includes links to the
+related issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for Detailed Design}
+\label{Tbl-DetailedDesign}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
+
 \subsection{VnV Plan and Report}
+
+The VnV Plan and Report deliverables are closely related, so we will summarize
+the feedback received for these two deliverables together in the sections that
+follow.
+
+\subsubsection{VnV Plan}
+Table~\ref{Tbl-VnVPlan} summarizes the feedback received from our peers, the TA, the instructor and other sources.  The table includes links to the related issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for VnV Plan}
+\label{Tbl-VnVPlan}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
+
+\subsubsection{VnV Report}
+
+Table~\ref{Tbl-VnVReport} summarizes the feedback received from our peers, the
+TA, the instructor and other sources.  The table includes links to the related
+issues and pull requests, along with a summary of our response/changes.
+
+\begin{longtable}{|p{2cm}|p{4cm}|p{5cm}|p{4cm}|}
+\caption{Feedback Responses and Traceability for VnV Report}
+\label{Tbl-VnVReport}\\
+
+\hline
+\textbf{Feedback Source} & \textbf{Summary} & \textbf{Changes Made} & \textbf{Related Issues} \\ 
+\hline
+\endhead
+
+Peer & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+TA & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Instructor & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+Other & summary of feedback & summary of changes made & \href{link}{IS\#}, \href{link}{PR\#}, ... \\
+\hline
+\end{longtable}
 
 \section{Extras}
 
 \plt{Summarize the extras that were tackled by this project.  Extras
 can include usability testing, code walkthroughs, user documentation, formal
 proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
+been approved by the course instructor as included in your problem statement.  The extras should match what is documented in TeamComposition.csv.}
+
+\plt{Provide links to the documentation of the extras}
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
