@@ -1,11 +1,11 @@
-**What is expected for a Norman’s Principle’s Extra?** 
+**What is expected for a Norman’s Principle’s CD?** 
 
-For this extra we're looking for your team to develop a document that uses
+For this CD we're looking for your team to develop a document that uses
 Norman’s Design Principles as a benchmark to evaluate the design decisions made
 in the final version of your capstone. Essentially, we want to see a discussion
 about how you used every principle in the design, examining aspects of the
 project where you applied the principles well, and aspects where the design
-could be improved according to the principles. For the extra to achieve full
+could be improved according to the principles. For the CD to achieve full
 marks there should be a close to even spread of "good" and "bad" applications of
 the principles discussed in the document, with at least three "good" or "bad"
 applications analyzed per principle. There should be explanations as to why your

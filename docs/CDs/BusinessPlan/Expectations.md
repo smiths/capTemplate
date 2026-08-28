@@ -1,11 +1,4 @@
-Some software Capstone teams have continued to develop their projects after Capstone, and have even
-started businesses related to their Capstones. The business plan extra is for teams who wish to conceive of 
-ways to monetize their Capstone project after Capstone ends. A good business plan report should include
-the following, plus any other information the team feels is necessary. Marks will be based on the depth
-of critical thought and justification, plus evidence of research-backed values presented in the document.
-It is not necessary to gather primary information (i.e., your own surveys and focus groups), but all
-information and estimates should be based whenever possible on realistic values from other, properly-cited
-sources.
+Some software Capstone teams have continued to develop their projects after Capstone, and have even started businesses related to their Capstones. The business plan custom document (CD) is for teams who wish to conceive of  ways to monetize their Capstone project after Capstone ends. A good business plan report should include the following, plus any other information the team feels is necessary. Marks will be based on the depth of critical thought and justification, plus evidence of research-backed values presented in the document. It is not necessary to gather primary information (i.e., your own surveys and focus groups), but all information and estimates should be based whenever possible on realistic values from other, properly-cited sources.
 
 * **Problem and market need:** Identifies target customer, the specific pain point your software addresses,
   evidence of demand for the product, and why your solution is better than existing ones. For any unknown

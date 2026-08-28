@@ -1,4 +1,4 @@
-This extra does not fit for all projects, but if the team has done something
+This CD does not fit for all projects, but if the team has done something
 significant to address the nonfunctional requirement of reducing the energy
 consumed by the software, this can be written up as a report.  The report should
 cover specific information including, citations to relevant literature, tools
