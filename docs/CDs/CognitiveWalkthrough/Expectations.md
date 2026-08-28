@@ -1,0 +1,3 @@
+Complete a cognitive walkthrough for your project's planned interface.  To do this the project needs to at least have a paper prototype.  A wireframe prototype is preferrable.
+
+[An overview of cognitive walkthroughs](https://www.nngroup.com/articles/cognitive-walkthroughs/) shows that it is necessary to document on a methodology, summarize the people and roles involved, and summarize the results. For the results you should be specific about what problems were noted. Along with the results of the cognitive walkthrough, summarize the changes that are planned for your interface.
