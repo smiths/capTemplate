@@ -7,8 +7,33 @@
 </head>
 <body>
   <h1>Available PDFs</h1>
-  <ul>
-    <!-- PDF_LIST -->
-  </ul>
+  <p class="generated-line">Site generated <!-- GENERATED --></p>
+  <!-- PDF_LIST -->
+
+  <script>
+    // Times are written into the page as UTC, because the machine that builds
+    // the site runs in UTC and cannot know where it will be read. Rewrite them
+    // in the reader's own timezone. If this does not run, the UTC text that
+    // was written into each element stands on its own.
+    (function () {
+      var stamps = document.querySelectorAll('time[datetime]');
+      for (var i = 0; i < stamps.length; i++) {
+        var el = stamps[i];
+        var when = new Date(el.getAttribute('datetime'));
+        if (isNaN(when.getTime())) continue;
+        var shown;
+        try {
+          shown = when.toLocaleString(undefined, {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+          });
+        } catch (e) {
+          continue;  // very old browser: leave the UTC text in place
+        }
+        el.textContent = (el.getAttribute('data-prefix') || '') + shown;
+        el.title = 'UTC: ' + el.getAttribute('datetime');
+      }
+    })();
+  </script>
 </body>
 </html>

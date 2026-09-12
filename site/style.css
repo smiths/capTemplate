@@ -2,7 +2,39 @@ body {
   font-family: system-ui, sans-serif;
   max-width: 900px;
   margin: 2rem auto;
+  padding: 0 1rem;
+  color: #222;
 }
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: .25rem;
+}
+
+h2 {
+  font-size: 1.05rem;
+  margin: 1.6rem 0 .4rem;
+  padding-bottom: .2rem;
+  border-bottom: 1px solid #ddd;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
 li {
-  margin: .5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: .4rem 0;
+}
+
+.updated,
+.generated-line {
+  color: #666;
+  font-size: .85rem;
+  white-space: nowrap;
 }
