@@ -1,7 +1,13 @@
 # Makefile for compiling .tex files
 
 # Define the pdflatex command
-PDFLATEX_CMD = pdflatex -interaction=nonstopmode
+# -recorder makes pdflatex write a .fls listing every file it read, which
+# is what record_deps.py turns into the dependency manifest.
+PDFLATEX_CMD = pdflatex -interaction=nonstopmode -recorder
+
+# Define the pandoc command, for teams who author a document in Markdown
+# instead of LaTeX. Uses the pdflatex already installed for the .tex rule.
+PANDOC_CMD = pandoc --pdf-engine=pdflatex --toc -V geometry:margin=1in
 
 # Define the compile step for pdflatex
 define COMPILE_TEX
@@ -18,6 +24,14 @@ endef
 
 # Default target: Compile all .tex files if no specific target is given
 all: $(patsubst %.tex, %.pdf, $(wildcard **/*.tex))
+
+# Rule for compiling .md to .pdf.
+# NOTE: this rule is deliberately listed BEFORE the .tex rule. When a folder
+# contains both Foo.md and Foo.tex, GNU make picks the first matching pattern
+# rule whose prerequisite exists, so Markdown wins the collision.
+%.pdf: %.md
+	@echo "Compiling $< to $@ with pandoc"
+	cd $(dir $<) && $(PANDOC_CMD) $(notdir $<) -o $(notdir $@)
 
 # Rule for compiling .tex to .pdf
 %.pdf: %.tex

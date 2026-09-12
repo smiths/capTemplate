@@ -3,10 +3,10 @@ name: Build LaTeX and Deploy PDFs
 on:
   push:
     branches: main
-    paths: [docs/**]
+    paths: [docs/**, refs/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
   pull_request:
     branches: main
-    paths: [docs/**]
+    paths: [docs/**, refs/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
   workflow_dispatch:
 
 permissions:
@@ -19,28 +19,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Restore PDF cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: build-pdf
           key: pdf-cache-${{ github.run_id }}
           restore-keys: |
             pdf-cache-
+      - name: Seed PDF cache from committed PDFs
+        run: |
+          # The committed pdfs/ directory is the source of truth, not the
+          # Actions cache. A cache miss (eviction, 7-day expiry, size limit)
+          # must never let the later rsync --delete wipe committed PDFs.
+          mkdir -p build-pdf
+          if [ -d pdfs ]; then
+            rsync -av --ignore-existing pdfs/ build-pdf/
+          fi
       - name: Get changed LaTeX files
         id: latex-files
         run: |
           BASE=${{ github.event.before }}
           [ -z "$BASE" ] && BASE=HEAD^
 
-          CHANGED_FILES=$(git diff --name-only "$BASE" "${{ github.sha }}" -- ':(glob)docs/**/*.tex' | xargs)
+          # Every file under docs/ and refs/ is a candidate, not just .tex and
+          # .md: a change to a shared \input, a figure or the bibliography has
+          # to rebuild the documents that read it. Which documents those are is
+          # decided by select_docs.py from the recorded dependency graph, so no
+          # filtering by extension happens here.
+          SCOPE=(':(glob)docs/**' ':(glob)refs/**' 'Makefile'
+                 ':(glob).github/workflows/latex-pages.yml'
+                 ':(glob).github/scripts/**')
+
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d "$BASE" "${{ github.sha }}" -- "${SCOPE[@]}" | xargs)
+          DELETED_FILES=$(git diff --name-only --diff-filter=D "$BASE" "${{ github.sha }}" -- "${SCOPE[@]}" | xargs)
 
           echo "Changed files: $CHANGED_FILES"
-          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+          echo "Deleted files: $DELETED_FILES"
+          echo "DELETED_FILES=$DELETED_FILES" >> $GITHUB_ENV
 
-          CHANGED_FILENAMES=$(for file in $CHANGED_FILES; do basename "$file"; done | xargs)
+          BUILD_DOCS=$(python3 .github/scripts/select_docs.py \
+                         --changed $CHANGED_FILES \
+                         --deleted $DELETED_FILES \
+                         --manifest .pdf-deps.json --root . | xargs)
+
+          echo "Documents to build: $BUILD_DOCS"
+          echo "BUILD_DOCS=$BUILD_DOCS" >> $GITHUB_ENV
+
+          CHANGED_FILENAMES=$(for file in $BUILD_DOCS; do basename "$file"; done | xargs)
           echo "CHANGED_FILENAMES=$CHANGED_FILENAMES" >> $GITHUB_ENV
 
           FILE_COUNT=$(echo "$CHANGED_FILENAMES" | wc -w)
@@ -50,76 +78,137 @@ jobs:
             PLURAL_S=''
           fi
           echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
-      - name: Install TeX Live
+      # Installing these with apt takes ~126s, almost all of it unpacking
+      # rather than downloading, so caching the installed files (not the
+      # .debs) is what saves time. Pinned to a commit: this template is
+      # forked widely and the job has contents: write.
+      # texlive-full is avoided deliberately; it is far larger than needed.
+      # pandoc drives the Markdown -> PDF rule in the Makefile.
+      - name: Install TeX Live and pandoc
+        uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9 # v1.6.3
+        with:
+          packages: texlive-latex-extra texlive-science texlive-fonts-extra texlive-fonts-recommended texlive-latex-recommended lmodern pandoc
+          version: 1.1
+      - name: Verify the TeX toolchain is usable
         run: |
-          sudo apt-get update
-          #sudo apt-get install -y texlive-full #if needed, but very large
-          sudo apt-get install -y --fix-missing texlive-latex-extra texlive-science texlive-fonts-extra #texlive-xetex texlive-luatex texlive-bibtex-extra 
+          # A restored cache that skipped texlive's postinst would leave
+          # pdflatex unable to find packages. Fail here, loudly, rather than
+          # part way through compiling documents.
+          # Restoring cached package files skips their postinst scripts, and
+          # texlive's is what builds the ls-R filename database. Without this
+          # kpsewhich cannot see the restored packages, which surfaced as
+          # "lmodern.sty not found" on the first cache hit.
+          sudo mktexlsr
+          # ...and updmap-sys is what builds the font map files. Without it
+          # pdflatex finds lmodern.sty but not the fonts it maps to, failing
+          # with "Font rm-lmr7 at 600 not found".
+          sudo updmap-sys >/dev/null
+
+          pdflatex --version | head -1
+          pandoc --version | head -1
+          kpsewhich article.cls
+          kpsewhich amsmath.sty
+          # pandoc's default template pulls in packages the .tex documents
+          # never ask for (lmodern.sty was missing the first time this ran),
+          # so smoke-test the Markdown path itself rather than guessing at
+          # the package list.
+          smoke=$(mktemp -d)
+          printf '%s\n' '# Smoke test' '' 'Math $x^2$ and a table:' '' \
+            '| a | b |' '|---|---|' '| 1 | 2 |' > "$smoke/smoke.md"
+          pandoc "$smoke/smoke.md" -o "$smoke/smoke.pdf" \
+            --pdf-engine=pdflatex --toc -V geometry:margin=1in
+          test -s "$smoke/smoke.pdf" && echo "pandoc -> PDF smoke test OK"
+          rm -rf "$smoke"
       - name: Compile LaTeX
         run: |
           PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
           mkdir -p "$PDF_CACHE_DIR"
 
-          echo "CHANGED_FILES seen by compile step: $CHANGED_FILES"
+          echo "Documents selected for build: $BUILD_DOCS"
 
-          # Bootstrap: full build if cache is empty
-          if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
-            echo "No cached PDFs found; building all documents"
-            CHANGED_FILES=$(find docs -name "*.tex")
-          fi
+          for src in $BUILD_DOCS; do
+            pdf="${src%.*}.pdf"
 
-          for file in $CHANGED_FILES; do
             # Build using existing Makefile rules
-            make -B "${file%.tex}.pdf"
-              
-            # Copy result into build-pdf, preserving structure
-            rel=$(dirname "$file" | cut -d'/' -f2-)
+            make -B "$pdf"
+
+            # Record what this document actually read, for the next run's
+            # change detection. Runs after the build so the .fls is present.
+            python3 .github/scripts/record_deps.py "$src" .pdf-deps.json .
+
+            # Copy result into build-pdf, preserving structure below docs/
+            rel=$(dirname "$pdf"); rel="${rel#docs}"; rel="${rel#/}"
             mkdir -p "$PDF_CACHE_DIR/$rel"
-            cp "${file%.tex}.pdf" "$PDF_CACHE_DIR/$rel/"
+            cp "$pdf" "$PDF_CACHE_DIR/$rel/"
           done
+
+          # Remove cached PDFs that no longer have a source document. This is
+          # driven by the filesystem rather than by this push's diff: a run
+          # that fails before this point would otherwise lose the deletion for
+          # good, because the next push's diff no longer mentions it.
+          find "$PDF_CACHE_DIR" -name '*.pdf' -print | while read -r cached; do
+            rel="${cached#$PDF_CACHE_DIR/}"
+            stem="docs/${rel%.pdf}"
+            if [ ! -f "$stem.tex" ] && [ ! -f "$stem.md" ]; then
+              echo "Removing $rel: no source document builds it any more"
+              rm -f "$cached"
+            fi
+          done
+
+          # Drop manifest entries for documents that no longer exist
+          python3 .github/scripts/record_deps.py --prune .pdf-deps.json .
         #continue-on-error: true # Job continues even if this step fails
+      - name: Sync PDFs for TA review
+        run: |
+          rm -rf pdfs
+          mkdir -p pdfs
+          rsync -av --delete build-pdf/ pdfs/
+      - name: Commit PDFs to repo
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pdfs .pdf-deps.json
+          if git diff --cached --quiet; then
+            echo "No PDF changes to commit"
+          else
+            git commit -m "Update generated PDFs for review"
+            # Another docs push may have landed while we were compiling.
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                echo "Pushed PDFs on attempt $attempt"
+                exit 0
+              fi
+              echo "Push rejected; rebasing onto latest main (attempt $attempt)"
+              git pull --rebase origin main
+            done
+            echo "Could not push PDFs after 3 attempts"
+            exit 1
+          fi
       - name: Prepare site
         run: |
           set -euo pipefail
 
-          # Always start from repo root
-          pwd
-          ls
-
           # Recreate public directory
           rm -rf public
-          mkdir -p public          
-          
+          mkdir -p public
+
           # Copy PDFs preserving structure
           rsync -av build-pdf/ public/
-          
-          # Generate PDF list (paths relative to site root)
-          PDF_LIST=$(find public -name "*.pdf" | sort | sed 's|^public/||' | awk -F/ '
-          {
-            dir = $1
-            file = $NF
-            groups[dir] = groups[dir] "<li><a href=\"" $0 "\">" file "</a></li>\n"
-          }
-          END {
-            for (dir in groups) {
-              printf "<h2>%s</h2>\n<ul>\n%s</ul>\n", dir, groups[dir]
-            }
-          }')
 
-          # Ensure site template exists
-          test -f site/index.html
-
-          # Build index.html safely
-          awk -v list="$PDF_LIST" '
-            /<!-- PDF_LIST -->/ { print list; next }
-            { print }
-          ' site/index.html > public/index.html
+          # Build the index. This runs after the PDFs are committed, so the
+          # per-document timestamps come from that commit.
+          python3 .github/scripts/build_index.py \
+            --public public \
+            --template site/index.html \
+            --output public/index.html \
+            --tracked-dir pdfs
 
           # Copy static assets
           cp site/style.css public/
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
