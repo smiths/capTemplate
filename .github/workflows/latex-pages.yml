@@ -214,6 +214,10 @@ jobs:
 
   deploy:
     needs: build
+    # Only the real branch publishes. A pull request, especially one from a
+    # fork, has a read-only token and cannot deploy, so without this the
+    # deploy job fails on every pull request.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
