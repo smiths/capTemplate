@@ -1,0 +1,141 @@
+{
+  "docs/CDs/MLReport/main.tex": [
+    "docs/CDs/MLReport/acl.sty",
+    "docs/CDs/MLReport/custom.bib",
+    "docs/CDs/MLReport/main.tex"
+  ],
+  "docs/Checklists/Code-Checklist.tex": [
+    "docs/Checklists/Code-Checklist.tex",
+    "docs/Comments.text"
+  ],
+  "docs/Checklists/DevPlan-Checklist.tex": [
+    "docs/Checklists/DevPlan-Checklist.tex"
+  ],
+  "docs/Checklists/FinalDoc-Checklist.tex": [
+    "docs/Checklists/FinalDoc-Checklist.tex"
+  ],
+  "docs/Checklists/GettingStarted-Checklist.tex": [
+    "docs/Checklists/GettingStarted-Checklist.tex"
+  ],
+  "docs/Checklists/HA-Checklist.tex": [
+    "docs/Checklists/HA-Checklist.tex",
+    "refs/References.bib"
+  ],
+  "docs/Checklists/MG-Checklist.tex": [
+    "docs/Checklists/MG-Checklist.tex"
+  ],
+  "docs/Checklists/MIS-Checklist.tex": [
+    "docs/Checklists/MIS-Checklist.tex"
+  ],
+  "docs/Checklists/POC-Checklist.tex": [
+    "docs/Checklists/POC-Checklist.tex"
+  ],
+  "docs/Checklists/ProbState-Checklist.tex": [
+    "docs/Checklists/ProbState-Checklist.tex"
+  ],
+  "docs/Checklists/SRS-Checklist.tex": [
+    "docs/Checklists/SRS-Checklist.tex",
+    "refs/References.bib"
+  ],
+  "docs/Checklists/SRS-SciComp-Checklist.tex": [
+    "docs/Checklists/SRS-SciComp-Checklist.tex",
+    "refs/References.bib"
+  ],
+  "docs/Checklists/VnV-Checklist.tex": [
+    "docs/Checklists/VnV-Checklist.tex"
+  ],
+  "docs/Checklists/Writing-Checklist.tex": [
+    "docs/Checklists/Writing-Checklist.tex"
+  ],
+  "docs/Design/SoftArchitecture/MG.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Design/SoftArchitecture/MG.tex",
+    "refs/References.bib"
+  ],
+  "docs/Design/SoftDetailedDes/MIS.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Design/SoftDetailedDes/MIS.tex",
+    "docs/Reflection.text",
+    "docs/SRS/SRS.tex",
+    "refs/References.bib"
+  ],
+  "docs/DevelopmentPlan/DevelopmentPlan.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/DevelopmentPlan/DevelopmentPlan.tex",
+    "docs/Reflection.text"
+  ],
+  "docs/HazardAnalysis/HazardAnalysis.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/HazardAnalysis/HazardAnalysis.tex",
+    "docs/Reflection.text"
+  ],
+  "docs/ProblemStatementAndGoals/ProblemStatement.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/ProblemStatementAndGoals/ProblemStatement.tex",
+    "docs/Reflection.text"
+  ],
+  "docs/ReflectAndTrace/ReflectAndTrace.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/ReflectAndTrace/ReflectAndTrace.tex"
+  ],
+  "docs/SRS-Volere/SRS.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/SRS-Volere/SRS.tex",
+    "docs/SRS_Reflection.text"
+  ],
+  "docs/SRS/SRS-FAQ.tex": [
+    "docs/SRS/SRS-FAQ.tex"
+  ],
+  "docs/SRS/SRS.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/SRS/RelationsBetweenTM_GD_IM_DD_A.pdf",
+    "docs/SRS/SRS.tex",
+    "docs/SRS/SystemContextFigure.pdf",
+    "docs/SRS_Reflection.text",
+    "refs/References.bib"
+  ],
+  "docs/UserGuide/UserGuide.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/UserGuide/UserGuide.tex"
+  ],
+  "docs/VnVPlan/VnVPlan.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/VnVPlan/VnVPlan.tex",
+    "refs/References.bib"
+  ],
+  "docs/VnVReport/VnVReport.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/VnVReport/VnVReport.tex",
+    "refs/References.bib"
+  ],
+  "docs/projMngmnt/Final_Productivity_Rep.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/projMngmnt/Final_Productivity_Rep.tex"
+  ],
+  "docs/projMngmnt/POC_Productivity_Rep.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/projMngmnt/POC_Productivity_Rep.tex"
+  ],
+  "docs/projMngmnt/Rev0_Productivity_Rep.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/projMngmnt/Rev0_Productivity_Rep.tex"
+  ]
+}
