@@ -24,7 +24,10 @@ DOC_SUFFIXES = (".tex", ".md")
 # Instructor-owned prose and things this pipeline never builds from.  Changes
 # to these must not trigger the full-rebuild fallback.
 IGNORED_BASENAMES = {"README.md", "README.txt", ".gitignore"}
-IGNORED_PREFIXES = ("pdfs/", "docs/SRS-Meyer/", ".github/")
+# site/ is the index page template. It changes what the published page
+# looks like, never the content of a PDF, so it must not trigger a
+# rebuild even though it does need to trigger the workflow.
+IGNORED_PREFIXES = ("pdfs/", "docs/SRS-Meyer/", ".github/", "site/")
 
 # Changing how documents are built can change every document, even though no
 # document source changed: the package list decides which LaTeX packages are
