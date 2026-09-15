@@ -3,10 +3,10 @@ name: Build LaTeX and Deploy PDFs
 on:
   push:
     branches: main
-    paths: [docs/**, refs/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
+    paths: [docs/**, refs/**, site/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
   pull_request:
     branches: main
-    paths: [docs/**, refs/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
+    paths: [docs/**, refs/**, site/**, Makefile, .github/scripts/**, .github/workflows/latex-pages.yml]
   workflow_dispatch:
 
 permissions:
