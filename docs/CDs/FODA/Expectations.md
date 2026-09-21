@@ -1,0 +1,3 @@
+Complete a Feature Oriented Domain Analysis
+
+[A feature oriented domain analysis](https://en.wikipedia.org/wiki/Feature-oriented_domain_analysis) shows the commonalities and variabilities for a software family (also called a software product line).  The domain analysis should identify the requirements that are common to all family members and the variabilities that are different between family members.  For each variability, the possible parameters of variation should be listed.  Tables summarizing the variabilities and the parameters of variation are helpful.  A feature diagram should also be shown.
