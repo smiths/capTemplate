@@ -83,6 +83,15 @@
     "docs/Common.text",
     "docs/ReflectAndTrace/ReflectAndTrace.tex"
   ],
+  "docs/SRS-IEEE/SRS.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/SRS-IEEE/SRS.tex",
+    "docs/SRS-IEEE/SystemContextFigure.pdf",
+    "docs/SRS_Reflection.text",
+    "refs/References.bib"
+  ],
   "docs/SRS-RschSoft/SRS-FAQ.tex": [
     "docs/SRS-RschSoft/SRS-FAQ.tex"
   ],
