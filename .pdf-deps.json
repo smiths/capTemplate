@@ -58,7 +58,6 @@
     "docs/Common.text",
     "docs/Design/SoftDetailedDes/MIS.tex",
     "docs/Reflection.text",
-    "docs/SRS/SRS.tex",
     "refs/References.bib"
   ],
   "docs/DevelopmentPlan/DevelopmentPlan.tex": [
@@ -84,25 +83,25 @@
     "docs/Common.text",
     "docs/ReflectAndTrace/ReflectAndTrace.tex"
   ],
+  "docs/SRS-RschSoft/SRS-FAQ.tex": [
+    "docs/SRS-RschSoft/SRS-FAQ.tex"
+  ],
+  "docs/SRS-RschSoft/SRS.tex": [
+    "docs/Comments.text",
+    "docs/Common.text",
+    "docs/Reflection.text",
+    "docs/SRS-RschSoft/RelationsBetweenTM_GD_IM_DD_A.pdf",
+    "docs/SRS-RschSoft/SRS.tex",
+    "docs/SRS-RschSoft/SystemContextFigure.pdf",
+    "docs/SRS_Reflection.text",
+    "refs/References.bib"
+  ],
   "docs/SRS-Volere/SRS.tex": [
     "docs/Comments.text",
     "docs/Common.text",
     "docs/Reflection.text",
     "docs/SRS-Volere/SRS.tex",
     "docs/SRS_Reflection.text"
-  ],
-  "docs/SRS/SRS-FAQ.tex": [
-    "docs/SRS/SRS-FAQ.tex"
-  ],
-  "docs/SRS/SRS.tex": [
-    "docs/Comments.text",
-    "docs/Common.text",
-    "docs/Reflection.text",
-    "docs/SRS/RelationsBetweenTM_GD_IM_DD_A.pdf",
-    "docs/SRS/SRS.tex",
-    "docs/SRS/SystemContextFigure.pdf",
-    "docs/SRS_Reflection.text",
-    "refs/References.bib"
   ],
   "docs/UserGuide/UserGuide.tex": [
     "docs/Comments.text",
