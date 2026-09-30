@@ -64,7 +64,8 @@
     "docs/Comments.text",
     "docs/Common.text",
     "docs/DevelopmentPlan/DevelopmentPlan.tex",
-    "docs/Reflection.text"
+    "docs/Reflection.text",
+    "refs/References.bib"
   ],
   "docs/HazardAnalysis/HazardAnalysis.tex": [
     "docs/Comments.text",
@@ -76,7 +77,8 @@
     "docs/Comments.text",
     "docs/Common.text",
     "docs/ProblemStatementAndGoals/ProblemStatement.tex",
-    "docs/Reflection.text"
+    "docs/Reflection.text",
+    "refs/References.bib"
   ],
   "docs/ReflectAndTrace/ReflectAndTrace.tex": [
     "docs/Comments.text",
