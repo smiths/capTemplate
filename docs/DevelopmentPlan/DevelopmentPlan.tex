@@ -3,6 +3,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 
+\usepackage[round]{natbib} % for citations
+
 \title{Development Plan\\\progname}
 
 \author{\authname}
@@ -37,6 +39,12 @@ what is contained in the report.}
 \wss{Additional information on the development plan can be found in the
 \href{https://gitlab.cas.mcmaster.ca/courses/capstone/-/blob/main/Lectures/L02b_POCAndDevPlan/POCAndDevPlan.pdf?ref_type=heads}
 {lecture slides}.}
+
+\wss{Citations should be in the form \citep{Parnas1978} for parenthetical
+citations or \citet{Parnas1978} for in-text citations.  The bibliography is in
+the file \texttt{refs/References.bib}.  You can add references to that file, and
+then cite them in this document.  The bibliography will be automatically
+generated when you compile the document.}
 
 \section{Confidential Information?}
 
@@ -290,5 +298,10 @@ their TA, or the instructor?  Are there incentives for reaching targets early?}
 
 \wss{How will you make decisions in your group? Consensus?  Vote? How will you
 handle disagreements? }
+
+\newpage
+
+\bibliographystyle {plainnat}
+\bibliography {../../refs/References}
 
 \end{document}

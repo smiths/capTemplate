@@ -3,6 +3,8 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
+\usepackage[round]{natbib} % for citations
+
 \title{Problem Statement and Goals\\\progname}
 
 \author{\authname}
@@ -37,6 +39,13 @@ Date2 & Name(s) & Description of changes\\
 
 \wss{You can change the section headings, as long as you include the required
 information.}
+
+\wss{Citations should be in the form \citep{Parnas1978} for parenthetical
+citations or \citet{Parnas1978} for in-text citations.  The bibliography is in
+the file \texttt{refs/References.bib}.  You can add references to that file, and
+then cite them in this document.  The bibliography will be automatically
+generated when you compile the document.}
+
 
 \subsection{Problem}
 
@@ -95,5 +104,10 @@ instructor, can be modified over the course of the term.}
     they are suitable for a Capstone project (not overly ambitious but also of
     appropriate complexity for a senior design project)?
 \end{enumerate}  
+
+\newpage
+
+\bibliographystyle {plainnat}
+\bibliography {../../refs/References}
 
 \end{document}
