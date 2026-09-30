@@ -84,10 +84,13 @@ jobs:
       # forked widely and the job has contents: write.
       # texlive-full is avoided deliberately; it is far larger than needed.
       # pandoc drives the Markdown -> PDF rule in the Makefile.
+      - name: Refresh apt package indexes
+        run: sudo apt-get update
+      
       - name: Install TeX Live and pandoc
         uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9 # v1.6.3
         with:
-          packages: texlive-latex-extra texlive-science texlive-fonts-extra texlive-fonts-recommended texlive-latex-recommended lmodern pandoc
+          packages: texlive-base texlive-binaries texlive-latex-base texlive-latex-extra texlive-science texlive-fonts-extra texlive-fonts-recommended texlive-latex-recommended lmodern pandoc
           version: 1.1
       - name: Verify the TeX toolchain is usable
         run: |
