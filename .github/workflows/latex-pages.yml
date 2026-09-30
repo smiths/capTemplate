@@ -107,7 +107,22 @@ jobs:
           # with "Font rm-lmr7 at 600 not found".
           sudo updmap-sys >/dev/null
 
+          # Restore the bibtex symlink skipped by cache-apt-pkgs postinst
+          if ! command -v bibtex >/dev/null 2>&1; then
+            if [ -f /usr/bin/bibtex.original ]; then
+              sudo ln -sf /usr/bin/bibtex.original /usr/bin/bibtex
+            elif [ -f /usr/bin/bibtexu ]; then
+              sudo ln -sf /usr/bin/bibtexu /usr/bin/bibtex
+            fi
+          fi
+
+          # Pre-generate pdflatex format at system level to suppress
+          # user-mode warning
+          sudo fmtutil-sys --byfmt pdflatex >/dev/null
+
           pdflatex --version | head -1
+          # add missing bibtex version check verifying executable exists
+          bibtex --version | head -1 
           pandoc --version | head -1
           kpsewhich article.cls
           kpsewhich amsmath.sty
