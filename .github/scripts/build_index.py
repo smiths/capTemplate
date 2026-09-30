@@ -20,6 +20,84 @@ import sys
 PDF_LIST_MARKER = "<!-- PDF_LIST -->"
 GENERATED_MARKER = "<!-- GENERATED -->"
 
+# The documents are listed in waterfall order, which is not the order in which
+# the course creates them: the V&V plan is written before the design, but is
+# read after it.  Listing them this way reinforces the rational design process
+# the course asks students to fake, and makes the documentation easier to
+# follow for a reader from outside the course.
+#
+# Taken from the Final Documentation (Revision 1) list in the course outline.
+# A directory not named here is listed after these, alphabetically, so adding
+# a document folder cannot make it disappear from the page.
+SECTION_ORDER = [
+    ("ProblemStatementAndGoals", "Problem Statement and Goals"),
+    ("DevelopmentPlan", "Development Plan"),
+    ("SRS", "Requirements (SRS)"),
+    ("SRS-Volere", "Requirements, Volere template"),
+    ("SRS-Meyer", "Requirements, Meyer template"),
+    ("HazardAnalysis", "Hazard Analysis"),
+    ("Design", "Design"),
+    ("VnVPlan", "Verification and Validation Plan"),
+    ("VnVReport", "Verification and Validation Report"),
+    ("UserGuide", "User Guide"),
+    ("CDs", "Custom Documents"),
+    ("ReflectAndTrace", "Reflection and Traceability"),
+    ("projMngmnt", "Project Management"),
+    ("Checklists", "Checklists"),
+]
+
+# Within a section, documents that should not be alphabetical.  The checklists
+# mirror the deliverables, so they follow the same order as the sections above;
+# the design documents go architecture first, then detailed design.
+FILE_ORDER = {
+    "Checklists": [
+        "GettingStarted-Checklist.pdf",
+        "ProbState-Checklist.pdf",
+        "DevPlan-Checklist.pdf",
+        "SRS-Checklist.pdf",
+        "SRS-SciComp-Checklist.pdf",
+        "HA-Checklist.pdf",
+        "MG-Checklist.pdf",
+        "MIS-Checklist.pdf",
+        "VnV-Checklist.pdf",
+        "POC-Checklist.pdf",
+        "Code-Checklist.pdf",
+        "Writing-Checklist.pdf",
+        "FinalDoc-Checklist.pdf",
+    ],
+    "Design": ["MG.pdf", "MIS.pdf"],
+    # The requirements document first, then the questions about it.
+    "SRS": ["SRS.pdf", "SRS-FAQ.pdf"],
+    # Chronological: proof of concept, then revision 0, then final.
+    "projMngmnt": [
+        "POC_Productivity_Rep.pdf",
+        "Rev0_Productivity_Rep.pdf",
+        "Final_Productivity_Rep.pdf",
+    ],
+}
+
+
+def section_rank(directory):
+    """Position of a section, with unlisted ones sorted after the known ones."""
+    for index, (name, _title) in enumerate(SECTION_ORDER):
+        if name == directory:
+            return (0, index, "")
+    return (1, 0, directory.lower())
+
+
+def section_title(directory):
+    for name, title in SECTION_ORDER:
+        if name == directory:
+            return title
+    return directory
+
+
+def file_rank(directory, filename):
+    order = FILE_ORDER.get(directory)
+    if order and filename in order:
+        return (0, order.index(filename), "")
+    return (1, 0, filename.lower())
+
 
 def git_last_updated(repo_relative_path):
     """Commit time of a path, or None when git knows nothing about it."""
@@ -86,10 +164,12 @@ def collect(public_dir, tracked_dir):
 
 def render(sections):
     lines = []
-    for section in sorted(sections):
-        lines.append("<h2>%s</h2>" % escape(section))
+    for section in sorted(sections, key=section_rank):
+        lines.append("<h2>%s</h2>" % escape(section_title(section)))
         lines.append("<ul>")
-        for href, name, moment in sections[section]:
+        entries = sorted(sections[section],
+                         key=lambda e: file_rank(section, e[1]))
+        for href, name, moment in entries:
             lines.append(
                 '  <li><a href="%s">%s</a>%s</li>'
                 % (escape(href), escape(name),

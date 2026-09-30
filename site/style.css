@@ -38,3 +38,9 @@ li {
   font-size: .85rem;
   white-space: nowrap;
 }
+
+.intro {
+  color: #333;
+  max-width: 60ch;
+  line-height: 1.5;
+}

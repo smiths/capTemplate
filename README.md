@@ -14,4 +14,4 @@ src - Source code
 test - Test cases
 etc.
 
-The documentation for this project is updated on the project's [GitHub page](https://smiths.github.io/capTemplate/). <!-- update for your project!  -->
+The documentation for this project is updated on the project's [GitHub page](https://smiths.github.io/capTemplate/). <!-- Kept up to date automatically; the build points this at your own repository's page. -->
